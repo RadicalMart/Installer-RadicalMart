@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.*" type="plugin" method="upgrade" group="installer">
+	<name>PLG_INSTALLER_HIKASU</name>
+	<author>Tsymbal</author>
+	<creationDate>19.06.2020</creationDate>
+	<copyright>Copyright (C) 2005 - 2020 Open Source Matters. All rights reserved.</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<authorEmail>cymbal@delo-design.ru</authorEmail>
+	<authorUrl>https://delo-design.ru</authorUrl>
+	<version>1.0.0</version>
+	<description>PLG_INSTALLER_HIKASU_PLUGIN_XML_DESCRIPTION</description>
+	<scriptfile>script.php</scriptfile>
+
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_installer_hikasu.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_installer_hikasu.sys.ini</language>
+		<language tag="ru-RU">ru-RU/ru-RU.plg_installer_hikasu.ini</language>
+		<language tag="ru-RU">ru-RU/ru-RU.plg_installer_hikasu.sys.ini</language>
+	</languages>
+
+	<media folder="media" destination="plg_installer_hikasu">
+		<folder>css</folder>
+		<folder>img</folder>
+		<folder>js</folder>
+	</media>
+
+	<install>
+		<sql>
+			<file driver="mysql" charset="utf8">sql/install/mysql/mysql.sql</file>
+		</sql>
+	</install>
+
+	<files>
+		<folder>language</folder>
+		<folder>src</folder>
+		<folder>sql</folder>
+		<folder>tables</folder>
+		<folder>tmpl</folder>
+		<filename plugin="hikasu">hikasu.php</filename>
+	</files>
+
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="apikey"
+					   type="text"
+					   label="PLG_INSTALLER_HIKASU_API_KEY"
+					   default=""/>
+			</fieldset>
+		</fields>
+	</config>
+</extension>
