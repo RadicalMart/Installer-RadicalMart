@@ -46,6 +46,20 @@ class API
 	}
 
 
+	public static function categories()
+	{
+		$result = self::execute('categories');
+		if(isset($result->body))
+		{
+			return $result->body;
+		}
+		else
+		{
+			return [];
+		}
+	}
+
+
 	public static function projects($category_id, $page = 1, $limit = 12)
 	{
 		$result = self::execute('projects', [

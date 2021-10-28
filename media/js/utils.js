@@ -97,7 +97,7 @@ window.HikasuUtils = {
         let modal = this.createElement('div', {'class': 'hikasu-modal ' + classForModal})
             .addChild('div', {'class': 'hikasu-modal_container'})
                 .add('button', {
-                    'class': 'btn btn-danger btn-large hikasu-modal_close',
+                    'class': 'btn btn-danger hikasu-modal_close',
                     'events': [
                         ['click', function (ev) {
                             let modalBackground = document.querySelector('.hikasu-modal_background');

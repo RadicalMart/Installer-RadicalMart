@@ -3,29 +3,21 @@ window.Hikasu = {
     url: 'index.php?option=com_ajax&plugin=hikasu&group=installer&format=json',
     container: null,
     form: null,
-    category_id: 2,
+    category_id: 0,
+    categories: null,
     button_active: '',
     depends_wait: true,
     list_install: [],
+    buy_projects: [],
 
     init: function () {
+        let self = this;
         this.container = document.querySelector('#hikasu-container');
         this.form = document.querySelector('#adminForm');
-        this.changeCategory(this.category_id);
         this.checkUpdates();
-    },
 
-    changeCategory: function (id) {
-        let self = this;
-        let categories = HikasuUtils.createElement('div', {'class': 'hikasu-categories'});
-        let grid = HikasuUtils.createElement('div', {'class': 'hikasu-grid'});
-        let pagination = HikasuUtils.createElement('div', {'class': 'hikasu-pagination'});
-
-        self.container.innerHTML = '';
-        self.loaderInit();
-        self.loaderShow();
-
-        categories.add('button', {
+        self.categories = HikasuUtils.createElement('div', {'class': 'hikasu-categories'});
+        self.categories.add('button', {
             'class': 'btn', 'data-type': 'installed', 'events': [
                 [
                     'click',
@@ -37,7 +29,7 @@ window.Hikasu = {
             ]
         }, HikasuLangs.button_installed);
 
-        categories.add('button', {
+        self.categories.add('button', {
             'class': 'btn btn-check-update', 'data-type': 'update', 'events': [
                 [
                     'click',
@@ -49,109 +41,7 @@ window.Hikasu = {
             ]
         }, '<span class="empty">0</span> ' + HikasuLangs.button_update);
 
-        categories.add('button', {
-            'class': 'btn btn-change-category', 'data-type': 'extensions', 'events': [
-                [
-                    'click',
-                    function (ev) {
-                        self.changeCategory(2);
-                        ev.preventDefault();
-                    }
-                ]
-            ]
-        }, HikasuLangs.button_extensions);
-
-        categories.add('button', {
-            'class': 'btn btn-change-category', 'data-type': 'plugins', 'events': [
-                [
-                    'click',
-                    function (ev) {
-                        self.changeCategory(7);
-                        ev.preventDefault();
-                    }
-                ]
-            ]
-        }, HikasuLangs.button_plugins);
-
-        categories.add('button', {
-            'class': 'btn btn-change-category', 'data-type': 'radicalmart', 'events': [
-                [
-                    'click',
-                    function (ev) {
-                        self.changeCategory(4);
-                        ev.preventDefault();
-                    }
-                ]
-            ]
-        },  HikasuLangs.button_radicalmart);
-
-
-        categories.add('button', {
-            'class': 'btn btn-change-category', 'data-type': 'radicalmart-pay', 'events': [
-                [
-                    'click',
-                    function (ev) {
-                        self.changeCategory(3);
-                        ev.preventDefault();
-                    }
-                ]
-            ]
-        }, HikasuLangs.button_radicalmart_pay);
-
-
-        categories.add('button', {
-            'class': 'btn btn-change-category', 'data-type': 'radicalmart-messages', 'events': [
-                [
-                    'click',
-                    function (ev) {
-                        self.changeCategory(8);
-                        ev.preventDefault();
-                    }
-                ]
-            ]
-        }, HikasuLangs.button_radicalmart_messages);
-
-
-        categories.add('button', {
-            'class': 'btn btn-change-category', 'data-type': 'radicalmart-express', 'events': [
-                [
-                    'click',
-                    function (ev) {
-                        self.changeCategory(5);
-                        ev.preventDefault();
-                    }
-                ]
-            ]
-        }, HikasuLangs.button_radicalmartexpress);
-
-
-        categories.add('button', {
-            'class': 'btn btn-change-category', 'data-type': 'radicalmart-express-pay', 'events': [
-                [
-                    'click',
-                    function (ev) {
-                        self.changeCategory(6);
-                        ev.preventDefault();
-                    }
-                ]
-            ]
-        }, HikasuLangs.button_radicalmartexpress_pay);
-
-
-        categories.add('button', {
-            'class': 'btn btn-change-category', 'data-type': 'radicalmart-express-messages', 'events': [
-                [
-                    'click',
-                    function (ev) {
-                        self.changeCategory(9);
-                        ev.preventDefault();
-                    }
-                ]
-            ]
-        }, HikasuLangs.button_radicalmartexpress_messages);
-
-
-        categories.add('button', {
+        self.categories.add('button', {
             'class': 'btn btn-change-category', 'data-type': 'support', 'events': [
                 [
                     'click',
@@ -164,8 +54,7 @@ window.Hikasu = {
             ]
         }, HikasuLangs.button_support);
 
-
-        categories.add('button', {
+        self.categories.add('button', {
             'class': 'btn btn-change-category', 'data-type': 'add', 'events': [
                 [
                     'click',
@@ -178,6 +67,68 @@ window.Hikasu = {
             ]
         }, HikasuLangs.button_extension_add);
 
+        self.categories.add('button', {
+            'class': 'btn btn-change-category', 'data-type': 'category-0', 'events': [
+                [
+                    'click',
+                    function (ev) {
+                        self.changeCategory(0);
+                        ev.preventDefault();
+                    }
+                ]
+            ]
+        }, 'Все расширения');
+
+        let load_categories = function () {
+            let url = self.url + '&method=categories';
+
+            self.ajax(url, function (json) {
+                json = JSON.parse(json.data);
+                let categories_items = json.items;
+                for (let i = 0; i < categories_items.length; i++) {
+                    self.categories.add('button', {
+                        'class': 'btn btn-change-category', 'data-type': 'category-' + categories_items[i].id, 'events': [
+                            [
+                                'click',
+                                function (ev) {
+                                    self.changeCategory(categories_items[i].id);
+                                    ev.preventDefault();
+                                }
+                            ]
+                        ]
+                    }, categories_items[i].title);
+                }
+
+                let search_categories = self.container.querySelector('.hikasu-categories');
+
+                if(search_categories !== null && search_categories !== undefined) {
+                    search_categories.remove();
+                    self.container.prepend(self.categories.build());
+                }
+            });
+        }
+
+        self.changeCategory(self.category_id);
+        load_categories();
+    },
+
+    changeCategory: function (id) {
+        let self = this;
+        let grid = HikasuUtils.createElement('div', {'class': 'hikasu-grid'});
+        let pagination = HikasuUtils.createElement('div', {'class': 'hikasu-pagination'});
+
+        self.container.innerHTML = '';
+        self.loaderInit();
+        self.loaderShow();
+
+        if(HikasuConfig.key !== '') {
+            let url = self.url + '&method=buyprojects';
+
+            self.ajax(url, function (json) {
+                json = JSON.parse(json.data);
+                self.buy_projects = json.items;
+            });
+        }
 
         let load_page = function (page, limit) {
             let url = self.url + '&method=projects&category_id=' + id;
@@ -228,15 +179,15 @@ window.Hikasu = {
                             ]
                         })
                         .addChild('div', {'class': 'hikasu-card_image'})
-                        .add('div', {'class': 'hikasu-card_color', 'style': 'opacity: .1'})
-                        .add('div', {
-                            'class': 'hikasu-card_cover',
-                            'style': cards[i].images.cover !== false ? ('background-image:url(' + self.api + '/' + cards[i].images.cover + ')') : ''
-                        })
-                        .getParent()
+                            .add('div', {'class': 'hikasu-card_color', 'style': 'opacity: .1'})
+                            .add('div', {
+                                'class': 'hikasu-card_cover',
+                                'style': cards[i].images.cover !== false ? ('background-image:url(' + self.api + '/' + cards[i].images.cover + ')') : ''
+                            })
+                            .getParent()
                         .add('h3', {'class': 'hikasu-card_title'}, cards[i].title)
                         .add('div', {'class': 'hikasu-card_description'}, cards[i].introtext)
-                        .addChild('div', {'class': 'hikasu-card_actions'});
+                            .addChild('div', {'class': 'hikasu-card_actions'});
 
                     if (cards[i].download_type === 'free') {
                         grid_cards = grid_cards.add('button', {
@@ -292,39 +243,10 @@ window.Hikasu = {
                             ]
                         ]
                     }, HikasuLangs.button_more)
-                        .add('button', {
-                            'class': 'btn', 'events': [
-                                [
-                                    'click',
-                                    function (ev) {
-                                        ev.preventDefault();
-                                        return false;
-                                    }
-                                ]
-                            ]
-                        }, '<span class="icon-menu"></span>')
                         .getParent()
                         .getParent();
 
                     self.container.querySelector('.hikasu-grid').append(grid_cards.build());
-
-                    let buttons_all = document.querySelectorAll('.hikasu-categories button');
-                    for (let i = 0; i < buttons_all.length; i++) {
-                        buttons_all[i].addEventListener('click', function () {
-                            if (this.hasAttribute('data-type')) {
-                                self.button_active = this.getAttribute('data-type');
-                            } else {
-                                self.button_active = '';
-                            }
-                        });
-                    }
-
-                    if (self.button_active !== '') {
-                        let button_active = document.querySelector('button[data-type="' + self.button_active + '"]');
-                        if (button_active !== null) {
-                            button_active.classList.add('btn-active');
-                        }
-                    }
 
                 }
 
@@ -362,11 +284,21 @@ window.Hikasu = {
             });
         }
 
-        self.container.append(categories.build());
+        self.category_id = id;
+        load_page();
+        self.container.append(self.categories.build());
         self.container.append(grid.build());
         self.container.append(pagination.build());
-        load_page();
 
+        let buttons_all = document.querySelectorAll('.hikasu-categories button');
+        for (let i = 0; i < buttons_all.length; i++) {
+            buttons_all[i].classList.remove('btn-active');
+        }
+
+        let button_active = document.querySelector('button[data-type="category-' + self.category_id + '"]');
+        if (button_active !== null && button_active !== undefined) {
+            button_active.classList.add('btn-active');
+        }
     },
 
     showProject: function (id) {

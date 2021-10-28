@@ -71,6 +71,11 @@ class PlgInstallerHikasu extends CMSPlugin
 			return false;
 		}
 
+		if($method === 'categories')
+		{
+			return $this->APICategories();
+		}
+
 		if($method === 'projects')
 		{
 			return $this->APIProjects();
@@ -215,6 +220,11 @@ class PlgInstallerHikasu extends CMSPlugin
 		return json_encode(['items' => $projects_for_update, 'count' => count($projects_for_update)]);
 	}
 
+
+	private function APICategories()
+	{
+		return API::categories();
+	}
 
 	/**
 	 *
