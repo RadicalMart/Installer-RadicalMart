@@ -10,106 +10,15 @@ window.Hikasu = {
     list_install: [],
     buy_projects: [],
 
-    init: function () {
+    init: function() {
         let self = this;
         this.container = document.querySelector('#hikasu-container');
         this.form = document.querySelector('#adminForm');
-        this.checkUpdates();
 
-        self.categories = HikasuUtils.createElement('div', {'class': 'hikasu-categories'});
-        self.categories.add('button', {
-            'class': 'btn', 'data-type': 'installed', 'events': [
-                [
-                    'click',
-                    function (ev) {
-                        self.showInstalled();
-                        ev.preventDefault();
-                    }
-                ]
-            ]
-        }, HikasuLangs.button_installed);
-
-        self.categories.add('button', {
-            'class': 'btn btn-check-update', 'data-type': 'update', 'events': [
-                [
-                    'click',
-                    function (ev) {
-                        self.showUpdates();
-                        ev.preventDefault();
-                    }
-                ]
-            ]
-        }, '<span class="empty">0</span> ' + HikasuLangs.button_update);
-
-        self.categories.add('button', {
-            'class': 'btn btn-change-category', 'data-type': 'support', 'events': [
-                [
-                    'click',
-                    function (ev) {
-                        window.open(self.api + '/support', '_target');
-                        ev.preventDefault();
-                        return false;
-                    }
-                ]
-            ]
-        }, HikasuLangs.button_support);
-
-        self.categories.add('button', {
-            'class': 'btn btn-change-category', 'data-type': 'add', 'events': [
-                [
-                    'click',
-                    function (ev) {
-                        window.open(self.api + '/add', '_target');
-                        ev.preventDefault();
-                        return false;
-                    }
-                ]
-            ]
-        }, HikasuLangs.button_extension_add);
-
-        self.categories.add('button', {
-            'class': 'btn btn-change-category', 'data-type': 'category-0', 'events': [
-                [
-                    'click',
-                    function (ev) {
-                        self.changeCategory(0);
-                        ev.preventDefault();
-                    }
-                ]
-            ]
-        }, 'Все расширения');
-
-        let load_categories = function () {
-            let url = self.url + '&method=categories';
-
-            self.ajax(url, function (json) {
-                json = JSON.parse(json.data);
-                let categories_items = json.items;
-                for (let i = 0; i < categories_items.length; i++) {
-                    self.categories.add('button', {
-                        'class': 'btn btn-change-category', 'data-type': 'category-' + categories_items[i].id, 'events': [
-                            [
-                                'click',
-                                function (ev) {
-                                    self.changeCategory(categories_items[i].id);
-                                    ev.preventDefault();
-                                }
-                            ]
-                        ]
-                    }, categories_items[i].title);
-                }
-
-                let search_categories = self.container.querySelector('.hikasu-categories');
-
-                if(search_categories !== null && search_categories !== undefined) {
-                    search_categories.remove();
-                    self.container.prepend(self.categories.build());
-                }
-            });
+        if(HikasuConfig.key === '') {
+            self.showFormKey();
+            return;
         }
-
-        self.changeCategory(self.category_id);
-        load_categories();
     },
 
     changeCategory: function (id) {
@@ -299,6 +208,139 @@ window.Hikasu = {
         if (button_active !== null && button_active !== undefined) {
             button_active.classList.add('btn-active');
         }
+    },
+
+    showCatalog: function () {
+        let self = this;
+        this.checkUpdates();
+
+        self.categories = HikasuUtils.createElement('div', {'class': 'hikasu-categories'});
+        self.categories.add('button', {
+            'class': 'btn', 'data-type': 'installed', 'events': [
+                [
+                    'click',
+                    function (ev) {
+                        self.showInstalled();
+                        ev.preventDefault();
+                    }
+                ]
+            ]
+        }, HikasuLangs.button_installed);
+
+        self.categories.add('button', {
+            'class': 'btn btn-check-update', 'data-type': 'update', 'events': [
+                [
+                    'click',
+                    function (ev) {
+                        self.showUpdates();
+                        ev.preventDefault();
+                    }
+                ]
+            ]
+        }, '<span class="empty">0</span> ' + HikasuLangs.button_update);
+
+        self.categories.add('button', {
+            'class': 'btn btn-change-category', 'data-type': 'support', 'events': [
+                [
+                    'click',
+                    function (ev) {
+                        window.open(self.api + '/support', '_target');
+                        ev.preventDefault();
+                        return false;
+                    }
+                ]
+            ]
+        }, HikasuLangs.button_support);
+
+        self.categories.add('button', {
+            'class': 'btn btn-change-category', 'data-type': 'add', 'events': [
+                [
+                    'click',
+                    function (ev) {
+                        window.open(self.api + '/add', '_target');
+                        ev.preventDefault();
+                        return false;
+                    }
+                ]
+            ]
+        }, HikasuLangs.button_extension_add);
+
+        self.categories.add('button', {
+            'class': 'btn btn-change-category', 'data-type': 'category-0', 'events': [
+                [
+                    'click',
+                    function (ev) {
+                        self.changeCategory(0);
+                        ev.preventDefault();
+                    }
+                ]
+            ]
+        }, 'Все расширения');
+
+        let load_categories = function () {
+            let url = self.url + '&method=categories';
+
+            self.ajax(url, function (json) {
+                json = JSON.parse(json.data);
+                let categories_items = json.items;
+                for (let i = 0; i < categories_items.length; i++) {
+                    self.categories.add('button', {
+                        'class': 'btn btn-change-category', 'data-type': 'category-' + categories_items[i].id, 'events': [
+                            [
+                                'click',
+                                function (ev) {
+                                    self.changeCategory(categories_items[i].id);
+                                    ev.preventDefault();
+                                }
+                            ]
+                        ]
+                    }, categories_items[i].title);
+                }
+
+                let search_categories = self.container.querySelector('.hikasu-categories');
+
+                if(search_categories !== null && search_categories !== undefined) {
+                    search_categories.remove();
+                    self.container.prepend(self.categories.build());
+                }
+            });
+        }
+
+        self.changeCategory(self.category_id);
+        load_categories();
+    },
+
+    showFormKey: function() {
+        let self = this;
+        let form = HikasuUtils.createElement('form', {
+            'class': 'form-horizontal hikasu-flex hikasu-flex-center hikasu-height-large',
+            'events': [
+                [
+                    'submit',
+                    function(event) {
+                        // отправить аякс на сохранение ключа
+                        event.preventDefault();
+                        return false;
+                    }
+                ]
+            ]
+        })
+        .addChild('div', {'class': 'span5 hikasu-card hikasu-background-muted hikasu-margin-auto hikasu-padding-large'})
+            .add('p', {'class': 'hikasu-text-large'}, 'Введите Ваш ключ из личного кабинета <a href="https://radicalmart.ru" target="_blank">radicalmart.ru</a>')
+            .addChild('div', {'class': 'control-group control-group-no-label control-group-large hikasu-margin-top'})
+                .addChild('div', {'class': 'controls'})
+                    .add('input', {'class': 'span12', 'type': 'text', 'placeholder': 'Введите здесь ваш ключ'})
+                    .getParent()
+                .getParent()
+            .addChild('div', {'class': 'control-group control-group-no-label control-group-large'})
+                .addChild('div', {'class': 'controls'})
+                    .add('button', {'class': 'btn btn-primary btn-large', 'type': 'submit'}, 'Отправить')
+                    .getParent()
+                .getParent()
+            .getParent()
+
+        self.container.innerHTML = '';
+        self.container.appendChild(form.build());
     },
 
     showProject: function (id) {
@@ -948,12 +990,12 @@ window.Hikasu = {
                 body =
                     body.addChild('table', {'class': 'hikasu-installed-page_tables table table-striped table-hover'})
                         .addChild('thead')
-                        .addChild('tr')
-                        .add('th', {}, HikasuLangs.extension_name)
-                        .add('th', {}, HikasuLangs.current_version)
-                        .add('th', {}, '')
-                        .getParent()
-                        .getParent()
+                            .addChild('tr')
+                                .add('th', {}, HikasuLangs.extension_name)
+                                .add('th', {}, HikasuLangs.current_version)
+                                .add('th', {}, '')
+                                .getParent()
+                            .getParent()
                         .addChild('tbody')
 
                 for (let i = 0; i < data.length; i++) {
@@ -961,48 +1003,48 @@ window.Hikasu = {
                         body.addChild('tr', {'class': 'hikasu-installed-page_tables-element-id-' + data[i].project_id})
                             .add('td', {}, data[i].title)
                             .add('td', {}, data[i].version)
-                            .addChild('td', {'class': 'hikasu-installed-page_buttons'})
-                            .add('button', {
-                                'class': 'btn btn-width-fixed', 'events': [
-                                    [
-                                        'click',
-                                        function (ev) {
-                                            self.showProject(data[i].project_id);
-                                            ev.preventDefault();
-                                        }
-                                    ]
-                                ]
-                            }, HikasuLangs.button_view)
-                            .add('button', {
-                                'class': 'btn btn-width-fixed ' + (parseInt(data[i].enable) ? 'btn-danger' : 'btn-success'),
-                                'events': [
-                                    [
-                                        'click',
-                                        function (ev) {
-                                            let button = this;
-                                            button.setAttribute('disabled', 'disabled');
+                                .addChild('td', {'class': 'hikasu-installed-page_buttons'})
+                                    .add('button', {
+                                        'class': 'btn btn-width-fixed', 'events': [
+                                            [
+                                                'click',
+                                                function (ev) {
+                                                    self.showProject(data[i].project_id);
+                                                    ev.preventDefault();
+                                                }
+                                            ]
+                                        ]
+                                    }, HikasuLangs.button_view)
+                                    /*.add('button', {
+                                        'class': 'btn btn-width-fixed ' + (parseInt(data[i].enable) ? 'btn-danger' : 'btn-success'),
+                                        'events': [
+                                            [
+                                                'click',
+                                                function (ev) {
+                                                    let button = this;
+                                                    button.setAttribute('disabled', 'disabled');
 
-                                            self.ajax(self.url + '&method=installedList', function (json) {
+                                                    self.ajax(self.url + '&method=installedList', function (json) {
 
-                                                button.removeAttribute('disabled');
-                                            }, function () {
-                                                button.removeAttribute('disabled');
-                                            });
-                                        }
-                                    ]
-                                ]
-                            }, parseInt(data[i].enable) ? HikasuLangs.button_disable : HikasuLangs.button_enable)
-                            .add('button', {
-                                'class': 'btn btn-danger', 'events': [
-                                    [
-                                        'click',
-                                        function (ev) {
+                                                        button.removeAttribute('disabled');
+                                                    }, function () {
+                                                        button.removeAttribute('disabled');
+                                                    });
+                                                }
+                                            ]
+                                        ]
+                                    }, parseInt(data[i].enable) ? HikasuLangs.button_disable : HikasuLangs.button_enable)
+                                    .add('button', {
+                                        'class': 'btn btn-danger', 'events': [
+                                            [
+                                                'click',
+                                                function (ev) {
 
-                                        }
-                                    ]
-                                ]
-                            }, '<span class="icon-trash"></span>')
-                            .getParent()
+                                                }
+                                            ]
+                                        ]
+                                    }, '<span class="icon-trash"></span>')*/
+                                    .getParent()
                             .getParent()
                 }
 

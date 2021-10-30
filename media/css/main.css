@@ -3,6 +3,15 @@
     position: relative;
 }
 
+/************* Text ***************/
+.hikasu-text-center {
+    text-align: center;
+}
+
+.hikasu-text-large {
+    font-size: 20px;
+    line-height: 24px;
+}
 
 /************* Buttons ***********/
 .btn-text {
@@ -10,6 +19,70 @@
     background: transparent !important;
     box-shadow: none !important;
     text-decoration: underline;
+}
+
+
+/************* Margin *************/
+.hikasu-margin-auto {
+    margin: auto !important;
+}
+
+.hikasu-margin-top {
+    margin-top: 35px;
+}
+
+
+/************* Padding *************/
+.hikasu-padding-large {
+    padding: 50px !important;
+}
+
+
+/*********** Height ***************/
+.hikasu-height-large {
+    height: 400px;
+}
+
+
+/*********** Backgrounds **********/
+.hikasu-background-muted {
+    background: #F0F0F0 !important;
+}
+
+
+/************ Flex ****************/
+.hikasu-flex {
+    display: flex;
+}
+
+.hikasu-flex-center {
+    justify-content: center;
+    justify-items: center;
+}
+
+
+.hikasu-flex-middle {
+    align-items: center;
+    align-content: center;
+}
+
+
+/*********** Form *****************/
+.control-group-large .control-label label {
+    font-size: 18px;
+    line-height: 22px;
+}
+
+.control-group-no-label .controls {
+    margin-left: 0 !important;
+    cursor: auto !important;
+}
+
+.control-group-large input {
+    line-height: 40px !important;
+    height: 40px !important;
+    padding: 0 15px !important;
+    font-size: 18px !important;
 }
 
 
