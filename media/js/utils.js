@@ -1,4 +1,84 @@
 window.HikasuUtils = {
+    ajaxGet: function (url, data) {
+        let self = this,
+            request = new XMLHttpRequest();
+
+        if (data !== undefined && data !== null) {
+            url += '&' + Object.keys(data).map(function (key) {
+                return key + '=' + data[key];
+            }).join('&');
+        }
+
+        request.open('GET', url);
+        return self.ajaxRequest(request);
+    },
+
+
+    ajaxPost: function (url, data) {
+        let self = this,
+            request = new XMLHttpRequest(),
+            formData = new FormData();
+
+        if (data !== undefined && data !== null) {
+            for (let key in data) {
+                formData.append(key, data[key]);
+            }
+        }
+
+
+        request.open('POST', url);
+        let ajax = self.ajaxRequest(request, false);
+        request.send(formData);
+
+        return ajax
+    },
+
+
+    ajaxRequest: function (request, send = true) {
+        let ajax = new function () {
+            return this;
+        };
+        ajax.request = request;
+        ajax.request.onreadystatechange = function () {
+            if (this.readyState === 4) {
+                if (this.status === 200) {
+                    if (ajax.done !== undefined) {
+                        ajax.done(this.responseText, this);
+                    }
+                } else {
+                    if (ajax.fail !== undefined) {
+                        ajax.fail(this);
+                    }
+                }
+
+            }
+        };
+
+        if (send) {
+            ajax.request.send();
+        }
+
+        let ajax_proxy = new Proxy(ajax, {
+            get: function (target_original, prop, receiver) {
+                let F = function (...args) {
+                }
+                return new Proxy(F, {
+                    apply: function (target, thisArg, argumentsList) {
+                        target_original[prop] = argumentsList[0];
+                        return ajax_proxy;
+                    }
+                });
+            },
+            set(target, prop, val) {
+                target[prop] = val;
+                return true;
+            }
+        });
+
+        return ajax_proxy;
+    },
+
+
     createElement: function(tag, attr, innerHtml) {
         let self = this;
         let element = document.createElement(tag);
@@ -68,6 +148,7 @@ window.HikasuUtils = {
         }
     },
 
+
     generateColorFromText: function(str) {
         var hash = 0;
         for (var i = 0; i < str.length; i++) {
@@ -81,7 +162,8 @@ window.HikasuUtils = {
         return colour;
     },
 
-    modal: function(header, body, footer, classForModal) {
+
+    modal: function(header, body, footer, classForModal, callback_close) {
         if(classForModal === null) {
             classForModal = '';
         }
@@ -104,6 +186,10 @@ window.HikasuUtils = {
 
                             modalBackground.classList.remove('active');
                             this.closest('.hikasu-modal').remove();
+
+                            if(callback_close !== undefined && callback_close !== null) {
+                                callback_close();
+                            }
                         }]
                     ]}, '<span class="icon-delete large-icon"></span> ' + HikasuLangs.button_close)
                 .add('div', {'class': 'hikasu-modal_header'}, header)
@@ -122,6 +208,7 @@ window.HikasuUtils = {
         document.querySelector('body').append(modal.build());
 
     },
+
 
     modalAjax: function(header, url) {
         let modalBackground = document.querySelector('.hikasu-modal_background');
@@ -157,6 +244,7 @@ window.HikasuUtils = {
         modalBackground.classList.add('active');
         document.querySelector('body').append(modal.build());
     },
+
 
     modalClose: function () {
 

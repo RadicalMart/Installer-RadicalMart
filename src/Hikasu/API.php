@@ -53,10 +53,8 @@ class API
 		{
 			return $result->body;
 		}
-		else
-		{
-			return [];
-		}
+
+		return [];
 	}
 
 
@@ -67,14 +65,8 @@ class API
 			'page' => $page,
 			'limit' => $limit
 		]);
-		if(isset($result->body))
-		{
-			return $result->body;
-		}
-		else
-		{
-			return [];
-		}
+
+		return $result->body ?? [];
 	}
 
 
@@ -85,10 +77,20 @@ class API
 		{
 			return $result->body;
 		}
-		else
+
+		return [];
+	}
+
+
+	public static function projectsMain()
+	{
+		$result = self::execute('projectsMain');
+		if(isset($result->body))
 		{
-			return [];
+			return $result->body;
 		}
+
+		return [];
 	}
 
 
@@ -99,10 +101,8 @@ class API
 		{
 			return $result->body;
 		}
-		else
-		{
-			return [];
-		}
+
+		return [];
 	}
 
 
@@ -113,10 +113,8 @@ class API
 		{
 			return $result->body;
 		}
-		else
-		{
-			return [];
-		}
+
+		return [];
 	}
 
 
@@ -127,16 +125,26 @@ class API
 		{
 			return $result->body;
 		}
-		else
-		{
-			return [];
-		}
+
+		return [];
 	}
 
 
 	public static function projectFile($id)
 	{
 		$result = self::execute('projectFile', ['project_id' => $id]);
+	}
+
+
+	public static function checkKey($key)
+	{
+		$result = self::execute('checkKey', ['key' => $key]);
+		if(isset($result->body))
+		{
+			return $result->body;
+		}
+
+		return false;
 	}
 
 

@@ -34,7 +34,7 @@ class ProviderJoomla implements ProviderInterface
 
 		if(isset($this->config['api_key']))
 		{
-			$url .= ((strpos($url, '?') === false ? '?' : '&')) . 'api_key=' . $this->config['api_key'];
+			$url .= ((strpos($url, '?') === false ? '?' : '&')) . 'download_key=' . $this->config['api_key'];
 		}
 
 		$input->set('installtype', 'url');

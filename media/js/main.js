@@ -5,20 +5,23 @@ window.Hikasu = {
     form: null,
     category_id: 0,
     categories: null,
+    check_main_after_install: false,
     button_active: '',
     depends_wait: true,
     list_install: [],
     buy_projects: [],
 
-    init: function() {
+    init: function () {
         let self = this;
         this.container = document.querySelector('#hikasu-container');
         this.form = document.querySelector('#adminForm');
 
-        if(HikasuConfig.key === '') {
+        if (HikasuConfig.key === '') {
             self.showFormKey();
             return;
         }
+
+        self.checkMainExtension();
     },
 
     changeCategory: function (id) {
@@ -27,14 +30,17 @@ window.Hikasu = {
         let pagination = HikasuUtils.createElement('div', {'class': 'hikasu-pagination'});
 
         self.container.innerHTML = '';
+        self.container.append(self.categories.build());
+        self.container.append(grid.build());
+        self.container.append(pagination.build());
         self.loaderInit();
         self.loaderShow();
 
-        if(HikasuConfig.key !== '') {
+        if (HikasuConfig.key !== '') {
             let url = self.url + '&method=buyprojects';
 
             self.ajax(url, function (json) {
-                json = JSON.parse(json.data);
+                //json = JSON.parse(json);
                 self.buy_projects = json.items;
             });
         }
@@ -53,112 +59,10 @@ window.Hikasu = {
             self.ajax(url, function (json) {
                 json = JSON.parse(json.data);
                 let cards = json.items;
-                for (let i = 0; i < cards.length; i++) {
-                    let color = '#ccc',
-                        docs = cards[i].urls.documentation,
-                        support = cards[i].urls.support;
 
-                    if (cards[i].documentation !== undefined && cards[i].documentation !== '' && cards[i].documentation !== false) {
-                        docs = self.api + cards[i].documentation;
-                    }
-
-                    if (cards[i].params !== undefined) {
-                        cards[i].params = JSON.parse(cards[i].params);
-                    }
-
-                    if (cards[i].params.attrs_color !== undefined && cards[i].params.attrs_color !== '') {
-                        color = cards[i].params.attrs_color;
-                    }
-
-                    let grid_cards = HikasuUtils.createElement('div', {})
-                        .addChild('div', {
-                            'class': 'hikasu-card',
-                            'data-install': '0',
-                            'data-element': cards[i].element,
-                            'events': [
-                                [
-                                    'click',
-                                    function (ev) {
-                                        if (!ev.target.classList.contains('btn-install')) {
-                                            self.showProject(cards[i].id);
-                                            ev.preventDefault();
-                                        }
-                                    }
-                                ]
-                            ]
-                        })
-                        .addChild('div', {'class': 'hikasu-card_image'})
-                            .add('div', {'class': 'hikasu-card_color', 'style': 'opacity: .1'})
-                            .add('div', {
-                                'class': 'hikasu-card_cover',
-                                'style': cards[i].images.cover !== false ? ('background-image:url(' + self.api + '/' + cards[i].images.cover + ')') : ''
-                            })
-                            .getParent()
-                        .add('h3', {'class': 'hikasu-card_title'}, cards[i].title)
-                        .add('div', {'class': 'hikasu-card_description'}, cards[i].introtext)
-                            .addChild('div', {'class': 'hikasu-card_actions'});
-
-                    if (cards[i].download_type === 'free') {
-                        grid_cards = grid_cards.add('button', {
-                            'class': 'btn btn-success btn-install', 'events': [
-                                [
-                                    'click',
-                                    function (ev) {
-                                        self.installProject(cards[i]);
-                                        ev.preventDefault();
-                                    }
-                                ]]
-                        }, '<span class="icon-download"></span> ' + HikasuLangs.button_install);
-                    }
-                    if (cards[i].download_type === 'paid') {
-                        if (HikasuConfig.key !== '') {
-                            grid_cards = grid_cards.add('button', {
-                                'class': 'btn btn-success btn-install', 'events': [
-                                    [
-                                        'click',
-                                        function (ev) {
-                                            self.installProject(cards[i]);
-                                            ev.preventDefault();
-                                        }
-                                    ]]
-                            }, '<span class="icon-download"></span> ' + HikasuLangs.button_install);
-                        } else {
-                            grid_cards = grid_cards.add('button', {
-                                'class': 'btn btn-success', 'events': [
-                                    [
-                                        'click',
-                                        function (ev) {
-                                            window.open(self.api + cards[i].link, '_target');
-                                            ev.preventDefault();
-                                            return false;
-                                        }
-                                    ]]
-                            }, 'Купить');
-                        }
-
-                    }
-
-
-                    grid_cards = grid_cards.add('button', {
-                        'class': 'btn', 'data-id': cards[i].id, 'events': [
-                            [
-                                'click',
-                                function (ev) {
-                                    let id = this.getAttribute('data-id');
-                                    self.showProject(id);
-                                    ev.preventDefault();
-                                    return false;
-                                }
-                            ]
-                        ]
-                    }, HikasuLangs.button_more)
-                        .getParent()
-                        .getParent();
-
-                    self.container.querySelector('.hikasu-grid').append(grid_cards.build());
-
+                for (let i=0;i<cards.length;i++) {
+                    self.container.querySelector('.hikasu-grid').append(self.renderCatalogGrid(cards[i]).build());
                 }
-
 
                 self.setColors();
                 self.checkInstall();
@@ -195,9 +99,6 @@ window.Hikasu = {
 
         self.category_id = id;
         load_page();
-        self.container.append(self.categories.build());
-        self.container.append(grid.build());
-        self.container.append(pagination.build());
 
         let buttons_all = document.querySelectorAll('.hikasu-categories button');
         for (let i = 0; i < buttons_all.length; i++) {
@@ -285,7 +186,9 @@ window.Hikasu = {
                 let categories_items = json.items;
                 for (let i = 0; i < categories_items.length; i++) {
                     self.categories.add('button', {
-                        'class': 'btn btn-change-category', 'data-type': 'category-' + categories_items[i].id, 'events': [
+                        'class': 'btn btn-change-category',
+                        'data-type': 'category-' + categories_items[i].id,
+                        'events': [
                             [
                                 'click',
                                 function (ev) {
@@ -299,7 +202,7 @@ window.Hikasu = {
 
                 let search_categories = self.container.querySelector('.hikasu-categories');
 
-                if(search_categories !== null && search_categories !== undefined) {
+                if (search_categories !== null && search_categories !== undefined) {
                     search_categories.remove();
                     self.container.prepend(self.categories.build());
                 }
@@ -310,33 +213,42 @@ window.Hikasu = {
         load_categories();
     },
 
-    showFormKey: function() {
+    showFormKey: function () {
         let self = this;
         let form = HikasuUtils.createElement('form', {
             'class': 'form-horizontal hikasu-flex hikasu-flex-center hikasu-height-large',
             'events': [
                 [
                     'submit',
-                    function(event) {
+                    function (event) {
                         // отправить аякс на сохранение ключа
+                        let key_value = event.target.querySelector('[name=key]').value;
+                        HikasuUtils.ajaxPost(self.url + '&method=saveKey', {key: key_value})
+                            .done(function (response) {
+                                self.checkMainExtension();
+                                HikasuConfig.key = key_value;
+                            })
+                            .fail(function (xhr) {
+
+                            });
                         event.preventDefault();
                         return false;
                     }
                 ]
             ]
         })
-        .addChild('div', {'class': 'span5 hikasu-card hikasu-background-muted hikasu-margin-auto hikasu-padding-large'})
+            .addChild('div', {'class': 'span5 hikasu-card hikasu-background-muted hikasu-margin-auto hikasu-padding-large'})
             .add('p', {'class': 'hikasu-text-large'}, 'Введите Ваш ключ из личного кабинета <a href="https://radicalmart.ru" target="_blank">radicalmart.ru</a>')
             .addChild('div', {'class': 'control-group control-group-no-label control-group-large hikasu-margin-top'})
-                .addChild('div', {'class': 'controls'})
-                    .add('input', {'class': 'span12', 'type': 'text', 'placeholder': 'Введите здесь ваш ключ'})
-                    .getParent()
-                .getParent()
+            .addChild('div', {'class': 'controls'})
+            .add('input', {'class': 'span12', 'type': 'text', 'placeholder': 'Введите здесь ваш ключ', 'name': 'key'})
+            .getParent()
+            .getParent()
             .addChild('div', {'class': 'control-group control-group-no-label control-group-large'})
-                .addChild('div', {'class': 'controls'})
-                    .add('button', {'class': 'btn btn-primary btn-large', 'type': 'submit'}, 'Отправить')
-                    .getParent()
-                .getParent()
+            .addChild('div', {'class': 'controls'})
+            .add('button', {'class': 'btn btn-primary btn-large', 'type': 'submit'}, 'Отправить')
+            .getParent()
+            .getParent()
             .getParent()
 
         self.container.innerHTML = '';
@@ -487,9 +399,7 @@ window.Hikasu = {
                     }, 'Купить');
                 }
 
-            }
-            else
-            {
+            } else {
                 body = body.add('button', {
                     'class': 'btn btn-success btn-large btn-install',
                     'disabled': 'disabled',
@@ -651,7 +561,11 @@ window.Hikasu = {
                 }
 
                 body = body.getParent().getParent();
-                HikasuUtils.modal(header.build(), body.build());
+                HikasuUtils.modal(header.build(), body.build(), '', '', function () {
+                    if(self.check_main_after_install) {
+                        self.checkMainExtension();
+                    }
+                });
             }
 
             //проходим что нам надо установить и ставим
@@ -805,7 +719,9 @@ window.Hikasu = {
         for (let i = 0; i < cards.length; i++) {
             let color = cards[i].querySelector('.hikasu-card_color');
             let text = cards[i].querySelector('.hikasu-card_title');
-            color.style.backgroundColor = HikasuUtils.generateColorFromText(text.textContent);
+            if(color !== undefined && color !== null) {
+                color.style.backgroundColor = HikasuUtils.generateColorFromText(text.textContent);
+            }
         }
 
     },
@@ -849,6 +765,39 @@ window.Hikasu = {
             });
         }
 
+    },
+
+    checkMainExtension: function () {
+        let self = this;
+        HikasuUtils.ajaxGet(self.url + '&method=checkMainExtension')
+            .done(function (response) {
+                response = JSON.parse(response);
+                let data = response.data[0];
+
+                if (data.status === 'ok') {
+                    self.showCatalog();
+                }
+
+                if (data.status === 'notinstall') {
+                    let grid = HikasuUtils.createElement('div', {'class': 'hikasu-grid'});
+                    self.container.innerHTML = '';
+                    self.container.append(grid.build());
+                    self.loaderInit();
+                    self.loaderShow();
+                    let grid_element = self.container.querySelector('.hikasu-grid');
+
+                    for (let i=0;i<data.items.length;i++) {
+                        grid_element.append(self.renderCatalogGrid(data.items[i]).build());
+                    }
+
+                    self.setColors();
+                    self.loaderHide();
+                    self.check_main_after_install = true;
+                }
+            })
+            .fail(function (xhr) {
+
+            });
     },
 
     showUpdates: function () {
@@ -990,12 +939,12 @@ window.Hikasu = {
                 body =
                     body.addChild('table', {'class': 'hikasu-installed-page_tables table table-striped table-hover'})
                         .addChild('thead')
-                            .addChild('tr')
-                                .add('th', {}, HikasuLangs.extension_name)
-                                .add('th', {}, HikasuLangs.current_version)
-                                .add('th', {}, '')
-                                .getParent()
-                            .getParent()
+                        .addChild('tr')
+                        .add('th', {}, HikasuLangs.extension_name)
+                        .add('th', {}, HikasuLangs.current_version)
+                        .add('th', {}, '')
+                        .getParent()
+                        .getParent()
                         .addChild('tbody')
 
                 for (let i = 0; i < data.length; i++) {
@@ -1003,48 +952,48 @@ window.Hikasu = {
                         body.addChild('tr', {'class': 'hikasu-installed-page_tables-element-id-' + data[i].project_id})
                             .add('td', {}, data[i].title)
                             .add('td', {}, data[i].version)
-                                .addChild('td', {'class': 'hikasu-installed-page_buttons'})
-                                    .add('button', {
-                                        'class': 'btn btn-width-fixed', 'events': [
-                                            [
-                                                'click',
-                                                function (ev) {
-                                                    self.showProject(data[i].project_id);
-                                                    ev.preventDefault();
-                                                }
-                                            ]
-                                        ]
-                                    }, HikasuLangs.button_view)
-                                    /*.add('button', {
-                                        'class': 'btn btn-width-fixed ' + (parseInt(data[i].enable) ? 'btn-danger' : 'btn-success'),
-                                        'events': [
-                                            [
-                                                'click',
-                                                function (ev) {
-                                                    let button = this;
-                                                    button.setAttribute('disabled', 'disabled');
+                            .addChild('td', {'class': 'hikasu-installed-page_buttons'})
+                            .add('button', {
+                                'class': 'btn btn-width-fixed', 'events': [
+                                    [
+                                        'click',
+                                        function (ev) {
+                                            self.showProject(data[i].project_id);
+                                            ev.preventDefault();
+                                        }
+                                    ]
+                                ]
+                            }, HikasuLangs.button_view)
+                            /*.add('button', {
+                                'class': 'btn btn-width-fixed ' + (parseInt(data[i].enable) ? 'btn-danger' : 'btn-success'),
+                                'events': [
+                                    [
+                                        'click',
+                                        function (ev) {
+                                            let button = this;
+                                            button.setAttribute('disabled', 'disabled');
 
-                                                    self.ajax(self.url + '&method=installedList', function (json) {
+                                            self.ajax(self.url + '&method=installedList', function (json) {
 
-                                                        button.removeAttribute('disabled');
-                                                    }, function () {
-                                                        button.removeAttribute('disabled');
-                                                    });
-                                                }
-                                            ]
-                                        ]
-                                    }, parseInt(data[i].enable) ? HikasuLangs.button_disable : HikasuLangs.button_enable)
-                                    .add('button', {
-                                        'class': 'btn btn-danger', 'events': [
-                                            [
-                                                'click',
-                                                function (ev) {
+                                                button.removeAttribute('disabled');
+                                            }, function () {
+                                                button.removeAttribute('disabled');
+                                            });
+                                        }
+                                    ]
+                                ]
+                            }, parseInt(data[i].enable) ? HikasuLangs.button_disable : HikasuLangs.button_enable)
+                            .add('button', {
+                                'class': 'btn btn-danger', 'events': [
+                                    [
+                                        'click',
+                                        function (ev) {
 
-                                                }
-                                            ]
-                                        ]
-                                    }, '<span class="icon-trash"></span>')*/
-                                    .getParent()
+                                        }
+                                    ]
+                                ]
+                            }, '<span class="icon-trash"></span>')*/
+                            .getParent()
                             .getParent()
                 }
 
@@ -1059,6 +1008,118 @@ window.Hikasu = {
             HikasuUtils.modal(header, body);
 
         });
+    },
+
+    renderCatalogGrid: function (item) {
+        let self = this;
+
+            let color = '#ccc',
+                docs = item.urls.documentation,
+                support = item.urls.support;
+
+            if (item.documentation !== undefined && item.documentation !== '' && item.documentation !== false) {
+                docs = self.api + item.documentation;
+            }
+
+            if (item.params !== undefined) {
+                item.params = JSON.parse(item.params);
+            }
+
+            if (item.params.attrs_color !== undefined && item.params.attrs_color !== '') {
+                color = item.params.attrs_color;
+            }
+
+            let grid_cards = HikasuUtils.createElement('div', {}).
+            addChild('div', {
+                    'class': 'hikasu-card',
+                    'data-install': '0',
+                    'data-element': item.element,
+                    'events': [
+                        [
+                            'click',
+                            function (ev) {
+                                if (!ev.target.classList.contains('btn-install')) {
+                                    self.showProject(item.id);
+                                    ev.preventDefault();
+                                }
+                            }
+                        ]
+                    ]
+                });
+
+            if(item.images !== undefined)
+            {
+                grid_cards.addChild('div', {'class': 'hikasu-card_image'})
+                    .add('div', {'class': 'hikasu-card_color', 'style': 'opacity: .1'})
+                    .add('div', {
+                        'class': 'hikasu-card_cover',
+                        'style': item.images.cover !== false ? ('background-image:url(' + self.api + '/' + item.images.cover + ')') : ''
+                    })
+                    .getParent();
+            }
+
+
+            grid_cards.add('h3', {'class': 'hikasu-card_title'}, item.title)
+            .add('div', {'class': 'hikasu-card_description'}, item.introtext)
+            .addChild('div', {'class': 'hikasu-card_actions'});
+
+            if (item.download_type === 'free') {
+                grid_cards = grid_cards.add('button', {
+                    'class': 'btn btn-success btn-install', 'events': [
+                        [
+                            'click',
+                            function (ev) {
+                                self.installProject(item);
+                                ev.preventDefault();
+                            }
+                        ]]
+                }, '<span class="icon-download"></span> ' + HikasuLangs.button_install);
+            }
+            if (item.download_type === 'paid') {
+                if (HikasuConfig.key !== '') {
+                    grid_cards = grid_cards.add('button', {
+                        'class': 'btn btn-success btn-install', 'events': [
+                            [
+                                'click',
+                                function (ev) {
+                                    self.installProject(item);
+                                    ev.preventDefault();
+                                }
+                            ]]
+                    }, '<span class="icon-download"></span> ' + HikasuLangs.button_install);
+                } else {
+                    grid_cards = grid_cards.add('button', {
+                        'class': 'btn btn-success', 'events': [
+                            [
+                                'click',
+                                function (ev) {
+                                    window.open(self.api + item.link, '_target');
+                                    ev.preventDefault();
+                                    return false;
+                                }
+                            ]]
+                    }, 'Купить');
+                }
+
+            }
+
+
+            grid_cards = grid_cards.add('button', {
+                'class': 'btn', 'data-id': item.id, 'events': [
+                    [
+                        'click',
+                        function (ev) {
+                            let id = this.getAttribute('data-id');
+                            self.showProject(id);
+                            ev.preventDefault();
+                            return false;
+                        }
+                    ]
+                ]
+            }, HikasuLangs.button_more)
+                .getParent()
+
+        return grid_cards;
     },
 
     ajax: function (url, callback_success, callback_fail) {

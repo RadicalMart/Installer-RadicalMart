@@ -1,13 +1,14 @@
 <?php defined('_JEXEC') or die;
 
+use Hikasu\API;
+use Hikasu\ProviderJoomla;
+use Hikasu\ProviderYooelements;
 use Hikasu\ProviderYoolayouts;
+use Joomla\CMS\Cache\Cache;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\FileLayout;
 use Joomla\CMS\Plugin\CMSPlugin;
-use Hikasu\API;
-use Hikasu\ProviderJoomla;
-use Hikasu\ProviderYooelements;
 
 /**
  * PlgInstallerHikasu Plugin.
@@ -22,6 +23,9 @@ class PlgInstallerHikasu extends CMSPlugin
 	 * @since version
 	 */
 	protected $app;
+
+
+	protected $db;
 
 
 	/**
@@ -42,11 +46,11 @@ class PlgInstallerHikasu extends CMSPlugin
 	 */
 	public function onInstallerAddInstallationTab()
 	{
-		$tab            = array();
-		$tab['name']    = 'hikasu';
-		$tab['label']   = Text::_('PLG_INSTALLER_HIKASU_TEXT');
+		$tab          = array();
+		$tab['name']  = 'hikasu';
+		$tab['label'] = Text::_('PLG_INSTALLER_HIKASU_TEXT');
 
-		$content = new FileLayout('default', JPATH_ROOT . '/plugins/installer/hikasu/tmpl');
+		$content        = new FileLayout('default', JPATH_ROOT . '/plugins/installer/hikasu/tmpl');
 		$tab['content'] = $content->render(['params' => $this->params]);
 
 		return $tab;
@@ -63,64 +67,72 @@ class PlgInstallerHikasu extends CMSPlugin
 	public function onAjaxHikasu()
 	{
 		JLoader::registerNamespace('Hikasu', __DIR__ . DIRECTORY_SEPARATOR . 'src');
-		$app = Factory::getApplication();
+		$app    = Factory::getApplication();
 		$method = $app->input->get('method');
 
-		if(!$app->isClient('administrator'))
+		if (!$app->isClient('administrator'))
 		{
 			return false;
 		}
 
-		if($method === 'categories')
+		if ($method === 'categories')
 		{
 			return $this->APICategories();
 		}
 
-		if($method === 'projects')
+		if ($method === 'projects')
 		{
 			return $this->APIProjects();
 		}
 
-		if($method === 'projectList')
+		if ($method === 'projectList')
 		{
 			return $this->APIProjectList();
 		}
 
-		if($method === 'project')
+		if ($method === 'checkMainExtension')
+		{
+			return $this->checkMainExtension();
+		}
+
+		if ($method === 'project')
 		{
 			return $this->APIProject();
 		}
 
-		if($method === 'getForInstallDepends')
+		if ($method === 'getForInstallDepends')
 		{
 			return $this->APIGetForInstallDepends();
 		}
 
-		if($method === 'installJoomla')
+		if ($method === 'installJoomla')
 		{
 			return $this->installJoomla();
 		}
 
-		if($method === 'checkInstall')
+		if ($method === 'checkInstall')
 		{
 			return $this->checkInstall();
 		}
 
-		if($method === 'checkUpdates')
+		if ($method === 'checkUpdates')
 		{
 			return $this->checkUpdates();
 		}
 
-		if($method === 'installedList')
+		if ($method === 'installedList')
 		{
 			return $this->installedList();
 		}
 
-		if($method === 'toggleEnabled')
+		if ($method === 'toggleEnabled')
 		{
 			return $this->toggleEnabled();
 		}
-
+		if ($method === 'saveKey')
+		{
+			return $this->saveKey();
+		}
 
 	}
 
@@ -132,30 +144,30 @@ class PlgInstallerHikasu extends CMSPlugin
 	 * @throws Exception
 	 * @since version
 	 */
-	private function installJoomla()
+	protected function installJoomla()
 	{
-		$app = Factory::getApplication();
-		$input = $app->input;
-		$id = $input->get('id', '', 'int');
-		$config = [
-			'api_key' => $this->params->get('api_key')
+		$app      = Factory::getApplication();
+		$input    = $app->input;
+		$id       = $input->get('id', '', 'int');
+		$config   = [
+			'api_key' => $this->params->get('apikey')
 		];
-		$update = new ProviderJoomla($config);
-		$install = $update->start($id);
+		$update   = new ProviderJoomla($config);
+		$install  = $update->start($id);
 		$messages = [];
 
-		if($install)
+		if ($install)
 		{
-			$message = $app->getUserState('com_installer.message', '');
+			$message           = $app->getUserState('com_installer.message', '');
 			$extension_message = $app->getUserState('com_installer.extension_message', '');
 
-			if($message)
+			if ($message)
 			{
 				$messages[] = ['message' => $app->getUserState('com_installer.message', ''), 'type' => 'info'];
 				$app->setUserState('com_installer.message', '');
 			}
 
-			if($extension_message)
+			if ($extension_message)
 			{
 				$messages[] = ['message' => $app->getUserState('com_installer.extension_message', ''), 'type' => 'info'];
 				$app->setUserState('com_installer.extension_message', '');
@@ -164,6 +176,7 @@ class PlgInstallerHikasu extends CMSPlugin
 		}
 
 		$messages = array_merge($messages, $app->getMessageQueue());
+
 		return json_encode(['status' => $install ? 'ok' : 'fail', 'messages' => $messages]);
 	}
 
@@ -173,11 +186,11 @@ class PlgInstallerHikasu extends CMSPlugin
 	 *
 	 * @since version
 	 */
-	private function checkUpdates()
+	protected function checkUpdates()
 	{
 		$ids = [];
 
-		$db = Factory::getDbo();
+		$db    = Factory::getDbo();
 		$query = $db->getQuery(true);
 		$query
 			->select(['id', 'title', 'version', 'project_id'])
@@ -191,27 +204,27 @@ class PlgInstallerHikasu extends CMSPlugin
 
 		$projects_from_server = API::projectListCheckVersion($ids);
 		$projects_from_server = json_decode($projects_from_server, JSON_OBJECT_AS_ARRAY);
-		$projects = [];
-		$projects_for_update = [];
+		$projects             = [];
+		$projects_for_update  = [];
 
-		if(is_array($projects_from_server))
+		if (is_array($projects_from_server))
 		{
 			foreach ($projects_from_server as $project_from_server)
 			{
-				$projects[(int)$project_from_server['id']] = $project_from_server;
+				$projects[(int) $project_from_server['id']] = $project_from_server;
 			}
 
 			foreach ($projects_install as $project_install)
 			{
-				if(isset($projects[(int)$project_install->project_id]))
+				if (isset($projects[(int) $project_install->project_id]))
 				{
-					$version_current = (string)$project_install->version;
-					$version_last = (string)$projects[$project_install->project_id]['version']['version'];
+					$version_current = (string) $project_install->version;
+					$version_last    = (string) $projects[$project_install->project_id]['version']['version'];
 
-					if(version_compare($version_last, $version_current, '>'))
+					if (version_compare($version_last, $version_current, '>'))
 					{
 						$project_install->version_last = $version_last;
-						$projects_for_update[] = $project_install;
+						$projects_for_update[]         = $project_install;
 					}
 				}
 			}
@@ -221,7 +234,7 @@ class PlgInstallerHikasu extends CMSPlugin
 	}
 
 
-	private function APICategories()
+	protected function APICategories()
 	{
 		return API::categories();
 	}
@@ -232,12 +245,13 @@ class PlgInstallerHikasu extends CMSPlugin
 	 *
 	 * @since version
 	 */
-	private function APIProjects()
+	protected function APIProjects()
 	{
-		$id = $this->app->input->get('category_id');
-		$page = $this->app->input->get('page', 1, 'int');
-		$limit = $this->app->input->get('limit', 12, 'int');
+		$id       = $this->app->input->get('category_id');
+		$page     = $this->app->input->get('page', 1, 'int');
+		$limit    = $this->app->input->get('limit', 12, 'int');
 		$projects = API::projects($id, $page, $limit);
+
 		return $projects;
 	}
 
@@ -248,10 +262,11 @@ class PlgInstallerHikasu extends CMSPlugin
 	 *
 	 * @since version
 	 */
-	private function APIProjectList()
+	protected function APIProjectList()
 	{
-		$ids = $this->app->input->get('ids', '{}', 'raw');
+		$ids      = $this->app->input->get('ids', '{}', 'raw');
 		$projects = API::projectList($ids);
+
 		return $projects;
 	}
 
@@ -262,10 +277,11 @@ class PlgInstallerHikasu extends CMSPlugin
 	 *
 	 * @since version
 	 */
-	private function APIGetForInstallDepends()
+	protected function APIGetForInstallDepends()
 	{
-		$id = $this->app->input->getInt('project_id');
+		$id       = $this->app->input->getInt('project_id');
 		$projects = API::getForInstallDepends($id);
+
 		return $projects;
 	}
 
@@ -276,10 +292,11 @@ class PlgInstallerHikasu extends CMSPlugin
 	 *
 	 * @since version
 	 */
-	private function APIProject()
+	protected function APIProject()
 	{
-		$id = $this->app->input->get('project_id');
+		$id      = $this->app->input->get('project_id');
 		$project = API::project($id);
+
 		return $project;
 	}
 
@@ -291,13 +308,13 @@ class PlgInstallerHikasu extends CMSPlugin
 	 * @throws Exception
 	 * @since version
 	 */
-	private function checkInstall()
+	protected function checkInstall()
 	{
-		$list = $this->app->input->getString('list', '{}');
-		$list = json_decode($list, JSON_OBJECT_AS_ARRAY);
-		$fields = [];
+		$list             = $this->app->input->getString('list', '{}');
+		$list             = json_decode($list, JSON_OBJECT_AS_ARRAY);
+		$fields           = [];
 		$find_list_output = [];
-		$db = Factory::getDbo();
+		$db               = Factory::getDbo();
 
 		foreach ($list as $value)
 		{
@@ -332,6 +349,92 @@ class PlgInstallerHikasu extends CMSPlugin
 	}
 
 
+	protected function checkMainExtension()
+	{
+		$projects = json_decode(API::projectsMain(), JSON_OBJECT_AS_ARRAY);
+		$elements = [];
+		$find     = false;
+
+		if (!is_array($projects) || !isset($projects['items']))
+		{
+			throw new RuntimeException(Text::_('Ошибка подключения к radicalmart.ru'), 500);
+		}
+		foreach ($projects['items'] as $project)
+		{
+			if (isset($project['element']))
+			{
+				$elements[] = $this->db->q($project['element']);
+			}
+		}
+
+		$query = $this->db->getQuery(true);
+		$query
+			->select($this->db->qn('element'))
+			->from($this->db->quoteName('#__extensions'))
+			->where($this->db->qn('element') . ' IN (' . implode(',', $elements) . ')');
+		$find_list = $this->db->setQuery($query)->loadObjectList();
+
+		if (count($find_list) > 0)
+		{
+			$find = true;
+		}
+
+		if (!$find)
+		{
+			return ['status' => 'notinstall', 'items' => $projects['items']];
+		}
+
+		return ['status' => 'ok'];
+	}
+
+
+	protected function saveKey()
+	{
+		$key = $this->app->input->getString('key');
+
+		if (empty($key))
+		{
+			throw new RuntimeException(Text::_('Пустой ключ'), 401);
+		}
+
+		$result = json_decode(API::checkKey($key), JSON_OBJECT_AS_ARRAY);
+
+		if (
+			is_array($result) &&
+			isset($result['check']) &&
+			((string) $result['check'] === 'true')
+		)
+		{
+			$this->params->set('apikey', $key);
+			$query  = $this->db->getQuery(true);
+			$fields = [
+				$this->db->qn('params') . ' = ' . $this->db->q($this->params->toString())
+			];
+
+			$conditions = [
+				$this->db->qn('element') . ' = ' . $this->db->q('hikasu'),
+				$this->db->qn('folder') . ' = ' . $this->db->q('installer'),
+			];
+
+			$query->update($this->db->quoteName('#__extensions'))->set($fields)->where($conditions);
+			$this->db->setQuery($query);
+			$result = $this->db->execute();
+
+			if (!$result)
+			{
+				throw new RuntimeException(Text::_('Ошибка при сохранение'), 500);
+			}
+
+			$this->cleanCache('_system', 0);
+			$this->cleanCache('_system', 1);
+
+			return "ok";
+		}
+
+		throw new RuntimeException(Text::_('Недопустимый ключ'), 401);
+	}
+
+
 	/**
 	 *
 	 * @return array|mixed
@@ -340,7 +443,7 @@ class PlgInstallerHikasu extends CMSPlugin
 	 */
 	protected function installedList()
 	{
-		$db = Factory::getDbo();
+		$db    = Factory::getDbo();
 		$query = $db->getQuery(true);
 		$query
 			->select('*')
@@ -355,17 +458,17 @@ class PlgInstallerHikasu extends CMSPlugin
 	{
 		$id = $this->app->input->getInt('id');
 
-		$db = Factory::getDbo();
+		$db    = Factory::getDbo();
 		$query = $db->getQuery(true);
 		$query
 			->select(['type'])
 			->from($db->quoteName('#__hikasu_install'))
 			->where('id = ' . $db->quote($id));
-		$item = $db->setQuery($query);
+		$item   = $db->setQuery($query);
 		$result = false;
-		$class = '\\Hikasu\\Provider' . ucfirst(strtolower($item->type));
+		$class  = '\\Hikasu\\Provider' . ucfirst(strtolower($item->type));
 
-		if(class_exists($class))
+		if (class_exists($class))
 		{
 			$result = (new $class())->enabled($id);
 		}
@@ -373,5 +476,18 @@ class PlgInstallerHikasu extends CMSPlugin
 		return json_encode(['status' => $result ? 'ok' : 'fail']);
 	}
 
+
+	protected function cleanCache($group = null, $client_id = 0)
+	{
+		$conf = Factory::getConfig();
+
+		$options = [
+			'defaultgroup' => !is_null($group) ? $group : Factory::getApplication()->input->get('option'),
+			'cachebase'    => $client_id ? JPATH_ADMINISTRATOR . '/cache' : $conf->get('cache_path', JPATH_SITE . '/cache')
+		];
+
+		$cache = Cache::getInstance('callback', $options);
+		$cache->clean();
+	}
 
 }
