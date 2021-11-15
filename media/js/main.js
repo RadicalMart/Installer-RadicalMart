@@ -25,9 +25,9 @@ window.Hikasu = {
     },
 
     changeCategory: function (id) {
-        let self = this;
-        let grid = HikasuUtils.createElement('div', {'class': 'hikasu-grid'});
-        let pagination = HikasuUtils.createElement('div', {'class': 'hikasu-pagination'});
+        let self = this,
+            grid = HikasuUtils.createElement('div', {'class': 'hikasu-grid'}),
+            pagination = HikasuUtils.createElement('div', {'class': 'hikasu-pagination'});
 
         self.container.innerHTML = '';
         self.container.append(self.categories.build());
@@ -214,8 +214,8 @@ window.Hikasu = {
     },
 
     showFormKey: function () {
-        let self = this;
-        let form = HikasuUtils.createElement('form', {
+        let self = this,
+            form = HikasuUtils.createElement('form', {
             'class': 'form-horizontal hikasu-flex hikasu-flex-center hikasu-height-large',
             'events': [
                 [
@@ -237,19 +237,19 @@ window.Hikasu = {
                 ]
             ]
         })
-            .addChild('div', {'class': 'span5 hikasu-card hikasu-background-muted hikasu-margin-auto hikasu-padding-large'})
+        .addChild('div', {'class': 'span5 hikasu-card hikasu-background-muted hikasu-margin-auto hikasu-padding-large'})
             .add('p', {'class': 'hikasu-text-large'}, 'Введите Ваш ключ из личного кабинета <a href="https://radicalmart.ru" target="_blank">radicalmart.ru</a>')
-            .addChild('div', {'class': 'control-group control-group-no-label control-group-large hikasu-margin-top'})
-            .addChild('div', {'class': 'controls'})
-            .add('input', {'class': 'span12', 'type': 'text', 'placeholder': 'Введите здесь ваш ключ', 'name': 'key'})
-            .getParent()
-            .getParent()
-            .addChild('div', {'class': 'control-group control-group-no-label control-group-large'})
-            .addChild('div', {'class': 'controls'})
-            .add('button', {'class': 'btn btn-primary btn-large', 'type': 'submit'}, 'Отправить')
-            .getParent()
-            .getParent()
-            .getParent()
+                .addChild('div', {'class': 'control-group control-group-no-label control-group-large hikasu-margin-top'})
+                    .addChild('div', {'class': 'controls'})
+                        .add('input', {'class': 'span12', 'type': 'text', 'placeholder': 'Введите здесь ваш ключ', 'name': 'key'})
+                        .getParent()
+                    .getParent()
+                .addChild('div', {'class': 'control-group control-group-no-label control-group-large'})
+                    .addChild('div', {'class': 'controls'})
+                        .add('button', {'class': 'btn btn-primary btn-large', 'type': 'submit'}, 'Отправить')
+                        .getParent()
+                    .getParent()
+                .getParent()
 
         self.container.innerHTML = '';
         self.container.appendChild(form.build());
@@ -258,10 +258,10 @@ window.Hikasu = {
     showProject: function (id) {
         let self = this;
         self.ajax(self.url + '&method=project&project_id=' + id, function (json) {
-            let item = JSON.parse(json.data);
-            let header = HikasuUtils.createElement('div');
-            let body = HikasuUtils.createElement('div', {'class': 'hikasu-project-page'});
-            let color = HikasuUtils.generateColorFromText(item.title),
+            let item = JSON.parse(json.data),
+                header = HikasuUtils.createElement('div'),
+                body = HikasuUtils.createElement('div', {'class': 'hikasu-project-page'}),
+                color = HikasuUtils.generateColorFromText(item.title),
                 docs = item.urls.documentation,
                 support = item.urls.support;
 
@@ -293,59 +293,59 @@ window.Hikasu = {
                         .add('div', {'class': 'hikasu-project-page_gallery-images-element_caption'}, item.gallery[i].text)
                         .getParent();
                 }
+
                 header = header.add('button', {
                     'class': 'hikasu-project-page_gallery-images-prev', 'events': [
                         [
                             'click', function (ev) {
-                            let i;
-                            let slideshow = this.closest(".hikasu-project-page_gallery-images");
-                            let slides = slideshow.querySelectorAll('.hikasu-project-page_gallery-images-element');
-                            let active = parseInt(slideshow.getAttribute('data-active'));
-                            active = active - 1;
+                                let i,
+                                    slideshow = this.closest(".hikasu-project-page_gallery-images"),
+                                    slides = slideshow.querySelectorAll('.hikasu-project-page_gallery-images-element'),
+                                    active = parseInt(slideshow.getAttribute('data-active')) - 1;
 
-                            if (active > slides.length) {
-                                active = 1;
+                                if (active > slides.length) {
+                                    active = 1;
+                                }
+
+                                if (active < 1) {
+                                    active = slides.length;
+                                }
+
+                                for (i = 0; i < slides.length; i++) {
+                                    slides[i].style.display = "none";
+                                }
+
+                                slides[active - 1].style.display = "block";
+                                slideshow.setAttribute('data-active', active);
                             }
-
-                            if (active < 1) {
-                                active = slides.length;
-                            }
-
-                            for (i = 0; i < slides.length; i++) {
-                                slides[i].style.display = "none";
-                            }
-
-                            slides[active - 1].style.display = "block";
-                            slideshow.setAttribute('data-active', active);
-                        }
                         ]
                     ]
                 }, '❮');
+
                 header = header.add('button', {
                     'class': 'hikasu-project-page_gallery-images-next', 'events': [
                         [
                             'click', function (ev) {
-                            let i;
-                            let slideshow = this.closest(".hikasu-project-page_gallery-images");
-                            let slides = slideshow.querySelectorAll('.hikasu-project-page_gallery-images-element');
-                            let active = parseInt(slideshow.getAttribute('data-active'));
-                            active = active + 1;
+                                let i,
+                                    slideshow = this.closest(".hikasu-project-page_gallery-images"),
+                                    slides = slideshow.querySelectorAll('.hikasu-project-page_gallery-images-element'),
+                                    active = parseInt(slideshow.getAttribute('data-active')) + 1;
 
-                            if (active > slides.length) {
-                                active = 1;
+                                if (active > slides.length) {
+                                    active = 1;
+                                }
+
+                                if (active < 1) {
+                                    active = slides.length;
+                                }
+
+                                for (i = 0; i < slides.length; i++) {
+                                    slides[i].style.display = "none";
+                                }
+
+                                slides[active - 1].style.display = "block";
+                                slideshow.setAttribute('data-active', active);
                             }
-
-                            if (active < 1) {
-                                active = slides.length;
-                            }
-
-                            for (i = 0; i < slides.length; i++) {
-                                slides[i].style.display = "none";
-                            }
-
-                            slides[active - 1].style.display = "block";
-                            slideshow.setAttribute('data-active', active);
-                        }
                         ]
                     ]
                 }, '❯');
@@ -497,7 +497,7 @@ window.Hikasu = {
     findDepends: function (project) {
         let self = this;
         self.depends_wait = true;
-        this.ajax(self.url + '&method=getForInstallDepends&project_id=' + project.id, function (json) {
+        self.ajax(self.url + '&method=getForInstallDepends&project_id=' + project.id, function (json) {
             let depends = JSON.parse(json.data);
             for (let i = 0; i < depends.length; i++) {
                 self.list_install.push({id: depends[i].id, title: depends[i].title});
@@ -531,28 +531,28 @@ window.Hikasu = {
             }
 
             if (show_modal) {
-                let header = HikasuUtils.createElement('h1', {'class': ''}, HikasuLangs.installing_an_extension);
-                let body = HikasuUtils.createElement('div', {'class': 'hikasu-install-page'});
+                let header = HikasuUtils.createElement('h1', {'class': ''}, HikasuLangs.installing_an_extension),
+                    body = HikasuUtils.createElement('div', {'class': 'hikasu-install-page'});
 
-                body =
-                    body.addChild('table', {'class': 'hikasu-updates-page_tables table table-striped table-hover'})
+                body = body
+                    .addChild('table', {'class': 'hikasu-updates-page_tables table table-striped table-hover'})
                         .addChild('thead')
-                        .addChild('tr')
-                        .add('th', {}, HikasuLangs.extension_name)
-                        .add('th', {}, HikasuLangs.status)
-                        .add('th', {}, '')
-                        .getParent()
-                        .getParent()
+                            .addChild('tr')
+                                .add('th', {}, HikasuLangs.extension_name)
+                                .add('th', {}, HikasuLangs.status)
+                                .add('th', {}, '')
+                                .getParent()
+                            .getParent()
                         .addChild('tbody');
 
                 for (let i = 0; i < self.list_install.length; i++) {
-                    body =
-                        body.addChild('tr', {'class': 'hikasu-install-page_tables-element-id-' + self.list_install[i].id})
+                    body = body
+                        .addChild('tr', {'class': 'hikasu-install-page_tables-element-id-' + self.list_install[i].id})
                             .add('td', {}, self.list_install[i].title)
                             .add('td', {'class': 'hikasu-install-page_tables-element-status'}, HikasuLangs.wait)
                             .add('td', {'class': 'hikasu-install-page_tables-element-action'})
                             .getParent()
-                            .addChild('tr', {'class': 'hikasu-install-page_tables-element-messages'})
+                        .addChild('tr', {'class': 'hikasu-install-page_tables-element-messages'})
                             .add('td', {
                                 'class': 'hikasu-install-page_tables-element-id-' + self.list_install[i].id + '-messages hidden',
                                 'colspan': 3
@@ -573,21 +573,21 @@ window.Hikasu = {
 
                 //получаем проект
                 self.ajax(self.url + '&method=project&project_id=' + self.list_install[i].id, function (json) {
-                    let item = JSON.parse(json.data);
-                    let install = item.install;
-                    let url = '';
+                    let item = JSON.parse(json.data),
+                        install = item.install,
+                        url = '';
 
                     if (install === '' || install === 'joomla') {
                         url = self.url + '&method=installJoomla&id=' + item.id;
                     }
 
                     self.ajax(url, function (response) {
-                        let element;
-                        let success = false;
-                        let modal_body = document.querySelector('.hikasu-install-page_loader');
-                        let buttons = undefined;
-                        let messages = '';
-                        let data = JSON.parse(response['data']);
+                        let element,
+                            success = false,
+                            modal_body = document.querySelector('.hikasu-install-page_loader'),
+                            buttons = undefined,
+                            messages = '',
+                            data = JSON.parse(response['data']);
 
                         if (show_modal) {
                             element = document.querySelector('.hikasu-install-page_tables-element-id-' + item.id);
@@ -713,12 +713,12 @@ window.Hikasu = {
     },
 
     setColors: function () {
-        let self = this;
-        let cards = self.container.querySelectorAll('.hikasu-card');
+        let self = this,
+            cards = self.container.querySelectorAll('.hikasu-card');
 
         for (let i = 0; i < cards.length; i++) {
-            let color = cards[i].querySelector('.hikasu-card_color');
-            let text = cards[i].querySelector('.hikasu-card_title');
+            let color = cards[i].querySelector('.hikasu-card_color'),
+                text = cards[i].querySelector('.hikasu-card_title');
             if(color !== undefined && color !== null) {
                 color.style.backgroundColor = HikasuUtils.generateColorFromText(text.textContent);
             }
@@ -751,8 +751,8 @@ window.Hikasu = {
     },
 
     checkUpdates: function () {
-        let self = this;
-        let button_check_update = document.querySelector('.btn-check-update');
+        let self = this,
+            button_check_update = document.querySelector('.btn-check-update');
 
         if (button_check_update !== null && button_check_update !== undefined) {
             self.ajax(self.url + '&method=checkUpdates', function (response) {
@@ -779,12 +779,14 @@ window.Hikasu = {
                 }
 
                 if (data.status === 'notinstall') {
-                    let grid = HikasuUtils.createElement('div', {'class': 'hikasu-grid'});
+                    let grid = HikasuUtils.createElement('div', {'class': 'hikasu-grid'}),
+                        grid_element = null;
+
                     self.container.innerHTML = '';
                     self.container.append(grid.build());
                     self.loaderInit();
                     self.loaderShow();
-                    let grid_element = self.container.querySelector('.hikasu-grid');
+                    grid_element = self.container.querySelector('.hikasu-grid');
 
                     for (let i=0;i<data.items.length;i++) {
                         grid_element.append(self.renderCatalogGrid(data.items[i]).build());
@@ -816,9 +818,9 @@ window.Hikasu = {
                             function (ev) {
                                 for (let i = 0; i < data.items.length; i++) {
                                     self.ajax(self.url + '&method=project&project_id=' + data.items[i].project_id, function (json) {
-                                        let item = JSON.parse(json.data);
-                                        let element = document.querySelector('.hikasu-updates-page_tables-element-id-' + data.items[i].project_id);
-                                        let btn = element.querySelector('.btn');
+                                        let item = JSON.parse(json.data),
+                                            element = document.querySelector('.hikasu-updates-page_tables-element-id-' + data.items[i].project_id);
+                                            btn = element.querySelector('.btn');
 
                                         if (btn !== null) {
                                             btn.setAttribute('disabled', 'disabled');
@@ -864,24 +866,24 @@ window.Hikasu = {
             if (parseInt(data.count) > 0) {
                 body =
                     body.addChild('table', {'class': 'hikasu-updates-page_tables table table-striped table-hover'})
-                        .addChild('thead')
-                        .addChild('tr')
-                        .add('th', {}, HikasuLangs.extension_name)
-                        .add('th', {}, HikasuLangs.current_version)
-                        .add('th', {}, HikasuLangs.new_version)
-                        .add('th', {}, '')
-                        .getParent()
-                        .getParent()
+                            .addChild('thead')
+                                .addChild('tr')
+                                    .add('th', {}, HikasuLangs.extension_name)
+                                    .add('th', {}, HikasuLangs.current_version)
+                                    .add('th', {}, HikasuLangs.new_version)
+                                    .add('th', {}, '')
+                                    .getParent()
+                            .getParent()
                         .addChild('tbody')
 
                 for (let i = 0; i < data.items.length; i++) {
                     body =
                         body.addChild('tr', {'class': 'hikasu-updates-page_tables-element-id-' + data.items[i].project_id})
-                            .add('td', {}, data.items[i].title)
-                            .add('td', {}, data.items[i].version)
-                            .add('td', {}, data.items[i].version_last)
-                            .addChild('td')
-                            .add('button', {
+                                .add('td', {}, data.items[i].title)
+                                .add('td', {}, data.items[i].version)
+                                .add('td', {}, data.items[i].version_last)
+                                    .addChild('td')
+                                        .add('button', {
                                 'class': 'btn', 'events': [
                                     [
                                         'click',
@@ -911,8 +913,8 @@ window.Hikasu = {
                                     ]
                                 ]
                             }, 'Обновить')
-                            .getParent()
-                            .getParent()
+                                        .getParent()
+                                .getParent()
                 }
 
                 body = body.getParent().getParent();
@@ -938,22 +940,22 @@ window.Hikasu = {
             if (data.length > 0) {
                 body =
                     body.addChild('table', {'class': 'hikasu-installed-page_tables table table-striped table-hover'})
-                        .addChild('thead')
-                        .addChild('tr')
-                        .add('th', {}, HikasuLangs.extension_name)
-                        .add('th', {}, HikasuLangs.current_version)
-                        .add('th', {}, '')
-                        .getParent()
-                        .getParent()
+                            .addChild('thead')
+                                .addChild('tr')
+                                    .add('th', {}, HikasuLangs.extension_name)
+                                    .add('th', {}, HikasuLangs.current_version)
+                                    .add('th', {}, '')
+                                    .getParent()
+                                .getParent()
                         .addChild('tbody')
 
                 for (let i = 0; i < data.length; i++) {
                     body =
                         body.addChild('tr', {'class': 'hikasu-installed-page_tables-element-id-' + data[i].project_id})
-                            .add('td', {}, data[i].title)
-                            .add('td', {}, data[i].version)
-                            .addChild('td', {'class': 'hikasu-installed-page_buttons'})
-                            .add('button', {
+                                .add('td', {}, data[i].title)
+                                .add('td', {}, data[i].version)
+                                    .addChild('td', {'class': 'hikasu-installed-page_buttons'})
+                                        .add('button', {
                                 'class': 'btn btn-width-fixed', 'events': [
                                     [
                                         'click',
@@ -964,36 +966,36 @@ window.Hikasu = {
                                     ]
                                 ]
                             }, HikasuLangs.button_view)
-                            /*.add('button', {
-                                'class': 'btn btn-width-fixed ' + (parseInt(data[i].enable) ? 'btn-danger' : 'btn-success'),
-                                'events': [
-                                    [
-                                        'click',
-                                        function (ev) {
-                                            let button = this;
-                                            button.setAttribute('disabled', 'disabled');
+                                        /*.add('button', {
+                                            'class': 'btn btn-width-fixed ' + (parseInt(data[i].enable) ? 'btn-danger' : 'btn-success'),
+                                            'events': [
+                                                [
+                                                    'click',
+                                                    function (ev) {
+                                                        let button = this;
+                                                        button.setAttribute('disabled', 'disabled');
 
-                                            self.ajax(self.url + '&method=installedList', function (json) {
+                                                        self.ajax(self.url + '&method=installedList', function (json) {
 
-                                                button.removeAttribute('disabled');
-                                            }, function () {
-                                                button.removeAttribute('disabled');
-                                            });
-                                        }
-                                    ]
-                                ]
-                            }, parseInt(data[i].enable) ? HikasuLangs.button_disable : HikasuLangs.button_enable)
-                            .add('button', {
-                                'class': 'btn btn-danger', 'events': [
-                                    [
-                                        'click',
-                                        function (ev) {
+                                                            button.removeAttribute('disabled');
+                                                        }, function () {
+                                                            button.removeAttribute('disabled');
+                                                        });
+                                                    }
+                                                ]
+                                            ]
+                                        }, parseInt(data[i].enable) ? HikasuLangs.button_disable : HikasuLangs.button_enable)
+                                        .add('button', {
+                                            'class': 'btn btn-danger', 'events': [
+                                                [
+                                                    'click',
+                                                    function (ev) {
 
-                                        }
-                                    ]
-                                ]
-                            }, '<span class="icon-trash"></span>')*/
-                            .getParent()
+                                                    }
+                                                ]
+                                            ]
+                                        }, '<span class="icon-trash"></span>')*/
+                                    .getParent()
                             .getParent()
                 }
 
@@ -1049,19 +1051,21 @@ window.Hikasu = {
 
             if(item.images !== undefined)
             {
-                grid_cards.addChild('div', {'class': 'hikasu-card_image'})
-                    .add('div', {'class': 'hikasu-card_color', 'style': 'opacity: .1'})
-                    .add('div', {
-                        'class': 'hikasu-card_cover',
-                        'style': item.images.cover !== false ? ('background-image:url(' + self.api + '/' + item.images.cover + ')') : ''
-                    })
-                    .getParent();
+                grid_cards
+                    .addChild('div', {'class': 'hikasu-card_image'})
+                        .add('div', {'class': 'hikasu-card_color', 'style': 'opacity: .1'})
+                        .add('div', {
+                            'class': 'hikasu-card_cover',
+                            'style': item.images.cover !== false ? ('background-image:url(' + self.api + '/' + item.images.cover + ')') : ''
+                        })
+                        .getParent();
             }
 
 
-            grid_cards.add('h3', {'class': 'hikasu-card_title'}, item.title)
-            .add('div', {'class': 'hikasu-card_description'}, item.introtext)
-            .addChild('div', {'class': 'hikasu-card_actions'});
+            grid_cards
+                .add('h3', {'class': 'hikasu-card_title'}, item.title)
+                .add('div', {'class': 'hikasu-card_description'}, item.introtext)
+                    .addChild('div', {'class': 'hikasu-card_actions'});
 
             if (item.download_type === 'free') {
                 grid_cards = grid_cards.add('button', {
@@ -1145,8 +1149,8 @@ window.Hikasu = {
     },
 
     loaderInit: function () {
-        let self = this;
-        let loader = HikasuUtils.createElement('div', {'class': 'hikasu-loader hide'})
+        let self = this,
+            loader = HikasuUtils.createElement('div', {'class': 'hikasu-loader hide'})
             .add('img', {'src': '/media/plg_installer_hikasu/img/loader.svg'});
         self.container.appendChild(loader.build());
     },
