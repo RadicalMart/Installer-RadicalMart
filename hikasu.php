@@ -46,7 +46,7 @@ class PlgInstallerHikasu extends CMSPlugin
 	 */
 	public function onInstallerAddInstallationTab()
 	{
-		$tab          = array();
+		$tab          = [];
 		$tab['name']  = 'hikasu';
 		$tab['label'] = Text::_('PLG_INSTALLER_HIKASU_TEXT');
 
@@ -90,11 +90,6 @@ class PlgInstallerHikasu extends CMSPlugin
 			return $this->APIProjectList();
 		}
 
-		if ($method === 'checkMainExtension')
-		{
-			return $this->checkMainExtension();
-		}
-
 		if ($method === 'project')
 		{
 			return $this->APIProject();
@@ -108,6 +103,11 @@ class PlgInstallerHikasu extends CMSPlugin
 		if ($method === 'installJoomla')
 		{
 			return $this->installJoomla();
+		}
+
+		if ($method === 'checkMainExtension')
+		{
+			return $this->checkMainExtension();
 		}
 
 		if ($method === 'checkInstall')
@@ -129,6 +129,7 @@ class PlgInstallerHikasu extends CMSPlugin
 		{
 			return $this->toggleEnabled();
 		}
+
 		if ($method === 'saveKey')
 		{
 			return $this->saveKey();
@@ -150,7 +151,7 @@ class PlgInstallerHikasu extends CMSPlugin
 		$input    = $app->input;
 		$id       = $input->get('id', '', 'int');
 		$config   = [
-			'api_key' => $this->params->get('apikey')
+			'api_key' => $this->params->get('apikey', '')
 		];
 		$update   = new ProviderJoomla($config);
 		$install  = $update->start($id);
@@ -234,10 +235,14 @@ class PlgInstallerHikasu extends CMSPlugin
 	}
 
 
+	/**
+	 * @return array
+	 */
 	protected function APICategories()
 	{
 		return API::categories();
 	}
+
 
 	/**
 	 *
@@ -349,6 +354,9 @@ class PlgInstallerHikasu extends CMSPlugin
 	}
 
 
+	/**
+	 * @return array
+	 */
 	protected function checkMainExtension()
 	{
 		$projects = json_decode(API::projectsMain(), JSON_OBJECT_AS_ARRAY);
@@ -388,6 +396,9 @@ class PlgInstallerHikasu extends CMSPlugin
 	}
 
 
+	/**
+	 * @return array
+	 */
 	protected function saveKey()
 	{
 		$key = $this->app->input->getString('key');
@@ -428,7 +439,7 @@ class PlgInstallerHikasu extends CMSPlugin
 			$this->cleanCache('_system', 0);
 			$this->cleanCache('_system', 1);
 
-			return "ok";
+			return ['status' => 'ok'];
 		}
 
 		throw new RuntimeException(Text::_('Недопустимый ключ'), 401);
