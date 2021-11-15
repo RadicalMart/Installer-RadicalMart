@@ -1,38 +1,52 @@
 window.Hikasu = {
     api: 'https://radicalmart.ru',
     url: 'index.php?option=com_ajax&plugin=hikasu&group=installer&format=json',
-    container: null,
-    form: null,
-    category_id: 0,
-    categories: null,
-    check_main_after_install: false,
-    button_active: '',
-    depends_wait: true,
-    list_install: [],
-    buy_projects: [],
+    container: null, // контейнер HTML для установщика
+    form: null, // форма HTML установки Joomla
+    category_id: 0, // текущая активная категория расширений
+    categories: null, // список категорий расширений в тулбар
+    check_main_after_install: false, // флаг для того чтобы смотреть после установки основного расширения
+    button_active: '', // активная кнопка в тулбаре
+    depends_wait: true, // флаг для ожидания загрузки зависимостей
+    list_install: [], // список установленных расширений
+    buy_projects: [], // спсиок купленных расширений
 
+    /**
+     * Запуск установщика
+     */
     init: function () {
         let self = this;
         this.container = document.querySelector('#hikasu-container');
         this.form = document.querySelector('#adminForm');
 
+        // если нет ключа, то запускаем показ формы ввода ключа
         if (HikasuConfig.key === '') {
             self.showFormKey();
             return;
         }
 
+        // если ключ есть, то запускаем проверку установки одного из основного расширения
         self.checkMainExtension();
     },
 
+
+    /**
+     * Смена категории расширений
+     *
+     * @param id
+     */
     changeCategory: function (id) {
         let self = this,
             grid = HikasuUtils.createElement('div', {'class': 'hikasu-grid'}),
             pagination = HikasuUtils.createElement('div', {'class': 'hikasu-pagination'});
 
+        // очищаем весь основной контейнер и вставляем в него базовые элементы для каталога
         self.container.innerHTML = '';
         self.container.append(self.categories.build());
         self.container.append(grid.build());
         self.container.append(pagination.build());
+
+        // запускаем показ экрана загрузки
         self.loaderInit();
         self.loaderShow();
 
@@ -45,6 +59,7 @@ window.Hikasu = {
             });
         }
 
+        // load_page замыкание, которое потом вызываем внутри себя при клике на пагинацию
         let load_page = function (page, limit) {
             let url = self.url + '&method=projects&category_id=' + id;
 
@@ -100,17 +115,23 @@ window.Hikasu = {
         self.category_id = id;
         load_page();
 
+        // отключаем всем кнопкам классы активности
         let buttons_all = document.querySelectorAll('.hikasu-categories button');
         for (let i = 0; i < buttons_all.length; i++) {
             buttons_all[i].classList.remove('btn-active');
         }
 
+        // находим активную кнопку и ей назначаем класс активности
         let button_active = document.querySelector('button[data-type="category-' + self.category_id + '"]');
         if (button_active !== null && button_active !== undefined) {
             button_active.classList.add('btn-active');
         }
     },
 
+
+    /**
+     * Запуск показа каталога
+     */
     showCatalog: function () {
         let self = this;
         this.checkUpdates();
@@ -178,6 +199,8 @@ window.Hikasu = {
             ]
         }, 'Все расширения');
 
+        // здесь замыкание не обязательно, но оставил по аналогии с загрузкой каталога
+        // получаем с API список доступных категорий для каталога
         let load_categories = function () {
             let url = self.url + '&method=categories';
 
@@ -213,6 +236,10 @@ window.Hikasu = {
         load_categories();
     },
 
+
+    /**
+     * Показ формы ввода ключа
+     */
     showFormKey: function () {
         let self = this,
             form = HikasuUtils.createElement('form', {
@@ -226,7 +253,7 @@ window.Hikasu = {
                         HikasuUtils.ajaxPost(self.url + '&method=saveKey', {key: key_value})
                             .done(function (response) {
                                 self.checkMainExtension();
-                                HikasuConfig.key = key_value;
+                                HikasuConfig.key = key_value; // можем присвоить ключ, так как сервер примет только проверенный ключ
                             })
                             .fail(function (xhr) {
 
@@ -255,6 +282,12 @@ window.Hikasu = {
         self.container.appendChild(form.build());
     },
 
+
+    /**
+     * Показывает подробную карточку расширения
+     *
+     * @param id
+     */
     showProject: function (id) {
         let self = this;
         self.ajax(self.url + '&method=project&project_id=' + id, function (json) {
@@ -265,6 +298,7 @@ window.Hikasu = {
                 docs = item.urls.documentation,
                 support = item.urls.support;
 
+            // проверяем наличии документации у расширения
             if (item.documentation !== undefined && item.documentation !== false && item.documentation !== '') {
                 docs = self.api + item.documentation;
             }
@@ -275,6 +309,7 @@ window.Hikasu = {
                 }
             }
 
+            // проверяем наличии галереи у расширения и генерируем DOM, если она есть
             if (item.gallery.length > 0) {
                 header = header.addChild('div', {'class': 'hikasu-project-page_gallery-images', 'data-active': 1})
                     .add('div', {
@@ -445,6 +480,7 @@ window.Hikasu = {
             header = header.build();
             body = body.build();
 
+            // это остаточный код на будущее, выводит расширения которые должны быть установленны вместе с этим расширением
             if (item.fullwillbeinstalled !== undefined) {
                 if (item.fullwillbeinstalled.length > 0) {
                     let relations_html = HikasuUtils.createElement('hikasu-project-page_relations')
@@ -478,6 +514,7 @@ window.Hikasu = {
 
             HikasuUtils.modal(header, body);
 
+            // запрашиваем локально у сервера, установлено ли это расширение и рисуем нужные кнопки в зависимости от состояния
             self.ajax(self.url + '&method=checkInstall&list=' + JSON.stringify([item.element]), function (json) {
                 let buttonInstall = body.querySelector('.btn-install');
                 let find = json.data[0];
@@ -494,6 +531,13 @@ window.Hikasu = {
         });
     },
 
+
+    /**
+     * Находит зависимости для проекта
+     *
+     *
+     * @param project
+     */
     findDepends: function (project) {
         let self = this;
         self.depends_wait = true;
@@ -506,6 +550,16 @@ window.Hikasu = {
         });
     },
 
+
+    /**
+     * Запуск установки проекта
+     *
+     * @param project
+     * @param depends
+     * @param show_modal
+     * @param callback_success
+     * @param callback_fail
+     */
     installProject: function (project, depends, show_modal, callback_success, callback_fail) {
         let self = this;
 
@@ -524,6 +578,7 @@ window.Hikasu = {
             show_modal = false;
         }
 
+        // интервал, потому что ожидаем загрузки всех завимостей для установки расширения
         let waitGetListDepends = setInterval(function () {
 
             if (self.depends_wait) {
@@ -712,6 +767,10 @@ window.Hikasu = {
 
     },
 
+
+    /**
+     * Установить цвета для карточек расширений
+     */
     setColors: function () {
         let self = this,
             cards = self.container.querySelectorAll('.hikasu-card');
@@ -726,6 +785,10 @@ window.Hikasu = {
 
     },
 
+
+    /**
+     * Проверка установленных расширений
+     */
     checkInstall: function () {
         let self = this,
             list_for_find = [],
@@ -750,6 +813,10 @@ window.Hikasu = {
 
     },
 
+
+    /**
+     * Проверка обновлений
+     */
     checkUpdates: function () {
         let self = this,
             button_check_update = document.querySelector('.btn-check-update');
@@ -767,6 +834,11 @@ window.Hikasu = {
 
     },
 
+
+    /**
+     * Проверка на основные расширения
+     *
+     */
     checkMainExtension: function () {
         let self = this;
         HikasuUtils.ajaxGet(self.url + '&method=checkMainExtension')
@@ -802,6 +874,11 @@ window.Hikasu = {
             });
     },
 
+
+    /**
+     * Показ обновлений расширений
+     *
+     */
     showUpdates: function () {
         let self = this;
         self.ajax(self.url + '&method=checkUpdates', function (response) {
@@ -930,6 +1007,11 @@ window.Hikasu = {
         });
     },
 
+
+    /**
+     * Показ установленных расширений
+     *
+     */
     showInstalled: function () {
         let self = this;
         self.ajax(self.url + '&method=installedList', function (response) {
@@ -1012,6 +1094,13 @@ window.Hikasu = {
         });
     },
 
+
+    /**
+     * Отрисовывает карточку расширения
+     *
+     * @param item
+     * @returns object
+     */
     renderCatalogGrid: function (item) {
         let self = this;
 
@@ -1126,6 +1215,7 @@ window.Hikasu = {
         return grid_cards;
     },
 
+
     ajax: function (url, callback_success, callback_fail) {
         let req = new XMLHttpRequest(),
             self = this;
@@ -1148,6 +1238,10 @@ window.Hikasu = {
         req.send();
     },
 
+
+    /**
+     * Добавление в DOM экрана загрузки
+     */
     loaderInit: function () {
         let self = this,
             loader = HikasuUtils.createElement('div', {'class': 'hikasu-loader hide'})
@@ -1155,6 +1249,9 @@ window.Hikasu = {
         self.container.appendChild(loader.build());
     },
 
+    /**
+     * Запуск показа экрана загрузки
+     */
     loaderShow: function () {
         let loader = document.querySelector('.hikasu-loader');
         if (loader !== null) {
@@ -1162,6 +1259,10 @@ window.Hikasu = {
         }
     },
 
+
+    /**
+     * Скрытие экрана загрузки
+     */
     loaderHide: function () {
         let loader = document.querySelector('.hikasu-loader');
         if (loader !== null) {
