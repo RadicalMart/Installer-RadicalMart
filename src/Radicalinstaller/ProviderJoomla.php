@@ -1,4 +1,4 @@
-<?php namespace Hikasu;
+<?php namespace Radicalinstaller;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
@@ -18,7 +18,7 @@ class ProviderJoomla implements ProviderInterface
 
 	public function __construct($config = [])
 	{
-		Table::addIncludePath(JPATH_ROOT . '/plugins/installer/hikasu/tables');
+		Table::addIncludePath(JPATH_ROOT . '/plugins/installer/radicalinstaller/tables');
 		$this->scheme = Config::$scheme;
 		$this->host   = Config::$host;
 		$this->config = $config;
@@ -32,7 +32,7 @@ class ProviderJoomla implements ProviderInterface
 		$project = json_decode(API::project($id), JSON_OBJECT_AS_ARRAY);
 		$url     = $this->scheme . '://' . $this->host . $project['download'];
 
-		if(isset($this->config['api_key']))
+		if (isset($this->config['api_key']))
 		{
 			$url .= ((strpos($url, '?') === false ? '?' : '&')) . 'download_key=' . $this->config['api_key'];
 		}
@@ -64,22 +64,22 @@ class ProviderJoomla implements ProviderInterface
 				$version = $project['version']['version'];
 			}
 
-			$hikasu = Table::getInstance('HikasuInstall', 'Table');
-			$hikasu->load(['element' => $project['element']]);
-			$hikasu->type       = $project['install'];
-			$hikasu->title      = $project['title'];
-			$hikasu->element    = $project['element'];
-			$hikasu->version    = $version;
-			$hikasu->project_id = $project['id'];
-			$hikasu->enable     = isset($extension_joomla->enabled) ? (int) $extension_joomla->enabled : 0;
-			$hikasu->params     = '{}';
+			$table = Table::getInstance('RadicalinstallerExtensions', 'Table');
+			$table->load(['element' => $project['element']]);
+			$table->type       = $project['install'];
+			$table->title      = $project['title'];
+			$table->element    = $project['element'];
+			$table->version    = $version;
+			$table->project_id = $project['id'];
+			$table->enable     = isset($extension_joomla->enabled) ? (int) $extension_joomla->enabled : 0;
+			$table->params     = '{}';
 
-			if (!$hikasu->check())
+			if (!$table->check())
 			{
 				//Log::add(Text::_('PLG_UIKIT_HIKASHOP_ERROR_ZIP_EXTRACT'), Log::ERROR, 'plg_system_uikithikashop');
 			}
 
-			if (!$hikasu->store())
+			if (!$table->store())
 			{
 				//Log::add(Text::_('PLG_UIKIT_HIKASHOP_ERROR_ZIP_EXTRACT'), Log::ERROR, 'plg_system_uikithikashop');
 			}
@@ -93,6 +93,7 @@ class ProviderJoomla implements ProviderInterface
 	public function delete($id)
 	{
 	}
+
 
 	public function toggleEnable($id)
 	{

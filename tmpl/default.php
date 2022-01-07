@@ -5,17 +5,17 @@ use Joomla\CMS\Language\Text;
 
 extract($displayData);
 
-HTMLHelper::_('stylesheet', 'plg_installer_hikasu/main.css', [
+HTMLHelper::_('stylesheet', 'plg_installer_radicalinstaller/main.css', [
     'version' => filemtime(__FILE__),
     'relative' => true
 ]);
 
-HTMLHelper::_('script', 'plg_installer_hikasu/utils.js', [
+HTMLHelper::_('script', 'plg_installer_radicalinstaller/utils.js', [
     'version' => filemtime(__FILE__),
     'relative' => true
 ]);
 
-HTMLHelper::_('script', 'plg_installer_hikasu/main.js', [
+HTMLHelper::_('script', 'plg_installer_radicalinstaller/main.js', [
     'version' => filemtime(__FILE__),
     'relative' => true
 ]);
@@ -79,10 +79,10 @@ $langs = [
 
 <script type="text/javascript">
     document.addEventListener("DOMContentLoaded", function () {
-        window.HikasuConfig = {
+        window.RadicalInstallerConfig = {
             key: '<?php echo $params->get('apikey', '')?>'
         };
-        window.HikasuLangs = <?php echo json_encode($langs) ?>;
-        Hikasu.init();
+        window.RadicalInstallerLangs = <?php echo json_encode($langs) ?>;
+        RadicalInstaller.init();
     });
 </script>

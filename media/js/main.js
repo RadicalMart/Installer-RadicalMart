@@ -1,4 +1,4 @@
-window.Hikasu = {
+window.RadicalInstaller = {
     api: 'https://radicalmart.ru',
     url: 'index.php?option=com_ajax&plugin=hikasu&group=installer&format=json',
     container: null, // контейнер HTML для установщика
@@ -20,7 +20,7 @@ window.Hikasu = {
         this.form = document.querySelector('#adminForm');
 
         // если нет ключа, то запускаем показ формы ввода ключа
-        if (HikasuConfig.key === '') {
+        if (RadicalInstallerConfig.key === '') {
             self.showFormKey();
             return;
         }
@@ -37,8 +37,8 @@ window.Hikasu = {
      */
     changeCategory: function (id) {
         let self = this,
-            grid = HikasuUtils.createElement('div', {'class': 'hikasu-grid'}),
-            pagination = HikasuUtils.createElement('div', {'class': 'hikasu-pagination'});
+            grid = RadicalInstallerUtils.createElement('div', {'class': 'hikasu-grid'}),
+            pagination = RadicalInstallerUtils.createElement('div', {'class': 'hikasu-pagination'});
 
         // очищаем весь основной контейнер и вставляем в него базовые элементы для каталога
         self.container.innerHTML = '';
@@ -50,7 +50,7 @@ window.Hikasu = {
         self.loaderInit();
         self.loaderShow();
 
-        if (HikasuConfig.key !== '') {
+        if (RadicalInstallerConfig.key !== '') {
             let url = self.url + '&method=buyprojects';
 
             self.ajax(url, function (json) {
@@ -91,7 +91,7 @@ window.Hikasu = {
                         current_page = parseInt(json.pagination.pagesCurrent);
 
                     if (last_page > current_page) {
-                        let pagination_button = HikasuUtils.createElement('button', {
+                        let pagination_button = RadicalInstallerUtils.createElement('button', {
                             'class': 'btn btn-large hikasu-pagination_more', 'events': [
                                 [
                                     'click',
@@ -102,7 +102,7 @@ window.Hikasu = {
                                     }
                                 ]
                             ]
-                        }, HikasuLangs.button_load_more);
+                        }, RadicalInstallerLangs.button_load_more);
 
                         self.container.querySelector('.hikasu-pagination').append(pagination_button.build());
                     }
@@ -136,7 +136,7 @@ window.Hikasu = {
         let self = this;
         this.checkUpdates();
 
-        self.categories = HikasuUtils.createElement('div', {'class': 'hikasu-categories'});
+        self.categories = RadicalInstallerUtils.createElement('div', {'class': 'hikasu-categories'});
         self.categories.add('button', {
             'class': 'btn', 'data-type': 'installed', 'events': [
                 [
@@ -147,7 +147,7 @@ window.Hikasu = {
                     }
                 ]
             ]
-        }, HikasuLangs.button_installed);
+        }, RadicalInstallerLangs.button_installed);
 
         self.categories.add('button', {
             'class': 'btn btn-check-update', 'data-type': 'update', 'events': [
@@ -159,7 +159,7 @@ window.Hikasu = {
                     }
                 ]
             ]
-        }, '<span class="empty">0</span> ' + HikasuLangs.button_update);
+        }, '<span class="empty">0</span> ' + RadicalInstallerLangs.button_update);
 
         self.categories.add('button', {
             'class': 'btn btn-change-category', 'data-type': 'support', 'events': [
@@ -172,7 +172,7 @@ window.Hikasu = {
                     }
                 ]
             ]
-        }, HikasuLangs.button_support);
+        }, RadicalInstallerLangs.button_support);
 
         self.categories.add('button', {
             'class': 'btn btn-change-category', 'data-type': 'add', 'events': [
@@ -185,7 +185,7 @@ window.Hikasu = {
                     }
                 ]
             ]
-        }, HikasuLangs.button_extension_add);
+        }, RadicalInstallerLangs.button_extension_add);
 
         self.categories.add('button', {
             'class': 'btn btn-change-category', 'data-type': 'category-0', 'events': [
@@ -242,7 +242,7 @@ window.Hikasu = {
      */
     showFormKey: function () {
         let self = this,
-            form = HikasuUtils.createElement('form', {
+            form = RadicalInstallerUtils.createElement('form', {
             'class': 'form-horizontal hikasu-flex hikasu-flex-center hikasu-height-large',
             'events': [
                 [
@@ -250,10 +250,10 @@ window.Hikasu = {
                     function (event) {
                         // отправить аякс на сохранение ключа
                         let key_value = event.target.querySelector('[name=key]').value;
-                        HikasuUtils.ajaxPost(self.url + '&method=saveKey', {key: key_value})
+                        RadicalInstallerUtils.ajaxPost(self.url + '&method=saveKey', {key: key_value})
                             .done(function (response) {
                                 self.checkMainExtension();
-                                HikasuConfig.key = key_value; // можем присвоить ключ, так как сервер примет только проверенный ключ
+                                RadicalInstallerConfig.key = key_value; // можем присвоить ключ, так как сервер примет только проверенный ключ
                             })
                             .fail(function (xhr) {
 
@@ -292,9 +292,9 @@ window.Hikasu = {
         let self = this;
         self.ajax(self.url + '&method=project&project_id=' + id, function (json) {
             let item = JSON.parse(json.data),
-                header = HikasuUtils.createElement('div'),
-                body = HikasuUtils.createElement('div', {'class': 'hikasu-project-page'}),
-                color = HikasuUtils.generateColorFromText(item.title),
+                header = RadicalInstallerUtils.createElement('div'),
+                body = RadicalInstallerUtils.createElement('div', {'class': 'hikasu-project-page'}),
+                color = RadicalInstallerUtils.generateColorFromText(item.title),
                 docs = item.urls.documentation,
                 support = item.urls.support;
 
@@ -407,7 +407,7 @@ window.Hikasu = {
             body = body.addChild('div', {'class': 'hikasu-project-page_buttons'});
 
             if (item.download_type === 'paid') {
-                if (HikasuConfig.key !== '') {
+                if (RadicalInstallerConfig.key !== '') {
                     body = body.add('button', {
                         'class': 'btn btn-success btn-large btn-install',
                         'disabled': 'disabled',
@@ -418,7 +418,7 @@ window.Hikasu = {
                                     self.installProject(item);
                                 }
                             ]]
-                    }, '<span class="icon-download large-icon"></span> ' + HikasuLangs.button_install);
+                    }, '<span class="icon-download large-icon"></span> ' + RadicalInstallerLangs.button_install);
                 } else {
                     body = body.add('button', {
                         'class': 'btn btn-success btn-large',
@@ -445,7 +445,7 @@ window.Hikasu = {
                                 self.installProject(item);
                             }
                         ]]
-                }, '<span class="icon-download large-icon"></span> ' + HikasuLangs.button_install);
+                }, '<span class="icon-download large-icon"></span> ' + RadicalInstallerLangs.button_install);
             }
 
             if (docs !== undefined && docs !== false && docs !== '') {
@@ -453,23 +453,23 @@ window.Hikasu = {
                     'class': 'btn btn-large',
                     'target': '_blank',
                     'href': docs
-                }, HikasuLangs.button_docs);
+                }, RadicalInstallerLangs.button_docs);
             }
 
             body = body.add('a', {
                 'class': 'btn btn-large',
                 'target': '_blank',
                 'href': support
-            }, HikasuLangs.button_support)
+            }, RadicalInstallerLangs.button_support)
                 .add('a', {
                     'class': 'btn btn-large btn-text',
                     'target': '_blank',
                     'href': self.api + item.link
-                }, HikasuLangs.button_extension_website)
+                }, RadicalInstallerLangs.button_extension_website)
                 .getParent();
 
 
-            body.add('div', {'class': 'hikasu-project-page_description-header'}, HikasuLangs.description);
+            body.add('div', {'class': 'hikasu-project-page_description-header'}, RadicalInstallerLangs.description);
 
             if (item.fulltext !== undefined && item.fulltext !== '') {
                 body = body.add('div', {'class': 'hikasu-project-page_description-text'}, item.fulltext);
@@ -483,10 +483,10 @@ window.Hikasu = {
             // это остаточный код на будущее, выводит расширения которые должны быть установленны вместе с этим расширением
             if (item.fullwillbeinstalled !== undefined) {
                 if (item.fullwillbeinstalled.length > 0) {
-                    let relations_html = HikasuUtils.createElement('hikasu-project-page_relations')
+                    let relations_html = RadicalInstallerUtils.createElement('hikasu-project-page_relations')
                         .add('h3', {
                             'class': 'hikasu-project-page_relations-header'
-                        }, HikasuLangs.will_be_installed)
+                        }, RadicalInstallerLangs.will_be_installed)
                         .addChild('div', {
                             'class': 'hikasu-project-page_relations-list'
                         });
@@ -512,7 +512,7 @@ window.Hikasu = {
 
             }
 
-            HikasuUtils.modal(header, body);
+            RadicalInstallerUtils.modal(header, body);
 
             // запрашиваем локально у сервера, установлено ли это расширение и рисуем нужные кнопки в зависимости от состояния
             self.ajax(self.url + '&method=checkInstall&list=' + JSON.stringify([item.element]), function (json) {
@@ -524,7 +524,7 @@ window.Hikasu = {
                 }
 
                 if (find.indexOf(item.element) !== -1) {
-                    buttonInstall.innerHTML = '<span class="icon-checkmark-2 large-icon"></span> ' + HikasuLangs.button_reinstall;
+                    buttonInstall.innerHTML = '<span class="icon-checkmark-2 large-icon"></span> ' + RadicalInstallerLangs.button_reinstall;
                 }
 
             });
@@ -586,15 +586,15 @@ window.Hikasu = {
             }
 
             if (show_modal) {
-                let header = HikasuUtils.createElement('h1', {'class': ''}, HikasuLangs.installing_an_extension),
-                    body = HikasuUtils.createElement('div', {'class': 'hikasu-install-page'});
+                let header = RadicalInstallerUtils.createElement('h1', {'class': ''}, RadicalInstallerLangs.installing_an_extension),
+                    body = RadicalInstallerUtils.createElement('div', {'class': 'hikasu-install-page'});
 
                 body = body
                     .addChild('table', {'class': 'hikasu-updates-page_tables table table-striped table-hover'})
                         .addChild('thead')
                             .addChild('tr')
-                                .add('th', {}, HikasuLangs.extension_name)
-                                .add('th', {}, HikasuLangs.status)
+                                .add('th', {}, RadicalInstallerLangs.extension_name)
+                                .add('th', {}, RadicalInstallerLangs.status)
                                 .add('th', {}, '')
                                 .getParent()
                             .getParent()
@@ -604,7 +604,7 @@ window.Hikasu = {
                     body = body
                         .addChild('tr', {'class': 'hikasu-install-page_tables-element-id-' + self.list_install[i].id})
                             .add('td', {}, self.list_install[i].title)
-                            .add('td', {'class': 'hikasu-install-page_tables-element-status'}, HikasuLangs.wait)
+                            .add('td', {'class': 'hikasu-install-page_tables-element-status'}, RadicalInstallerLangs.wait)
                             .add('td', {'class': 'hikasu-install-page_tables-element-action'})
                             .getParent()
                         .addChild('tr', {'class': 'hikasu-install-page_tables-element-messages'})
@@ -616,7 +616,7 @@ window.Hikasu = {
                 }
 
                 body = body.getParent().getParent();
-                HikasuUtils.modal(header.build(), body.build(), '', '', function () {
+                RadicalInstallerUtils.modal(header.build(), body.build(), '', '', function () {
                     if(self.check_main_after_install) {
                         self.checkMainExtension();
                     }
@@ -665,8 +665,8 @@ window.Hikasu = {
 
                         if (!success) {
                             if (show_modal) {
-                                element.querySelector('.hikasu-install-page_tables-element-status').innerHTML = HikasuLangs.installation_error;
-                                buttons = HikasuUtils.createElement('div', {'class': 'hikasu-install-page_buttons'})
+                                element.querySelector('.hikasu-install-page_tables-element-status').innerHTML = RadicalInstallerLangs.installation_error;
+                                buttons = RadicalInstallerUtils.createElement('div', {'class': 'hikasu-install-page_buttons'})
                                     .add('button', {
                                         'class': 'btn',
                                         'events': [
@@ -677,7 +677,7 @@ window.Hikasu = {
                                                 }
                                             ]
                                         ]
-                                    }, '<span class="icon-loop"></span> ' + HikasuLangs.try_again);
+                                    }, '<span class="icon-loop"></span> ' + RadicalInstallerLangs.try_again);
 
                                 if (messages !== '') {
                                     buttons = buttons.add('button', {
@@ -689,16 +689,16 @@ window.Hikasu = {
                                                     let element_messages = document.querySelector('.hikasu-install-page_tables-element-id-' + item.id + '-messages');
 
                                                     if (element_messages.classList.contains('hidden')) {
-                                                        this.innerHTML = HikasuLangs.hide_messages;
+                                                        this.innerHTML = RadicalInstallerLangs.hide_messages;
                                                         element_messages.classList.remove('hidden');
                                                     } else {
-                                                        this.innerHTML = HikasuLangs.show_messages;
+                                                        this.innerHTML = RadicalInstallerLangs.show_messages;
                                                         element_messages.classList.add('hidden');
                                                     }
                                                 }
                                             ]
                                         ]
-                                    }, HikasuLangs.show_messages);
+                                    }, RadicalInstallerLangs.show_messages);
                                 }
                             }
 
@@ -707,11 +707,11 @@ window.Hikasu = {
                             }
                         } else {
                             if (show_modal) {
-                                element.querySelector('.hikasu-install-page_tables-element-status').innerHTML = HikasuLangs.button_installed;
+                                element.querySelector('.hikasu-install-page_tables-element-status').innerHTML = RadicalInstallerLangs.button_installed;
                             }
 
                             if (messages !== '') {
-                                buttons = HikasuUtils.createElement('div', {'class': 'hikasu-install-page_buttons'})
+                                buttons = RadicalInstallerUtils.createElement('div', {'class': 'hikasu-install-page_buttons'})
                                     .add('button', {
                                         'class': 'btn',
                                         'events': [
@@ -721,16 +721,16 @@ window.Hikasu = {
                                                     let element_messages = document.querySelector('.hikasu-install-page_tables-element-id-' + item.id + '-messages');
 
                                                     if (element_messages.classList.contains('hidden')) {
-                                                        this.innerHTML = HikasuLangs.hide_messages;
+                                                        this.innerHTML = RadicalInstallerLangs.hide_messages;
                                                         element_messages.classList.remove('hidden');
                                                     } else {
-                                                        this.innerHTML = HikasuLangs.show_messages;
+                                                        this.innerHTML = RadicalInstallerLangs.show_messages;
                                                         element_messages.classList.add('hidden');
                                                     }
                                                 }
                                             ]
                                         ]
-                                    }, HikasuLangs.show_messages);
+                                    }, RadicalInstallerLangs.show_messages);
                             }
 
                             if (typeof callback_success === 'function') {
@@ -750,7 +750,7 @@ window.Hikasu = {
                                 let element_messages = document.querySelector('.hikasu-install-page_tables-element-id-' + self.list_install[i].id + '-messages');
 
                                 element_messages.innerHTML = '';
-                                messages = HikasuUtils.createElement('div', {'class': 'hikasu-install-page_messages'}, messages);
+                                messages = RadicalInstallerUtils.createElement('div', {'class': 'hikasu-install-page_messages'}, messages);
                                 element_messages.appendChild(messages.build());
                             }
                         }
@@ -779,7 +779,7 @@ window.Hikasu = {
             let color = cards[i].querySelector('.hikasu-card_color'),
                 text = cards[i].querySelector('.hikasu-card_title');
             if(color !== undefined && color !== null) {
-                color.style.backgroundColor = HikasuUtils.generateColorFromText(text.textContent);
+                color.style.backgroundColor = RadicalInstallerUtils.generateColorFromText(text.textContent);
             }
         }
 
@@ -806,7 +806,7 @@ window.Hikasu = {
                     card.setAttribute('data-install', '1');
                     let button = card.querySelector('.btn-success');
                     button.setAttribute('disabled', 'disabled');
-                    button.innerHTML = '<span class="icon-checkmark-2"></span> ' + HikasuLangs.button_installed;
+                    button.innerHTML = '<span class="icon-checkmark-2"></span> ' + RadicalInstallerLangs.button_installed;
                 }
             }
         });
@@ -825,9 +825,9 @@ window.Hikasu = {
             self.ajax(self.url + '&method=checkUpdates', function (response) {
                 let data = JSON.parse(response.data);
                 if (parseInt(data.count) > 0) {
-                    button_check_update.innerHTML = '<span>' + data.count + '</span> ' + HikasuLangs.button_update;
+                    button_check_update.innerHTML = '<span>' + data.count + '</span> ' + RadicalInstallerLangs.button_update;
                 } else {
-                    button_check_update.innerHTML = '<span class="empty">' + data.count + '</span> ' + HikasuLangs.button_update;
+                    button_check_update.innerHTML = '<span class="empty">' + data.count + '</span> ' + RadicalInstallerLangs.button_update;
                 }
             });
         }
@@ -841,7 +841,7 @@ window.Hikasu = {
      */
     checkMainExtension: function () {
         let self = this;
-        HikasuUtils.ajaxGet(self.url + '&method=checkMainExtension')
+        RadicalInstallerUtils.ajaxGet(self.url + '&method=checkMainExtension')
             .done(function (response) {
                 response = JSON.parse(response);
                 let data = response.data[0];
@@ -851,7 +851,7 @@ window.Hikasu = {
                 }
 
                 if (data.status === 'notinstall') {
-                    let grid = HikasuUtils.createElement('div', {'class': 'hikasu-grid'}),
+                    let grid = RadicalInstallerUtils.createElement('div', {'class': 'hikasu-grid'}),
                         grid_element = null;
 
                     self.container.innerHTML = '';
@@ -884,8 +884,8 @@ window.Hikasu = {
         self.ajax(self.url + '&method=checkUpdates', function (response) {
             let data = JSON.parse(response.data);
 
-            let header = HikasuUtils.createElement('h2', {'class': ''}, HikasuLangs.extension_updates);
-            let body = HikasuUtils.createElement('div', {'class': 'hikasu-updates-page'});
+            let header = RadicalInstallerUtils.createElement('h2', {'class': ''}, RadicalInstallerLangs.extension_updates);
+            let body = RadicalInstallerUtils.createElement('div', {'class': 'hikasu-updates-page'});
             body = body.addChild('div', {'class': 'hikasu-updates-page_buttons'})
                 .add('button', {
                     'class': 'btn btn-success btn-large',
@@ -901,7 +901,7 @@ window.Hikasu = {
 
                                         if (btn !== null) {
                                             btn.setAttribute('disabled', 'disabled');
-                                            btn.innerHTML = HikasuLangs.updating;
+                                            btn.innerHTML = RadicalInstallerLangs.updating;
                                         }
 
                                         self.installProject(item, false, false, function (data, messages) {
@@ -917,7 +917,7 @@ window.Hikasu = {
                                         }, function () {
                                             if (btn !== null) {
                                                 btn.removeAttribute('disabled');
-                                                btn.innerHTML = HikasuLangs.update;
+                                                btn.innerHTML = RadicalInstallerLangs.update;
                                             }
                                         });
                                     });
@@ -926,7 +926,7 @@ window.Hikasu = {
                             }
                         ]
                     ]
-                }, '<span class="icon-download large-icon"></span> ' + HikasuLangs.button_update_all)
+                }, '<span class="icon-download large-icon"></span> ' + RadicalInstallerLangs.button_update_all)
                 .add('button', {
                     'class': 'btn btn-large',
                     'events': [
@@ -938,16 +938,16 @@ window.Hikasu = {
                             }
                         ]
                     ]
-                }, '<span class="icon-loop large-icon"></span> ' + HikasuLangs.button_update_check);
+                }, '<span class="icon-loop large-icon"></span> ' + RadicalInstallerLangs.button_update_check);
 
             if (parseInt(data.count) > 0) {
                 body =
                     body.addChild('table', {'class': 'hikasu-updates-page_tables table table-striped table-hover'})
                             .addChild('thead')
                                 .addChild('tr')
-                                    .add('th', {}, HikasuLangs.extension_name)
-                                    .add('th', {}, HikasuLangs.current_version)
-                                    .add('th', {}, HikasuLangs.new_version)
+                                    .add('th', {}, RadicalInstallerLangs.extension_name)
+                                    .add('th', {}, RadicalInstallerLangs.current_version)
+                                    .add('th', {}, RadicalInstallerLangs.new_version)
                                     .add('th', {}, '')
                                     .getParent()
                             .getParent()
@@ -972,7 +972,7 @@ window.Hikasu = {
 
                                                 if (btn !== null) {
                                                     btn.setAttribute('disabled', 'disabled');
-                                                    btn.innerHTML = HikasuLangs.updating;
+                                                    btn.innerHTML = RadicalInstallerLangs.updating;
                                                 }
 
                                                 self.installProject(item, false, false, function (data, messages) {
@@ -981,7 +981,7 @@ window.Hikasu = {
                                                 }, function () {
                                                     if (btn !== null) {
                                                         btn.removeAttribute('disabled');
-                                                        btn.innerHTML = HikasuLangs.update;
+                                                        btn.innerHTML = RadicalInstallerLangs.update;
                                                     }
                                                 });
 
@@ -996,13 +996,13 @@ window.Hikasu = {
 
                 body = body.getParent().getParent();
             } else {
-                body = body.add('div', {'class': 'hikasu-updates-empty'}, HikasuLangs.no_updates)
+                body = body.add('div', {'class': 'hikasu-updates-empty'}, RadicalInstallerLangs.no_updates)
             }
 
             header = header.build();
             body = body.build();
 
-            HikasuUtils.modal(header, body);
+            RadicalInstallerUtils.modal(header, body);
 
         });
     },
@@ -1016,16 +1016,16 @@ window.Hikasu = {
         let self = this;
         self.ajax(self.url + '&method=installedList', function (response) {
             let data = response.data[0];
-            let header = HikasuUtils.createElement('h2', {'class': ''}, HikasuLangs.extension_installed);
-            let body = HikasuUtils.createElement('div', {'class': 'hikasu-installed-page'});
+            let header = RadicalInstallerUtils.createElement('h2', {'class': ''}, RadicalInstallerLangs.extension_installed);
+            let body = RadicalInstallerUtils.createElement('div', {'class': 'hikasu-installed-page'});
 
             if (data.length > 0) {
                 body =
                     body.addChild('table', {'class': 'hikasu-installed-page_tables table table-striped table-hover'})
                             .addChild('thead')
                                 .addChild('tr')
-                                    .add('th', {}, HikasuLangs.extension_name)
-                                    .add('th', {}, HikasuLangs.current_version)
+                                    .add('th', {}, RadicalInstallerLangs.extension_name)
+                                    .add('th', {}, RadicalInstallerLangs.current_version)
                                     .add('th', {}, '')
                                     .getParent()
                                 .getParent()
@@ -1047,7 +1047,7 @@ window.Hikasu = {
                                         }
                                     ]
                                 ]
-                            }, HikasuLangs.button_view)
+                            }, RadicalInstallerLangs.button_view)
                                         /*.add('button', {
                                             'class': 'btn btn-width-fixed ' + (parseInt(data[i].enable) ? 'btn-danger' : 'btn-success'),
                                             'events': [
@@ -1066,7 +1066,7 @@ window.Hikasu = {
                                                     }
                                                 ]
                                             ]
-                                        }, parseInt(data[i].enable) ? HikasuLangs.button_disable : HikasuLangs.button_enable)
+                                        }, parseInt(data[i].enable) ? RadicalInstallerLangs.button_disable : RadicalInstallerLangs.button_enable)
                                         .add('button', {
                                             'class': 'btn btn-danger', 'events': [
                                                 [
@@ -1083,13 +1083,13 @@ window.Hikasu = {
 
                 body = body.getParent().getParent();
             } else {
-                body = body.add('div', {'class': 'hikasu-installed-empty'}, HikasuLangs.no_installed)
+                body = body.add('div', {'class': 'hikasu-installed-empty'}, RadicalInstallerLangs.no_installed)
             }
 
             header = header.build();
             body = body.build();
 
-            HikasuUtils.modal(header, body);
+            RadicalInstallerUtils.modal(header, body);
 
         });
     },
@@ -1120,7 +1120,7 @@ window.Hikasu = {
                 color = item.params.attrs_color;
             }
 
-            let grid_cards = HikasuUtils.createElement('div', {}).
+            let grid_cards = RadicalInstallerUtils.createElement('div', {}).
             addChild('div', {
                     'class': 'hikasu-card',
                     'data-install': '0',
@@ -1166,10 +1166,10 @@ window.Hikasu = {
                                 ev.preventDefault();
                             }
                         ]]
-                }, '<span class="icon-download"></span> ' + HikasuLangs.button_install);
+                }, '<span class="icon-download"></span> ' + RadicalInstallerLangs.button_install);
             }
             if (item.download_type === 'paid') {
-                if (HikasuConfig.key !== '') {
+                if (RadicalInstallerConfig.key !== '') {
                     grid_cards = grid_cards.add('button', {
                         'class': 'btn btn-success btn-install', 'events': [
                             [
@@ -1179,7 +1179,7 @@ window.Hikasu = {
                                     ev.preventDefault();
                                 }
                             ]]
-                    }, '<span class="icon-download"></span> ' + HikasuLangs.button_install);
+                    }, '<span class="icon-download"></span> ' + RadicalInstallerLangs.button_install);
                 } else {
                     grid_cards = grid_cards.add('button', {
                         'class': 'btn btn-success', 'events': [
@@ -1209,7 +1209,7 @@ window.Hikasu = {
                         }
                     ]
                 ]
-            }, HikasuLangs.button_more)
+            }, RadicalInstallerLangs.button_more)
                 .getParent()
 
         return grid_cards;
@@ -1244,7 +1244,7 @@ window.Hikasu = {
      */
     loaderInit: function () {
         let self = this,
-            loader = HikasuUtils.createElement('div', {'class': 'hikasu-loader hide'})
+            loader = RadicalInstallerUtils.createElement('div', {'class': 'hikasu-loader hide'})
             .add('img', {'src': '/media/plg_installer_hikasu/img/loader.svg'});
         self.container.appendChild(loader.build());
     },

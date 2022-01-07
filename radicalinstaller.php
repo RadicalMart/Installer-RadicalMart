@@ -15,7 +15,7 @@ use Joomla\CMS\Plugin\CMSPlugin;
  *
  * @since  3.6.0
  */
-class PlgInstallerHikasu extends CMSPlugin
+class PlgInstallerRadicalinstaller extends CMSPlugin
 {
 
 	/**
@@ -66,7 +66,7 @@ class PlgInstallerHikasu extends CMSPlugin
 	 */
 	public function onAjaxHikasu()
 	{
-		JLoader::registerNamespace('Hikasu', __DIR__ . DIRECTORY_SEPARATOR . 'src');
+		JLoader::registerNamespace('Radicalinstaller', __DIR__ . DIRECTORY_SEPARATOR . 'src');
 		$app    = Factory::getApplication();
 		$method = $app->input->get('method');
 
@@ -477,7 +477,7 @@ class PlgInstallerHikasu extends CMSPlugin
 			->where('id = ' . $db->quote($id));
 		$item   = $db->setQuery($query);
 		$result = false;
-		$class  = '\\Hikasu\\Provider' . ucfirst(strtolower($item->type));
+		$class  = '\\Radicalinstaller\\Provider' . ucfirst(strtolower($item->type));
 
 		if (class_exists($class))
 		{

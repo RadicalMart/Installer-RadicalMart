@@ -1,4 +1,4 @@
-<?php namespace Hikasu;
+<?php namespace Radicalinstaller;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Http\Transport\CurlTransport;

@@ -1,5 +1,4 @@
-DROP TABLE IF EXISTS `#__hikasu_install`;
-CREATE TABLE `#__hikasu_install` (
+CREATE TABLE `#__radicalinstaller_extensions` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(512) NOT NULL,
   `type` varchar(512) NOT NULL,

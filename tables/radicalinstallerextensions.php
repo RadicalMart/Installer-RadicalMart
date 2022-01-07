@@ -2,7 +2,7 @@
 
 use Joomla\CMS\Table\Table;
 
-class TableHikasuInstall extends Table
+class TableRadicalinstallerExtensions extends Table
 {
 
     /**
@@ -14,7 +14,7 @@ class TableHikasuInstall extends Table
      */
     public function __construct(JDatabaseDriver $db)
     {
-        parent::__construct('#__hikasu_install', 'id', $db);
+        parent::__construct('#__radicalinstaller_extensions', 'id', $db);
     }
 
 }

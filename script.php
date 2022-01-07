@@ -3,7 +3,7 @@
 use Joomla\CMS\Factory;
 use Joomla\CMS\Installer\InstallerAdapter;
 
-class plgInstallerHikasuInstallerScript
+class plgInstallerRadicalinstallerInstallerScript
 {
     /**
      * Runs right after any installation action.

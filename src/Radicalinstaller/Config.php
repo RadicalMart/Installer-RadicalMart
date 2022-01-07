@@ -1,4 +1,4 @@
-<?php namespace Hikasu;
+<?php namespace Radicalinstaller;
 
 class Config
 {
