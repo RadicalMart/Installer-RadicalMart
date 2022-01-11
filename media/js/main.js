@@ -10,6 +10,16 @@ window.RadicalInstaller = {
     depends_wait: true, // флаг для ожидания загрузки зависимостей
     list_install: [], // список установленных расширений
     buy_projects: [], // список купленных расширений
+    template_sidebar: {
+        'key': {
+            header: 'Что такое ключ',
+            content: 'Lorem lorem lorem text text text.'
+        },
+        'faq': {
+            header: 'FAQ',
+            content: 'Lorem lorem lorem text text text.'
+        }
+    },
 
     /**
      * Запуск установщика
@@ -41,10 +51,14 @@ window.RadicalInstaller = {
             pagination = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-pagination'});
 
         // очищаем весь основной контейнер и вставляем в него базовые элементы для каталога
-        self.container.innerHTML = '';
-        self.container.append(self.categories.build());
-        self.container.append(grid.build());
-        self.container.append(pagination.build());
+        self.renderPage({
+            header: 'Каталог расширений',
+            content: [grid.build(), pagination.build()],
+            sidebar: [
+                {header: 'Категории', content: self.categories.build()},
+                {template: 'faq'}
+            ]
+        })
 
         // запускаем показ экрана загрузки
         self.loaderInit();
@@ -199,6 +213,18 @@ window.RadicalInstaller = {
             ]
         }, 'Все расширения');
 
+        self.categories.add('button', {
+            'class': 'btn btn-change-category', 'data-type': 'category--1', 'events': [
+                [
+                    'click',
+                    function (ev) {
+                        self.changeCategory(-1);
+                        ev.preventDefault();
+                    }
+                ]
+            ]
+        }, 'Доступные мне');
+
         // здесь замыкание не обязательно, но оставил по аналогии с загрузкой каталога
         // получаем с API список доступных категорий для каталога
         let load_categories = function () {
@@ -227,8 +253,9 @@ window.RadicalInstaller = {
                 let search_categories = self.container.querySelector('.radicalinstaller-categories');
 
                 if (search_categories !== null && search_categories !== undefined) {
+                    let container = search_categories.parentElement;
                     search_categories.remove();
-                    self.container.prepend(self.categories.build());
+                    container.append(self.categories.build());
                 }
             });
         }
@@ -244,7 +271,7 @@ window.RadicalInstaller = {
     showFormKey: function () {
         let self = this,
             form = RadicalInstallerUtils.createElement('form', {
-            'class': 'form-horizontal radicalinstaller-flex radicalinstaller-flex-center radicalinstaller-height-large',
+            'class': 'form-horizontal span7',
             'events': [
                 [
                     'submit',
@@ -265,22 +292,27 @@ window.RadicalInstaller = {
                 ]
             ]
         })
-        .addChild('div', {'class': 'span5 radicalinstaller-card radicalinstaller-background-muted radicalinstaller-margin-auto radicalinstaller-padding-large'})
-            .add('p', {'class': 'radicalinstaller-text-large'}, 'Введите Ваш ключ из личного кабинета <a href="https://radicalmart.ru" target="_blank">radicalmart.ru</a>')
-                .addChild('div', {'class': 'control-group control-group-no-label control-group-large radicalinstaller-margin-top'})
-                    .addChild('div', {'class': 'controls'})
-                        .add('input', {'class': 'span12', 'type': 'text', 'placeholder': 'Введите здесь ваш ключ', 'name': 'key'})
-                        .getParent()
+        .addChild('div', {'class': 'radicalinstaller-card radicalinstaller-background-muted radicalinstaller-padding-large'})
+            .addChild('div', {'class': 'control-group control-group-no-label control-group-large'})
+                .addChild('div', {'class': 'controls'})
+                    .add('input', {'class': 'span12', 'type': 'text', 'placeholder': 'Введите здесь ваш ключ', 'name': 'key'})
                     .getParent()
-                .addChild('div', {'class': 'control-group control-group-no-label control-group-large'})
-                    .addChild('div', {'class': 'controls'})
-                        .add('button', {'class': 'btn btn-primary btn-large', 'type': 'submit'}, 'Отправить')
-                        .getParent()
+                .getParent()
+            .addChild('div', {'class': 'control-group control-group-no-label control-group-large'})
+                .addChild('div', {'class': 'controls'})
+                    .add('button', {'class': 'btn btn-primary btn-large', 'type': 'submit'}, 'Отправить')
                     .getParent()
                 .getParent()
 
-        self.container.innerHTML = '';
-        self.container.appendChild(form.build());
+        self.renderPage({
+            header: 'Установка расширений из <a href="https://radicalmart.ru" target="_blank">radicalmart.ru</a>',
+            description: 'Для того чтобы продолжить, Вам необходимо установить ключ обращения к сервису.',
+            content: form.build(),
+            sidebar: [
+                {'template': 'key'},
+                {'template': 'faq'}
+            ]
+        })
     },
 
 
@@ -859,8 +891,15 @@ window.RadicalInstaller = {
                     let grid = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-grid'}),
                         grid_element = null;
 
-                    self.container.innerHTML = '';
-                    self.container.append(grid.build());
+                    self.renderPage({
+                        header: 'Выберите главное расширение',
+                        description: 'текст текст',
+                        content: grid.build(),
+                        sidebar: [
+                            {template: 'faq'}
+                        ]
+                    });
+
                     self.loaderInit();
                     self.loaderShow();
                     grid_element = self.container.querySelector('.radicalinstaller-grid');
@@ -1073,6 +1112,75 @@ window.RadicalInstaller = {
     },
 
 
+    renderPage: function (data) {
+        let self = this,
+            header_content = data.header,
+            description_content = data.description,
+            content_content = data.content,
+            sidebar = data.sidebar,
+            page = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-page'});
+
+        page = page.add('h1', {'class': 'radicalinstaller-page_header'}, header_content);
+
+        if(description_content !== '') {
+            page = page.add('p', {'class': 'radicalinstaller-page_description'}, description_content);
+        }
+
+        page = page.addChild('div', {'class': 'radicalinstaller-page_wrap'})
+                .add('div', {'class': 'radicalinstaller-page_content'})
+                .addChild('div', {'class': 'radicalinstaller-page_sidebar radicalinstaller-background-muted'});
+
+        if(
+            typeof sidebar === 'object' ||
+            typeof sidebar === 'array'
+        )
+        {
+            for(let i=0;i<sidebar.length;i++)
+            {
+                let item_header = '',
+                    item_content = '';
+
+                if(
+                    sidebar[i].template !== undefined &&
+                    self.template_sidebar[sidebar[i].template] !== undefined
+                )
+                {
+                    item_header = self.template_sidebar[sidebar[i].template].header;
+                    item_content = self.template_sidebar[sidebar[i].template].content;
+                }
+
+                if(sidebar[i].header !== undefined && sidebar[i].content) {
+                    item_header = sidebar[i].header;
+                    item_content = sidebar[i].content;
+                }
+
+                page = page.addChild('div', {'class': 'radicalinstaller-page_sidebar-item'})
+                    .add('h3', {'class': 'radicalinstaller-page_sidebar-item_title'}, item_header)
+                    .add('div', {'class': 'radicalinstaller-page_sidebar-item_content'}, item_content)
+                    .getParent();
+
+            }
+        }
+
+        page = page.getParent().getParent();
+        self.container.innerHTML = '';
+        self.container.append(page.build());
+
+
+        if(typeof content_content === 'object') {
+            let content = document.querySelector('.radicalinstaller-page_content');
+
+            if(typeof content_content[Object.keys(content_content)[0]] === 'object') {
+                for(let i=0;i<content_content.length;i++) {
+                    content.append(content_content[i]);
+                }
+            } else {
+                content.append(content_content);
+            }
+        }
+
+    },
+
     /**
      * Отрисовывает карточку расширения
      *
@@ -1100,7 +1208,7 @@ window.RadicalInstaller = {
 
             let grid_cards = RadicalInstallerUtils.createElement('div', {}).
             addChild('div', {
-                    'class': 'radicalinstaller-card',
+                    'class': 'radicalinstaller-card radicalinstaller-card_extension',
                     'data-install': '0',
                     'data-element': item.element,
                     'events': [

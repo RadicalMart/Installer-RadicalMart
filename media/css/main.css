@@ -3,6 +3,38 @@
     position: relative;
 }
 
+
+/************ Page ****************/
+.radicalinstaller-page {
+
+}
+
+.radicalinstaller-page_header {
+    font-size: 24px;
+    line-height: 28px;
+}
+
+.radicalinstaller-page_description {
+    font-size: 16px;
+    line-height: 20px;
+}
+
+.radicalinstaller-page_wrap {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+.radicalinstaller-page_content {
+    width: 70%;
+}
+
+.radicalinstaller-page_sidebar {
+    width: calc(30% - 60px);
+    padding: 15px;
+    border-radius: 4px;
+}
+
 /************* Text ***************/
 .radicalinstaller-text-center {
     text-align: center;
@@ -11,6 +43,12 @@
 .radicalinstaller-text-large {
     font-size: 20px;
     line-height: 24px;
+}
+
+
+/************* Width *************/
+.radicalinstaller-width-1-1 {
+    width: 100%;
 }
 
 /************* Buttons ***********/
@@ -72,6 +110,10 @@
 
 
 /*********** Form *****************/
+.control-group-large:last-child {
+    margin-bottom: 0 !important;
+}
+
 .control-group-large .control-label label {
     font-size: 18px;
     line-height: 22px;
@@ -143,12 +185,13 @@
 .radicalinstaller-grid {
     display: flex;
     flex-wrap: wrap;
+    margin-top: -15px;
     margin-left: -15px;
     margin-right: -15px;
 }
 
 .radicalinstaller-grid > div {
-    width: calc(25% - 32px);
+    width: calc(33% - 32px);
     margin: 15px;
 }
 
@@ -166,10 +209,8 @@
 /************ Card **************/
 .radicalinstaller-card {
     position: relative;
-    display: flex;
-    border-radius: 3px;
+    border-radius: 4px;
     padding: 0;
-    height: 120px;
     background-color: transparent;
     transition: background-color 0.2s ease;
     border: 1px solid #eee;
@@ -181,6 +222,10 @@
     transition: background-color 0.2s ease;
 }
 
+.radicalinstaller-card_extension {
+    display: flex;
+    height: 110px;
+}
 
 .radicalinstaller-card.radicalinstaller-card_installed:after {
     position: absolute;
