@@ -1,5 +1,7 @@
 <?php namespace Radicalinstaller;
 
+defined('_JEXEC') or die;
+
 use Joomla\CMS\Factory;
 use Joomla\CMS\Http\Transport\CurlTransport;
 use Joomla\CMS\Uri\Uri;

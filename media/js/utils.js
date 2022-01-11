@@ -170,39 +170,39 @@ window.RadicalInstallerUtils = {
             classForModal = '';
         }
 
-        let modalBackground = document.querySelector('.hikasu-modal_background');
-        let activeModal = document.querySelector('.hikasu-modal');
+        let modalBackground = document.querySelector('.radicalinstaller-modal_background');
+        let activeModal = document.querySelector('.radicalinstaller-modal');
         if(activeModal !== null) {
             activeModal.remove();
             modalBackground.classList.remove('active');
         }
 
 
-        let modal = this.createElement('div', {'class': 'hikasu-modal ' + classForModal})
-            .addChild('div', {'class': 'hikasu-modal_container'})
+        let modal = this.createElement('div', {'class': 'radicalinstaller-modal ' + classForModal})
+            .addChild('div', {'class': 'radicalinstaller-modal_container'})
                 .add('button', {
-                    'class': 'btn btn-danger hikasu-modal_close',
+                    'class': 'btn btn-danger radicalinstaller-modal_close',
                     'events': [
                         ['click', function (ev) {
-                            let modalBackground = document.querySelector('.hikasu-modal_background');
+                            let modalBackground = document.querySelector('.radicalinstaller-modal_background');
 
                             modalBackground.classList.remove('active');
-                            this.closest('.hikasu-modal').remove();
+                            this.closest('.radicalinstaller-modal').remove();
 
                             if(callback_close !== undefined && callback_close !== null) {
                                 callback_close();
                             }
                         }]
                     ]}, '<span class="icon-delete large-icon"></span> ' + HikasuLangs.button_close)
-                .add('div', {'class': 'hikasu-modal_header'}, header)
-                    .addChild('div', {'class': 'hikasu-modal_body-wrap'})
-                        .add('div', {'class': 'hikasu-modal_body'}, body)
+                .add('div', {'class': 'radicalinstaller-modal_header'}, header)
+                    .addChild('div', {'class': 'radicalinstaller-modal_body-wrap'})
+                        .add('div', {'class': 'radicalinstaller-modal_body'}, body)
                         .getParent()
                 .getParent();
 
 
         if(modalBackground === null) {
-            modalBackground = this.createElement('div', {'class': 'hikasu-modal_background'}).build();
+            modalBackground = this.createElement('div', {'class': 'radicalinstaller-modal_background'}).build();
             document.querySelector('body').append(modalBackground);
         }
 
@@ -213,33 +213,33 @@ window.RadicalInstallerUtils = {
 
 
     modalAjax: function(header, url) {
-        let modalBackground = document.querySelector('.hikasu-modal_background');
-        let activeModal = document.querySelector('.hikasu-modal');
+        let modalBackground = document.querySelector('.radicalinstaller-modal_background');
+        let activeModal = document.querySelector('.radicalinstaller-modal');
         if(activeModal !== null) {
             activeModal.remove();
             modalBackground.classList.remove('active');
         }
 
 
-        let modal = this.createElement('div', {'class': 'hikasu-modal hikasu-modal-iframe'})
-            .addChild('div', {'class': 'hikasu-modal_container'})
+        let modal = this.createElement('div', {'class': 'radicalinstaller-modal radicalinstaller-modal-iframe'})
+            .addChild('div', {'class': 'radicalinstaller-modal_container'})
                 .add('button', {
-                    'class': 'btn btn-danger btn-large hikasu-modal_close',
+                    'class': 'btn btn-danger btn-large radicalinstaller-modal_close',
                     'events': [
                         ['click', function (ev) {
-                            let modalBackground = document.querySelector('.hikasu-modal_background');
+                            let modalBackground = document.querySelector('.radicalinstaller-modal_background');
 
                             modalBackground.classList.remove('active');
-                            this.closest('.hikasu-modal').remove();
+                            this.closest('.radicalinstaller-modal').remove();
                         }]
                     ]}, '<span class="icon-delete large-icon"></span> ' + HikasuLangs.button_close)
-                .add('div', {'class': 'hikasu-modal_header'}, header)
-                .add('iframe', {'class': 'hikasu-modal_iframe', 'src': url})
+                .add('div', {'class': 'radicalinstaller-modal_header'}, header)
+                .add('iframe', {'class': 'radicalinstaller-modal_iframe', 'src': url})
             .getParent();
 
 
         if(modalBackground === null) {
-            modalBackground = this.createElement('div', {'class': 'hikasu-modal_background'}).build();
+            modalBackground = this.createElement('div', {'class': 'radicalinstaller-modal_background'}).build();
             document.querySelector('body').append(modalBackground);
         }
 
@@ -250,8 +250,8 @@ window.RadicalInstallerUtils = {
 
     modalClose: function () {
 
-        let modalBackground = document.querySelector('.hikasu-modal_background');
-        let activeModal = document.querySelector('.hikasu-modal');
+        let modalBackground = document.querySelector('.radicalinstaller-modal_background');
+        let activeModal = document.querySelector('.radicalinstaller-modal');
         if(activeModal !== null) {
             activeModal.remove();
             modalBackground.classList.remove('active');

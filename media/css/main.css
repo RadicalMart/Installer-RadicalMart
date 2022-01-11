@@ -1,14 +1,14 @@
 /*********** Container ************/
-#hikasu-container {
+#radicalinstaller-container {
     position: relative;
 }
 
 /************* Text ***************/
-.hikasu-text-center {
+.radicalinstaller-text-center {
     text-align: center;
 }
 
-.hikasu-text-large {
+.radicalinstaller-text-large {
     font-size: 20px;
     line-height: 24px;
 }
@@ -23,45 +23,45 @@
 
 
 /************* Margin *************/
-.hikasu-margin-auto {
+.radicalinstaller-margin-auto {
     margin: auto !important;
 }
 
-.hikasu-margin-top {
+.radicalinstaller-margin-top {
     margin-top: 35px;
 }
 
 
 /************* Padding *************/
-.hikasu-padding-large {
+.radicalinstaller-padding-large {
     padding: 50px !important;
 }
 
 
 /*********** Height ***************/
-.hikasu-height-large {
+.radicalinstaller-height-large {
     height: 400px;
 }
 
 
 /*********** Backgrounds **********/
-.hikasu-background-muted {
+.radicalinstaller-background-muted {
     background: #F0F0F0 !important;
 }
 
 
 /************ Flex ****************/
-.hikasu-flex {
+.radicalinstaller-flex {
     display: flex;
 }
 
-.hikasu-flex-center {
+.radicalinstaller-flex-center {
     justify-content: center;
     justify-items: center;
 }
 
 
-.hikasu-flex-middle {
+.radicalinstaller-flex-middle {
     align-items: center;
     align-content: center;
 }
@@ -87,38 +87,38 @@
 
 
 /************ Categories **********/
-.hikasu-categories {
+.radicalinstaller-categories {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
     margin-bottom: 0;
 }
 
-.hikasu-categories > * {
+.radicalinstaller-categories > * {
     margin-right: 10px;
     margin-bottom: 10px !important;
 }
 
-.hikasu-categories > *:last-child {
+.radicalinstaller-categories > *:last-child {
     margin-right: 0;
 }
 
-.hikasu-categories .btn.btn-active,
-.hikasu-categories .btn.btn-active:focus,
-.hikasu-categories .btn.btn-active:active {
+.radicalinstaller-categories .btn.btn-active,
+.radicalinstaller-categories .btn.btn-active:focus,
+.radicalinstaller-categories .btn.btn-active:active {
     background: #314a0b;
     border-color: #314a0b;
     color: #fff;
 }
 
-.hikasu-categories .btn-check-update {
+.radicalinstaller-categories .btn-check-update {
     display: flex;
     align-self: center;
     align-content: center;
     align-items: center;
 }
 
-.hikasu-categories .btn-check-update span {
+.radicalinstaller-categories .btn-check-update span {
     display: inline-block;
     width: 18px;
     height: 18px;
@@ -130,29 +130,29 @@
     text-align: center;
 }
 
-.hikasu-categories .btn-check-update span.empty {
+.radicalinstaller-categories .btn-check-update span.empty {
     background: #134b9e;
 }
 
 
 /************ Grid ***************/
-.hikasu-grid {
+.radicalinstaller-grid {
     display: flex;
     flex-wrap: wrap;
     margin-left: -15px;
     margin-right: -15px;
 }
 
-.hikasu-grid > div {
+.radicalinstaller-grid > div {
     width: calc(25% - 30px);
     margin: 15px;
 }
 
-.hikasu-grid > div > .hikasu-card {
+.radicalinstaller-grid > div > .radicalinstaller-card {
     height: 335px;
 }
 
-.hikasu-pagination {
+.radicalinstaller-pagination {
     display: flex;
     justify-content: center;
     margin-top: 25px;
@@ -160,7 +160,7 @@
 
 
 /************ Card **************/
-.hikasu-card {
+.radicalinstaller-card {
     position: relative;
     border-radius: 3px;
     padding: 35px;
@@ -169,13 +169,13 @@
     border: 1px solid #eee;
 }
 
-.hikasu-card:hover {
+.radicalinstaller-card:hover {
     background-color: #eeeeee;
     cursor: pointer;
     transition: background-color 0.2s ease;
 }
 
-.hikasu-card_image {
+.radicalinstaller-card_image {
     position: relative;
     margin-left: -35px;
     margin-top: -35px;
@@ -185,7 +185,7 @@
     height: 100px;
 }
 
-.hikasu-card_color {
+.radicalinstaller-card_color {
     position: absolute;
     top: 0;
     left: 0;
@@ -195,7 +195,7 @@
     z-index: 1;
 }
 
-.hikasu-card_cover {
+.radicalinstaller-card_cover {
     position: absolute;
     top: 0;
     left: 0;
@@ -208,12 +208,12 @@
 
 }
 
-.hikasu-card_title {
+.radicalinstaller-card_title {
     margin-top: 35px;
     margin-bottom: 15px;
 }
 
-.hikasu-card_description {
+.radicalinstaller-card_description {
     margin-bottom: 15px;
     overflow: hidden;
     position: relative;
@@ -225,14 +225,14 @@
     padding-right: 1em;
 }
 
-.hikasu-card_description:before {
+.radicalinstaller-card_description:before {
     content: '...';
     position: absolute;
     right: 0;
     bottom: 0;
 }
 
-.hikasu-card_description:after {
+.radicalinstaller-card_description:after {
     content: '';
     position: absolute;
     right: 0;
@@ -243,12 +243,12 @@
     transition: background-color 0.2s ease;
 }
 
-.hikasu-card:hover  .hikasu-card_description:after {
+.radicalinstaller-card:hover  .radicalinstaller-card_description:after {
     background-color: #eee;
     transition: background-color 0.2s ease;
 }
 
-.hikasu-card_actions {
+.radicalinstaller-card_actions {
     position: absolute;
     display: flex;
     flex-wrap: nowrap;
@@ -257,46 +257,46 @@
     right: 35px;
 }
 
-.hikasu-card_actions > * {
+.radicalinstaller-card_actions > * {
     margin-right: 5px;
     white-space: nowrap;
 }
 
-.hikasu-card_actions > *:last-child {
+.radicalinstaller-card_actions > *:last-child {
     margin-right: 0;
 }
 
 
 /************ Page project ***************/
-.hikasu-project-page {
+.radicalinstaller-project-page {
 
 }
 
-.hikasu-project-page_buttons {
+.radicalinstaller-project-page_buttons {
     margin-bottom: 35px;
 }
 
-.hikasu-project-page_buttons > * {
+.radicalinstaller-project-page_buttons > * {
     margin-right: 15px;
 }
 
-.hikasu-project-page_buttons > *:last-child {
+.radicalinstaller-project-page_buttons > *:last-child {
     margin-right: 0;
 }
 
-.hikasu-project-page_providers-header {
+.radicalinstaller-project-page_providers-header {
     font-size: 20px;
     font-weight: bold;
     margin-bottom: 15px;
 }
 
-.hikasu-project-page_providers-elements {
+.radicalinstaller-project-page_providers-elements {
     margin-bottom: 25px;
     display: flex;
     align-self: center;
 }
 
-.hikasu-project-page_providers-elements_element {
+.radicalinstaller-project-page_providers-elements_element {
     width: 31%;
     margin-right: 2%;
     position: relative;
@@ -304,19 +304,19 @@
     align-items: center;
 }
 
-.hikasu-project-page_providers-elements_element_logo {
+.radicalinstaller-project-page_providers-elements_element_logo {
     width: 25%;
     margin-right: 10px;
 }
 
-.hikasu-project-page_providers-elements_element_title {
+.radicalinstaller-project-page_providers-elements_element_title {
     flex: 1;
     font-size: 17px;
     line-height: 21px;
     font-weight: 500;
 }
 
-.hikasu-project-page_providers-elements_element_link {
+.radicalinstaller-project-page_providers-elements_element_link {
     position: absolute;
     top: 0;
     left: 0;
@@ -324,32 +324,32 @@
     bottom: 0;
 }
 
-.hikasu-project-page_description-header {
+.radicalinstaller-project-page_description-header {
     font-size: 20px;
     font-weight: bold;
     margin-bottom: 15px;
 }
 
-.hikasu-project-page_description-text {
+.radicalinstaller-project-page_description-text {
     margin-bottom: 25px;
     font-size: 17px;
     line-height: 23px;
 }
 
-.hikasu-project-page_gallery-header {
+.radicalinstaller-project-page_gallery-header {
     font-size: 25px;
     font-weight: bold;
     margin-bottom: 22px;
 }
 
-.hikasu-project-page_gallery-images {
+.radicalinstaller-project-page_gallery-images {
     position: relative;
     background: #ccc;
     margin: -25px -25px -15px -25px;
     height: 300px;
 }
 
-.hikasu-project-page_gallery-images-background {
+.radicalinstaller-project-page_gallery-images-background {
     position: absolute;
     top: 0;
     left: 0;
@@ -359,8 +359,8 @@
     z-index: 0;
 }
 
-.hikasu-project-page_gallery-images-prev,
-.hikasu-project-page_gallery-images-next {
+.radicalinstaller-project-page_gallery-images-prev,
+.radicalinstaller-project-page_gallery-images-next {
     position: absolute;
     border: none;
     display: inline-block;
@@ -376,33 +376,33 @@
     box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.04), 0px 0px 2px rgba(0, 0, 0, 0.06), 0px 4px 8px rgba(0, 0, 0, 0.04);
 }
 
-.hikasu-project-page_gallery-images-prev {
+.radicalinstaller-project-page_gallery-images-prev {
     top: 50%;
     left: 0;
     transform: translate(0%,-50%);
     -ms-transform: translate(-0%,-50%);
 }
 
-.hikasu-project-page_gallery-images-next {
+.radicalinstaller-project-page_gallery-images-next {
     top: 50%;
     right: 0;
     transform: translate(0%,-50%);
     -ms-transform: translate(0%,-50%);
 }
 
-.hikasu-project-page_gallery-images-element {
+.radicalinstaller-project-page_gallery-images-element {
     position: relative;
     animation: opac 0.8s;
 }
 
-.hikasu-project-page_gallery-images-element img {
+.radicalinstaller-project-page_gallery-images-element img {
     width: 100%;
     object-fit: contain;
     object-position: center;
     max-height: 300px;
 }
 
-.hikasu-project-page_gallery-images-element_caption {
+.radicalinstaller-project-page_gallery-images-element_caption {
     position: absolute;
     left: 10px;
     bottom: 10px;
@@ -416,58 +416,58 @@
     box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.04), 0px 0px 2px rgba(0, 0, 0, 0.06), 0px 4px 8px rgba(0, 0, 0, 0.04);
 }
 
-.hikasu-project-page_relations {
+.radicalinstaller-project-page_relations {
     margin-top: 35px;
 }
 
-.hikasu-project-page_relations-header {
+.radicalinstaller-project-page_relations-header {
     font-size: 20px;
     line-height: 24px;
 }
 
-.hikasu-project-page_relations-list {
+.radicalinstaller-project-page_relations-list {
 
 }
 
-.hikasu-project-page_relations-list_link {
+.radicalinstaller-project-page_relations-list_link {
     padding-top: 5px;
     padding-bottom: 5px;
     font-size: 18px;
     color: #000;
 }
 
-.hikasu-project-page_relations-list_link:hover {
+.radicalinstaller-project-page_relations-list_link:hover {
     color: #ccc;
     cursor: pointer;
 }
 
 
 /************ Page updates ***************/
-.hikasu-updates-page {
+.radicalinstaller-updates-page {
 
 }
 
-.hikasu-updates-page_buttons {
+.radicalinstaller-updates-page_buttons {
     margin-bottom: 35px;
 }
 
-.hikasu-updates-page_buttons > * {
+.radicalinstaller-updates-page_buttons > * {
     margin-right: 15px;
 }
 
-.hikasu-updates-page_buttons > *:last-child {
+.radicalinstaller-updates-page_buttons > *:last-child {
     margin-right: 0;
 }
 
-.hikasu-updates-page_tables {
+.radicalinstaller-updates-page_tables {
     margin-top: 25px;
 }
 
-.hikasu-updates-page_tables td {
+.radicalinstaller-updates-page_tables td {
     vertical-align: middle !important;
 }
 
-.hikasu-updates-empty {
+.radicalinstaller-updates-empty {
     margin-top: 25px;
     text-align: center;
     font-size: 20px;
@@ -475,73 +475,73 @@
 
 
 /**************** Install *************/
-.hikasu-install-page_loader {
+.radicalinstaller-install-page_loader {
     font-size: 20px;
 }
 
-.hikasu-install-page_tables-element-messages.hidden {
+.radicalinstaller-install-page_tables-element-messages.hidden {
     display: none;
 }
 
-.hikasu-install-page_buttons button {
+.radicalinstaller-install-page_buttons button {
     margin-right: 15px;
 }
 
-.hikasu-install-page_buttons button:last-child {
+.radicalinstaller-install-page_buttons button:last-child {
     margin-right: 0;
 }
 
-.hikasu-install-page_messages {
+.radicalinstaller-install-page_messages {
     margin-top: 25px;
 }
 
 
 /**************** Installed *************/
-.hikasu-installed-page_loader {
+.radicalinstaller-installed-page_loader {
     font-size: 20px;
 }
 
-.hikasu-installed-page_buttons {
+.radicalinstaller-installed-page_buttons {
     text-align: right !important;
 }
 
-.hikasu-installed-page_buttons button.btn-width-fixed {
+.radicalinstaller-installed-page_buttons button.btn-width-fixed {
     padding-left: 0;
     padding-right: 0;
     width: 110px;
 }
 
-.hikasu-installed-page_buttons button {
+.radicalinstaller-installed-page_buttons button {
     margin-right: 15px;
     text-align: center;
 }
 
-.hikasu-installed-page_buttons button:last-child {
+.radicalinstaller-installed-page_buttons button:last-child {
     margin-right: 0;
 }
 
 
 /**************** Support ************/
-.hikasu-info-page p {
+.radicalinstaller-info-page p {
     font-size: 18px;
     line-height: 24px;
 }
 
-.hikasu-info-page_buttons {
+.radicalinstaller-info-page_buttons {
     margin-top: 25px;
 }
 
-.hikasu-info-page_buttons .btn {
+.radicalinstaller-info-page_buttons .btn {
     margin-right: 15px;
 }
 
-.hikasu-info-page_buttons .btn:last-child {
+.radicalinstaller-info-page_buttons .btn:last-child {
     margin-right: 0;
 }
 
 
 /**************** Modal **************/
-.hikasu-modal {
+.radicalinstaller-modal {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -554,65 +554,65 @@
     z-index: 9;
 }
 
-.hikasu-modal.hikasu-modal-iframe {
+.radicalinstaller-modal.radicalinstaller-modal-iframe {
     width: 85%;
 }
 
-.hikasu-modal .hikasu-modal_container {
+.radicalinstaller-modal .radicalinstaller-modal_container {
     position: relative;
     height: 100%;
     max-height: 100%;
     padding: 25px;
 }
 
-.hikasu-modal.hikasu-modal-iframe .hikasu-modal_container {
+.radicalinstaller-modal.radicalinstaller-modal-iframe .radicalinstaller-modal_container {
     padding: 0;
 }
 
-.hikasu-modal_iframe {
+.radicalinstaller-modal_iframe {
     width: 100%;
     height: 100%;
 }
 
 @media screen and (max-width: 1200px) {
 
-    .hikasu-modal .hikasu-modal_container {
+    .radicalinstaller-modal .radicalinstaller-modal_container {
         width: 100%;
     }
 
 }
 
-.hikasu-modal .hikasu-modal_close {
+.radicalinstaller-modal .radicalinstaller-modal_close {
     position: absolute;
     top: 10px;
     right: 10px;
     z-index: 1;
 }
 
-.hikasu-modal .hikasu-modal_header {
+.radicalinstaller-modal .radicalinstaller-modal_header {
     margin-bottom: 30px;
 }
 
-.hikasu-modal.hikasu-modal-iframe .hikasu-modal_header {
+.radicalinstaller-modal.radicalinstaller-modal-iframe .radicalinstaller-modal_header {
     padding: 25px 25px 0 25px;
 }
 
-.hikasu-modal .hikasu-modal_header h2 {
+.radicalinstaller-modal .radicalinstaller-modal_header h2 {
     font-size: 26px;
     line-height: 30px;
     font-weight: bold;
 }
 
-.hikasu-modal .hikasu-modal_iframe {
+.radicalinstaller-modal .radicalinstaller-modal_iframe {
     border: none;
 }
 
-.hikasu-modal .hikasu-modal_body-wrap {
+.radicalinstaller-modal .radicalinstaller-modal_body-wrap {
     position: relative;
     height: calc(100% - 85px);
 }
 
-.hikasu-modal .hikasu-modal_body-wrap .hikasu-modal_body {
+.radicalinstaller-modal .radicalinstaller-modal_body-wrap .radicalinstaller-modal_body {
     width: 100%;
     height: 100%;
     position: absolute;
@@ -632,7 +632,7 @@
     user-select: none;
 }
 
-.hikasu-modal_background {
+.radicalinstaller-modal_background {
     display: none;
     position: fixed;
     left: 0;
@@ -643,13 +643,13 @@
     z-index: 1;
 }
 
-.hikasu-modal_background.active {
+.radicalinstaller-modal_background.active {
     display: block;
 }
 
 
 /************** Loader ***************/
-.hikasu-loader {
+.radicalinstaller-loader {
     position: absolute;
     top: 0;
     left: 0;
@@ -661,6 +661,6 @@
     z-index: 2;
 }
 
-.hikasu-loader.hide {
+.radicalinstaller-loader.hide {
     display: none;
 }

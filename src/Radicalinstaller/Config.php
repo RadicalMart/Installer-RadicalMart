@@ -1,5 +1,7 @@
 <?php namespace Radicalinstaller;
 
+defined('_JEXEC') or die;
+
 class Config
 {
 

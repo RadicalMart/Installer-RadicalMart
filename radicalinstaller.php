@@ -1,9 +1,9 @@
 <?php defined('_JEXEC') or die;
 
-use Hikasu\API;
-use Hikasu\ProviderJoomla;
-use Hikasu\ProviderYooelements;
-use Hikasu\ProviderYoolayouts;
+use Radicalinstaller\API;
+use Radicalinstaller\ProviderJoomla;
+use Radicalinstaller\ProviderYooelements;
+use Radicalinstaller\ProviderYoolayouts;
 use Joomla\CMS\Cache\Cache;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
@@ -50,7 +50,7 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 		$tab['name']  = 'hikasu';
 		$tab['label'] = Text::_('PLG_INSTALLER_HIKASU_TEXT');
 
-		$content        = new FileLayout('default', JPATH_ROOT . '/plugins/installer/hikasu/tmpl');
+		$content        = new FileLayout('default', JPATH_ROOT . '/plugins/installer/radicalinstaller/tmpl');
 		$tab['content'] = $content->render(['params' => $this->params]);
 
 		return $tab;
@@ -195,7 +195,7 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 		$query = $db->getQuery(true);
 		$query
 			->select(['id', 'title', 'version', 'project_id'])
-			->from($db->quoteName('#__hikasu_install'));
+			->from($db->quoteName('#__radicalinstaller_extensions'));
 		$projects_install = $db->setQuery($query)->loadObjectList();
 
 		foreach ($projects_install as $project_install)
@@ -341,7 +341,7 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 		$query = $db->getQuery(true);
 		$query
 			->select(['element'])
-			->from($db->quoteName('#__hikasu_install'))
+			->from($db->quoteName('#__radicalinstaller_extensions'))
 			->where('element IN (' . implode(',', $fields) . ')');
 		$find_list = $db->setQuery($query)->loadObjectList();
 
@@ -458,7 +458,7 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 		$query = $db->getQuery(true);
 		$query
 			->select('*')
-			->from($db->quoteName('#__hikasu_install'));
+			->from($db->quoteName('#__radicalinstaller_extensions'));
 		$list_installed = $db->setQuery($query)->loadObjectList();
 
 		return $list_installed;
@@ -473,7 +473,7 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 		$query = $db->getQuery(true);
 		$query
 			->select(['type'])
-			->from($db->quoteName('#__hikasu_install'))
+			->from($db->quoteName('#__radicalinstaller_extensions'))
 			->where('id = ' . $db->quote($id));
 		$item   = $db->setQuery($query);
 		$result = false;

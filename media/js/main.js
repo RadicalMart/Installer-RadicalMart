@@ -1,6 +1,6 @@
 window.RadicalInstaller = {
     api: 'https://radicalmart.ru',
-    url: 'index.php?option=com_ajax&plugin=hikasu&group=installer&format=json',
+    url: 'index.php?option=com_ajax&plugin=radicalinstaller&group=installer&format=json',
     container: null, // контейнер HTML для установщика
     form: null, // форма HTML установки Joomla
     category_id: 0, // текущая активная категория расширений
@@ -16,7 +16,7 @@ window.RadicalInstaller = {
      */
     init: function () {
         let self = this;
-        this.container = document.querySelector('#hikasu-container');
+        this.container = document.querySelector('#radicalinstaller-container');
         this.form = document.querySelector('#adminForm');
 
         // если нет ключа, то запускаем показ формы ввода ключа
@@ -37,8 +37,8 @@ window.RadicalInstaller = {
      */
     changeCategory: function (id) {
         let self = this,
-            grid = RadicalInstallerUtils.createElement('div', {'class': 'hikasu-grid'}),
-            pagination = RadicalInstallerUtils.createElement('div', {'class': 'hikasu-pagination'});
+            grid = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-grid'}),
+            pagination = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-pagination'});
 
         // очищаем весь основной контейнер и вставляем в него базовые элементы для каталога
         self.container.innerHTML = '';
@@ -76,7 +76,7 @@ window.RadicalInstaller = {
                 let cards = json.items;
 
                 for (let i=0;i<cards.length;i++) {
-                    self.container.querySelector('.hikasu-grid').append(self.renderCatalogGrid(cards[i]).build());
+                    self.container.querySelector('.radicalinstaller-grid').append(self.renderCatalogGrid(cards[i]).build());
                 }
 
                 self.setColors();
@@ -84,7 +84,7 @@ window.RadicalInstaller = {
                 self.checkUpdates();
                 self.loaderHide();
 
-                self.container.querySelector('.hikasu-pagination').innerHTML = '';
+                self.container.querySelector('.radicalinstaller-pagination').innerHTML = '';
                 if (json.pagination !== undefined) {
                     let last_page = parseInt(json.pagination.pagesTotal),
                         page_limit = parseInt(json.pagination.limit),
@@ -92,7 +92,7 @@ window.RadicalInstaller = {
 
                     if (last_page > current_page) {
                         let pagination_button = RadicalInstallerUtils.createElement('button', {
-                            'class': 'btn btn-large hikasu-pagination_more', 'events': [
+                            'class': 'btn btn-large radicalinstaller-pagination_more', 'events': [
                                 [
                                     'click',
                                     function (ev) {
@@ -104,7 +104,7 @@ window.RadicalInstaller = {
                             ]
                         }, RadicalInstallerLangs.button_load_more);
 
-                        self.container.querySelector('.hikasu-pagination').append(pagination_button.build());
+                        self.container.querySelector('.radicalinstaller-pagination').append(pagination_button.build());
                     }
 
                 }
@@ -116,7 +116,7 @@ window.RadicalInstaller = {
         load_page();
 
         // отключаем всем кнопкам классы активности
-        let buttons_all = document.querySelectorAll('.hikasu-categories button');
+        let buttons_all = document.querySelectorAll('.radicalinstaller-categories button');
         for (let i = 0; i < buttons_all.length; i++) {
             buttons_all[i].classList.remove('btn-active');
         }
@@ -136,7 +136,7 @@ window.RadicalInstaller = {
         let self = this;
         this.checkUpdates();
 
-        self.categories = RadicalInstallerUtils.createElement('div', {'class': 'hikasu-categories'});
+        self.categories = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-categories'});
         self.categories.add('button', {
             'class': 'btn', 'data-type': 'installed', 'events': [
                 [
@@ -223,7 +223,7 @@ window.RadicalInstaller = {
                     }, categories_items[i].title);
                 }
 
-                let search_categories = self.container.querySelector('.hikasu-categories');
+                let search_categories = self.container.querySelector('.radicalinstaller-categories');
 
                 if (search_categories !== null && search_categories !== undefined) {
                     search_categories.remove();
@@ -243,7 +243,7 @@ window.RadicalInstaller = {
     showFormKey: function () {
         let self = this,
             form = RadicalInstallerUtils.createElement('form', {
-            'class': 'form-horizontal hikasu-flex hikasu-flex-center hikasu-height-large',
+            'class': 'form-horizontal radicalinstaller-flex radicalinstaller-flex-center radicalinstaller-height-large',
             'events': [
                 [
                     'submit',
@@ -264,9 +264,9 @@ window.RadicalInstaller = {
                 ]
             ]
         })
-        .addChild('div', {'class': 'span5 hikasu-card hikasu-background-muted hikasu-margin-auto hikasu-padding-large'})
-            .add('p', {'class': 'hikasu-text-large'}, 'Введите Ваш ключ из личного кабинета <a href="https://radicalmart.ru" target="_blank">radicalmart.ru</a>')
-                .addChild('div', {'class': 'control-group control-group-no-label control-group-large hikasu-margin-top'})
+        .addChild('div', {'class': 'span5 radicalinstaller-card radicalinstaller-background-muted radicalinstaller-margin-auto radicalinstaller-padding-large'})
+            .add('p', {'class': 'radicalinstaller-text-large'}, 'Введите Ваш ключ из личного кабинета <a href="https://radicalmart.ru" target="_blank">radicalmart.ru</a>')
+                .addChild('div', {'class': 'control-group control-group-no-label control-group-large radicalinstaller-margin-top'})
                     .addChild('div', {'class': 'controls'})
                         .add('input', {'class': 'span12', 'type': 'text', 'placeholder': 'Введите здесь ваш ключ', 'name': 'key'})
                         .getParent()
@@ -293,7 +293,7 @@ window.RadicalInstaller = {
         self.ajax(self.url + '&method=project&project_id=' + id, function (json) {
             let item = JSON.parse(json.data),
                 header = RadicalInstallerUtils.createElement('div'),
-                body = RadicalInstallerUtils.createElement('div', {'class': 'hikasu-project-page'}),
+                body = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-project-page'}),
                 color = RadicalInstallerUtils.generateColorFromText(item.title),
                 docs = item.urls.documentation,
                 support = item.urls.support;
@@ -311,31 +311,31 @@ window.RadicalInstaller = {
 
             // проверяем наличии галереи у расширения и генерируем DOM, если она есть
             if (item.gallery.length > 0) {
-                header = header.addChild('div', {'class': 'hikasu-project-page_gallery-images', 'data-active': 1})
+                header = header.addChild('div', {'class': 'radicalinstaller-project-page_gallery-images', 'data-active': 1})
                     .add('div', {
-                        'class': 'hikasu-project-page_gallery-images-background',
+                        'class': 'radicalinstaller-project-page_gallery-images-background',
                         'style': 'background-color: ' + color
                     });
                 for (let i = 0; i < item.gallery.length; i++) {
                     header = header.addChild('div', {
-                        'class': 'hikasu-project-page_gallery-images-element',
+                        'class': 'radicalinstaller-project-page_gallery-images-element',
                         'style': i === 0 ? 'display:block' : 'display:none'
                     })
                         .add('img', {
                             'alt': item.gallery[i].text,
                             'src': self.api + '/' + item.gallery[i].src
                         })
-                        .add('div', {'class': 'hikasu-project-page_gallery-images-element_caption'}, item.gallery[i].text)
+                        .add('div', {'class': 'radicalinstaller-project-page_gallery-images-element_caption'}, item.gallery[i].text)
                         .getParent();
                 }
 
                 header = header.add('button', {
-                    'class': 'hikasu-project-page_gallery-images-prev', 'events': [
+                    'class': 'radicalinstaller-project-page_gallery-images-prev', 'events': [
                         [
                             'click', function (ev) {
                                 let i,
-                                    slideshow = this.closest(".hikasu-project-page_gallery-images"),
-                                    slides = slideshow.querySelectorAll('.hikasu-project-page_gallery-images-element'),
+                                    slideshow = this.closest(".radicalinstaller-project-page_gallery-images"),
+                                    slides = slideshow.querySelectorAll('.radicalinstaller-project-page_gallery-images-element'),
                                     active = parseInt(slideshow.getAttribute('data-active')) - 1;
 
                                 if (active > slides.length) {
@@ -358,12 +358,12 @@ window.RadicalInstaller = {
                 }, '❮');
 
                 header = header.add('button', {
-                    'class': 'hikasu-project-page_gallery-images-next', 'events': [
+                    'class': 'radicalinstaller-project-page_gallery-images-next', 'events': [
                         [
                             'click', function (ev) {
                                 let i,
-                                    slideshow = this.closest(".hikasu-project-page_gallery-images"),
-                                    slides = slideshow.querySelectorAll('.hikasu-project-page_gallery-images-element'),
+                                    slideshow = this.closest(".radicalinstaller-project-page_gallery-images"),
+                                    slides = slideshow.querySelectorAll('.radicalinstaller-project-page_gallery-images-element'),
                                     active = parseInt(slideshow.getAttribute('data-active')) + 1;
 
                                 if (active > slides.length) {
@@ -387,13 +387,13 @@ window.RadicalInstaller = {
                 header = header.getParent();
             } else {
                 if (item.images !== undefined) {
-                    header = header.addChild('div', {'class': 'hikasu-project-page_gallery-images', 'data-active': 1})
+                    header = header.addChild('div', {'class': 'radicalinstaller-project-page_gallery-images', 'data-active': 1})
                         .add('div', {
-                            'class': 'hikasu-project-page_gallery-images-background',
+                            'class': 'radicalinstaller-project-page_gallery-images-background',
                             'style': 'background-color: ' + color
                         });
                     header = header.addChild('div', {
-                        'class': 'hikasu-project-page_gallery-images-element',
+                        'class': 'radicalinstaller-project-page_gallery-images-element',
                         'style': 'display:block'
                     })
                         .add('img', {
@@ -403,8 +403,8 @@ window.RadicalInstaller = {
                 }
             }
 
-            body = body.add('h2', {'class': 'hikasu-project-page_gallery-header'}, item.title);
-            body = body.addChild('div', {'class': 'hikasu-project-page_buttons'});
+            body = body.add('h2', {'class': 'radicalinstaller-project-page_gallery-header'}, item.title);
+            body = body.addChild('div', {'class': 'radicalinstaller-project-page_buttons'});
 
             if (item.download_type === 'paid') {
                 if (RadicalInstallerConfig.key !== '') {
@@ -469,12 +469,12 @@ window.RadicalInstaller = {
                 .getParent();
 
 
-            body.add('div', {'class': 'hikasu-project-page_description-header'}, RadicalInstallerLangs.description);
+            body.add('div', {'class': 'radicalinstaller-project-page_description-header'}, RadicalInstallerLangs.description);
 
             if (item.fulltext !== undefined && item.fulltext !== '') {
-                body = body.add('div', {'class': 'hikasu-project-page_description-text'}, item.fulltext);
+                body = body.add('div', {'class': 'radicalinstaller-project-page_description-text'}, item.fulltext);
             } else {
-                body = body.add('div', {'class': 'hikasu-project-page_description-text'}, item.introtext);
+                body = body.add('div', {'class': 'radicalinstaller-project-page_description-text'}, item.introtext);
             }
 
             header = header.build();
@@ -483,17 +483,17 @@ window.RadicalInstaller = {
             // это остаточный код на будущее, выводит расширения которые должны быть установленны вместе с этим расширением
             if (item.fullwillbeinstalled !== undefined) {
                 if (item.fullwillbeinstalled.length > 0) {
-                    let relations_html = RadicalInstallerUtils.createElement('hikasu-project-page_relations')
+                    let relations_html = RadicalInstallerUtils.createElement('radicalinstaller-project-page_relations')
                         .add('h3', {
-                            'class': 'hikasu-project-page_relations-header'
+                            'class': 'radicalinstaller-project-page_relations-header'
                         }, RadicalInstallerLangs.will_be_installed)
                         .addChild('div', {
-                            'class': 'hikasu-project-page_relations-list'
+                            'class': 'radicalinstaller-project-page_relations-list'
                         });
 
                     for (let i = 0; i < item.fullwillbeinstalled.length; i++) {
                         relations_html = relations_html.add('div', {
-                            'class': 'hikasu-project-page_relations-list_link',
+                            'class': 'radicalinstaller-project-page_relations-list_link',
                             'events': [
                                 [
                                     'click',
@@ -587,10 +587,10 @@ window.RadicalInstaller = {
 
             if (show_modal) {
                 let header = RadicalInstallerUtils.createElement('h1', {'class': ''}, RadicalInstallerLangs.installing_an_extension),
-                    body = RadicalInstallerUtils.createElement('div', {'class': 'hikasu-install-page'});
+                    body = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-install-page'});
 
                 body = body
-                    .addChild('table', {'class': 'hikasu-updates-page_tables table table-striped table-hover'})
+                    .addChild('table', {'class': 'radicalinstaller-updates-page_tables table table-striped table-hover'})
                         .addChild('thead')
                             .addChild('tr')
                                 .add('th', {}, RadicalInstallerLangs.extension_name)
@@ -602,14 +602,14 @@ window.RadicalInstaller = {
 
                 for (let i = 0; i < self.list_install.length; i++) {
                     body = body
-                        .addChild('tr', {'class': 'hikasu-install-page_tables-element-id-' + self.list_install[i].id})
+                        .addChild('tr', {'class': 'radicalinstaller-install-page_tables-element-id-' + self.list_install[i].id})
                             .add('td', {}, self.list_install[i].title)
-                            .add('td', {'class': 'hikasu-install-page_tables-element-status'}, RadicalInstallerLangs.wait)
-                            .add('td', {'class': 'hikasu-install-page_tables-element-action'})
+                            .add('td', {'class': 'radicalinstaller-install-page_tables-element-status'}, RadicalInstallerLangs.wait)
+                            .add('td', {'class': 'radicalinstaller-install-page_tables-element-action'})
                             .getParent()
-                        .addChild('tr', {'class': 'hikasu-install-page_tables-element-messages'})
+                        .addChild('tr', {'class': 'radicalinstaller-install-page_tables-element-messages'})
                             .add('td', {
-                                'class': 'hikasu-install-page_tables-element-id-' + self.list_install[i].id + '-messages hidden',
+                                'class': 'radicalinstaller-install-page_tables-element-id-' + self.list_install[i].id + '-messages hidden',
                                 'colspan': 3
                             })
                             .getParent()
@@ -639,14 +639,14 @@ window.RadicalInstaller = {
                     self.ajax(url, function (response) {
                         let element,
                             success = false,
-                            modal_body = document.querySelector('.hikasu-install-page_loader'),
+                            modal_body = document.querySelector('.radicalinstaller-install-page_loader'),
                             buttons = undefined,
                             messages = '',
                             data = JSON.parse(response['data']);
 
                         if (show_modal) {
-                            element = document.querySelector('.hikasu-install-page_tables-element-id-' + item.id);
-                            element.querySelector('.hikasu-install-page_tables-element-action').innerHTML = '';
+                            element = document.querySelector('.radicalinstaller-install-page_tables-element-id-' + item.id);
+                            element.querySelector('.radicalinstaller-install-page_tables-element-action').innerHTML = '';
                         }
 
                         if (data.messages !== undefined && data.messages !== null) {
@@ -665,8 +665,8 @@ window.RadicalInstaller = {
 
                         if (!success) {
                             if (show_modal) {
-                                element.querySelector('.hikasu-install-page_tables-element-status').innerHTML = RadicalInstallerLangs.installation_error;
-                                buttons = RadicalInstallerUtils.createElement('div', {'class': 'hikasu-install-page_buttons'})
+                                element.querySelector('.radicalinstaller-install-page_tables-element-status').innerHTML = RadicalInstallerLangs.installation_error;
+                                buttons = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-install-page_buttons'})
                                     .add('button', {
                                         'class': 'btn',
                                         'events': [
@@ -686,7 +686,7 @@ window.RadicalInstaller = {
                                             [
                                                 'click',
                                                 function (ev) {
-                                                    let element_messages = document.querySelector('.hikasu-install-page_tables-element-id-' + item.id + '-messages');
+                                                    let element_messages = document.querySelector('.radicalinstaller-install-page_tables-element-id-' + item.id + '-messages');
 
                                                     if (element_messages.classList.contains('hidden')) {
                                                         this.innerHTML = RadicalInstallerLangs.hide_messages;
@@ -707,18 +707,18 @@ window.RadicalInstaller = {
                             }
                         } else {
                             if (show_modal) {
-                                element.querySelector('.hikasu-install-page_tables-element-status').innerHTML = RadicalInstallerLangs.button_installed;
+                                element.querySelector('.radicalinstaller-install-page_tables-element-status').innerHTML = RadicalInstallerLangs.button_installed;
                             }
 
                             if (messages !== '') {
-                                buttons = RadicalInstallerUtils.createElement('div', {'class': 'hikasu-install-page_buttons'})
+                                buttons = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-install-page_buttons'})
                                     .add('button', {
                                         'class': 'btn',
                                         'events': [
                                             [
                                                 'click',
                                                 function (ev) {
-                                                    let element_messages = document.querySelector('.hikasu-install-page_tables-element-id-' + item.id + '-messages');
+                                                    let element_messages = document.querySelector('.radicalinstaller-install-page_tables-element-id-' + item.id + '-messages');
 
                                                     if (element_messages.classList.contains('hidden')) {
                                                         this.innerHTML = RadicalInstallerLangs.hide_messages;
@@ -743,14 +743,14 @@ window.RadicalInstaller = {
 
                         if (show_modal) {
                             if (buttons !== undefined) {
-                                element.querySelector('.hikasu-install-page_tables-element-action').appendChild(buttons.build());
+                                element.querySelector('.radicalinstaller-install-page_tables-element-action').appendChild(buttons.build());
                             }
 
                             if (messages !== '') {
-                                let element_messages = document.querySelector('.hikasu-install-page_tables-element-id-' + self.list_install[i].id + '-messages');
+                                let element_messages = document.querySelector('.radicalinstaller-install-page_tables-element-id-' + self.list_install[i].id + '-messages');
 
                                 element_messages.innerHTML = '';
-                                messages = RadicalInstallerUtils.createElement('div', {'class': 'hikasu-install-page_messages'}, messages);
+                                messages = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-install-page_messages'}, messages);
                                 element_messages.appendChild(messages.build());
                             }
                         }
@@ -773,11 +773,11 @@ window.RadicalInstaller = {
      */
     setColors: function () {
         let self = this,
-            cards = self.container.querySelectorAll('.hikasu-card');
+            cards = self.container.querySelectorAll('.radicalinstaller-card');
 
         for (let i = 0; i < cards.length; i++) {
-            let color = cards[i].querySelector('.hikasu-card_color'),
-                text = cards[i].querySelector('.hikasu-card_title');
+            let color = cards[i].querySelector('.radicalinstaller-card_color'),
+                text = cards[i].querySelector('.radicalinstaller-card_title');
             if(color !== undefined && color !== null) {
                 color.style.backgroundColor = RadicalInstallerUtils.generateColorFromText(text.textContent);
             }
@@ -792,7 +792,7 @@ window.RadicalInstaller = {
     checkInstall: function () {
         let self = this,
             list_for_find = [],
-            cards = self.container.querySelectorAll('.hikasu-card');
+            cards = self.container.querySelectorAll('.radicalinstaller-card');
 
         for (let i = 0; i < cards.length; i++) {
             list_for_find.push(cards[i].getAttribute('data-element'));
@@ -801,7 +801,7 @@ window.RadicalInstaller = {
         this.ajax(this.url + '&method=checkInstall&list=' + JSON.stringify(list_for_find), function (json) {
             let find = json.data[0];
             for (let i = 0; i < find.length; i++) {
-                let card = self.container.querySelector('.hikasu-card[data-element="' + find[i] + '"]');
+                let card = self.container.querySelector('.radicalinstaller-card[data-element="' + find[i] + '"]');
                 if (card !== null) {
                     card.setAttribute('data-install', '1');
                     let button = card.querySelector('.btn-success');
@@ -851,14 +851,14 @@ window.RadicalInstaller = {
                 }
 
                 if (data.status === 'notinstall') {
-                    let grid = RadicalInstallerUtils.createElement('div', {'class': 'hikasu-grid'}),
+                    let grid = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-grid'}),
                         grid_element = null;
 
                     self.container.innerHTML = '';
                     self.container.append(grid.build());
                     self.loaderInit();
                     self.loaderShow();
-                    grid_element = self.container.querySelector('.hikasu-grid');
+                    grid_element = self.container.querySelector('.radicalinstaller-grid');
 
                     for (let i=0;i<data.items.length;i++) {
                         grid_element.append(self.renderCatalogGrid(data.items[i]).build());
@@ -885,8 +885,8 @@ window.RadicalInstaller = {
             let data = JSON.parse(response.data);
 
             let header = RadicalInstallerUtils.createElement('h2', {'class': ''}, RadicalInstallerLangs.extension_updates);
-            let body = RadicalInstallerUtils.createElement('div', {'class': 'hikasu-updates-page'});
-            body = body.addChild('div', {'class': 'hikasu-updates-page_buttons'})
+            let body = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-updates-page'});
+            body = body.addChild('div', {'class': 'radicalinstaller-updates-page_buttons'})
                 .add('button', {
                     'class': 'btn btn-success btn-large',
                     'events': [
@@ -896,7 +896,7 @@ window.RadicalInstaller = {
                                 for (let i = 0; i < data.items.length; i++) {
                                     self.ajax(self.url + '&method=project&project_id=' + data.items[i].project_id, function (json) {
                                         let item = JSON.parse(json.data),
-                                            element = document.querySelector('.hikasu-updates-page_tables-element-id-' + data.items[i].project_id);
+                                            element = document.querySelector('.radicalinstaller-updates-page_tables-element-id-' + data.items[i].project_id);
                                             btn = element.querySelector('.btn');
 
                                         if (btn !== null) {
@@ -906,7 +906,7 @@ window.RadicalInstaller = {
 
                                         self.installProject(item, false, false, function (data, messages) {
                                             element.remove();
-                                            let table = document.querySelector('.hikasu-updates-page_tables');
+                                            let table = document.querySelector('.radicalinstaller-updates-page_tables');
 
                                             if (table !== null) {
                                                 if (table.querySelectorAll('tbody tr').length === 0) {
@@ -942,7 +942,7 @@ window.RadicalInstaller = {
 
             if (parseInt(data.count) > 0) {
                 body =
-                    body.addChild('table', {'class': 'hikasu-updates-page_tables table table-striped table-hover'})
+                    body.addChild('table', {'class': 'radicalinstaller-updates-page_tables table table-striped table-hover'})
                             .addChild('thead')
                                 .addChild('tr')
                                     .add('th', {}, RadicalInstallerLangs.extension_name)
@@ -955,7 +955,7 @@ window.RadicalInstaller = {
 
                 for (let i = 0; i < data.items.length; i++) {
                     body =
-                        body.addChild('tr', {'class': 'hikasu-updates-page_tables-element-id-' + data.items[i].project_id})
+                        body.addChild('tr', {'class': 'radicalinstaller-updates-page_tables-element-id-' + data.items[i].project_id})
                                 .add('td', {}, data.items[i].title)
                                 .add('td', {}, data.items[i].version)
                                 .add('td', {}, data.items[i].version_last)
@@ -967,7 +967,7 @@ window.RadicalInstaller = {
                                         function (ev) {
                                             self.ajax(self.url + '&method=project&project_id=' + data.items[i].project_id, function (json) {
                                                 let item = JSON.parse(json.data);
-                                                let element = document.querySelector('.hikasu-updates-page_tables-element-id-' + data.items[i].project_id);
+                                                let element = document.querySelector('.radicalinstaller-updates-page_tables-element-id-' + data.items[i].project_id);
                                                 let btn = element.querySelector('.btn');
 
                                                 if (btn !== null) {
@@ -996,7 +996,7 @@ window.RadicalInstaller = {
 
                 body = body.getParent().getParent();
             } else {
-                body = body.add('div', {'class': 'hikasu-updates-empty'}, RadicalInstallerLangs.no_updates)
+                body = body.add('div', {'class': 'radicalinstaller-updates-empty'}, RadicalInstallerLangs.no_updates)
             }
 
             header = header.build();
@@ -1017,11 +1017,11 @@ window.RadicalInstaller = {
         self.ajax(self.url + '&method=installedList', function (response) {
             let data = response.data[0];
             let header = RadicalInstallerUtils.createElement('h2', {'class': ''}, RadicalInstallerLangs.extension_installed);
-            let body = RadicalInstallerUtils.createElement('div', {'class': 'hikasu-installed-page'});
+            let body = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-installed-page'});
 
             if (data.length > 0) {
                 body =
-                    body.addChild('table', {'class': 'hikasu-installed-page_tables table table-striped table-hover'})
+                    body.addChild('table', {'class': 'radicalinstaller-installed-page_tables table table-striped table-hover'})
                             .addChild('thead')
                                 .addChild('tr')
                                     .add('th', {}, RadicalInstallerLangs.extension_name)
@@ -1033,10 +1033,10 @@ window.RadicalInstaller = {
 
                 for (let i = 0; i < data.length; i++) {
                     body =
-                        body.addChild('tr', {'class': 'hikasu-installed-page_tables-element-id-' + data[i].project_id})
+                        body.addChild('tr', {'class': 'radicalinstaller-installed-page_tables-element-id-' + data[i].project_id})
                                 .add('td', {}, data[i].title)
                                 .add('td', {}, data[i].version)
-                                    .addChild('td', {'class': 'hikasu-installed-page_buttons'})
+                                    .addChild('td', {'class': 'radicalinstaller-installed-page_buttons'})
                                         .add('button', {
                                 'class': 'btn btn-width-fixed', 'events': [
                                     [
@@ -1083,7 +1083,7 @@ window.RadicalInstaller = {
 
                 body = body.getParent().getParent();
             } else {
-                body = body.add('div', {'class': 'hikasu-installed-empty'}, RadicalInstallerLangs.no_installed)
+                body = body.add('div', {'class': 'radicalinstaller-installed-empty'}, RadicalInstallerLangs.no_installed)
             }
 
             header = header.build();
@@ -1122,7 +1122,7 @@ window.RadicalInstaller = {
 
             let grid_cards = RadicalInstallerUtils.createElement('div', {}).
             addChild('div', {
-                    'class': 'hikasu-card',
+                    'class': 'radicalinstaller-card',
                     'data-install': '0',
                     'data-element': item.element,
                     'events': [
@@ -1141,10 +1141,10 @@ window.RadicalInstaller = {
             if(item.images !== undefined)
             {
                 grid_cards
-                    .addChild('div', {'class': 'hikasu-card_image'})
-                        .add('div', {'class': 'hikasu-card_color', 'style': 'opacity: .1'})
+                    .addChild('div', {'class': 'radicalinstaller-card_image'})
+                        .add('div', {'class': 'radicalinstaller-card_color', 'style': 'opacity: .1'})
                         .add('div', {
-                            'class': 'hikasu-card_cover',
+                            'class': 'radicalinstaller-card_cover',
                             'style': item.images.cover !== false ? ('background-image:url(' + self.api + '/' + item.images.cover + ')') : ''
                         })
                         .getParent();
@@ -1152,9 +1152,9 @@ window.RadicalInstaller = {
 
 
             grid_cards
-                .add('h3', {'class': 'hikasu-card_title'}, item.title)
-                .add('div', {'class': 'hikasu-card_description'}, item.introtext)
-                    .addChild('div', {'class': 'hikasu-card_actions'});
+                .add('h3', {'class': 'radicalinstaller-card_title'}, item.title)
+                .add('div', {'class': 'radicalinstaller-card_description'}, item.introtext)
+                    .addChild('div', {'class': 'radicalinstaller-card_actions'});
 
             if (item.download_type === 'free') {
                 grid_cards = grid_cards.add('button', {
@@ -1244,8 +1244,8 @@ window.RadicalInstaller = {
      */
     loaderInit: function () {
         let self = this,
-            loader = RadicalInstallerUtils.createElement('div', {'class': 'hikasu-loader hide'})
-            .add('img', {'src': '/media/plg_installer_hikasu/img/loader.svg'});
+            loader = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-loader hide'})
+            .add('img', {'src': '/media/plg_installer_radicalinstaller/img/loader.svg'});
         self.container.appendChild(loader.build());
     },
 
@@ -1253,7 +1253,7 @@ window.RadicalInstaller = {
      * Запуск показа экрана загрузки
      */
     loaderShow: function () {
-        let loader = document.querySelector('.hikasu-loader');
+        let loader = document.querySelector('.radicalinstaller-loader');
         if (loader !== null) {
             loader.classList.remove('hide');
         }
@@ -1264,7 +1264,7 @@ window.RadicalInstaller = {
      * Скрытие экрана загрузки
      */
     loaderHide: function () {
-        let loader = document.querySelector('.hikasu-loader');
+        let loader = document.querySelector('.radicalinstaller-loader');
         if (loader !== null) {
             loader.classList.add('hide');
         }
