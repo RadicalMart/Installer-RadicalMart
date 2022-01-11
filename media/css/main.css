@@ -31,6 +31,10 @@
     margin-top: 35px;
 }
 
+.radicalinstaller-margin-right {
+    margin-right: 35px;
+}
+
 
 /************* Padding *************/
 .radicalinstaller-padding-large {
@@ -144,7 +148,7 @@
 }
 
 .radicalinstaller-grid > div {
-    width: calc(25% - 30px);
+    width: calc(25% - 32px);
     margin: 15px;
 }
 
@@ -162,8 +166,10 @@
 /************ Card **************/
 .radicalinstaller-card {
     position: relative;
+    display: flex;
     border-radius: 3px;
-    padding: 35px;
+    padding: 0;
+    height: 120px;
     background-color: transparent;
     transition: background-color 0.2s ease;
     border: 1px solid #eee;
@@ -175,14 +181,29 @@
     transition: background-color 0.2s ease;
 }
 
+
+.radicalinstaller-card.radicalinstaller-card_installed:after {
+    position: absolute;
+    content: attr(data-installed);
+    padding: 3px 6px;
+    border-radius: 4px;
+    background: rgb(40, 145, 74, .8);
+    color: #fff;
+    z-index: 1;
+    top: 5px;
+    left: 5px;
+    font-size: 12px;
+}
+
+.radicalinstaller-card.radicalinstaller-card_installed .radicalinstaller-card_image,
+.radicalinstaller-card.radicalinstaller-card_installed .radicalinstaller-card_title {
+    opacity: 0.8;
+}
+
 .radicalinstaller-card_image {
     position: relative;
-    margin-left: -35px;
-    margin-top: -35px;
-    margin-right: -35px;
-    padding-top: 35px;
-    padding-bottom: 35px;
-    height: 100px;
+    width: 50%;
+    height: 100%;
 }
 
 .radicalinstaller-card_color {
@@ -209,61 +230,10 @@
 }
 
 .radicalinstaller-card_title {
-    margin-top: 35px;
-    margin-bottom: 15px;
-}
-
-.radicalinstaller-card_description {
-    margin-bottom: 15px;
-    overflow: hidden;
-    position: relative;
-    font-size: 14px;
-    line-height: 17px;
-    max-height: 85px;
-    text-align: justify;
-    margin-right: -1em;
-    padding-right: 1em;
-}
-
-.radicalinstaller-card_description:before {
-    content: '...';
-    position: absolute;
-    right: 0;
-    bottom: 0;
-}
-
-.radicalinstaller-card_description:after {
-    content: '';
-    position: absolute;
-    right: 0;
-    width: 1em;
-    height: 1em;
-    margin-top: 0.2em;
-    background-color: #fff;
-    transition: background-color 0.2s ease;
-}
-
-.radicalinstaller-card:hover  .radicalinstaller-card_description:after {
-    background-color: #eee;
-    transition: background-color 0.2s ease;
-}
-
-.radicalinstaller-card_actions {
-    position: absolute;
-    display: flex;
-    flex-wrap: nowrap;
-    bottom: 35px;
-    left: 35px;
-    right: 35px;
-}
-
-.radicalinstaller-card_actions > * {
-    margin-right: 5px;
-    white-space: nowrap;
-}
-
-.radicalinstaller-card_actions > *:last-child {
-    margin-right: 0;
+    width: 50%;
+    padding: 15px;
+    font-size: 16px;
+    line-height: 20px;
 }
 
 

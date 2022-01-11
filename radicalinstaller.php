@@ -48,7 +48,7 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 	{
 		$tab          = [];
 		$tab['name']  = 'hikasu';
-		$tab['label'] = Text::_('PLG_INSTALLER_HIKASU_TEXT');
+		$tab['label'] = Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT');
 
 		$content        = new FileLayout('default', JPATH_ROOT . '/plugins/installer/radicalinstaller/tmpl');
 		$tab['content'] = $content->render(['params' => $this->params]);
@@ -64,75 +64,88 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 	 * @throws Exception
 	 * @since version
 	 */
-	public function onAjaxHikasu()
+	public function onAjaxRadicalinstaller()
 	{
 		JLoader::registerNamespace('Radicalinstaller', __DIR__ . DIRECTORY_SEPARATOR . 'src');
 		$app    = Factory::getApplication();
 		$method = $app->input->get('method');
+		$output = '';
 
 		if (!$app->isClient('administrator'))
 		{
 			return false;
 		}
 
-		if ($method === 'categories')
+		try
 		{
-			return $this->APICategories();
-		}
+			if ($method === 'categories')
+			{
+				$output = $this->APICategories();
+			}
 
-		if ($method === 'projects')
-		{
-			return $this->APIProjects();
-		}
+			if ($method === 'projects')
+			{
+				$output = $this->APIProjects();
+			}
 
-		if ($method === 'projectList')
-		{
-			return $this->APIProjectList();
-		}
+			if ($method === 'projectList')
+			{
+				$output = $this->APIProjectList();
+			}
 
-		if ($method === 'project')
-		{
-			return $this->APIProject();
-		}
+			if ($method === 'project')
+			{
+				$output = $this->APIProject();
+			}
 
-		if ($method === 'getForInstallDepends')
-		{
-			return $this->APIGetForInstallDepends();
-		}
+			if ($method === 'getForInstallDepends')
+			{
+				$output = $this->APIGetForInstallDepends();
+			}
 
-		if ($method === 'installJoomla')
-		{
-			return $this->installJoomla();
-		}
+			if ($method === 'installJoomla')
+			{
+				$output = $this->installJoomla();
+			}
 
-		if ($method === 'checkMainExtension')
-		{
-			return $this->checkMainExtension();
-		}
+			if ($method === 'checkMainExtension')
+			{
+				$output = $this->checkMainExtension();
+			}
 
-		if ($method === 'checkInstall')
-		{
-			return $this->checkInstall();
-		}
+			if ($method === 'checkInstall')
+			{
+				$output = $this->checkInstall();
+			}
 
-		if ($method === 'checkUpdates')
-		{
-			return $this->checkUpdates();
-		}
+			if ($method === 'checkUpdates')
+			{
+				$output = $this->checkUpdates();
+			}
 
-		if ($method === 'installedList')
-		{
-			return $this->installedList();
-		}
+			if ($method === 'installedList')
+			{
+				$output = $this->installedList();
+			}
 
-		if ($method === 'toggleEnabled')
-		{
-			return $this->toggleEnabled();
-		}
+			if ($method === 'toggleEnabled')
+			{
+				$output = $this->toggleEnabled();
+			}
 
-		if ($method === 'saveKey')
+			if ($method === 'saveKey')
+			{
+				$output = $this->saveKey();
+			}
+		}
+		catch (Exception $e)
 		{
-			return $this->saveKey();
+			$output = $e->getMessage();
+			$app->setHeader('status', $e->getCode(), true);
+		}
+		finally
+		{
+			return $output;
 		}
 
 	}
@@ -423,7 +436,7 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 			];
 
 			$conditions = [
-				$this->db->qn('element') . ' = ' . $this->db->q('hikasu'),
+				$this->db->qn('element') . ' = ' . $this->db->q('radicalinstaller'),
 				$this->db->qn('folder') . ' = ' . $this->db->q('installer'),
 			];
 

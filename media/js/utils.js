@@ -43,7 +43,14 @@ window.RadicalInstallerUtils = {
             if (this.readyState === 4) {
                 if (this.status === 200) {
                     if (ajax.done !== undefined) {
-                        ajax.done(this.responseText, this);
+                        let response = JSON.parse(this.responseText);
+
+                        if(response === null || response === undefined)
+                        {
+                            response = this.responseText;
+                        }
+
+                        ajax.done(response, this);
                     }
                 } else {
                     if (ajax.fail !== undefined) {
@@ -193,7 +200,7 @@ window.RadicalInstallerUtils = {
                                 callback_close();
                             }
                         }]
-                    ]}, '<span class="icon-delete large-icon"></span> ' + HikasuLangs.button_close)
+                    ]}, '<span class="icon-delete large-icon"></span> ' + RadicalInstallerLangs.button_close)
                 .add('div', {'class': 'radicalinstaller-modal_header'}, header)
                     .addChild('div', {'class': 'radicalinstaller-modal_body-wrap'})
                         .add('div', {'class': 'radicalinstaller-modal_body'}, body)
@@ -232,7 +239,7 @@ window.RadicalInstallerUtils = {
                             modalBackground.classList.remove('active');
                             this.closest('.radicalinstaller-modal').remove();
                         }]
-                    ]}, '<span class="icon-delete large-icon"></span> ' + HikasuLangs.button_close)
+                    ]}, '<span class="icon-delete large-icon"></span> ' + RadicalInstallerLangs.button_close)
                 .add('div', {'class': 'radicalinstaller-modal_header'}, header)
                 .add('iframe', {'class': 'radicalinstaller-modal_iframe', 'src': url})
             .getParent();

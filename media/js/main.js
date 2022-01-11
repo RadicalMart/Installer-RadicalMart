@@ -53,8 +53,7 @@ window.RadicalInstaller = {
         if (RadicalInstallerConfig.key !== '') {
             let url = self.url + '&method=buyprojects';
 
-            self.ajax(url, function (json) {
-                //json = JSON.parse(json);
+            RadicalInstallerUtils.ajaxGet(url).done( function (json) {
                 self.buy_projects = json.items;
             });
         }
@@ -71,7 +70,8 @@ window.RadicalInstaller = {
                 url += 'l&imit=' + limit;
             }
 
-            self.ajax(url, function (json) {
+            RadicalInstallerUtils.ajaxGet(url)
+            .done( function (json) {
                 json = JSON.parse(json.data);
                 let cards = json.items;
 
@@ -204,7 +204,8 @@ window.RadicalInstaller = {
         let load_categories = function () {
             let url = self.url + '&method=categories';
 
-            self.ajax(url, function (json) {
+            RadicalInstallerUtils.ajaxGet(url)
+            .done( function (json) {
                 json = JSON.parse(json.data);
                 let categories_items = json.items;
                 for (let i = 0; i < categories_items.length; i++) {
@@ -290,7 +291,8 @@ window.RadicalInstaller = {
      */
     showProject: function (id) {
         let self = this;
-        self.ajax(self.url + '&method=project&project_id=' + id, function (json) {
+        RadicalInstallerUtils.ajaxGet(self.url + '&method=project&project_id=' + id)
+        .done(function (json) {
             let item = JSON.parse(json.data),
                 header = RadicalInstallerUtils.createElement('div'),
                 body = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-project-page'}),
@@ -515,7 +517,8 @@ window.RadicalInstaller = {
             RadicalInstallerUtils.modal(header, body);
 
             // запрашиваем локально у сервера, установлено ли это расширение и рисуем нужные кнопки в зависимости от состояния
-            self.ajax(self.url + '&method=checkInstall&list=' + JSON.stringify([item.element]), function (json) {
+            RadicalInstallerUtils.ajaxGet(self.url + '&method=checkInstall&list=' + JSON.stringify([item.element]))
+            .done(function (json) {
                 let buttonInstall = body.querySelector('.btn-install');
                 let find = json.data[0];
 
@@ -541,7 +544,8 @@ window.RadicalInstaller = {
     findDepends: function (project) {
         let self = this;
         self.depends_wait = true;
-        self.ajax(self.url + '&method=getForInstallDepends&project_id=' + project.id, function (json) {
+        RadicalInstallerUtils.ajaxGet(self.url + '&method=getForInstallDepends&project_id=' + project.id,)
+        .done(function (json) {
             let depends = JSON.parse(json.data);
             for (let i = 0; i < depends.length; i++) {
                 self.list_install.push({id: depends[i].id, title: depends[i].title});
@@ -627,7 +631,8 @@ window.RadicalInstaller = {
             for (let i = 0; i < self.list_install.length; i++) {
 
                 //получаем проект
-                self.ajax(self.url + '&method=project&project_id=' + self.list_install[i].id, function (json) {
+                RadicalInstallerUtils.ajaxGet(self.url + '&method=project&project_id=' + self.list_install[i].id)
+                .done( function (json) {
                     let item = JSON.parse(json.data),
                         install = item.install,
                         url = '';
@@ -636,7 +641,8 @@ window.RadicalInstaller = {
                         url = self.url + '&method=installJoomla&id=' + item.id;
                     }
 
-                    self.ajax(url, function (response) {
+                    RadicalInstallerUtils.ajaxGet(url)
+                    .done( function (response) {
                         let element,
                             success = false,
                             modal_body = document.querySelector('.radicalinstaller-install-page_loader'),
@@ -798,15 +804,14 @@ window.RadicalInstaller = {
             list_for_find.push(cards[i].getAttribute('data-element'));
         }
 
-        this.ajax(this.url + '&method=checkInstall&list=' + JSON.stringify(list_for_find), function (json) {
+        RadicalInstallerUtils.ajaxGet(this.url + '&method=checkInstall&list=' + JSON.stringify(list_for_find))
+        .done( function (json) {
             let find = json.data[0];
             for (let i = 0; i < find.length; i++) {
                 let card = self.container.querySelector('.radicalinstaller-card[data-element="' + find[i] + '"]');
                 if (card !== null) {
-                    card.setAttribute('data-install', '1');
-                    let button = card.querySelector('.btn-success');
-                    button.setAttribute('disabled', 'disabled');
-                    button.innerHTML = '<span class="icon-checkmark-2"></span> ' + RadicalInstallerLangs.button_installed;
+                    card.classList.add('radicalinstaller-card_installed');
+                    card.setAttribute('data-installed', RadicalInstallerLangs.button_installed);
                 }
             }
         });
@@ -822,7 +827,7 @@ window.RadicalInstaller = {
             button_check_update = document.querySelector('.btn-check-update');
 
         if (button_check_update !== null && button_check_update !== undefined) {
-            self.ajax(self.url + '&method=checkUpdates', function (response) {
+            RadicalInstallerUtils.ajaxGet(self.url + '&method=checkUpdates').done( function (response) {
                 let data = JSON.parse(response.data);
                 if (parseInt(data.count) > 0) {
                     button_check_update.innerHTML = '<span>' + data.count + '</span> ' + RadicalInstallerLangs.button_update;
@@ -843,7 +848,7 @@ window.RadicalInstaller = {
         let self = this;
         RadicalInstallerUtils.ajaxGet(self.url + '&method=checkMainExtension')
             .done(function (response) {
-                response = JSON.parse(response);
+
                 let data = response.data[0];
 
                 if (data.status === 'ok') {
@@ -881,130 +886,132 @@ window.RadicalInstaller = {
      */
     showUpdates: function () {
         let self = this;
-        self.ajax(self.url + '&method=checkUpdates', function (response) {
-            let data = JSON.parse(response.data);
+        RadicalInstallerUtils.ajaxGet(self.url + '&method=checkUpdates')
+            .done(function(response) {
+                let data = JSON.parse(response.data);
 
-            let header = RadicalInstallerUtils.createElement('h2', {'class': ''}, RadicalInstallerLangs.extension_updates);
-            let body = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-updates-page'});
-            body = body.addChild('div', {'class': 'radicalinstaller-updates-page_buttons'})
-                .add('button', {
-                    'class': 'btn btn-success btn-large',
-                    'events': [
-                        [
-                            'click',
-                            function (ev) {
-                                for (let i = 0; i < data.items.length; i++) {
-                                    self.ajax(self.url + '&method=project&project_id=' + data.items[i].project_id, function (json) {
-                                        let item = JSON.parse(json.data),
-                                            element = document.querySelector('.radicalinstaller-updates-page_tables-element-id-' + data.items[i].project_id);
-                                            btn = element.querySelector('.btn');
+                let header = RadicalInstallerUtils.createElement('h2', {'class': ''}, RadicalInstallerLangs.extension_updates);
+                let body = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-updates-page'});
+                body = body.addChild('div', {'class': 'radicalinstaller-updates-page_buttons'})
+                    .add('button', {
+                        'class': 'btn btn-success btn-large',
+                        'events': [
+                            [
+                                'click',
+                                function (ev) {
+                                    for (let i = 0; i < data.items.length; i++) {
+                                        RadicalInstallerUtils.ajaxGet(self.url + '&method=project&project_id=' + data.items[i].project_id)
+                                        .done(function (json) {
+                                            let item = JSON.parse(json.data),
+                                                element = document.querySelector('.radicalinstaller-updates-page_tables-element-id-' + data.items[i].project_id);
+                                                btn = element.querySelector('.btn');
 
-                                        if (btn !== null) {
-                                            btn.setAttribute('disabled', 'disabled');
-                                            btn.innerHTML = RadicalInstallerLangs.updating;
-                                        }
-
-                                        self.installProject(item, false, false, function (data, messages) {
-                                            element.remove();
-                                            let table = document.querySelector('.radicalinstaller-updates-page_tables');
-
-                                            if (table !== null) {
-                                                if (table.querySelectorAll('tbody tr').length === 0) {
-                                                    self.showUpdates();
-                                                    self.checkUpdates();
-                                                }
-                                            }
-                                        }, function () {
                                             if (btn !== null) {
-                                                btn.removeAttribute('disabled');
-                                                btn.innerHTML = RadicalInstallerLangs.update;
+                                                btn.setAttribute('disabled', 'disabled');
+                                                btn.innerHTML = RadicalInstallerLangs.updating;
                                             }
-                                        });
-                                    });
-                                }
-                                ev.preventDefault();
-                            }
-                        ]
-                    ]
-                }, '<span class="icon-download large-icon"></span> ' + RadicalInstallerLangs.button_update_all)
-                .add('button', {
-                    'class': 'btn btn-large',
-                    'events': [
-                        [
-                            'click',
-                            function (ev) {
-                                self.showUpdates();
-                                ev.preventDefault();
-                            }
-                        ]
-                    ]
-                }, '<span class="icon-loop large-icon"></span> ' + RadicalInstallerLangs.button_update_check);
 
-            if (parseInt(data.count) > 0) {
-                body =
-                    body.addChild('table', {'class': 'radicalinstaller-updates-page_tables table table-striped table-hover'})
-                            .addChild('thead')
-                                .addChild('tr')
-                                    .add('th', {}, RadicalInstallerLangs.extension_name)
-                                    .add('th', {}, RadicalInstallerLangs.current_version)
-                                    .add('th', {}, RadicalInstallerLangs.new_version)
-                                    .add('th', {}, '')
-                                    .getParent()
-                            .getParent()
-                        .addChild('tbody')
+                                            self.installProject(item, false, false, function (data, messages) {
+                                                element.remove();
+                                                let table = document.querySelector('.radicalinstaller-updates-page_tables');
 
-                for (let i = 0; i < data.items.length; i++) {
-                    body =
-                        body.addChild('tr', {'class': 'radicalinstaller-updates-page_tables-element-id-' + data.items[i].project_id})
-                                .add('td', {}, data.items[i].title)
-                                .add('td', {}, data.items[i].version)
-                                .add('td', {}, data.items[i].version_last)
-                                    .addChild('td')
-                                        .add('button', {
-                                'class': 'btn', 'events': [
-                                    [
-                                        'click',
-                                        function (ev) {
-                                            self.ajax(self.url + '&method=project&project_id=' + data.items[i].project_id, function (json) {
-                                                let item = JSON.parse(json.data);
-                                                let element = document.querySelector('.radicalinstaller-updates-page_tables-element-id-' + data.items[i].project_id);
-                                                let btn = element.querySelector('.btn');
-
-                                                if (btn !== null) {
-                                                    btn.setAttribute('disabled', 'disabled');
-                                                    btn.innerHTML = RadicalInstallerLangs.updating;
-                                                }
-
-                                                self.installProject(item, false, false, function (data, messages) {
-                                                    element.remove();
-                                                    self.checkUpdates();
-                                                }, function () {
-                                                    if (btn !== null) {
-                                                        btn.removeAttribute('disabled');
-                                                        btn.innerHTML = RadicalInstallerLangs.update;
+                                                if (table !== null) {
+                                                    if (table.querySelectorAll('tbody tr').length === 0) {
+                                                        self.showUpdates();
+                                                        self.checkUpdates();
                                                     }
-                                                });
-
+                                                }
+                                            }, function () {
+                                                if (btn !== null) {
+                                                    btn.removeAttribute('disabled');
+                                                    btn.innerHTML = RadicalInstallerLangs.update;
+                                                }
                                             });
-                                        }
-                                    ]
-                                ]
-                            }, 'Обновить')
+                                        });
+                                    }
+                                    ev.preventDefault();
+                                }
+                            ]
+                        ]
+                    }, '<span class="icon-download large-icon"></span> ' + RadicalInstallerLangs.button_update_all)
+                    .add('button', {
+                        'class': 'btn btn-large',
+                        'events': [
+                            [
+                                'click',
+                                function (ev) {
+                                    self.showUpdates();
+                                    ev.preventDefault();
+                                }
+                            ]
+                        ]
+                    }, '<span class="icon-loop large-icon"></span> ' + RadicalInstallerLangs.button_update_check);
+
+                if (parseInt(data.count) > 0) {
+                    body =
+                        body.addChild('table', {'class': 'radicalinstaller-updates-page_tables table table-striped table-hover'})
+                                .addChild('thead')
+                                    .addChild('tr')
+                                        .add('th', {}, RadicalInstallerLangs.extension_name)
+                                        .add('th', {}, RadicalInstallerLangs.current_version)
+                                        .add('th', {}, RadicalInstallerLangs.new_version)
+                                        .add('th', {}, '')
                                         .getParent()
                                 .getParent()
+                            .addChild('tbody')
+
+                    for (let i = 0; i < data.items.length; i++) {
+                        body =
+                            body.addChild('tr', {'class': 'radicalinstaller-updates-page_tables-element-id-' + data.items[i].project_id})
+                                    .add('td', {}, data.items[i].title)
+                                    .add('td', {}, data.items[i].version)
+                                    .add('td', {}, data.items[i].version_last)
+                                        .addChild('td')
+                                            .add('button', {
+                                    'class': 'btn', 'events': [
+                                        [
+                                            'click',
+                                            function (ev) {
+                                                RadicalInstallerUtils.ajaxGet(self.url + '&method=project&project_id=' + data.items[i].project_id)
+                                                .done( function (json) {
+                                                    let item = JSON.parse(json.data);
+                                                    let element = document.querySelector('.radicalinstaller-updates-page_tables-element-id-' + data.items[i].project_id);
+                                                    let btn = element.querySelector('.btn');
+
+                                                    if (btn !== null) {
+                                                        btn.setAttribute('disabled', 'disabled');
+                                                        btn.innerHTML = RadicalInstallerLangs.updating;
+                                                    }
+
+                                                    self.installProject(item, false, false, function (data, messages) {
+                                                        element.remove();
+                                                        self.checkUpdates();
+                                                    }, function () {
+                                                        if (btn !== null) {
+                                                            btn.removeAttribute('disabled');
+                                                            btn.innerHTML = RadicalInstallerLangs.update;
+                                                        }
+                                                    });
+
+                                                });
+                                            }
+                                        ]
+                                    ]
+                                }, 'Обновить')
+                                            .getParent()
+                                    .getParent()
+                    }
+
+                    body = body.getParent().getParent();
+                } else {
+                    body = body.add('div', {'class': 'radicalinstaller-updates-empty'}, RadicalInstallerLangs.no_updates)
                 }
 
-                body = body.getParent().getParent();
-            } else {
-                body = body.add('div', {'class': 'radicalinstaller-updates-empty'}, RadicalInstallerLangs.no_updates)
-            }
+                header = header.build();
+                body = body.build();
 
-            header = header.build();
-            body = body.build();
-
-            RadicalInstallerUtils.modal(header, body);
-
-        });
+                RadicalInstallerUtils.modal(header, body);
+         });
     },
 
 
@@ -1014,7 +1021,7 @@ window.RadicalInstaller = {
      */
     showInstalled: function () {
         let self = this;
-        self.ajax(self.url + '&method=installedList', function (response) {
+        RadicalInstallerUtils.ajaxGet(self.url + '&method=installedList').done(function (response) {
             let data = response.data[0];
             let header = RadicalInstallerUtils.createElement('h2', {'class': ''}, RadicalInstallerLangs.extension_installed);
             let body = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-installed-page'});
@@ -1048,35 +1055,6 @@ window.RadicalInstaller = {
                                     ]
                                 ]
                             }, RadicalInstallerLangs.button_view)
-                                        /*.add('button', {
-                                            'class': 'btn btn-width-fixed ' + (parseInt(data[i].enable) ? 'btn-danger' : 'btn-success'),
-                                            'events': [
-                                                [
-                                                    'click',
-                                                    function (ev) {
-                                                        let button = this;
-                                                        button.setAttribute('disabled', 'disabled');
-
-                                                        self.ajax(self.url + '&method=installedList', function (json) {
-
-                                                            button.removeAttribute('disabled');
-                                                        }, function () {
-                                                            button.removeAttribute('disabled');
-                                                        });
-                                                    }
-                                                ]
-                                            ]
-                                        }, parseInt(data[i].enable) ? RadicalInstallerLangs.button_disable : RadicalInstallerLangs.button_enable)
-                                        .add('button', {
-                                            'class': 'btn btn-danger', 'events': [
-                                                [
-                                                    'click',
-                                                    function (ev) {
-
-                                                    }
-                                                ]
-                                            ]
-                                        }, '<span class="icon-trash"></span>')*/
                                     .getParent()
                             .getParent()
                 }
@@ -1151,91 +1129,9 @@ window.RadicalInstaller = {
             }
 
 
-            grid_cards
-                .add('h3', {'class': 'radicalinstaller-card_title'}, item.title)
-                .add('div', {'class': 'radicalinstaller-card_description'}, item.introtext)
-                    .addChild('div', {'class': 'radicalinstaller-card_actions'});
-
-            if (item.download_type === 'free') {
-                grid_cards = grid_cards.add('button', {
-                    'class': 'btn btn-success btn-install', 'events': [
-                        [
-                            'click',
-                            function (ev) {
-                                self.installProject(item);
-                                ev.preventDefault();
-                            }
-                        ]]
-                }, '<span class="icon-download"></span> ' + RadicalInstallerLangs.button_install);
-            }
-            if (item.download_type === 'paid') {
-                if (RadicalInstallerConfig.key !== '') {
-                    grid_cards = grid_cards.add('button', {
-                        'class': 'btn btn-success btn-install', 'events': [
-                            [
-                                'click',
-                                function (ev) {
-                                    self.installProject(item);
-                                    ev.preventDefault();
-                                }
-                            ]]
-                    }, '<span class="icon-download"></span> ' + RadicalInstallerLangs.button_install);
-                } else {
-                    grid_cards = grid_cards.add('button', {
-                        'class': 'btn btn-success', 'events': [
-                            [
-                                'click',
-                                function (ev) {
-                                    window.open(self.api + item.link, '_target');
-                                    ev.preventDefault();
-                                    return false;
-                                }
-                            ]]
-                    }, 'Купить');
-                }
-
-            }
-
-
-            grid_cards = grid_cards.add('button', {
-                'class': 'btn', 'data-id': item.id, 'events': [
-                    [
-                        'click',
-                        function (ev) {
-                            let id = this.getAttribute('data-id');
-                            self.showProject(id);
-                            ev.preventDefault();
-                            return false;
-                        }
-                    ]
-                ]
-            }, RadicalInstallerLangs.button_more)
-                .getParent()
+            grid_cards.add('h3', {'class': 'radicalinstaller-card_title'}, item.title);
 
         return grid_cards;
-    },
-
-
-    ajax: function (url, callback_success, callback_fail) {
-        let req = new XMLHttpRequest(),
-            self = this;
-
-        req.open("POST", url, true);
-        req.onload = function (ev) {
-
-            if (req.status === 200) {
-                let json = JSON.parse(req.responseText);
-                if (callback_success !== null) {
-                    callback_success(json);
-                }
-            } else {
-                if (callback_fail !== null) {
-                    callback_fail();
-                }
-            }
-
-        };
-        req.send();
     },
 
 

@@ -75,7 +75,7 @@ $langs = [
 ];
 ?>
 
-<div id="hikasu-container"></div>
+<div id="radicalinstaller-container"></div>
 
 <script type="text/javascript">
     document.addEventListener("DOMContentLoaded", function () {
