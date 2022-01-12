@@ -435,7 +435,7 @@ window.RadicalInstaller = {
             }
 
             body = body.add('h2', {'class': 'radicalinstaller-project-page_gallery-header'}, item.title);
-            body = body.addChild('div', {'class': 'radicalinstaller-project-page_buttons'});
+            body = body.addChild('div', {'class': 'radicalinstaller-project-page_buttons radicalinstaller-flex radicalinstaller-flex-space'});
 
             if (item.download_type === 'paid') {
                 if (RadicalInstallerConfig.key !== '') {
@@ -953,6 +953,7 @@ window.RadicalInstaller = {
                         description: 'текст текст',
                         content: grid.build(),
                         sidebar: [
+                            {template: 'support'},
                             {template: 'faq'}
                         ]
                     });

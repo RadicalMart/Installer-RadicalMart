@@ -172,8 +172,8 @@
 .radicalinstaller-categories .btn.btn-active,
 .radicalinstaller-categories .btn.btn-active:focus,
 .radicalinstaller-categories .btn.btn-active:active {
-    background: #314a0b;
-    border-color: #314a0b;
+    background: #243d57;
+    border-color: #243d57;
     color: #fff;
 }
 
@@ -286,14 +286,6 @@
 
 .radicalinstaller-project-page_buttons {
     margin-bottom: 35px;
-}
-
-.radicalinstaller-project-page_buttons > * {
-    margin-right: 15px;
-}
-
-.radicalinstaller-project-page_buttons > *:last-child {
-    margin-right: 0;
 }
 
 .radicalinstaller-project-page_providers-header {
@@ -480,8 +472,7 @@
 }
 
 .radicalinstaller-updates-empty {
-    margin-top: 25px;
-    text-align: center;
+    margin-top: 45px;
     font-size: 20px;
 }
 
@@ -657,6 +648,11 @@
 
 .radicalinstaller-modal_background.active {
     display: block;
+}
+
+.radicalinstaller-modal_body .btn-large {
+    padding: 10px 15px;
+    font-size: 15px;
 }
 
 
