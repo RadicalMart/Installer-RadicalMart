@@ -53,7 +53,7 @@ class ProviderJoomla implements ProviderInterface
 			$type  = $project['joomla']['type'];
 			$db    = Factory::getDbo();
 			$query = $db->getQuery(true);
-			$query->select(['manifest_cache', 'enabled']);
+			$query->select(['extension_id', 'manifest_cache', 'enabled']);
 			$query->from('#__extensions');
 			$query->where($db->quoteName('type') . '=' . $db->quote($type));
 			$query->where($db->quoteName('element') . '=' . $db->quote($project['element']));
@@ -68,13 +68,14 @@ class ProviderJoomla implements ProviderInterface
 
 			$table = Table::getInstance('RadicalinstallerExtensions', 'Table');
 			$table->load(['element' => $project['element']]);
-			$table->type       = $project['install'];
-			$table->title      = $project['title'];
-			$table->element    = $project['element'];
-			$table->version    = $version;
-			$table->project_id = $project['id'];
-			$table->enable     = isset($extension_joomla->enabled) ? (int) $extension_joomla->enabled : 0;
-			$table->params     = '{}';
+			$table->type         = $project['install'];
+			$table->title        = $project['title'];
+			$table->element      = $project['element'];
+			$table->version      = $version;
+			$table->project_id   = $project['id'];
+			$table->extension_id = $extension_joomla->extension_id;
+			$table->enable       = isset($extension_joomla->enabled) ? (int) $extension_joomla->enabled : 0;
+			$table->params       = '{}';
 
 			if (!$table->check())
 			{
@@ -99,7 +100,6 @@ class ProviderJoomla implements ProviderInterface
 
 	public function toggleEnable($id)
 	{
-
 	}
 
 

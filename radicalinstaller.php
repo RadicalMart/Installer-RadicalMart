@@ -1,53 +1,34 @@
 <?php defined('_JEXEC') or die;
 
-use Radicalinstaller\API;
-use Radicalinstaller\ProviderJoomla;
-use Radicalinstaller\ProviderYooelements;
-use Radicalinstaller\ProviderYoolayouts;
 use Joomla\CMS\Cache\Cache;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\FileLayout;
 use Joomla\CMS\Plugin\CMSPlugin;
+use Radicalinstaller\API;
+use Radicalinstaller\ProviderJoomla;
 
 /**
- * PlgInstallerHikasu Plugin.
+ * PlgInstallerRadicalinstaller Plugin.
  *
- * @since  3.6.0
  */
 class PlgInstallerRadicalinstaller extends CMSPlugin
 {
 
-	/**
-	 * @var
-	 * @since version
-	 */
+
 	protected $app;
 
 
 	protected $db;
 
 
-	/**
-	 * Load the language file on instantiation.
-	 *
-	 * @var    boolean
-	 * @since  3.6.0
-	 */
 	protected $autoloadLanguage = true;
 
 
-	/**
-	 * Textfield or Form of the Plugin.
-	 *
-	 * @return  array  Returns an array with the tab information
-	 *
-	 * @since   3.6.0
-	 */
 	public function onInstallerAddInstallationTab()
 	{
 		$tab          = [];
-		$tab['name']  = 'hikasu';
+		$tab['name']  = 'radicalinstaller';
 		$tab['label'] = Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT');
 
 		$content        = new FileLayout('default', JPATH_ROOT . '/plugins/installer/radicalinstaller/tmpl');
@@ -57,13 +38,24 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 	}
 
 
-	/**
-	 *
-	 * @return array|bool|false|string
-	 *
-	 * @throws Exception
-	 * @since version
-	 */
+	public function onExtensionAfterUninstall($installer, $identifier, $result)
+	{
+		if (!$result)
+		{
+			return;
+		}
+
+		$query      = $this->db->getQuery(true);
+		$conditions = [
+			$this->db->quoteName('extension_id') . ' = ' . (int) $identifier,
+		];
+		$query->delete($this->db->quoteName('#__radicalinstaller_extensions'));
+		$query->where($conditions);
+		$this->db->setQuery($query);
+		$this->db->execute();
+	}
+
+
 	public function onAjaxRadicalinstaller()
 	{
 		JLoader::registerNamespace('Radicalinstaller', __DIR__ . DIRECTORY_SEPARATOR . 'src');
@@ -142,8 +134,7 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 		{
 			$output = $e->getMessage();
 			$app->setHeader('status', $e->getCode(), true);
-		}
-		finally
+		} finally
 		{
 			return $output;
 		}
@@ -151,13 +142,6 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 	}
 
 
-	/**
-	 *
-	 * @return false|string
-	 *
-	 * @throws Exception
-	 * @since version
-	 */
 	protected function installJoomla()
 	{
 		$app      = Factory::getApplication();
@@ -194,22 +178,15 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 		return json_encode(['status' => $install ? 'ok' : 'fail', 'messages' => $messages]);
 	}
 
-	/**
-	 *
-	 * @return false|string
-	 *
-	 * @since version
-	 */
+
 	protected function checkUpdates()
 	{
-		$ids = [];
-
-		$db    = Factory::getDbo();
-		$query = $db->getQuery(true);
+		$ids   = [];
+		$query = $this->db->getQuery(true);
 		$query
 			->select(['id', 'title', 'version', 'project_id'])
-			->from($db->quoteName('#__radicalinstaller_extensions'));
-		$projects_install = $db->setQuery($query)->loadObjectList();
+			->from($this->db->quoteName('#__radicalinstaller_extensions'));
+		$projects_install = $this->db->setQuery($query)->loadObjectList();
 
 		foreach ($projects_install as $project_install)
 		{
@@ -248,21 +225,12 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 	}
 
 
-	/**
-	 * @return array
-	 */
 	protected function APICategories()
 	{
 		return API::categories();
 	}
 
 
-	/**
-	 *
-	 * @return array|string
-	 *
-	 * @since version
-	 */
 	protected function APIProjects()
 	{
 		$id       = $this->app->input->get('category_id');
@@ -274,12 +242,6 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 	}
 
 
-	/**
-	 *
-	 * @return array|string
-	 *
-	 * @since version
-	 */
 	protected function APIProjectList()
 	{
 		$ids      = $this->app->input->get('ids', '{}', 'raw');
@@ -289,12 +251,6 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 	}
 
 
-	/**
-	 *
-	 * @return array|string
-	 *
-	 * @since version
-	 */
 	protected function APIGetForInstallDepends()
 	{
 		$id       = $this->app->input->getInt('project_id');
@@ -304,12 +260,6 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 	}
 
 
-	/**
-	 *
-	 * @return array|string
-	 *
-	 * @since version
-	 */
 	protected function APIProject()
 	{
 		$id      = $this->app->input->get('project_id');
@@ -319,44 +269,36 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 	}
 
 
-	/**
-	 *
-	 * @return array
-	 *
-	 * @throws Exception
-	 * @since version
-	 */
 	protected function checkInstall()
 	{
 		$list             = $this->app->input->getString('list', '{}');
 		$list             = json_decode($list, JSON_OBJECT_AS_ARRAY);
 		$fields           = [];
 		$find_list_output = [];
-		$db               = Factory::getDbo();
 
 		foreach ($list as $value)
 		{
-			$fields[] = $db->quote($value);
+			$fields[] = $this->db->quote($value);
 		}
 
-		$query = $db->getQuery(true);
+		$query = $this->db->getQuery(true);
 		$query
 			->select(['element'])
-			->from($db->quoteName('#__extensions'))
+			->from($this->db->quoteName('#__extensions'))
 			->where('element IN (' . implode(',', $fields) . ')');
-		$find_list = $db->setQuery($query)->loadObjectList();
+		$find_list = $this->db->setQuery($query)->loadObjectList();
 
 		foreach ($find_list as $find)
 		{
 			$find_list_output[] = $find->element;
 		}
 
-		$query = $db->getQuery(true);
+		$query = $this->db->getQuery(true);
 		$query
 			->select(['element'])
-			->from($db->quoteName('#__radicalinstaller_extensions'))
+			->from($this->db->quoteName('#__radicalinstaller_extensions'))
 			->where('element IN (' . implode(',', $fields) . ')');
-		$find_list = $db->setQuery($query)->loadObjectList();
+		$find_list = $this->db->setQuery($query)->loadObjectList();
 
 		foreach ($find_list as $find)
 		{
@@ -367,9 +309,6 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 	}
 
 
-	/**
-	 * @return array
-	 */
 	protected function checkMainExtension()
 	{
 		$projects = json_decode(API::projectsMain(), JSON_OBJECT_AS_ARRAY);
@@ -378,7 +317,7 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 
 		if (!is_array($projects) || !isset($projects['items']))
 		{
-			throw new RuntimeException(Text::_('Ошибка подключения к radicalmart.ru'), 500);
+			throw new RuntimeException(Text::_('Ошибка подключения к сервису'), 500);
 		}
 		foreach ($projects['items'] as $project)
 		{
@@ -409,9 +348,6 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 	}
 
 
-	/**
-	 * @return array
-	 */
 	protected function saveKey()
 	{
 		$key = $this->app->input->getString('key');
@@ -459,20 +395,13 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 	}
 
 
-	/**
-	 *
-	 * @return array|mixed
-	 *
-	 * @since version
-	 */
 	protected function installedList()
 	{
-		$db    = Factory::getDbo();
-		$query = $db->getQuery(true);
+		$query = $this->db->getQuery(true);
 		$query
 			->select('*')
-			->from($db->quoteName('#__radicalinstaller_extensions'));
-		$list_installed = $db->setQuery($query)->loadObjectList();
+			->from($this->db->quoteName('#__radicalinstaller_extensions'));
+		$list_installed = $this->db->setQuery($query)->loadObjectList();
 
 		return $list_installed;
 	}
@@ -480,15 +409,13 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 
 	protected function toggleEnabled()
 	{
-		$id = $this->app->input->getInt('id');
-
-		$db    = Factory::getDbo();
-		$query = $db->getQuery(true);
+		$id    = $this->app->input->getInt('id');
+		$query = $this->db->getQuery(true);
 		$query
 			->select(['type'])
-			->from($db->quoteName('#__radicalinstaller_extensions'))
-			->where('id = ' . $db->quote($id));
-		$item   = $db->setQuery($query);
+			->from($this->db->quoteName('#__radicalinstaller_extensions'))
+			->where('id = ' . $this->db->quote($id));
+		$item   = $this->db->setQuery($query);
 		$result = false;
 		$class  = '\\Radicalinstaller\\Provider' . ucfirst(strtolower($item->type));
 
@@ -513,5 +440,6 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 		$cache = Cache::getInstance('callback', $options);
 		$cache->clean();
 	}
+
 
 }

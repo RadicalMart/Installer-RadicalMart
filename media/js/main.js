@@ -4,6 +4,7 @@ window.RadicalInstaller = {
     container: null, // контейнер HTML для установщика
     form: null, // форма HTML установки Joomla
     category_id: 0, // текущая активная категория расширений
+    manage: null,
     categories: null, // список категорий расширений в тулбар
     check_main_after_install: false, // флаг для того чтобы смотреть после установки основного расширения
     button_active: null, // активная кнопка в тулбаре
@@ -17,7 +18,20 @@ window.RadicalInstaller = {
         },
         'faq': {
             header: 'FAQ',
-            content: 'Lorem lorem lorem text text text.'
+            content: '<ul>' +
+                '<li><h4>Как купить расширение</h4><p>На сайте <a href="https://radicalmart.ru">radicalmart.ru</a>.</p></li>' +
+                '<li><h4>Где поменять ключ</h4><p>В настройках плагина установщика.</p></li>' +
+                '<li><h4>Как удалить расширение</h4><p>В управлении расширений Joomla</p></li>' +
+                '</ul>'
+        },
+        support: {
+            header: 'Поддержка',
+            content: '<div class="radicalinstaller-flex radicalinstaller-flex-space">' +
+                '<a href="https://radicalmart.ru/support" class="btn" target="_blank">На сайте</a>' +
+                '<a href="mailto:support@radicalmart.ru" class="btn">Email</a>' +
+                '<a href="https://t.me/radicalmart" class="btn" target="_blank">Telegram</a>' +
+                '<a href="https://radicalmart.ru/support" class="btn" target="_blank">Добавить расширение</a>' +
+                '</div>'
         }
     },
 
@@ -55,7 +69,9 @@ window.RadicalInstaller = {
             header: 'Каталог расширений',
             content: [grid.build(), pagination.build()],
             sidebar: [
+                {header: 'Управление', content: self.manage.build()},
                 {header: 'Категории', content: self.categories.build()},
+                {template: 'support'},
                 {template: 'faq'}
             ]
         })
@@ -150,20 +166,10 @@ window.RadicalInstaller = {
         let self = this;
         this.checkUpdates();
 
-        self.categories = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-categories'});
-        self.categories.add('button', {
-            'class': 'btn', 'data-type': 'installed', 'events': [
-                [
-                    'click',
-                    function (ev) {
-                        self.showInstalled();
-                        ev.preventDefault();
-                    }
-                ]
-            ]
-        }, RadicalInstallerLangs.button_installed);
+        self.categories = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-categories radicalinstaller-flex radicalinstaller-flex-space'});
+        self.manage = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-flex radicalinstaller-flex-space'});
 
-        self.categories.add('button', {
+        self.manage.add('button', {
             'class': 'btn btn-check-update', 'data-type': 'update', 'events': [
                 [
                     'click',
@@ -175,31 +181,29 @@ window.RadicalInstaller = {
             ]
         }, '<span class="empty">0</span> ' + RadicalInstallerLangs.button_update);
 
-        self.categories.add('button', {
-            'class': 'btn btn-change-category', 'data-type': 'support', 'events': [
+        self.manage.add('button', {
+            'class': 'btn', 'data-type': 'installed', 'events': [
                 [
                     'click',
                     function (ev) {
-                        window.open(self.api + '/support', '_target');
+                        self.showInstalled();
                         ev.preventDefault();
-                        return false;
                     }
                 ]
             ]
-        }, RadicalInstallerLangs.button_support);
+        }, RadicalInstallerLangs.button_installed);
 
-        self.categories.add('button', {
-            'class': 'btn btn-change-category', 'data-type': 'add', 'events': [
+        self.manage.add('button', {
+            'class': 'btn', 'data-type': 'installed', 'events': [
                 [
                     'click',
                     function (ev) {
-                        window.open(self.api + '/add', '_target');
+                        self.showInstalled();
                         ev.preventDefault();
-                        return false;
                     }
                 ]
             ]
-        }, RadicalInstallerLangs.button_extension_add);
+        }, 'Удаление');
 
         self.categories.add('button', {
             'class': 'btn btn-change-category', 'data-type': 'category-0', 'events': [
@@ -291,18 +295,21 @@ window.RadicalInstaller = {
                     }
                 ]
             ]
-        })
-        .addChild('div', {'class': 'radicalinstaller-card radicalinstaller-background-muted radicalinstaller-padding-large'})
-            .addChild('div', {'class': 'control-group control-group-no-label control-group-large'})
-                .addChild('div', {'class': 'controls'})
-                    .add('input', {'class': 'span12', 'type': 'text', 'placeholder': 'Введите здесь ваш ключ', 'name': 'key'})
+        });
+
+        form = form
+            .addChild('div', {'class': 'radicalinstaller-card radicalinstaller-background-muted radicalinstaller-padding-large'})
+                .addChild('div', {'class': 'control-group control-group-no-label control-group-large'})
+                    .addChild('div', {'class': 'controls'})
+                        .add('input', {'class': 'span12', 'type': 'text', 'placeholder': 'Введите здесь ваш ключ', 'name': 'key'})
+                        .getParent()
                     .getParent()
-                .getParent()
-            .addChild('div', {'class': 'control-group control-group-no-label control-group-large'})
-                .addChild('div', {'class': 'controls'})
-                    .add('button', {'class': 'btn btn-primary btn-large', 'type': 'submit'}, 'Отправить')
+                .addChild('div', {'class': 'control-group control-group-no-label control-group-large'})
+                    .addChild('div', {'class': 'controls'})
+                        .add('button', {'class': 'btn btn-primary btn-large', 'type': 'submit'}, 'Отправить')
+                        .getParent()
                     .getParent()
-                .getParent()
+                .getParent();
 
         self.renderPage({
             header: 'Установка расширений из <a href="https://radicalmart.ru" target="_blank">radicalmart.ru</a>',
@@ -310,6 +317,7 @@ window.RadicalInstaller = {
             content: form.build(),
             sidebar: [
                 {'template': 'key'},
+                {template: 'support'},
                 {'template': 'faq'}
             ]
         })
@@ -1170,7 +1178,7 @@ window.RadicalInstaller = {
         if(typeof content_content === 'object') {
             let content = document.querySelector('.radicalinstaller-page_content');
 
-            if(typeof content_content[Object.keys(content_content)[0]] === 'object') {
+            if(content_content.nodeType === undefined) {
                 for(let i=0;i<content_content.length;i++) {
                     content.append(content_content[i]);
                 }

@@ -59,6 +59,28 @@
     text-decoration: underline;
 }
 
+.btn-check-update {
+    display: flex;
+    align-self: center;
+    align-content: center;
+    align-items: center;
+}
+
+.btn-check-update span {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    margin-right: 4px;
+    border-radius: 50%;
+    background: #a94442;
+    color: #fff;
+    font-size: 12px;
+    text-align: center;
+}
+
+.btn-check-update span.empty {
+    background: #134b9e;
+}
 
 /************* Margin *************/
 .radicalinstaller-margin-auto {
@@ -108,6 +130,14 @@
     align-content: center;
 }
 
+.radicalinstaller-flex-space > * {
+    margin-right: 10px;
+    margin-bottom: 10px !important;
+}
+
+.radicalinstaller-flex-space > *:last-child {
+    margin-right: 0;
+}
 
 /*********** Form *****************/
 .control-group-large:last-child {
@@ -134,19 +164,9 @@
 
 /************ Categories **********/
 .radicalinstaller-categories {
-    display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
     margin-bottom: 0;
-}
-
-.radicalinstaller-categories > * {
-    margin-right: 10px;
-    margin-bottom: 10px !important;
-}
-
-.radicalinstaller-categories > *:last-child {
-    margin-right: 0;
 }
 
 .radicalinstaller-categories .btn.btn-active,
@@ -155,29 +175,6 @@
     background: #314a0b;
     border-color: #314a0b;
     color: #fff;
-}
-
-.radicalinstaller-categories .btn-check-update {
-    display: flex;
-    align-self: center;
-    align-content: center;
-    align-items: center;
-}
-
-.radicalinstaller-categories .btn-check-update span {
-    display: inline-block;
-    width: 18px;
-    height: 18px;
-    margin-right: 4px;
-    border-radius: 50%;
-    background: #a94442;
-    color: #fff;
-    font-size: 12px;
-    text-align: center;
-}
-
-.radicalinstaller-categories .btn-check-update span.empty {
-    background: #134b9e;
 }
 
 
