@@ -100,6 +100,11 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 				$output = $this->installJoomla();
 			}
 
+			if ($method === 'deleteJoomla')
+			{
+				$output = $this->deleteJoomla();
+			}
+
 			if ($method === 'checkMainExtension')
 			{
 				$output = $this->checkMainExtension();
@@ -176,6 +181,40 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 		$messages = array_merge($messages, $app->getMessageQueue());
 
 		return json_encode(['status' => $install ? 'ok' : 'fail', 'messages' => $messages]);
+	}
+
+
+	protected function deleteJoomla()
+	{
+		$app      = Factory::getApplication();
+		$input    = $app->input;
+		$id       = $input->get('id', '', 'int');
+		$update   = new ProviderJoomla();
+		$result   = $update->delete($id);
+		$messages = [];
+
+		if ($result)
+		{
+			$message           = $app->getUserState('com_installer.message', '');
+			$extension_message = $app->getUserState('com_installer.extension_message', '');
+
+			if ($message)
+			{
+				$messages[] = ['message' => $app->getUserState('com_installer.message', ''), 'type' => 'info'];
+				$app->setUserState('com_installer.message', '');
+			}
+
+			if ($extension_message)
+			{
+				$messages[] = ['message' => $app->getUserState('com_installer.extension_message', ''), 'type' => 'info'];
+				$app->setUserState('com_installer.extension_message', '');
+			}
+
+		}
+
+		$messages = array_merge($messages, $app->getMessageQueue());
+
+		return json_encode(['status' => $result ? 'ok' : 'fail', 'messages' => $messages]);
 	}
 
 

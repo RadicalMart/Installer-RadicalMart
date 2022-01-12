@@ -50,18 +50,19 @@ class ProviderJoomla implements ProviderInterface
 		if ($result)
 		{
 			//проверяем что поставила джумла на расширение
-			$type  = $project['joomla']['type'];
-			$db    = Factory::getDbo();
-			$query = $db->getQuery(true);
+			$type    = $project['joomla']['type'];
+			$element = $project['joomla']['element'];
+			$db      = Factory::getDbo();
+			$query   = $db->getQuery(true);
 			$query->select(['extension_id', 'manifest_cache', 'enabled']);
 			$query->from('#__extensions');
 			$query->where($db->quoteName('type') . '=' . $db->quote($type));
-			$query->where($db->quoteName('element') . '=' . $db->quote($project['element']));
+			$query->where($db->quoteName('element') . '=' . $db->quote($element));
 			$extension_joomla = $db->setQuery($query)->loadObject();
 			$manifest_cache   = new Registry($extension_joomla->manifest_cache);
 			$version          = $manifest_cache->get('version');
 
-			if (isset($project['version'], $project['version']['version']))
+			if (isset($project['version']['version']))
 			{
 				$version = $project['version']['version'];
 			}
@@ -95,6 +96,15 @@ class ProviderJoomla implements ProviderInterface
 
 	public function delete($id)
 	{
+
+		$table = Table::getInstance('RadicalinstallerExtensions', 'Table');
+		$table->load(['project_id' => $id]);
+		Factory::getApplication()->getLanguage()->load('com_installer');
+		\JModelLegacy::addIncludePath(JPATH_ROOT . '/administrator/components/com_installer/models');
+		$model  = \JModelLegacy::getInstance('Manage', 'InstallerModel');
+		$result = $model->remove([$table->extension_id]);
+
+		return $result;
 	}
 
 
