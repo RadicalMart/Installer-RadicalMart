@@ -127,6 +127,10 @@
     display: flex;
 }
 
+.radicalinstaller-flex-wrap {
+    flex-wrap: wrap;
+}
+
 .radicalinstaller-flex-center {
     justify-content: center;
     justify-items: center;
@@ -208,6 +212,12 @@
     display: flex;
     justify-content: center;
     margin-top: 25px;
+}
+
+@media screen and (max-width: 1500px) {
+    .radicalinstaller-grid > div {
+        width: calc(50% - 32px);
+    }
 }
 
 /************ Alerts *************/
