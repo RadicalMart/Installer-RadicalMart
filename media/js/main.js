@@ -5,6 +5,7 @@ window.RadicalInstaller = {
     container: null, // контейнер HTML для установщика
     form: null, // форма HTML установки Joomla
     category_id: 0, // текущая активная категория расширений
+    category_load: false,
     manage: null,
     categories: null, // список категорий расширений в тулбар
     check_main_after_install: false, // флаг для того чтобы смотреть после установки основного расширения
@@ -65,8 +66,15 @@ window.RadicalInstaller = {
      * @param id
      */
     changeCategory: function (id) {
-        let self = this,
-            grid = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-grid'}),
+        let self = this;
+
+        if(id === self.category_id && self.category_load) {
+            return;
+        }
+
+        self.category_load = false;
+
+        let grid = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-grid'}),
             pagination = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-pagination'});
 
         // очищаем весь основной контейнер и вставляем в него базовые элементы для каталога
@@ -114,6 +122,7 @@ window.RadicalInstaller = {
                     self.container.querySelector('.radicalinstaller-grid').append(self.renderCatalogGrid(cards[i]).build());
                 }
 
+                self.category_load = true;
                 self.setColors();
                 self.checkInstall();
                 self.checkUpdates();
@@ -1105,6 +1114,7 @@ window.RadicalInstaller = {
 
                 if (data.status === 'ok') {
                     self.showCatalog();
+                    return;
                 }
 
                 if (data.status === 'notinstall') {
