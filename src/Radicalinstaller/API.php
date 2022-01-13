@@ -12,19 +12,6 @@ class API
 
 
 	/**
-	 * @var string
-	 * @since version
-	 */
-	private static $scheme = 'https';
-
-	/**
-	 * @var string
-	 * @since version
-	 */
-	private static $host = 'radicalmart.ru';
-
-
-	/**
 	 * @var string[]
 	 * @since version
 	 */
@@ -44,7 +31,7 @@ class API
 	 */
 	public static function setKey($key)
 	{
-		$data_request['key'] = $key;
+		self::$data_request['key'] = $key;
 	}
 
 
@@ -169,8 +156,8 @@ class API
 
 		$curlTransport = new CurlTransport(new Registry());
 		$uri = (new Uri());
-		$uri->setScheme(self::$scheme);
-		$uri->setHost(self::$host);
+		$uri->setScheme(Config::$scheme);
+		$uri->setHost(Config::$host);
 		$request = $curlTransport->request('GET', $uri, $data_build);
 		return $request;
 	}

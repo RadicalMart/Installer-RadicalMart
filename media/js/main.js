@@ -1,5 +1,5 @@
 window.RadicalInstaller = {
-    api: 'https://radicalmart.ru',
+    api: '',
     url: 'index.php?option=com_ajax&plugin=radicalinstaller&group=installer&format=json',
     assets: '/media/plg_installer_radicalinstaller/',
     container: null, // контейнер HTML для установщика
@@ -20,17 +20,18 @@ window.RadicalInstaller = {
      */
     init: function () {
         let self = this;
-        this.container = document.querySelector('#radicalinstaller-container');
-        this.form = document.querySelector('#adminForm');
+        self.container = document.querySelector('#radicalinstaller-container');
+        self.form = document.querySelector('#adminForm');
+        self.api = RadicalInstallerConfig.api;
         self.template_sidebar = {
             key: {
                 header: 'Что такое ключ',
-                content: 'Lorem lorem lorem text text text.'
+                content: 'Для того чтобы распознать, что это Вы обращаетесь в наш сервис нам требуется идентификация. Свой ключ Вы можете получить на сайте <a href="https://radicalmart.ru" target="_blank">radicalmart.ru</a>'
             },
             faq: {
                 header: 'FAQ',
                 content: '<ul>' +
-                    '<li><h4>Как купить расширение</h4><p>На сайте <a href="https://radicalmart.ru">radicalmart.ru</a>.</p></li>' +
+                    '<li><h4>Как купить расширение</h4><p>На сайте <a href="https://radicalmart.ru" target="_blank">radicalmart.ru</a>.</p></li>' +
                     '<li><h4>Где поменять ключ</h4><p>В настройках плагина установщика.</p></li>' +
                     '<li><h4>Как удалить расширение</h4><p>В управлении расширений Joomla</p></li>' +
                     '</ul>'
@@ -324,9 +325,8 @@ window.RadicalInstaller = {
             description: 'Для того чтобы продолжить, Вам необходимо установить ключ обращения к сервису.',
             content: form.build(),
             sidebar: [
-                {'template': 'key'},
+                {template: 'key'},
                 {template: 'support'},
-                {'template': 'faq'}
             ]
         })
     },
@@ -796,6 +796,13 @@ window.RadicalInstaller = {
 
 
     deleteProject: function (project, show_modal, callback_success, callback_fail) {
+        let is_delete = confirm(RadicalInstallerLangs.question_extension_delete);
+
+        if(!is_delete)
+        {
+            return;
+        }
+
         let self = this,
             url = '';
 
@@ -812,7 +819,7 @@ window.RadicalInstaller = {
         }
 
         if (show_modal) {
-            let header = RadicalInstallerUtils.createElement('h1', {'class': ''}, 'Удаление'),
+            let header = RadicalInstallerUtils.createElement('h1', {'class': ''}, RadicalInstallerLangs.delete_an_extension),
                 body = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-delete-page'});
 
             body

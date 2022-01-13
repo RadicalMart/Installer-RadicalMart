@@ -323,18 +323,6 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 		$query = $this->db->getQuery(true);
 		$query
 			->select(['element'])
-			->from($this->db->quoteName('#__extensions'))
-			->where('element IN (' . implode(',', $fields) . ')');
-		$find_list = $this->db->setQuery($query)->loadObjectList();
-
-		foreach ($find_list as $find)
-		{
-			$find_list_output[] = $find->element;
-		}
-
-		$query = $this->db->getQuery(true);
-		$query
-			->select(['element'])
 			->from($this->db->quoteName('#__radicalinstaller_extensions'))
 			->where('element IN (' . implode(',', $fields) . ')');
 		$find_list = $this->db->setQuery($query)->loadObjectList();

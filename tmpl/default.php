@@ -2,6 +2,7 @@
 
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
+use Radicalinstaller\Config;
 
 extract($displayData);
 
@@ -19,7 +20,6 @@ HTMLHelper::_('script', 'plg_installer_radicalinstaller/main.js', [
 	'version'  => filemtime(__FILE__),
 	'relative' => true
 ]);
-
 
 $langs = [
 	'button_close'                       => Text::_('PLG_INSTALLER_RADICALINSTALLER_BUTTON_CLOSE'),
@@ -66,6 +66,7 @@ $langs = [
 	'will_be_installed'                  => Text::_('PLG_INSTALLER_RADICALINSTALLER_WILL_BE_INSTALLED'),
 	'support'                            => Text::_('PLG_INSTALLER_RADICALINSTALLER_SUPPORT'),
 	'installing_an_extension'            => Text::_('PLG_INSTALLER_RADICALINSTALLER_INSTALLING_AN_EXTENSION'),
+	'delete_an_extension'                => Text::_('PLG_INSTALLER_RADICALINSTALLER_DELETE_AN_EXTENSION'),
 	'extension_name'                     => Text::_('PLG_INSTALLER_RADICALINSTALLER_EXTENSION_NAME'),
 	'status'                             => Text::_('PLG_INSTALLER_RADICALINSTALLER_STATUS'),
 	'wait'                               => Text::_('PLG_INSTALLER_RADICALINSTALLER_WAIT'),
@@ -79,11 +80,12 @@ $langs = [
 	'new_version'                        => Text::_('PLG_INSTALLER_RADICALINSTALLER_NEW_VERSION'),
 	'no_updates'                         => Text::_('PLG_INSTALLER_RADICALINSTALLER_NO_UPDATES'),
 	'no_installed'                       => Text::_('PLG_INSTALLER_RADICALINSTALLER_NO_INSTALLED'),
-	'error_key'                          => Text::_('PLG_INSTALLER_ERROR_KEY'),
-	'error_service'                      => Text::_('PLG_INSTALLER_ERROR_SERVICE'),
-	'error_install'                      => Text::_('PLG_INSTALLER_ERROR_INSTALL'),
-	'error_uninstall'                    => Text::_('PLG_INSTALLER_ERROR_UNINSTALL'),
-	'error_check_main_extensions'        => Text::_('PLG_INSTALLER_ERROR_CHECK_MAIN_EXTENSIONS'),
+	'question_extension_delete'          => Text::_('PLG_INSTALLER_RADICALINSTALLER_QUESTION_EXTENSION_DELETE'),
+	'error_key'                          => Text::_('PLG_INSTALLER_RADICALINSTALLER_ERROR_KEY'),
+	'error_service'                      => Text::_('PLG_INSTALLER_RADICALINSTALLER_ERROR_SERVICE'),
+	'error_install'                      => Text::_('PLG_INSTALLER_RADICALINSTALLER_ERROR_INSTALL'),
+	'error_uninstall'                    => Text::_('PLG_INSTALLER_RADICALINSTALLER_ERROR_UNINSTALL'),
+	'error_check_main_extensions'        => Text::_('PLG_INSTALLER_RADICALINSTALLER_ERROR_CHECK_MAIN_EXTENSIONS'),
 ];
 ?>
 
@@ -92,6 +94,7 @@ $langs = [
 <script type="text/javascript">
     document.addEventListener("DOMContentLoaded", function () {
         window.RadicalInstallerConfig = {
+            api: <?php echo Config::$scheme . '://' . Config::$host ?>,
             key: '<?php echo $params->get('apikey', '')?>'
         };
         window.RadicalInstallerLangs = <?php echo json_encode($langs) ?>;
