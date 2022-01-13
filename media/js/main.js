@@ -31,9 +31,10 @@ window.RadicalInstaller = {
             faq: {
                 header: 'FAQ',
                 content: '<ul>' +
-                    '<li><h4>Как купить расширение</h4><p>На сайте <a href="https://radicalmart.ru" target="_blank">radicalmart.ru</a>.</p></li>' +
-                    '<li><h4>Где поменять ключ</h4><p>В настройках плагина установщика.</p></li>' +
-                    '<li><h4>Как удалить расширение</h4><p>В управлении расширений Joomla</p></li>' +
+                    '<li><h4>Как купить расширение?</h4><p>На сайте <a href="https://radicalmart.ru" target="_blank">radicalmart.ru</a>.</p></li>' +
+                    '<li><h4>Где поменять ключ?</h4><p>В настройках плагина установщика.</p></li>' +
+                    '<li><h4>Как удалить расширение?</h4><p>Нажмите на кнопку "Установлено" из раздела "Управление".</p></li>' +
+                    '<li><h4>Могу ли я добавить свое расширение?</h4><p>Да. Перейдите по кнопке "Добавить расширение" из поддержки.</p></li>' +
                     '</ul>'
             },
             support: {
@@ -266,64 +267,76 @@ window.RadicalInstaller = {
      */
     showFormKey: function () {
         let self = this,
-            form = RadicalInstallerUtils.createElement('form', {
-            'class': 'form-horizontal span7',
-            'events': [
-                [
-                    'submit',
-                    function (event) {
-                        event.preventDefault();
+            page = RadicalInstallerUtils.createElement('div');
+            page = page
+                .addChild('div')
+                    .addChild('div', {'class': 'radicalinstaller-width-1-1 radicalinstaller-margin-bottom'})
+                        .addChild('form', {
+                            'class': 'radicalinstaller-width-2-3 form-horizontal',
+                            'events': [
+                                [
+                                    'submit',
+                                    function (event) {
+                                        event.preventDefault();
 
 
-                        let key_value = event.target.querySelector('[name=key]').value;
+                                        let key_value = event.target.querySelector('[name=key]').value;
 
-                        if(key_value.length < 30)
-                        {
-                            RadicalInstallerUtils.createAlert(RadicalInstallerLangs.error_key, 'danger',5000);
-                            return;
-                        }
+                                        if(key_value.length < 30)
+                                        {
+                                            RadicalInstallerUtils.createAlert(RadicalInstallerLangs.error_key, 'danger',5000);
+                                            return;
+                                        }
 
-                        // отправить аякс на сохранение ключа
-                        RadicalInstallerUtils.ajaxPost(self.url + '&method=saveKey', {key: key_value})
-                            .done(function (response) {
-                                self.checkMainExtension();
-                                RadicalInstallerConfig.key = key_value; // можем присвоить ключ, так как сервер примет только проверенный ключ
-                            })
-                            .fail(function (xhr) {
-                                let response = JSON.parse(xhr.responseText);
+                                        // отправить аякс на сохранение ключа
+                                        RadicalInstallerUtils.ajaxPost(self.url + '&method=saveKey', {key: key_value})
+                                            .done(function (response) {
+                                                self.checkMainExtension();
+                                                RadicalInstallerConfig.key = key_value; // можем присвоить ключ, так как сервер примет только проверенный ключ
+                                            })
+                                            .fail(function (xhr) {
+                                                let response = JSON.parse(xhr.responseText);
 
-                                if(response !== null && response.data[0] !== undefined) {
-                                    RadicalInstallerUtils.createAlert(response.data[0], 'danger',5000);
-                                    return;
-                                }
+                                                if(response !== null && response.data[0] !== undefined) {
+                                                    RadicalInstallerUtils.createAlert(response.data[0], 'danger',5000);
+                                                    return;
+                                                }
 
-                                RadicalInstallerUtils.createAlert(RadicalInstallerLangs.error_service, 'danger',5000);
-                            });
+                                                RadicalInstallerUtils.createAlert(RadicalInstallerLangs.error_service, 'danger',5000);
+                                            });
 
-                        return false;
-                    }
-                ]
-            ]
-        });
-
-        form = form
-            .addChild('div', {'class': 'radicalinstaller-card radicalinstaller-background-muted radicalinstaller-padding-large'})
-                .addChild('div', {'class': 'control-group control-group-no-label control-group-large'})
-                    .addChild('div', {'class': 'controls'})
-                        .add('input', {'class': 'span12', 'type': 'text', 'placeholder': 'Введите здесь ваш ключ', 'name': 'key'})
+                                        return false;
+                                    }
+                                ]
+                            ]
+                        })
+                            .addChild('div', {'class': 'radicalinstaller-card radicalinstaller-background-muted radicalinstaller-padding-large'})
+                                .addChild('div', {'class': 'control-group control-group-no-label control-group-large'})
+                                    .addChild('div', {'class': 'controls'})
+                                        .add('input', {'class': 'span12', 'type': 'text', 'placeholder': 'Введите здесь ваш ключ', 'name': 'key'})
+                                        .getParent()
+                                    .getParent()
+                                .addChild('div', {'class': 'control-group control-group-no-label control-group-large'})
+                                    .addChild('div', {'class': 'controls'})
+                                        .add('button', {'class': 'btn btn-primary btn-large', 'type': 'submit'}, 'Отправить')
+                                        .getParent()
+                                    .getParent()
+                                .getParent()
+                            .getParent()
                         .getParent()
-                    .getParent()
-                .addChild('div', {'class': 'control-group control-group-no-label control-group-large'})
-                    .addChild('div', {'class': 'controls'})
-                        .add('button', {'class': 'btn btn-primary btn-large', 'type': 'submit'}, 'Отправить')
+                .addChild('div', {'class': 'radicalinstaller-width-1-1'})
+                    .addChild('div', {'class': 'radicalinstaller-width-2-3'})
+                        .addChild('div', {'class': 'alert alert-info'})
+                            .add('h3', {'class': 'alert-alert'}, RadicalInstallerLangs.text_header_scan_extension)
+                            .add('div', {'class': 'alert-message'}, RadicalInstallerLangs.text_scan_extension)
+                            .getParent()
                         .getParent()
-                    .getParent()
-                .getParent();
+                    .getParent();
 
         self.renderPage({
             header: 'Установка расширений из <a href="https://radicalmart.ru" target="_blank">radicalmart.ru</a>',
-            description: 'Для того чтобы продолжить, Вам необходимо установить ключ обращения к сервису.',
-            content: form.build(),
+            description: 'Для того чтобы продолжить, Вам необходимо ввести ключ обращения к сервису.',
+            content: page.build(),
             sidebar: [
                 {template: 'key'},
                 {template: 'support'},
@@ -338,23 +351,57 @@ window.RadicalInstaller = {
      * @param id
      */
     showProject: function (id) {
-        let self = this;
+        let self = this,
+            header_loader = RadicalInstallerUtils.createElement('div'),
+            body_loader = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-project-page'});
+
+        body_loader = body_loader
+            .addChild('div', {'class': 'radicalinstaller-flex radicalinstaller-flex-center'})
+                .add('img', {'src': self.assets + '/img/loader.svg'})
+                .getParent();
+
+        RadicalInstallerUtils.modal(header_loader.build(), body_loader.build());
+
         RadicalInstallerUtils.ajaxGet(self.url + '&method=project&project_id=' + id)
         .done(function (json) {
             let item = JSON.parse(json.data),
                 header = RadicalInstallerUtils.createElement('div'),
                 body = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-project-page'}),
                 color = RadicalInstallerUtils.generateColorFromText(item.title),
-                docs = item.urls.documentation,
+                docs = '',
+                support = '';
+
+            // проверяем наличие поддержки у расширения
+            if (
+                item.urls.support !== undefined &&
+                item.urls.support !== false &&
+                item.urls.support !== ''
+            ) {
                 support = item.urls.support;
+            }
 
             // проверяем наличии документации у расширения
-            if (item.documentation !== undefined && item.documentation !== false && item.documentation !== '') {
+            if (
+                item.urls.documentation !== undefined &&
+                item.urls.documentation !== false &&
+                item.urls.documentation !== ''
+            ) {
+                docs = item.urls.documentation;
+            }
+
+            if (
+                item.documentation !== undefined &&
+                item.documentation !== false &&
+                item.documentation !== ''
+            ) {
                 docs = self.api + item.documentation;
             }
 
             if (item.params !== undefined) {
-                if (item.params.attrs_color !== undefined && item.params.attrs_color !== '') {
+                if (
+                    item.params.attrs_color !== undefined &&
+                    item.params.attrs_color !== ''
+                ) {
                     color = item.params.attrs_color;
                 }
             }
@@ -511,7 +558,11 @@ window.RadicalInstaller = {
                     ]]
             }, RadicalInstallerLangs.button_delete);
 
-            if (docs !== undefined && docs !== false && docs !== '') {
+            if (
+                docs !== undefined &&
+                docs !== false &&
+                docs !== ''
+            ) {
                 body = body.add('a', {
                     'class': 'btn btn-large',
                     'target': '_blank',
@@ -519,11 +570,19 @@ window.RadicalInstaller = {
                 }, RadicalInstallerLangs.button_docs);
             }
 
-            body = body.add('a', {
-                'class': 'btn btn-large',
-                'target': '_blank',
-                'href': support
-            }, RadicalInstallerLangs.button_support)
+            if (
+                support !== undefined &&
+                support !== false &&
+                support !== ''
+            ) {
+                body = body.add('a', {
+                    'class': 'btn btn-large',
+                    'target': '_blank',
+                    'href': support
+                }, RadicalInstallerLangs.button_support);
+            }
+
+            body = body
                 .add('a', {
                     'class': 'btn btn-large btn-text',
                     'target': '_blank',
@@ -531,13 +590,19 @@ window.RadicalInstaller = {
                 }, RadicalInstallerLangs.button_extension_website)
                 .getParent();
 
-
             body.add('div', {'class': 'radicalinstaller-project-page_description-header'}, RadicalInstallerLangs.description);
 
-            if (item.fulltext !== undefined && item.fulltext !== '') {
+            if (
+                item.fulltext !== undefined &&
+                item.fulltext !== ''
+            ) {
                 body = body.add('div', {'class': 'radicalinstaller-project-page_description-text'}, item.fulltext);
             } else {
-                body = body.add('div', {'class': 'radicalinstaller-project-page_description-text'}, item.introtext);
+                if(item.introtext !== undefined && item.introtext !== '') {
+                    body = body.add('div', {'class': 'radicalinstaller-project-page_description-text'}, item.introtext);
+                } else {
+                    body = body.add('div', {'class': 'radicalinstaller-project-page_description-text'}, RadicalInstallerLangs.text_no_description);
+                }
             }
 
             header = header.build();
@@ -902,6 +967,7 @@ window.RadicalInstaller = {
                         callback_success();
                     }
 
+                    self.checkMainExtension();
                     self.checkInstall();
                 }
 
@@ -1047,7 +1113,7 @@ window.RadicalInstaller = {
 
                     self.renderPage({
                         header: 'Выберите главное расширение',
-                        description: 'текст текст',
+                        description: 'Каталог расширений разблокируется после установки одного из главных расширений.',
                         content: grid.build(),
                         sidebar: [
                             {template: 'support'},

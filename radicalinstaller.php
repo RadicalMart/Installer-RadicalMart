@@ -27,6 +27,8 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 
 	public function onInstallerAddInstallationTab()
 	{
+		JLoader::registerNamespace('Radicalinstaller', __DIR__ . DIRECTORY_SEPARATOR . 'src');
+
 		$tab          = [];
 		$tab['name']  = 'radicalinstaller';
 		$tab['label'] = Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT');

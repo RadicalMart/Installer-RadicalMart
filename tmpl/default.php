@@ -80,6 +80,9 @@ $langs = [
 	'new_version'                        => Text::_('PLG_INSTALLER_RADICALINSTALLER_NEW_VERSION'),
 	'no_updates'                         => Text::_('PLG_INSTALLER_RADICALINSTALLER_NO_UPDATES'),
 	'no_installed'                       => Text::_('PLG_INSTALLER_RADICALINSTALLER_NO_INSTALLED'),
+	'text_header_scan_extension'                => Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_HEADER_SCAN_EXTENSION'),
+	'text_scan_extension'                => Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_SCAN_EXTENSION'),
+	'text_no_description'                => Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_NO_DESCRIPTION'),
 	'question_extension_delete'          => Text::_('PLG_INSTALLER_RADICALINSTALLER_QUESTION_EXTENSION_DELETE'),
 	'error_key'                          => Text::_('PLG_INSTALLER_RADICALINSTALLER_ERROR_KEY'),
 	'error_service'                      => Text::_('PLG_INSTALLER_RADICALINSTALLER_ERROR_SERVICE'),
@@ -94,7 +97,7 @@ $langs = [
 <script type="text/javascript">
     document.addEventListener("DOMContentLoaded", function () {
         window.RadicalInstallerConfig = {
-            api: <?php echo Config::$scheme . '://' . Config::$host ?>,
+            api: '<?php echo Config::$scheme . '://' . Config::$host ?>',
             key: '<?php echo $params->get('apikey', '')?>'
         };
         window.RadicalInstallerLangs = <?php echo json_encode($langs) ?>;
