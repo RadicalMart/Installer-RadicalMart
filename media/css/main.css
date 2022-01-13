@@ -202,6 +202,127 @@
     margin-top: 25px;
 }
 
+/************ Alerts *************/
+#radicalinstaller-alert-container {
+    position: fixed;
+    height: auto;
+    max-width: 350px;
+    width: 100%;
+    bottom: 30px;
+    right: 0;
+}
+
+#radicalinstaller-alert-wrapper {
+    height: auto;
+    padding: 15px;
+}
+
+.radicalinstaller-alert {
+    position: relative;
+    padding: 25px 30px 20px;
+    font-size: 15px;
+    margin-top: 15px;
+    opacity: 1;
+    line-height: 1.4;
+    border-radius: 3px;
+    border: 1px solid transparent;
+    cursor: default;
+    transition: all 0.5s ease-in-out;   /* Edit for fadeout time */
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;          /* Likely future */
+}
+
+.radicalinstaller-alert span {
+    opacity: 0.7;
+    transition: all 0.25s ease-in-out;   /* Edit for fadeout time */
+}
+
+.radicalinstaller-alert span:hover {
+    opacity: 1.0;
+}
+
+.radicalinstaller-alert-success {
+    color: #ffffff;
+    background-color: #37c1aa;
+}
+
+.radicalinstaller-alert-success > span {
+    color: #0b6f5e;
+}
+
+.radicalinstaller-alert-info {
+    color: #ffffff;
+    background-color: #3473c1;
+}
+
+.radicalinstaller-alert-info > span {
+    color: #1e4567;
+}
+
+.radicalinstaller-alert-warning {
+    color: #6b7117;
+    background-color: #ffee9e;
+}
+
+.radicalinstaller-alert-warning > span {
+    color: #8a6d3b;
+}
+
+.radicalinstaller-alert-danger {
+    color: #ffffff;
+    background-color: #d64f62;
+}
+
+.radicalinstaller-alert-danger > span {
+    color: #6f1414;
+}
+
+.close-alert-x {
+    position: absolute;
+    float: right;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    outline: none;
+}
+
+.fade-out {
+    opacity: 0;
+}
+
+.animation-target {
+    animation: radicalinstaller-alert-animation 1500ms linear both;
+}
+
+/* Generated with Bounce.js. Edit at http://goo.gl/BKCT19 */
+
+@keyframes radicalinstaller-alert-animation {
+    0% { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 250, 0, 0, 1); }
+    3.14% { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 160.737, 0, 0, 1); }
+    4.3% { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 132.565, 0, 0, 1); }
+    6.27% { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 91.357, 0, 0, 1); }
+    8.61% { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 51.939, 0, 0, 1); }
+    9.41% { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 40.599, 0, 0, 1); }
+    12.48% { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 6.498, 0, 0, 1); }
+    12.91% { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 2.807, 0, 0, 1); }
+    16.22% { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -17.027, 0, 0, 1); }
+    17.22% { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -20.404, 0, 0, 1); }
+    19.95% { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -24.473, 0, 0, 1); }
+    23.69% { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -21.178, 0, 0, 1); }
+    27.36% { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -13.259, 0, 0, 1); }
+    28.33% { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -11.027, 0, 0, 1); }
+    34.77% { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.142, 0, 0, 1); }
+    39.44% { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 2.725, 0, 0, 1); }
+    42.18% { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 2.675, 0, 0, 1); }
+    56.99% { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -0.202, 0, 0, 1); }
+    61.66% { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -0.223, 0, 0, 1); }
+    66.67% { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -0.104, 0, 0, 1); }
+    83.98% { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.01, 0, 0, 1); }
+    100% { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+}
+
 
 /************ Card **************/
 .radicalinstaller-card {

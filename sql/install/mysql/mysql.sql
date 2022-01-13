@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS `#__radicalinstaller_extensions`;
 CREATE TABLE `#__radicalinstaller_extensions`
 (
     `id`           int(10) unsigned NOT NULL AUTO_INCREMENT,

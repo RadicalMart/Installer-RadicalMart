@@ -1,6 +1,7 @@
 window.RadicalInstaller = {
     api: 'https://radicalmart.ru',
     url: 'index.php?option=com_ajax&plugin=radicalinstaller&group=installer&format=json',
+    assets: '/media/plg_installer_radicalinstaller/',
     container: null, // контейнер HTML для установщика
     form: null, // форма HTML установки Joomla
     category_id: 0, // текущая активная категория расширений
@@ -269,17 +270,34 @@ window.RadicalInstaller = {
                 [
                     'submit',
                     function (event) {
-                        // отправить аякс на сохранение ключа
+                        event.preventDefault();
+
+
                         let key_value = event.target.querySelector('[name=key]').value;
+
+                        if(key_value.length < 30)
+                        {
+                            RadicalInstallerUtils.createAlert('Недопустимый ключ', 'danger',5000);
+                            return;
+                        }
+
+                        // отправить аякс на сохранение ключа
                         RadicalInstallerUtils.ajaxPost(self.url + '&method=saveKey', {key: key_value})
                             .done(function (response) {
                                 self.checkMainExtension();
                                 RadicalInstallerConfig.key = key_value; // можем присвоить ключ, так как сервер примет только проверенный ключ
                             })
                             .fail(function (xhr) {
+                                let response = JSON.parse(xhr.responseText);
 
+                                if(response !== null && response.data[0] !== undefined) {
+                                    RadicalInstallerUtils.createAlert(response.data[0], 'danger',5000);
+                                    return;
+                                }
+
+                                RadicalInstallerUtils.createAlert('Ошибка с работой сервиса', 'danger',5000);
                             });
-                        event.preventDefault();
+
                         return false;
                     }
                 ]
@@ -613,6 +631,42 @@ window.RadicalInstaller = {
 
         self.project_install = {id: project.id, title: project.title};
 
+        let fail = function (xhr){
+            let modal_body = document.querySelector('.radicalinstaller-install-page'),
+                buttons = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-flex radicalinstaller-flex-center radicalinstaller-flex-space'});
+
+            buttons = buttons.add('button', {
+                'class': 'btn btn-large',
+                'events': [
+                    [
+                        'click',
+                        function (ev) {
+                            self.installProject(self.project_install, false);
+                        }
+                    ]
+                ]
+            }, '<span class="icon-loop"></span> ' + RadicalInstallerLangs.try_again)
+                .add('button', {
+                    'class': 'btn btn-large',
+                    'events': [
+                        [
+                            'click',
+                            function (ev) {
+                                ev.target
+                                    .closest('.radicalinstaller-modal_container')
+                                    .querySelector('.radicalinstaller-modal_close')
+                                    .click();
+                            }
+                        ]
+                    ]
+                }, 'Закрыть окно');
+
+            modal_body.innerHTML = '';
+            modal_body.appendChild(buttons.build());
+
+            RadicalInstallerUtils.createAlert('Ошибка с работой сервиса. Не удалось установить расширение', 'danger',5000);
+        };
+
         if (show_modal === null || show_modal === undefined || show_modal === true) {
             show_modal = true;
         } else {
@@ -626,7 +680,7 @@ window.RadicalInstaller = {
 
             body
                 .addChild('div', {'class': 'radicalinstaller-flex radicalinstaller-flex-center'})
-                    .add('img', {'src': '/media/plg_installer_radicalinstaller/img/loader.svg'})
+                    .add('img', {'src': self.assets + '/img/loader.svg'})
                     .getParent();
 
             RadicalInstallerUtils.modal(header.build(), body.build(), '', '', function () {
@@ -732,9 +786,10 @@ window.RadicalInstaller = {
                     }
                 }
 
-            });
-
-        });
+            })
+            .fail(fail);
+        })
+        .fail(fail);
 
     },
 
@@ -761,7 +816,7 @@ window.RadicalInstaller = {
 
             body
                 .addChild('div', {'class': 'radicalinstaller-flex radicalinstaller-flex-center'})
-                    .add('img', {'src': '/media/plg_installer_radicalinstaller/img/loader.svg'})
+                    .add('img', {'src': self.assets + '/img/loader.svg'})
                     .getParent();
 
             RadicalInstallerUtils.modal(header.build(), body.build(), '', '', function () {
@@ -810,7 +865,6 @@ window.RadicalInstaller = {
                                     ]
                                 ]
                             }, '<span class="icon-loop"></span> ' + RadicalInstallerLangs.try_again);
-
                     }
 
                     if (typeof callback_fail === 'function') {
@@ -857,6 +911,41 @@ window.RadicalInstaller = {
                     }
                 }
 
+            })
+            .fail(function (xhr){
+                let modal_body = document.querySelector('.radicalinstaller-install-page'),
+                    buttons = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-flex radicalinstaller-flex-center radicalinstaller-flex-space'});
+
+                buttons = buttons.add('button', {
+                    'class': 'btn btn-large',
+                    'events': [
+                        [
+                            'click',
+                            function (ev) {
+                                self.deleteProject(self.project_delete, false);
+                            }
+                        ]
+                    ]
+                }, '<span class="icon-loop"></span> ' + RadicalInstallerLangs.try_again)
+                    .add('button', {
+                        'class': 'btn btn-large',
+                        'events': [
+                            [
+                                'click',
+                                function (ev) {
+                                    ev.target
+                                        .closest('.radicalinstaller-modal_container')
+                                        .querySelector('.radicalinstaller-modal_close')
+                                        .click();
+                                }
+                            ]
+                        ]
+                    }, 'Закрыть окно');
+
+                modal_body.innerHTML = '';
+                modal_body.appendChild(buttons.build());
+
+                RadicalInstallerUtils.createAlert('Ошибка с работой сервиса. Не удалось получить проект', 'danger',5000);
             });
 
     },
@@ -1314,7 +1403,7 @@ window.RadicalInstaller = {
     loaderInit: function () {
         let self = this,
             loader = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-loader hide'})
-            .add('img', {'src': '/media/plg_installer_radicalinstaller/img/loader.svg'});
+            .add('img', {'src': self.assets + '/img/loader.svg'});
         self.container.appendChild(loader.build());
     },
 

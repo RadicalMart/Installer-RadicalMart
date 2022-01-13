@@ -1,1 +1,1 @@
-DROP TABLE `#__radicalinstaller_extensions`;
+DROP TABLE IF EXISTS `#__radicalinstaller_extensions`;
