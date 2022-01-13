@@ -67,11 +67,6 @@ window.RadicalInstaller = {
      */
     changeCategory: function (id) {
         let self = this;
-
-        if(id === self.category_id && self.category_load) {
-            return;
-        }
-
         self.category_load = false;
 
         let grid = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-grid'}),
@@ -901,11 +896,7 @@ window.RadicalInstaller = {
                     .add('img', {'src': self.assets + '/img/loader.svg'})
                     .getParent();
 
-            RadicalInstallerUtils.modal(header.build(), body.build(), '', '', function () {
-                if(self.check_main_after_install) {
-                    self.checkMainExtension();
-                }
-            });
+            RadicalInstallerUtils.modal(header.build(), body.build());
         }
 
 
@@ -976,7 +967,7 @@ window.RadicalInstaller = {
                         callback_success();
                     }
 
-                    self.checkMainExtension();
+                    self.checkMainExtension(false);
                     self.checkInstall();
                 }
 
@@ -1105,15 +1096,25 @@ window.RadicalInstaller = {
      * Проверка на основные расширения
      *
      */
-    checkMainExtension: function () {
+    checkMainExtension: function (action) {
         let self = this;
+
+        if(
+            action === undefined ||
+            action === null
+        ) {
+            action = true;
+        }
+
         RadicalInstallerUtils.ajaxGet(self.url + '&method=checkMainExtension')
             .done(function (response) {
 
                 let data = response.data[0];
 
                 if (data.status === 'ok') {
-                    self.showCatalog();
+                    if(action) {
+                        self.showCatalog();
+                    }
                     return;
                 }
 
