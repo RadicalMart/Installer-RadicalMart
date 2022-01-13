@@ -13,29 +13,7 @@ window.RadicalInstaller = {
     project_install: [], // список установленных расширений
     project_delete: [], // список удаляемых расширений
     buy_projects: [], // список купленных расширений
-    template_sidebar: {
-        key: {
-            header: 'Что такое ключ',
-            content: 'Lorem lorem lorem text text text.'
-        },
-        faq: {
-            header: 'FAQ',
-            content: '<ul>' +
-                '<li><h4>Как купить расширение</h4><p>На сайте <a href="https://radicalmart.ru">radicalmart.ru</a>.</p></li>' +
-                '<li><h4>Где поменять ключ</h4><p>В настройках плагина установщика.</p></li>' +
-                '<li><h4>Как удалить расширение</h4><p>В управлении расширений Joomla</p></li>' +
-                '</ul>'
-        },
-        support: {
-            header: 'Поддержка',
-            content: '<div class="radicalinstaller-flex radicalinstaller-flex-space">' +
-                '<a href="https://radicalmart.ru/support" class="btn" target="_blank">На сайте</a>' +
-                '<a href="mailto:support@radicalmart.ru" class="btn">Email</a>' +
-                '<a href="https://t.me/radicalmart" class="btn" target="_blank">Telegram</a>' +
-                '<a href="https://radicalmart.ru/support" class="btn" target="_blank">Добавить расширение</a>' +
-                '</div>'
-        }
-    },
+    template_sidebar: {},
 
     /**
      * Запуск установщика
@@ -44,6 +22,29 @@ window.RadicalInstaller = {
         let self = this;
         this.container = document.querySelector('#radicalinstaller-container');
         this.form = document.querySelector('#adminForm');
+        self.template_sidebar = {
+            key: {
+                header: 'Что такое ключ',
+                content: 'Lorem lorem lorem text text text.'
+            },
+            faq: {
+                header: 'FAQ',
+                content: '<ul>' +
+                    '<li><h4>Как купить расширение</h4><p>На сайте <a href="https://radicalmart.ru">radicalmart.ru</a>.</p></li>' +
+                    '<li><h4>Где поменять ключ</h4><p>В настройках плагина установщика.</p></li>' +
+                    '<li><h4>Как удалить расширение</h4><p>В управлении расширений Joomla</p></li>' +
+                    '</ul>'
+            },
+            support: {
+                header: 'Поддержка',
+                content: '<div class="radicalinstaller-flex radicalinstaller-flex-space">' +
+                    '<a href="https://radicalmart.ru/support" class="btn" target="_blank">' + RadicalInstallerLangs.button_support_site + '</a>' +
+                    '<a href="mailto:support@radicalmart.ru" class="btn">' + RadicalInstallerLangs.button_support_email + '</a>' +
+                    '<a href="https://t.me/radicalmart" class="btn" target="_blank">' + RadicalInstallerLangs.button_support_telegram + '</a>' +
+                    '<a href="https://radicalmart.ru/support" class="btn" target="_blank">' + RadicalInstallerLangs.button_support_add + '</a>' +
+                    '</div>'
+            }
+        };
 
         // если нет ключа, то запускаем показ формы ввода ключа
         if (RadicalInstallerConfig.key === '') {
@@ -205,7 +206,7 @@ window.RadicalInstaller = {
                     }
                 ]
             ]
-        }, 'Все расширения');
+        }, RadicalInstallerLangs.button_extensions_all);
 
         self.categories.add('button', {
             'class': 'btn btn-change-category', 'data-type': 'category--1', 'events': [
@@ -217,7 +218,7 @@ window.RadicalInstaller = {
                     }
                 ]
             ]
-        }, 'Доступные мне');
+        }, RadicalInstallerLangs.button_extensions_my);
 
         // здесь замыкание не обязательно, но оставил по аналогии с загрузкой каталога
         // получаем с API список доступных категорий для каталога
@@ -277,7 +278,7 @@ window.RadicalInstaller = {
 
                         if(key_value.length < 30)
                         {
-                            RadicalInstallerUtils.createAlert('Недопустимый ключ', 'danger',5000);
+                            RadicalInstallerUtils.createAlert(RadicalInstallerLangs.error_key, 'danger',5000);
                             return;
                         }
 
@@ -295,7 +296,7 @@ window.RadicalInstaller = {
                                     return;
                                 }
 
-                                RadicalInstallerUtils.createAlert('Ошибка с работой сервиса', 'danger',5000);
+                                RadicalInstallerUtils.createAlert(RadicalInstallerLangs.error_service, 'danger',5000);
                             });
 
                         return false;
@@ -480,7 +481,7 @@ window.RadicalInstaller = {
                                     return false;
                                 }
                             ]]
-                    }, 'Купить');
+                    }, RadicalInstallerLangs.button_buy);
                 }
 
             } else {
@@ -508,7 +509,7 @@ window.RadicalInstaller = {
                             return false;
                         }
                     ]]
-            }, 'Удалить');
+            }, RadicalInstallerLangs.button_delete);
 
             if (docs !== undefined && docs !== false && docs !== '') {
                 body = body.add('a', {
@@ -659,12 +660,12 @@ window.RadicalInstaller = {
                             }
                         ]
                     ]
-                }, 'Закрыть окно');
+                }, RadicalInstallerLangs.button_close);
 
             modal_body.innerHTML = '';
             modal_body.appendChild(buttons.build());
 
-            RadicalInstallerUtils.createAlert('Ошибка с работой сервиса. Не удалось установить расширение', 'danger',5000);
+            RadicalInstallerUtils.createAlert(RadicalInstallerLangs.error_install, 'danger',5000);
         };
 
         if (show_modal === null || show_modal === undefined || show_modal === true) {
@@ -765,7 +766,7 @@ window.RadicalInstaller = {
                                         }
                                     ]
                                 ]
-                            }, 'Закрыть окно');
+                            }, RadicalInstallerLangs.button_close);
                     }
 
                     self.checkInstall();
@@ -887,7 +888,7 @@ window.RadicalInstaller = {
                                         }
                                     ]
                                 ]
-                            }, 'Закрыть окно');
+                            }, RadicalInstallerLangs.button_close);
                     }
 
                     if (typeof callback_success === 'function') {
@@ -940,12 +941,12 @@ window.RadicalInstaller = {
                                 }
                             ]
                         ]
-                    }, 'Закрыть окно');
+                    }, RadicalInstallerLangs.button_close);
 
                 modal_body.innerHTML = '';
                 modal_body.appendChild(buttons.build());
 
-                RadicalInstallerUtils.createAlert('Ошибка с работой сервиса. Не удалось получить проект', 'danger',5000);
+                RadicalInstallerUtils.createAlert(RadicalInstallerLangs.error_uninstall, 'danger',5000);
             });
 
     },
@@ -1061,7 +1062,7 @@ window.RadicalInstaller = {
                 }
             })
             .fail(function (xhr) {
-
+                RadicalInstallerUtils.createAlert(RadicalInstallerLangs.error_check_main_extensions, 'danger', 5000);
             });
     },
 
@@ -1183,7 +1184,7 @@ window.RadicalInstaller = {
                                             }
                                         ]
                                     ]
-                                }, 'Обновить')
+                                }, RadicalInstallerLangs.button_update_select)
                                             .getParent()
                                     .getParent()
                     }
@@ -1247,7 +1248,7 @@ window.RadicalInstaller = {
                                                         ev.preventDefault();
                                                     }
                                                 ]
-                                            ]}, 'Удалить')
+                                            ]}, RadicalInstallerLangs.button_delete)
                                     .getParent()
                                 .getParent()
                 }
