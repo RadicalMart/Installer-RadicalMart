@@ -80,12 +80,10 @@ class ProviderJoomla implements ProviderInterface
 
 			if (!$table->check())
 			{
-				//Log::add(Text::_('PLG_UIKIT_HIKASHOP_ERROR_ZIP_EXTRACT'), Log::ERROR, 'plg_system_uikithikashop');
 			}
 
 			if (!$table->store())
 			{
-				//Log::add(Text::_('PLG_UIKIT_HIKASHOP_ERROR_ZIP_EXTRACT'), Log::ERROR, 'plg_system_uikithikashop');
 			}
 
 		}

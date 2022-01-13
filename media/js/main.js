@@ -41,7 +41,7 @@ window.RadicalInstaller = {
                     '<a href="https://radicalmart.ru/support" class="btn" target="_blank">' + RadicalInstallerLangs.button_support_site + '</a>' +
                     '<a href="mailto:support@radicalmart.ru" class="btn">' + RadicalInstallerLangs.button_support_email + '</a>' +
                     '<a href="https://t.me/radicalmart" class="btn" target="_blank">' + RadicalInstallerLangs.button_support_telegram + '</a>' +
-                    '<a href="https://radicalmart.ru/support" class="btn" target="_blank">' + RadicalInstallerLangs.button_support_add + '</a>' +
+                    '<a href="https://radicalmart.ru/add" class="btn" target="_blank">' + RadicalInstallerLangs.button_support_add + '</a>' +
                     '</div>'
             }
         };

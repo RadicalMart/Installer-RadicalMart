@@ -356,7 +356,7 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 
 		if (!is_array($projects) || !isset($projects['items']))
 		{
-			throw new RuntimeException(Text::_('Ошибка подключения к сервису'), 500);
+			throw new RuntimeException(Text::_('PLG_INSTALLER_ERROR_SERVICE'), 500);
 		}
 		foreach ($projects['items'] as $project)
 		{
@@ -393,7 +393,7 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 
 		if (empty($key))
 		{
-			throw new RuntimeException(Text::_('Пустой ключ'), 401);
+			throw new RuntimeException(Text::_('PLG_INSTALLER_ERROR_KEY'), 401);
 		}
 
 		$result = json_decode(API::checkKey($key), JSON_OBJECT_AS_ARRAY);
@@ -421,16 +421,16 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 
 			if (!$result)
 			{
-				throw new RuntimeException(Text::_('Ошибка при сохранение'), 500);
+				throw new RuntimeException(Text::_('PLG_INSTALLER_ERROR_DATABASE_SAVE'), 500);
 			}
 
-			$this->cleanCache('_system', 0);
+			$this->cleanCache('_system');
 			$this->cleanCache('_system', 1);
 
 			return ['status' => 'ok'];
 		}
 
-		throw new RuntimeException(Text::_('Недопустимый ключ'), 401);
+		throw new RuntimeException(Text::_('PLG_INSTALLER_ERROR_KEY'), 401);
 	}
 
 
