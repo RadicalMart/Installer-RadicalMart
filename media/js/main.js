@@ -87,11 +87,17 @@ window.RadicalInstaller = {
         let load_page = function (page, limit) {
             let url = self.url + '&method=projects&category_id=' + id;
 
-            if (page !== null) {
+            if (
+                page !== null &&
+                page !== undefined
+            ) {
                 url += '&page=' + page;
             }
 
-            if (limit !== null) {
+            if (
+                limit !== null &&
+                limit !== undefined
+            ) {
                 url += 'l&imit=' + limit;
             }
 
