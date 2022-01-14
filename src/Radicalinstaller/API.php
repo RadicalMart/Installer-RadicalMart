@@ -18,7 +18,7 @@ class API
 	private static $data_request = [
 		'option' => 'com_ajax',
 		'plugin' => 'swprojectsapi',
-		'group' => 'system',
+		'group'  => 'system',
 		'format' => 'json',
 	];
 
@@ -38,7 +38,7 @@ class API
 	public static function categories()
 	{
 		$result = self::execute('categories');
-		if(isset($result->body))
+		if (isset($result->body))
 		{
 			return $result->body;
 		}
@@ -51,8 +51,8 @@ class API
 	{
 		$result = self::execute('projects', [
 			'category_id' => $category_id,
-			'page' => $page,
-			'limit' => $limit
+			'page'        => $page,
+			'limit'       => $limit
 		]);
 
 		return $result->body ?? [];
@@ -62,7 +62,7 @@ class API
 	public static function projectList($ids)
 	{
 		$result = self::execute('projectList', ['projects_ids' => $ids]);
-		if(isset($result->body))
+		if (isset($result->body))
 		{
 			return $result->body;
 		}
@@ -74,7 +74,7 @@ class API
 	public static function projectsMain()
 	{
 		$result = self::execute('projectsMain');
-		if(isset($result->body))
+		if (isset($result->body))
 		{
 			return $result->body;
 		}
@@ -86,7 +86,19 @@ class API
 	public static function project($id)
 	{
 		$result = self::execute('project', ['project_id' => $id]);
-		if(isset($result->body))
+		if (isset($result->body))
+		{
+			return $result->body;
+		}
+
+		return [];
+	}
+
+
+	public static function projectsMy($key = '')
+	{
+		$result = self::execute('projectsMy', ['key' => $key]);
+		if (isset($result->body))
 		{
 			return $result->body;
 		}
@@ -98,7 +110,7 @@ class API
 	public static function projectListCheckVersion($ids)
 	{
 		$result = self::execute('projectListCheckVersion', ['projects_ids' => json_encode($ids)]);
-		if(isset($result->body))
+		if (isset($result->body))
 		{
 			return $result->body;
 		}
@@ -110,7 +122,7 @@ class API
 	public static function getForInstallDepends($id)
 	{
 		$result = self::execute('getForInstallDepends', ['project_id' => json_encode($id)]);
-		if(isset($result->body))
+		if (isset($result->body))
 		{
 			return $result->body;
 		}
@@ -128,7 +140,19 @@ class API
 	public static function checkKey($key)
 	{
 		$result = self::execute('checkKey', ['key' => $key]);
-		if(isset($result->body))
+		if (isset($result->body))
+		{
+			return $result->body;
+		}
+
+		return false;
+	}
+
+
+	public static function syncExtensions($list = '')
+	{
+		$result = self::execute('syncExtensions', ['extensions' => $list], 'POST');
+		if (isset($result->body))
 		{
 			return $result->body;
 		}
@@ -138,14 +162,14 @@ class API
 
 
 	/**
-	 * @param $method
-	 * @param array $data
+	 * @param          $method
+	 * @param   array  $data
 	 *
 	 * @return \Joomla\CMS\Http\Response
 	 *
 	 * @since version
 	 */
-	private static function execute($method, $data = [])
+	private static function execute($method, $data = [], $type = "GET")
 	{
 
 		$lang = Factory::getLanguage();
@@ -155,10 +179,11 @@ class API
 		);
 
 		$curlTransport = new CurlTransport(new Registry());
-		$uri = (new Uri());
+		$uri           = (new Uri());
 		$uri->setScheme(Config::$scheme);
 		$uri->setHost(Config::$host);
-		$request = $curlTransport->request('GET', $uri, $data_build);
+		$request = $curlTransport->request($type, $uri, $data_build);
+
 		return $request;
 	}
 

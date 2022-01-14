@@ -8,6 +8,8 @@ use Joomla\CMS\Plugin\CMSPlugin;
 use Radicalinstaller\API;
 use Radicalinstaller\ProviderJoomla;
 
+JLoader::register('RadicalinstallerHelper', __DIR__ . '/helper.php');
+
 /**
  * PlgInstallerRadicalinstaller Plugin.
  *
@@ -87,6 +89,11 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 				$output = $this->APIProjectList();
 			}
 
+			if ($method === 'projectsMy')
+			{
+				$output = $this->APIProjectsMy();
+			}
+
 			if ($method === 'project')
 			{
 				$output = $this->APIProject();
@@ -125,6 +132,11 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 			if ($method === 'installedList')
 			{
 				$output = $this->installedList();
+			}
+
+			if ($method === 'syncExtensions')
+			{
+				$output = $this->syncExtensions();
 			}
 
 			if ($method === 'toggleEnabled')
@@ -292,6 +304,21 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 	}
 
 
+	protected function APIProjectsMy()
+	{
+		$key = $this->params->get('apikey', '');
+
+		if(empty($key))
+		{
+			return [];
+		}
+
+		$projects = API::projectsMy($key);
+
+		return $projects;
+	}
+
+
 	protected function APIGetForInstallDepends()
 	{
 		$id       = $this->app->input->getInt('project_id');
@@ -307,6 +334,19 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 		$project = API::project($id);
 
 		return $project;
+	}
+
+
+	protected function syncExtensions()
+	{
+		$result = RadicalinstallerHelper::syncExtensions();
+
+		if($result === false)
+		{
+			throw new RuntimeException(Text::_('Не удалось синхронизировать расширения'), 500);
+		}
+
+		return $result;
 	}
 
 

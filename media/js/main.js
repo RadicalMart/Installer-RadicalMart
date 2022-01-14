@@ -200,6 +200,26 @@ window.RadicalInstaller = {
             ]
         }, RadicalInstallerLangs.button_installed);
 
+        self.manage.add('button', {
+            'class': 'btn', 'data-type': 'installed', 'events': [
+                [
+                    'click',
+                    function (ev) {
+                        let button = this;
+                        button.setAttribute('disabled', 'disabled');
+
+                        self.syncExtensions(function(){
+                            button.removeAttribute('disabled');
+                        }, function(){
+                            button.removeAttribute('disabled');
+                        });
+                        ev.preventDefault();
+                    }
+                ]
+            ]
+        }, 'Синхронизация');
+
+
         self.categories.add('button', {
             'class': 'btn btn-change-category', 'data-type': 'category-0', 'events': [
                 [
@@ -294,7 +314,13 @@ window.RadicalInstaller = {
                                         // отправить аякс на сохранение ключа
                                         RadicalInstallerUtils.ajaxPost(self.url + '&method=saveKey', {key: key_value})
                                             .done(function (response) {
-                                                self.checkMainExtension();
+
+                                                self.syncExtensions(function(){
+                                                    self.checkMainExtension();
+                                                }, function() {
+                                                    self.checkMainExtension();
+                                                });
+
                                                 RadicalInstallerConfig.key = key_value; // можем присвоить ключ, так как сервер примет только проверенный ключ
                                             })
                                             .fail(function (xhr) {
@@ -1187,6 +1213,34 @@ window.RadicalInstaller = {
             })
             .fail(function (xhr) {
                 RadicalInstallerUtils.createAlert(RadicalInstallerLangs.error_check_main_extensions, 'danger', 5000);
+            });
+    },
+
+
+    /**
+     * Синхронизация установленных расширениях
+     */
+    syncExtensions: function (callback_success, callback_fail) {
+        let self = this;
+
+        RadicalInstallerUtils.ajaxGet(this.url + '&method=syncExtensions')
+            .done( function (json) {
+                let count = json.data;
+
+                RadicalInstallerUtils.createAlert('Синхронизировано расширений: ' + count, 'info', 5000);
+                self.checkInstall();
+
+                if(typeof callback_success === 'function') {
+                    callback_success();
+                }
+            })
+            .fail(function (xhr) {
+                let data = JSON.parse(xhr.responseText);
+                RadicalInstallerUtils.createAlert(data.data, 'danger', 5000);
+
+                if(typeof callback_fail === 'function') {
+                    callback_fail();
+                }
             });
     },
 

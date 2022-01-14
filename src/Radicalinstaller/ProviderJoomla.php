@@ -75,8 +75,6 @@ class ProviderJoomla implements ProviderInterface
 			$table->version      = $version;
 			$table->project_id   = $project['id'];
 			$table->extension_id = $extension_joomla->extension_id;
-			$table->enable       = isset($extension_joomla->enabled) ? (int) $extension_joomla->enabled : 0;
-			$table->params       = '{}';
 
 			if (!$table->check())
 			{
