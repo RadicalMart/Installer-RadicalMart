@@ -94,7 +94,11 @@ $langs = [
 ];
 ?>
 
-<div id="radicalinstaller-container"></div>
+<div id="radicalinstaller-container">
+    <div class="radicalinstaller-loader">
+        <img src="/media/plg_installer_radicalinstaller/img/loader.svg" />
+    </div>
+</div>
 
 <script type="text/javascript">
     document.addEventListener("DOMContentLoaded", function () {

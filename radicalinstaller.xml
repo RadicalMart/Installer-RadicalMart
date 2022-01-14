@@ -4,7 +4,7 @@
 	<author>Cymbal</author>
 	<creationDate>19.06.2020</creationDate>
 	<copyright>Delo-Design</copyright>
-	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<license>GNU General Public License version 3; see LICENSE.txt</license>
 	<authorEmail>cymbal@delo-design.ru</authorEmail>
 	<authorUrl>https://delo-design.ru</authorUrl>
 	<version>1.0.0</version>
@@ -30,6 +30,13 @@
 		</sql>
 	</install>
 
+
+	<uninstall>
+		<sql>
+			<file driver="mysql" charset="utf8">sql/uninstall/mysql/mysql.sql</file>
+		</sql>
+	</uninstall>
+
 	<files>
 		<folder>language</folder>
 		<folder>src</folder>
@@ -37,6 +44,7 @@
 		<folder>tables</folder>
 		<folder>tmpl</folder>
 		<filename plugin="radicalinstaller">radicalinstaller.php</filename>
+		<filename plugin="radicalinstaller">helper.php</filename>
 	</files>
 
 	<config>

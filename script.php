@@ -18,40 +18,41 @@ class plgInstallerRadicalinstallerInstallerScript
 	 */
 	function postflight($type, $parent)
 	{
-		// Enable plugin
 		if ($type === 'install')
 		{
-			$db = Factory::getDbo();
-			$elements_key = ['com_radicalmart', 'com_radicalmart_express'];
-			$find_key = '';
+
+			$db              = Factory::getDbo();
+			$elements_key    = [$db->q('com_radicalmart'), $db->q('com_radicalmart_express')];
+			$find_key        = '';
 			$plugin          = new stdClass();
 			$plugin->type    = 'plugin';
-			$plugin->element = $parent->getElement();
-			$plugin->folder  = (string) $parent->getParent()->manifest->attributes()['group'];
+			$plugin->element = 'radicalinstaller';
+			$plugin->folder  = 'installer';
 			$plugin->enabled = 1;
-
 
 			$query = $db->getQuery(true);
 			$query
-				->select('params')
+				->select($db->quoteName('params'))
 				->from($db->quoteName('#__extensions'))
-				->where($this->db->qn('element') . ' IN (' . implode(',', $elements_key) . ')');
-			$find_list = $this->db->setQuery($query)->loadObjectList();
+				->where($db->qn('element') . ' IN (' . implode(',', $elements_key) . ')');
+			$find_list = $db->setQuery($query)->loadObjectList();
 
 			foreach ($find_list as $item)
 			{
 				$params_item = new Registry($item->params);
-				$find_key = $params_item->get('product_key', '');
+				$find_key    = $params_item->get('product_key', '');
 			}
 
-			if(!empty($find_key))
+			if (!empty($find_key))
 			{
 				$params = new Registry();
+				$params->set('apikey', $find_key);
 				$plugin->params = $params->toString();
 			}
 
 			// Update record
 			$db->updateObject('#__extensions', $plugin, ['type', 'element', 'folder']);
+
 		}
 	}
 

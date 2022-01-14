@@ -17,14 +17,17 @@ class RadicalinstallerHelper
 		$db    = Factory::getDbo();
 		$query = $db->getQuery(true);
 		$query
-			->select($db->qn(['extension_id', 'type', 'element', 'manifest_cache']))
+			->select($db->qn(['extension_id', 'type', 'element', 'folder', 'manifest_cache']))
 			->from($db->quoteName('#__extensions'));
 		$list               = $db->setQuery($query)->loadObjectList();
 		$extensions_for_api = [];
 
 		foreach ($list as $item)
 		{
-			$extensions_for_api[$item->element] = $item->type;
+			$extensions_for_api[$item->element] = [
+				'folder' => $item->folder,
+				'type'   => $item->type
+			];
 		}
 
 		// отсылаем на сервер radicalmart.ru и получаем ответ об установленных расширениях
@@ -54,7 +57,7 @@ class RadicalinstallerHelper
 		foreach ($sync_projects as $sync_project)
 		{
 			$element = $sync_project['joomla']['element'];
-			$table = Table::getInstance('RadicalinstallerExtensions', 'Table');
+			$table   = Table::getInstance('RadicalinstallerExtensions', 'Table');
 			$table->load(['element' => $sync_project['element']]);
 			$table->type         = $sync_project['install'];
 			$table->title        = $sync_project['title'];

@@ -54,7 +54,7 @@ class ProviderJoomla implements ProviderInterface
 			$element = $project['joomla']['element'];
 			$db      = Factory::getDbo();
 			$query   = $db->getQuery(true);
-			$query->select(['extension_id', 'manifest_cache', 'enabled']);
+			$query->select(['extension_id', 'folder', 'manifest_cache', 'enabled']);
 			$query->from('#__extensions');
 			$query->where($db->quoteName('type') . '=' . $db->quote($type));
 			$query->where($db->quoteName('element') . '=' . $db->quote($element));
@@ -72,6 +72,7 @@ class ProviderJoomla implements ProviderInterface
 			$table->type         = $project['install'];
 			$table->title        = $project['title'];
 			$table->element      = $project['element'];
+			$table->folder       = $extension_joomla->folder;
 			$table->version      = $version;
 			$table->project_id   = $project['id'];
 			$table->extension_id = $extension_joomla->extension_id;

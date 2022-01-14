@@ -1182,11 +1182,32 @@ window.RadicalInstaller = {
                     let grid = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-grid'}),
                         grid_element = null;
 
+                    let sync = RadicalInstallerUtils.createElement('button', {
+                        'class': 'btn', 'data-type': 'installed', 'events': [
+                            [
+                                'click',
+                                function (ev) {
+                                    let button = this;
+                                    button.setAttribute('disabled', 'disabled');
+
+                                    self.syncExtensions(function(){
+                                        self.checkMainExtension();
+                                        button.removeAttribute('disabled');
+                                    }, function(){
+                                        button.removeAttribute('disabled');
+                                    });
+                                    ev.preventDefault();
+                                }
+                            ]
+                        ]
+                    }, RadicalInstallerLangs.button_sync);
+
                     self.renderPage({
                         header: 'Выберите главное расширение',
                         description: 'Каталог расширений разблокируется после установки одного из главных расширений.',
                         content: grid.build(),
                         sidebar: [
+                            {header: 'Управление', content: sync.build()},
                             {template: 'support'},
                             {template: 'faq'}
                         ]
