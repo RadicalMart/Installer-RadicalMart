@@ -343,7 +343,7 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 
 		if($result === false)
 		{
-			throw new RuntimeException(Text::_('Не удалось синхронизировать расширения'), 500);
+			throw new RuntimeException(Text::_('PLG_INSTALLER_RADICALINSTALLER_ERROR_SYNC'), 500);
 		}
 
 		return $result;

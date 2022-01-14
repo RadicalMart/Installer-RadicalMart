@@ -14,7 +14,7 @@ window.RadicalInstaller = {
     project_install: [], // список установленных расширений
     project_delete: [], // список удаляемых расширений
     buy_projects: [], // список купленных расширений
-    template_sidebar: {},
+    template_sidebar: {}, // шаблоны для сайдбара
 
     /**
      * Запуск установщика
@@ -26,20 +26,15 @@ window.RadicalInstaller = {
         self.api = RadicalInstallerConfig.api;
         self.template_sidebar = {
             key: {
-                header: 'Что такое ключ',
-                content: 'Для того чтобы распознать, что это Вы обращаетесь в наш сервис нам требуется идентификация. Свой ключ Вы можете получить на сайте <a href="https://radicalmart.ru" target="_blank">radicalmart.ru</a>'
+                header: RadicalInstallerLangs.text_sidebar_key_header,
+                content: RadicalInstallerLangs.text_sidebar_key_content
             },
             faq: {
-                header: 'FAQ',
-                content: '<ul>' +
-                    '<li><h4>Как купить расширение?</h4><p>На сайте <a href="https://radicalmart.ru" target="_blank">radicalmart.ru</a>.</p></li>' +
-                    '<li><h4>Где поменять ключ?</h4><p>В настройках плагина установщика.</p></li>' +
-                    '<li><h4>Как удалить расширение?</h4><p>Нажмите на кнопку "Установлено" из раздела "Управление".</p></li>' +
-                    '<li><h4>Могу ли я добавить свое расширение?</h4><p>Да. Перейдите по кнопке "Добавить расширение" из поддержки.</p></li>' +
-                    '</ul>'
+                header: RadicalInstallerLangs.text_sidebar_faq_header,
+                content: RadicalInstallerLangs.text_sidebar_faq_content
             },
             support: {
-                header: 'Поддержка',
+                header: RadicalInstallerLangs.text_sidebar_support_header,
                 content: '<div class="radicalinstaller-flex radicalinstaller-flex-wrap radicalinstaller-flex-space">' +
                     '<a href="https://radicalmart.ru/support" class="btn" target="_blank">' + RadicalInstallerLangs.button_support_site + '</a>' +
                     '<a href="mailto:support@radicalmart.ru" class="btn">' + RadicalInstallerLangs.button_support_email + '</a>' +
@@ -74,11 +69,11 @@ window.RadicalInstaller = {
 
         // очищаем весь основной контейнер и вставляем в него базовые элементы для каталога
         self.renderPage({
-            header: 'Каталог расширений',
+            header: RadicalInstallerLangs.text_catalog_header,
             content: [grid.build(), pagination.build()],
             sidebar: [
-                {header: 'Управление', content: self.manage.build()},
-                {header: 'Категории', content: self.categories.build()},
+                {header: RadicalInstallerLangs.text_sidebar_manage_header, content: self.manage.build()},
+                {header: RadicalInstallerLangs.text_sidebar_categories_header, content: self.categories.build()},
                 {template: 'support'},
                 {template: 'faq'}
             ]
@@ -336,12 +331,12 @@ window.RadicalInstaller = {
                             .addChild('div', {'class': 'radicalinstaller-card radicalinstaller-background-muted radicalinstaller-padding-large'})
                                 .addChild('div', {'class': 'control-group control-group-no-label control-group-large'})
                                     .addChild('div', {'class': 'controls'})
-                                        .add('input', {'class': 'span12', 'type': 'text', 'placeholder': 'Введите здесь ваш ключ', 'name': 'key'})
+                                        .add('input', {'class': 'span12', 'type': 'text', 'placeholder': RadicalInstallerLangs.text_input_key, 'name': 'key'})
                                         .getParent()
                                     .getParent()
                                 .addChild('div', {'class': 'control-group control-group-no-label control-group-large'})
                                     .addChild('div', {'class': 'controls'})
-                                        .add('button', {'class': 'btn btn-primary btn-large', 'type': 'submit'}, 'Отправить')
+                                        .add('button', {'class': 'btn btn-primary btn-large', 'type': 'submit'}, RadicalInstallerLangs.button_submit)
                                         .getParent()
                                     .getParent()
                                 .getParent()
@@ -357,8 +352,8 @@ window.RadicalInstaller = {
                     .getParent();
 
         self.renderPage({
-            header: 'Установка расширений из <a href="https://radicalmart.ru" target="_blank">radicalmart.ru</a>',
-            description: 'Для того чтобы продолжить, Вам необходимо ввести ключ обращения к сервису.',
+            header: RadicalInstallerLangs.text_key_header,
+            description: RadicalInstallerLangs.text_key_description,
             content: page.build(),
             sidebar: [
                 {template: 'key'},
@@ -1242,7 +1237,7 @@ window.RadicalInstaller = {
             .done( function (json) {
                 let count = json.data;
 
-                RadicalInstallerUtils.createAlert('Синхронизировано расширений: ' + count, 'info', 5000);
+                RadicalInstallerUtils.createAlert(RadicalInstallerLangs.text_sync + count, 'info', 5000);
                 self.checkInstall();
 
                 if(typeof callback_success === 'function') {

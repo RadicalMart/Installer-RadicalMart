@@ -22,6 +22,7 @@ HTMLHelper::_('script', 'plg_installer_radicalinstaller/main.js', [
 ]);
 
 $langs = [
+	'button_submit'                      => Text::_('PLG_INSTALLER_RADICALINSTALLER_BUTTON_SUBMIT'),
 	'button_close'                       => Text::_('PLG_INSTALLER_RADICALINSTALLER_BUTTON_CLOSE'),
 	'button_update'                      => Text::_('PLG_INSTALLER_RADICALINSTALLER_BUTTON_UPDATE'),
 	'button_update_all'                  => Text::_('PLG_INSTALLER_RADICALINSTALLER_BUTTON_UPDATE_ALL'),
@@ -81,6 +82,18 @@ $langs = [
 	'new_version'                        => Text::_('PLG_INSTALLER_RADICALINSTALLER_NEW_VERSION'),
 	'no_updates'                         => Text::_('PLG_INSTALLER_RADICALINSTALLER_NO_UPDATES'),
 	'no_installed'                       => Text::_('PLG_INSTALLER_RADICALINSTALLER_NO_INSTALLED'),
+	'text_input_key'                     => Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_INPUT_KEY'),
+	'text_key_header'                    => Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_KEY_HEADER'),
+	'text_key_description'               => Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_KEY_DESCRIPTION'),
+	'text_catalog_header'                => Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_CATALOG_HEADER'),
+	'text_sync'                          => Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_SYNC'),
+	'text_sidebar_key_header'            => Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_SIDEBAR_KEY_HEADER'),
+	'text_sidebar_key_content'           => Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_SIDEBAR_KEY_CONTENT'),
+	'text_sidebar_faq_header'            => Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_SIDEBAR_FAQ_HEADER'),
+	'text_sidebar_faq_content'           => Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_SIDEBAR_FAQ_CONTENT'),
+	'text_sidebar_support_header'        => Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_SIDEBAR_SUPPORT_HEADER'),
+	'text_sidebar_manage_header'         => Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_SIDEBAR_MANAGE_HEADER'),
+	'text_sidebar_categories_header'     => Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_SIDEBAR_CATEGORIES_HEADER'),
 	'text_header_scan_extension'         => Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_HEADER_SCAN_EXTENSION'),
 	'text_scan_extension'                => Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_SCAN_EXTENSION'),
 	'text_no_description'                => Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_NO_DESCRIPTION'),
@@ -96,7 +109,7 @@ $langs = [
 
 <div id="radicalinstaller-container">
     <div class="radicalinstaller-loader">
-        <img src="/media/plg_installer_radicalinstaller/img/loader.svg" />
+        <img src="/media/plg_installer_radicalinstaller/img/loader.svg"/>
     </div>
 </div>
 
