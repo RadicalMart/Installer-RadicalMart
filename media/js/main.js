@@ -88,14 +88,6 @@ window.RadicalInstaller = {
         self.loaderInit();
         self.loaderShow();
 
-        if (RadicalInstallerConfig.key !== '') {
-            let url = self.url + '&method=buyprojects';
-
-            RadicalInstallerUtils.ajaxGet(url).done( function (json) {
-                self.buy_projects = json.items;
-            });
-        }
-
         // load_page замыкание, которое потом вызываем внутри себя при клике на пагинацию
         let load_page = function (page, limit) {
             let url = self.url + '&method=projects&category_id=' + id;
@@ -113,8 +105,10 @@ window.RadicalInstaller = {
                 json = JSON.parse(json.data);
                 let cards = json.items;
 
-                for (let i=0;i<cards.length;i++) {
-                    self.container.querySelector('.radicalinstaller-grid').append(self.renderCatalogGrid(cards[i]).build());
+                for (let i in cards) {
+                    if(typeof cards[i] === 'object') {
+                        self.container.querySelector('.radicalinstaller-grid').append(self.renderCatalogGrid(cards[i]).build());
+                    }
                 }
 
                 self.category_load = true;
@@ -217,7 +211,7 @@ window.RadicalInstaller = {
                     }
                 ]
             ]
-        }, 'Синхронизация');
+        }, RadicalInstallerLangs.button_sync);
 
 
         self.categories.add('button', {
@@ -233,11 +227,11 @@ window.RadicalInstaller = {
         }, RadicalInstallerLangs.button_extensions_all);
 
         self.categories.add('button', {
-            'class': 'btn btn-change-category', 'data-type': 'category--1', 'events': [
+            'class': 'btn btn-change-category', 'data-type': 'category-my', 'events': [
                 [
                     'click',
                     function (ev) {
-                        self.changeCategory(-1);
+                        self.changeCategory('my');
                         ev.preventDefault();
                     }
                 ]

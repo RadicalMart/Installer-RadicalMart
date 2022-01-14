@@ -27,6 +27,7 @@ $langs = [
 	'button_update_all'                  => Text::_('PLG_INSTALLER_RADICALINSTALLER_BUTTON_UPDATE_ALL'),
 	'button_update_check'                => Text::_('PLG_INSTALLER_RADICALINSTALLER_BUTTON_UPDATE_CHECK'),
 	'button_update_select'               => Text::_('PLG_INSTALLER_RADICALINSTALLER_BUTTON_UPDATE_SELECT'),
+	'button_sync'                        => Text::_('PLG_INSTALLER_RADICALINSTALLER_BUTTON_SYNC'),
 	'button_extensions_all'              => Text::_('PLG_INSTALLER_RADICALINSTALLER_BUTTON_EXTENSIONS_ALL'),
 	'button_extensions'                  => Text::_('PLG_INSTALLER_RADICALINSTALLER_BUTTON_EXTENSIONS'),
 	'button_extensions_my'               => Text::_('PLG_INSTALLER_RADICALINSTALLER_BUTTON_EXTENSIONS_MY'),

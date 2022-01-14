@@ -287,6 +287,21 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 	protected function APIProjects()
 	{
 		$id       = $this->app->input->get('category_id');
+
+		if($id === 'my')
+		{
+			$key = $this->params->get('apikey', '');
+
+			if(empty($key))
+			{
+				return [];
+			}
+
+			$projects = API::projectsMy($key);
+
+			return $projects;
+		}
+
 		$page     = $this->app->input->get('page', 1, 'int');
 		$limit    = $this->app->input->get('limit', 12, 'int');
 		$projects = API::projects($id, $page, $limit);
@@ -299,21 +314,6 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 	{
 		$ids      = $this->app->input->get('ids', '{}', 'raw');
 		$projects = API::projectList($ids);
-
-		return $projects;
-	}
-
-
-	protected function APIProjectsMy()
-	{
-		$key = $this->params->get('apikey', '');
-
-		if(empty($key))
-		{
-			return [];
-		}
-
-		$projects = API::projectsMy($key);
 
 		return $projects;
 	}
@@ -356,6 +356,11 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 		$list             = json_decode($list, JSON_OBJECT_AS_ARRAY);
 		$fields           = [];
 		$find_list_output = [];
+
+		if(count($list) === 0)
+		{
+			return [];
+		}
 
 		foreach ($list as $value)
 		{
