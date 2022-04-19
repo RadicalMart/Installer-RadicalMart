@@ -30,7 +30,7 @@
 }
 
 .radicalinstaller-page_sidebar {
-    width: calc(30% - 60px);
+    width: calc(30% - 20px);
     padding: 15px;
     border-radius: 4px;
 }
@@ -57,21 +57,14 @@
 }
 
 /************* Buttons ***********/
-.btn-text {
-    border-color: transparent !important;
-    background: transparent !important;
-    box-shadow: none !important;
-    text-decoration: underline;
-}
-
-.btn-check-update {
+.ri-btn-check-update {
     display: flex;
     align-self: center;
     align-content: center;
     align-items: center;
 }
 
-.btn-check-update span {
+.ri-btn-check-update span {
     display: inline-block;
     width: 18px;
     height: 18px;
@@ -83,7 +76,7 @@
     text-align: center;
 }
 
-.btn-check-update span.empty {
+.ri-btn-check-update span.empty {
     background: #134b9e;
 }
 
@@ -143,8 +136,8 @@
 }
 
 .radicalinstaller-flex-space > * {
-    margin-right: 10px;
-    margin-bottom: 10px !important;
+    margin-right: 6px;
+    margin-bottom: 6px !important;
 }
 
 .radicalinstaller-flex-space > *:last-child {
@@ -180,15 +173,6 @@
     justify-content: flex-start;
     margin-bottom: 0;
 }
-
-.radicalinstaller-categories .btn.btn-active,
-.radicalinstaller-categories .btn.btn-active:focus,
-.radicalinstaller-categories .btn.btn-active:active {
-    background: #243d57;
-    border-color: #243d57;
-    color: #fff;
-}
-
 
 /************ Grid ***************/
 .radicalinstaller-grid {
@@ -647,7 +631,7 @@
     text-align: right !important;
 }
 
-.radicalinstaller-installed-page_buttons button.btn-width-fixed {
+.radicalinstaller-installed-page_buttons button.ri-btn-width-fixed {
     padding-left: 0;
     padding-right: 0;
     width: 110px;
@@ -663,6 +647,15 @@
 }
 
 
+/**************** Sidebar **************/
+.radicalinstaller-page_sidebar-item {
+    margin-bottom: 10px;
+}
+
+.radicalinstaller-page_sidebar-item:last-child {
+    margin-bottom: 0;
+}
+
 /**************** Support ************/
 .radicalinstaller-info-page p {
     font-size: 18px;
@@ -673,11 +666,11 @@
     margin-top: 25px;
 }
 
-.radicalinstaller-info-page_buttons .btn {
+.radicalinstaller-info-page_buttons .ri-btn {
     margin-right: 15px;
 }
 
-.radicalinstaller-info-page_buttons .btn:last-child {
+.radicalinstaller-info-page_buttons .ri-btn:last-child {
     margin-right: 0;
 }
 
@@ -685,9 +678,9 @@
 /**************** Modal **************/
 .radicalinstaller-modal {
     position: fixed;
-    top: 50%;
+    top: calc(52%);
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -47%);
     width: 800px;
     height: 80%;
     max-width: 100%;
@@ -789,7 +782,7 @@
     display: block;
 }
 
-.radicalinstaller-modal_body .btn-large {
+.radicalinstaller-modal_body .ri-btn-large {
     padding: 10px 15px;
     font-size: 15px;
 }

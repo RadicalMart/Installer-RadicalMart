@@ -2,6 +2,7 @@
 
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Version;
 use Radicalinstaller\Config;
 
 extract($displayData);
@@ -10,6 +11,22 @@ HTMLHelper::_('stylesheet', 'plg_installer_radicalinstaller/main.css', [
 	'version'  => filemtime(__FILE__),
 	'relative' => true
 ]);
+
+
+if ((new Version())->isCompatible('4.0'))
+{
+	HTMLHelper::_('stylesheet', 'plg_installer_radicalinstaller/joomla4.css', [
+		'version'  => filemtime(__FILE__),
+		'relative' => true
+	]);
+}
+else
+{
+	HTMLHelper::_('stylesheet', 'plg_installer_radicalinstaller/joomla3.css', [
+		'version'  => filemtime(__FILE__),
+		'relative' => true
+	]);
+}
 
 HTMLHelper::_('script', 'plg_installer_radicalinstaller/utils.js', [
 	'version'  => filemtime(__FILE__),
@@ -106,6 +123,10 @@ $langs = [
 	'error_check_main_extensions'        => Text::_('PLG_INSTALLER_RADICALINSTALLER_ERROR_CHECK_MAIN_EXTENSIONS'),
 ];
 ?>
+
+<?php if ((new Version())->isCompatible('4.0')) : ?>
+<legend><?php echo Text::_('PLG_INSTALLER_RADICALINSTALLER_LEGEND'); ?></legend>
+<?php endif; ?>
 
 <div id="radicalinstaller-container">
     <div class="radicalinstaller-loader">

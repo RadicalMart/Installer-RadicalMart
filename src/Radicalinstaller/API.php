@@ -5,6 +5,7 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Http\Transport\CurlTransport;
 use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Version;
 use Joomla\Registry\Registry;
 
 class API
@@ -37,127 +38,77 @@ class API
 
 	public static function categories()
 	{
-		$result = self::execute('categories');
-		if (isset($result->body))
-		{
-			return $result->body;
-		}
-
-		return [];
+		return self::execute('categories');
 	}
 
 
 	public static function projects($category_id, $page = 1, $limit = 12)
 	{
-		$result = self::execute('projects', [
+		return self::execute('projects', [
 			'category_id' => $category_id,
 			'page'        => $page,
 			'limit'       => $limit
 		]);
-
-		return $result->body ?? [];
 	}
 
 
 	public static function projectList($ids)
 	{
-		$result = self::execute('projectList', ['projects_ids' => $ids]);
-		if (isset($result->body))
-		{
-			return $result->body;
-		}
-
-		return [];
+		return self::execute('projectList', ['projects_ids' => $ids]);
 	}
 
 
 	public static function projectsMain()
 	{
-		$result = self::execute('projectsMain');
-		if (isset($result->body))
-		{
-			return $result->body;
-		}
-
-		return [];
+		return self::execute('projectsMain');
 	}
 
 
 	public static function project($id)
 	{
-		$result = self::execute('project', ['project_id' => $id]);
-		if (isset($result->body))
-		{
-			return $result->body;
-		}
-
-		return [];
+		return self::execute('project', ['project_id' => $id]);
 	}
 
 
 	public static function projectsMy($key = '')
 	{
-		$result = self::execute('projectsMy', ['key' => $key]);
-		if (isset($result->body))
-		{
-			return $result->body;
-		}
-
-		return [];
+		return self::execute('projectsMy', ['key' => $key]);
 	}
 
 
 	public static function projectListCheckVersion($ids)
 	{
-		$result = self::execute('projectListCheckVersion', ['projects_ids' => json_encode($ids)]);
-		if (isset($result->body))
-		{
-			return $result->body;
-		}
-
-		return [];
+		return self::execute('projectListCheckVersion', ['projects_ids' => json_encode($ids)]);
 	}
 
 
 	public static function getForInstallDepends($id)
 	{
-		$result = self::execute('getForInstallDepends', ['project_id' => json_encode($id)]);
-		if (isset($result->body))
-		{
-			return $result->body;
-		}
-
-		return [];
+		return self::execute('getForInstallDepends', ['project_id' => json_encode($id)]);
 	}
 
 
 	public static function projectFile($id)
 	{
-		$result = self::execute('projectFile', ['project_id' => $id]);
+		return self::execute('projectFile', ['project_id' => $id]);
 	}
 
 
 	public static function checkKey($key)
 	{
-		$result = self::execute('checkKey', ['key' => $key]);
-		if (isset($result->body))
-		{
-			return $result->body;
-		}
-
-		return false;
+		return self::execute(
+			'checkKey', ['key' => $key]
+		);
 	}
 
 
 	public static function syncExtensions($list = '')
 	{
-		$result = self::execute('syncExtensions', ['extensions' => $list], 'POST');
-		if (isset($result->body))
-		{
-			return $result->body;
-		}
-
-		return false;
+		return self::execute(
+			'syncExtensions',
+			['extensions' => $list],
+			'POST'
+		);
 	}
 
 
@@ -165,7 +116,7 @@ class API
 	 * @param          $method
 	 * @param   array  $data
 	 *
-	 * @return \Joomla\CMS\Http\Response
+	 * @return string|bool
 	 *
 	 * @since version
 	 */
@@ -182,9 +133,16 @@ class API
 		$uri           = (new Uri());
 		$uri->setScheme(Config::$scheme);
 		$uri->setHost(Config::$host);
-		$request = $curlTransport->request($type, $uri, $data_build);
+		$response = $curlTransport->request($type, $uri, $data_build);
 
-		return $request;
+		if (((new Version())->isCompatible('4.0')))
+		{
+			$body = $response->body;
+
+			return (!empty($body)) ? $response->body : false;
+		}
+
+		return (!empty($response->body)) ? $response->body : false;
 	}
 
 

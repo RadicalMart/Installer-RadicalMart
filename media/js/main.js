@@ -36,10 +36,10 @@ window.RadicalInstaller = {
             support: {
                 header: RadicalInstallerLangs.text_sidebar_support_header,
                 content: '<div class="radicalinstaller-flex radicalinstaller-flex-wrap radicalinstaller-flex-space">' +
-                    '<a href="https://radicalmart.ru/support" class="btn" target="_blank">' + RadicalInstallerLangs.button_support_site + '</a>' +
-                    '<a href="mailto:support@radicalmart.ru" class="btn">' + RadicalInstallerLangs.button_support_email + '</a>' +
-                    '<a href="https://t.me/radicalmart" class="btn" target="_blank">' + RadicalInstallerLangs.button_support_telegram + '</a>' +
-                    '<a href="https://radicalmart.ru/add" class="btn" target="_blank">' + RadicalInstallerLangs.button_support_add + '</a>' +
+                    '<a href="https://radicalmart.ru/support" class="ri-btn ri-btn-default" target="_blank">' + RadicalInstallerLangs.button_support_site + '</a>' +
+                    '<a href="mailto:support@radicalmart.ru" class="ri-btn ri-btn-default">' + RadicalInstallerLangs.button_support_email + '</a>' +
+                    '<a href="https://t.me/radicalmart" class="ri-btn ri-btn-default" target="_blank">' + RadicalInstallerLangs.button_support_telegram + '</a>' +
+                    '<a href="https://radicalmart.ru/add" class="ri-btn ri-btn-default" target="_blank">' + RadicalInstallerLangs.button_support_add + '</a>' +
                     '</div>'
             }
         };
@@ -125,7 +125,7 @@ window.RadicalInstaller = {
 
                     if (last_page > current_page) {
                         let pagination_button = RadicalInstallerUtils.createElement('button', {
-                            'class': 'btn btn-large radicalinstaller-pagination_more', 'events': [
+                            'class': 'ri-btn ri-btn-default ri-btn-large radicalinstaller-pagination_more', 'events': [
                                 [
                                     'click',
                                     function (ev) {
@@ -151,13 +151,13 @@ window.RadicalInstaller = {
         // отключаем всем кнопкам классы активности
         let buttons_all = document.querySelectorAll('.radicalinstaller-categories button');
         for (let i = 0; i < buttons_all.length; i++) {
-            buttons_all[i].classList.remove('btn-active');
+            buttons_all[i].classList.remove('ri-btn-active');
         }
 
         // находим активную кнопку и ей назначаем класс активности
         let button_active = document.querySelector('button[data-type="category-' + self.category_id + '"]');
         if (button_active !== null && button_active !== undefined) {
-            button_active.classList.add('btn-active');
+            button_active.classList.add('ri-btn-active');
         }
     },
 
@@ -172,7 +172,7 @@ window.RadicalInstaller = {
         self.manage = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-flex radicalinstaller-flex-space'});
 
         self.manage.add('button', {
-            'class': 'btn btn-check-update', 'data-type': 'update', 'events': [
+            'class': 'ri-btn ri-btn-default ri-btn-check-update', 'data-type': 'update', 'events': [
                 [
                     'click',
                     function (ev) {
@@ -184,7 +184,7 @@ window.RadicalInstaller = {
         }, '<span class="empty">0</span> ' + RadicalInstallerLangs.button_update);
 
         self.manage.add('button', {
-            'class': 'btn', 'data-type': 'installed', 'events': [
+            'class': 'ri-btn ri-btn-default', 'data-type': 'installed', 'events': [
                 [
                     'click',
                     function (ev) {
@@ -196,7 +196,7 @@ window.RadicalInstaller = {
         }, RadicalInstallerLangs.button_installed);
 
         self.manage.add('button', {
-            'class': 'btn', 'data-type': 'installed', 'events': [
+            'class': 'ri-btn ri-btn-default', 'data-type': 'installed', 'events': [
                 [
                     'click',
                     function (ev) {
@@ -216,7 +216,7 @@ window.RadicalInstaller = {
 
 
         self.categories.add('button', {
-            'class': 'btn btn-change-category', 'data-type': 'category-0', 'events': [
+            'class': 'ri-btn ri-btn-default ri-btn-change-category', 'data-type': 'category-0', 'events': [
                 [
                     'click',
                     function (ev) {
@@ -228,7 +228,7 @@ window.RadicalInstaller = {
         }, RadicalInstallerLangs.button_extensions_all);
 
         self.categories.add('button', {
-            'class': 'btn btn-change-category', 'data-type': 'category-my', 'events': [
+            'class': 'ri-btn ri-btn-default ri-btn-change-category', 'data-type': 'category-my', 'events': [
                 [
                     'click',
                     function (ev) {
@@ -250,7 +250,7 @@ window.RadicalInstaller = {
                 let categories_items = json.items;
                 for (let i = 0; i < categories_items.length; i++) {
                     self.categories.add('button', {
-                        'class': 'btn btn-change-category',
+                        'class': 'ri-btn ri-btn-default ri-btn-change-category',
                         'data-type': 'category-' + categories_items[i].id,
                         'events': [
                             [
@@ -337,12 +337,12 @@ window.RadicalInstaller = {
                             .addChild('div', {'class': 'radicalinstaller-card radicalinstaller-background-muted radicalinstaller-padding-large'})
                                 .addChild('div', {'class': 'control-group control-group-no-label control-group-large'})
                                     .addChild('div', {'class': 'controls'})
-                                        .add('input', {'class': 'span12', 'type': 'text', 'placeholder': RadicalInstallerLangs.text_input_key, 'name': 'key'})
+                                        .add('input', {'class': 'radicalinstaller-width-1-1', 'type': 'text', 'placeholder': RadicalInstallerLangs.text_input_key, 'name': 'key'})
                                         .getParent()
                                     .getParent()
                                 .addChild('div', {'class': 'control-group control-group-no-label control-group-large'})
                                     .addChild('div', {'class': 'controls'})
-                                        .add('button', {'class': 'btn btn-primary btn-large', 'type': 'submit'}, RadicalInstallerLangs.button_submit)
+                                        .add('button', {'class': 'ri-btn ri-btn-default ri-btn-primary ri-btn-large', 'type': 'submit'}, RadicalInstallerLangs.button_submit)
                                         .getParent()
                                     .getParent()
                                 .getParent()
@@ -530,7 +530,7 @@ window.RadicalInstaller = {
             if (item.download_type === 'paid') {
                 if (RadicalInstallerConfig.key !== '') {
                     body = body.add('button', {
-                        'class': 'btn btn-success btn-large btn-install',
+                        'class': 'ri-btn ri-btn-default ri-btn-success ri-btn-large ri-btn-install',
                         'disabled': 'disabled',
                         'events': [
                             [
@@ -542,7 +542,7 @@ window.RadicalInstaller = {
                     }, '<span class="icon-download large-icon"></span> ' + RadicalInstallerLangs.button_install);
                 } else {
                     body = body.add('button', {
-                        'class': 'btn btn-success btn-large',
+                        'class': 'ri-btn ri-btn-default ri-btn-success ri-btn-large',
                         'events': [
                             [
                                 'click',
@@ -557,7 +557,7 @@ window.RadicalInstaller = {
 
             } else {
                 body = body.add('button', {
-                    'class': 'btn btn-success btn-large btn-install',
+                    'class': 'ri-btn ri-btn-default ri-btn-success ri-btn-large ri-btn-install',
                     'disabled': 'disabled',
                     'events': [
                         [
@@ -570,7 +570,7 @@ window.RadicalInstaller = {
             }
 
             body = body.add('button', {
-                'class': 'btn btn-danger btn-large btn-delete hide',
+                'class': 'ri-btn ri-btn-default ri-btn-danger ri-btn-large ri-btn-delete hide',
                 'events': [
                     [
                         'click',
@@ -588,7 +588,7 @@ window.RadicalInstaller = {
                 docs !== ''
             ) {
                 body = body.add('a', {
-                    'class': 'btn btn-large',
+                    'class': 'ri-btn ri-btn-default ri-btn-large',
                     'target': '_blank',
                     'href': docs
                 }, RadicalInstallerLangs.button_docs);
@@ -600,7 +600,7 @@ window.RadicalInstaller = {
                 support !== ''
             ) {
                 body = body.add('a', {
-                    'class': 'btn btn-large',
+                    'class': 'ri-btn ri-btn-default ri-btn-large',
                     'target': '_blank',
                     'href': support
                 }, RadicalInstallerLangs.button_support);
@@ -608,7 +608,7 @@ window.RadicalInstaller = {
 
             body = body
                 .add('a', {
-                    'class': 'btn btn-large btn-text',
+                    'class': 'ri-btn ri-btn-default ri-btn-large ri-btn-text',
                     'target': '_blank',
                     'href': self.api + item.link
                 }, RadicalInstallerLangs.button_extension_website)
@@ -669,8 +669,8 @@ window.RadicalInstaller = {
             // запрашиваем локально у сервера, установлено ли это расширение и рисуем нужные кнопки в зависимости от состояния
             RadicalInstallerUtils.ajaxGet(self.url + '&method=checkInstall&list=' + JSON.stringify([item.element]))
             .done(function (json) {
-                let button_install = body.querySelector('.btn-install'),
-                    button_delete = body.querySelector('.btn-delete'),
+                let button_install = body.querySelector('.ri-btn-install'),
+                    button_delete = body.querySelector('.ri-btn-delete'),
                     find = json.data[0];
 
                 if (button_install !== undefined && button_install !== null) {
@@ -726,7 +726,7 @@ window.RadicalInstaller = {
                 buttons = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-flex radicalinstaller-flex-center radicalinstaller-flex-space'});
 
             buttons = buttons.add('button', {
-                'class': 'btn btn-large',
+                'class': 'ri-btn ri-btn-default ri-btn-large',
                 'events': [
                     [
                         'click',
@@ -737,7 +737,7 @@ window.RadicalInstaller = {
                 ]
             }, '<span class="icon-loop"></span> ' + RadicalInstallerLangs.try_again)
                 .add('button', {
-                    'class': 'btn btn-large',
+                    'class': 'ri-btn ri-btn-default ri-btn-large',
                     'events': [
                         [
                             'click',
@@ -818,7 +818,7 @@ window.RadicalInstaller = {
                     if (show_modal) {
                         buttons = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-flex radicalinstaller-flex-center radicalinstaller-flex-space'})
                             .add('button', {
-                                'class': 'btn btn-large',
+                                'class': 'ri-btn ri-btn-default ri-btn-large',
                                 'events': [
                                     [
                                         'click',
@@ -843,7 +843,7 @@ window.RadicalInstaller = {
                     if (messages !== '') {
                         buttons = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-flex radicalinstaller-flex-center radicalinstaller-flex-space'})
                             .add('button', {
-                                'class': 'btn btn-large',
+                                'class': 'ri-btn ri-btn-default ri-btn-large',
                                 'events': [
                                     [
                                         'click',
@@ -948,7 +948,7 @@ window.RadicalInstaller = {
                     if (show_modal) {
                         buttons = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-flex radicalinstaller-flex-center radicalinstaller-flex-space'})
                             .add('button', {
-                                'class': 'btn btn-large',
+                                'class': 'ri-btn ri-btn-default ri-btn-large',
                                 'events': [
                                     [
                                         'click',
@@ -968,7 +968,7 @@ window.RadicalInstaller = {
                     if (messages !== '') {
                         buttons = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-flex radicalinstaller-flex-center radicalinstaller-flex-space'})
                             .add('button', {
-                                'class': 'btn btn-large',
+                                'class': 'ri-btn ri-btn-default ri-btn-large',
                                 'events': [
                                     [
                                         'click',
@@ -1012,7 +1012,7 @@ window.RadicalInstaller = {
                     buttons = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-flex radicalinstaller-flex-center radicalinstaller-flex-space'});
 
                 buttons = buttons.add('button', {
-                    'class': 'btn btn-large',
+                    'class': 'ri-btn ri-btn-default ri-btn-large',
                     'events': [
                         [
                             'click',
@@ -1023,7 +1023,7 @@ window.RadicalInstaller = {
                     ]
                 }, '<span class="icon-loop"></span> ' + RadicalInstallerLangs.try_again)
                     .add('button', {
-                        'class': 'btn btn-large',
+                        'class': 'ri-btn ri-btn-default ri-btn-large',
                         'events': [
                             [
                                 'click',
@@ -1099,7 +1099,7 @@ window.RadicalInstaller = {
         let self = this,
             max_time = 10000,
             current_time = 0,
-            button_check_update = document.querySelector('.btn-check-update');
+            button_check_update = document.querySelector('.ri-btn-check-update');
 
         if(
             alert === undefined ||
@@ -1125,7 +1125,7 @@ window.RadicalInstaller = {
                 || button_check_update === null
             ) {
                 let check_interval = setInterval(function () {
-                    button_check_update = document.querySelector('.btn-check-update');
+                    button_check_update = document.querySelector('.ri-btn-check-update');
 
                     if(
                         current_time >= max_time
@@ -1184,7 +1184,7 @@ window.RadicalInstaller = {
                         grid_element = null;
 
                     let sync = RadicalInstallerUtils.createElement('button', {
-                        'class': 'btn', 'data-type': 'installed', 'events': [
+                        'class': 'ri-btn ri-btn-default', 'data-type': 'installed', 'events': [
                             [
                                 'click',
                                 function (ev) {
@@ -1275,7 +1275,7 @@ window.RadicalInstaller = {
                 let body = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-updates-page'});
                 body = body.addChild('div', {'class': 'radicalinstaller-updates-page_buttons'})
                     .add('button', {
-                        'class': 'btn btn-success btn-large',
+                        'class': 'ri-btn ri-btn-default ri-btn-success ri-btn-large',
                         'events': [
                             [
                                 'click',
@@ -1285,7 +1285,7 @@ window.RadicalInstaller = {
                                         .done(function (json) {
                                             let item = JSON.parse(json.data),
                                                 element = document.querySelector('.radicalinstaller-updates-page_tables-element-id-' + data.items[i].project_id);
-                                                btn = element.querySelector('.btn');
+                                                btn = element.querySelector('.ri-btn');
 
                                             if (btn !== null) {
                                                 btn.setAttribute('disabled', 'disabled');
@@ -1318,7 +1318,7 @@ window.RadicalInstaller = {
                         ]
                     }, '<span class="icon-download large-icon"></span> ' + RadicalInstallerLangs.button_update_all)
                     .add('button', {
-                        'class': 'btn btn-large',
+                        'class': 'ri-btn ri-btn-default ri-btn-large',
                         'events': [
                             [
                                 'click',
@@ -1351,7 +1351,7 @@ window.RadicalInstaller = {
                                     .add('td', {}, data.items[i].version_last)
                                         .addChild('td')
                                             .add('button', {
-                                    'class': 'btn', 'events': [
+                                    'class': 'ri-btn ri-btn-default', 'events': [
                                         [
                                             'click',
                                             function (ev) {
@@ -1359,7 +1359,7 @@ window.RadicalInstaller = {
                                                 .done( function (json) {
                                                     let item = JSON.parse(json.data);
                                                     let element = document.querySelector('.radicalinstaller-updates-page_tables-element-id-' + data.items[i].project_id);
-                                                    let btn = element.querySelector('.btn');
+                                                    let btn = element.querySelector('.ri-btn');
 
                                                     if (btn !== null) {
                                                         btn.setAttribute('disabled', 'disabled');
@@ -1426,7 +1426,7 @@ window.RadicalInstaller = {
                                 .add('td', {}, data[i].title)
                                 .add('td', {}, data[i].version)
                                     .addChild('td', {'class': 'radicalinstaller-installed-page_buttons'})
-                                        .add('button', {'class': 'btn btn-width-fixed', 'events': [
+                                        .add('button', {'class': 'ri-btn ri-btn-default ri-btn-width-fixed', 'events': [
                                             [
                                                 'click',
                                                 function (ev) {
@@ -1435,7 +1435,7 @@ window.RadicalInstaller = {
                                                 }
                                             ]
                                         ]}, RadicalInstallerLangs.button_view)
-                                        .add('button', {'class': 'btn btn-danger btn-width-fixed', 'events': [
+                                        .add('button', {'class': 'ri-btn ri-btn-default ri-btn-danger ri-btn-width-fixed', 'events': [
                                                 [
                                                     'click',
                                                     function (ev) {
@@ -1564,7 +1564,7 @@ window.RadicalInstaller = {
                         [
                             'click',
                             function (ev) {
-                                if (!ev.target.classList.contains('btn-install')) {
+                                if (!ev.target.classList.contains('ri-btn-install')) {
                                     self.showProject(item.id);
                                     ev.preventDefault();
                                 }

@@ -29,7 +29,7 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 
 	public function onInstallerAddInstallationTab()
 	{
-		JLoader::registerNamespace('Radicalinstaller', __DIR__ . DIRECTORY_SEPARATOR . 'src');
+		JLoader::registerNamespace('Radicalinstaller', __DIR__ . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Radicalinstaller', false, 'psr4');
 
 		$tab          = [];
 		$tab['name']  = 'radicalinstaller';
@@ -62,7 +62,7 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 
 	public function onAjaxRadicalinstaller()
 	{
-		JLoader::registerNamespace('Radicalinstaller', __DIR__ . DIRECTORY_SEPARATOR . 'src');
+		JLoader::registerNamespace('Radicalinstaller', __DIR__ . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Radicalinstaller');
 		$app    = Factory::getApplication();
 		$method = $app->input->get('method');
 		$output = '';
