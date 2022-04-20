@@ -5,10 +5,21 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\FileLayout;
 use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\CMS\Version;
 use Radicalinstaller\API;
 use Radicalinstaller\ProviderJoomla;
 
 JLoader::register('RadicalinstallerHelper', __DIR__ . '/helper.php');
+
+if ((new Version())->isCompatible('4.0'))
+{
+	JLoader::registerNamespace('Radicalinstaller', __DIR__ . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Radicalinstaller', false, 'psr4');
+}
+else
+{
+	JLoader::registerNamespace('Radicalinstaller', __DIR__ . DIRECTORY_SEPARATOR . 'src', false, 'psr4');
+}
+
 
 /**
  * PlgInstallerRadicalinstaller Plugin.
@@ -29,7 +40,6 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 
 	public function onInstallerAddInstallationTab()
 	{
-		JLoader::registerNamespace('Radicalinstaller', __DIR__ . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Radicalinstaller', false, 'psr4');
 
 		$tab          = [];
 		$tab['name']  = 'radicalinstaller';
@@ -62,7 +72,6 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 
 	public function onAjaxRadicalinstaller()
 	{
-		JLoader::registerNamespace('Radicalinstaller', __DIR__ . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Radicalinstaller');
 		$app    = Factory::getApplication();
 		$method = $app->input->get('method');
 		$output = '';

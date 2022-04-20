@@ -1,0 +1,139 @@
+/************* Buttons ***********/
+.ri-btn {
+    display: inline-block;
+    padding: 5px 13px;
+    border: 1px solid transparent;
+    font-size: 13px;
+    line-height: 1.5;
+    white-space: nowrap;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 5%);
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.ri-btn-default {
+    background-color: #f3f3f3;
+    color: #333;
+    border-color: #b3b3b3;
+}
+
+.ri-btn-default:hover,
+.ri-btn-default:focus {
+    background-color: #e6e6e6;
+    text-decoration: none;
+    text-shadow: none;
+}
+
+.ri-btn-default:focus {
+    outline: 5px auto -webkit-focus-ring-color;
+    outline-offset: -2px;
+}
+
+.ri-btn-default:active {
+    background-image: none;
+    outline: 0;
+}
+
+.ri-btn-primary {
+    color: #fff;
+    background-color: #2384d3;
+    border-color: rgba(0, 0, 0, 0.2);
+}
+
+.ri-btn-primary:hover,
+.ri-btn-primary:focus,
+.ri-btn-primary:active {
+    background-color: #185b91;
+    color: #fff;
+    text-decoration: none;
+}
+
+.ri-btn-primary:focus {
+    outline: 5px auto -webkit-focus-ring-color;
+    outline-offset: -2px;
+}
+
+
+.ri-btn-active {
+    color: #fff;
+    background-color: #2384d3;
+    border-color: rgba(0, 0, 0, 0.2);
+}
+
+.ri-btn-active:hover,
+.ri-btn-active:focus,
+.ri-btn-active:active {
+    background-color: #185b91;
+    color: #fff;
+    text-decoration: none;
+}
+
+.ri-btn-active:focus {
+    outline: 5px auto -webkit-focus-ring-color;
+    outline-offset: -2px;
+}
+
+.ri-btn-success {
+    background-color: #46a546;
+    border-color: rgba(0, 0, 0, 0.2);
+    color: #fff;
+}
+
+.ri-btn-success:focus + .ri-btn-success,
+.ri-btn-success:focus,
+.ri-btn-success:hover {
+    background-color: #2f6f2f;
+    color: #fff;
+    text-decoration: none;
+}
+
+.ri-btn-success:focus + .ri-btn-success,
+.ri-btn-success:focus {
+    outline: 5px auto -webkit-focus-ring-color;
+    outline-offset: -2px;
+}
+
+.ri-btn-danger {
+    background-color: #bd362f;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    color: #fff;
+}
+
+.ri-btn-danger:focus + .ri-btn-danger,
+.ri-btn-danger:focus,
+.ri-btn-danger:hover {
+    outline: 5px auto -webkit-focus-ring-color;
+    outline-offset: -2px;
+}
+
+.ri-btn-large {
+    padding: 10px 15px;
+    font-size: 15px;
+}
+
+.ri-btn-small {
+    padding: 4px 10px;
+    font-size: 13px;
+}
+
+.ri-btn-text {
+    border-color: transparent !important;
+    background: transparent !important;
+    box-shadow: none !important;
+
+}
+
+.ri-btn-text:focus,
+.ri-btn-text:active,
+.ri-btn-text:hover {
+    color: #212529;
+    text-decoration: underline;
+}

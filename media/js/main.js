@@ -1285,7 +1285,7 @@ window.RadicalInstaller = {
                                         .done(function (json) {
                                             let item = JSON.parse(json.data),
                                                 element = document.querySelector('.radicalinstaller-updates-page_tables-element-id-' + data.items[i].project_id);
-                                                btn = element.querySelector('.ri-btn');
+                                                let btn = element.querySelector('.ri-btn');
 
                                             if (btn !== null) {
                                                 btn.setAttribute('disabled', 'disabled');
