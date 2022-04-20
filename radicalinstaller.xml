@@ -24,6 +24,13 @@
 		<folder>js</folder>
 	</media>
 
+	<updateservers>
+		<server type="extension" priority="1" name="RadicalInstaller">
+			https://radicalmart.ru/update?element=radicalinstaller
+		</server>
+	</updateservers>
+
+
 	<install>
 		<sql>
 			<file driver="mysql" charset="utf8">sql/install/mysql/mysql.sql</file>
