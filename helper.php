@@ -54,23 +54,29 @@ class RadicalinstallerHelper
 
 		foreach ($sync_projects as $sync_project)
 		{
+			$type    = $sync_project['joomla']['type'];
 			$element = $sync_project['joomla']['element'];
+			$folder  = $sync_project['joomla']['folder'];
 			$table   = Table::getInstance('RadicalinstallerExtensions', 'Table');
-			$table->load(['element' => $element]);
-			$table->title        = $sync_project['title'];
-			$table->type         = $sync_project['install'];
-			$table->element      = $sync_project['element'];
-			$table->folder       = $extensions[$element]['folder'] ?? '';
-			$table->version      = $extensions[$element]['version'] ?? '';
-			$table->project_id   = $sync_project['id'];
-			$table->extension_id = $extensions[$element]['id'] ?? '';
+			$table->load(['type' => $type, 'folder' => $folder, 'element' => $element]);
+
+			$table->title                 = $sync_project['title'];
+			$table->type_radicalinstaller = $sync_project['install'];
+			$table->type                  = $type;
+			$table->element               = $element;
+			$table->folder                = $folder ?? '';
+			$table->version               = $extensions[$element]['version'] ?? '';
+			$table->project_id            = $sync_project['id'];
+			$table->extension_id          = $extensions[$element]['id'] ?? '';
 
 			if (!$table->check())
 			{
+				// TODO отдать ошибку
 			}
 
 			if (!$table->store())
 			{
+				// TODO отдать ошибку
 			}
 
 		}
