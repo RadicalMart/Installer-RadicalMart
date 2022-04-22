@@ -24,10 +24,7 @@ class RadicalinstallerHelper
 
 		foreach ($list as $item)
 		{
-			$extensions_for_api[$item->element] = [
-				'folder' => $item->folder,
-				'type'   => $item->type
-			];
+			$extensions_for_api[] = implode('.', [$item->type, $item->folder, $item->element]);
 		}
 
 		// отсылаем на сервер radicalmart.ru и получаем ответ об установленных расширениях
@@ -44,6 +41,7 @@ class RadicalinstallerHelper
 			$extensions[$item->element] = [
 				'id'      => $item->extension_id,
 				'version' => $params['version'] ?? '',
+				'folder'  => $item->folder,
 			];
 		}
 
@@ -58,10 +56,11 @@ class RadicalinstallerHelper
 		{
 			$element = $sync_project['joomla']['element'];
 			$table   = Table::getInstance('RadicalinstallerExtensions', 'Table');
-			$table->load(['element' => $sync_project['element']]);
-			$table->type         = $sync_project['install'];
+			$table->load(['element' => $element]);
 			$table->title        = $sync_project['title'];
+			$table->type         = $sync_project['install'];
 			$table->element      = $sync_project['element'];
+			$table->folder       = $extensions[$element]['folder'] ?? '';
 			$table->version      = $extensions[$element]['version'] ?? '';
 			$table->project_id   = $sync_project['id'];
 			$table->extension_id = $extensions[$element]['id'] ?? '';
