@@ -711,7 +711,6 @@ window.RadicalInstaller = {
      * Запуск установки проекта
      *
      * @param project
-     * @param depends
      * @param show_modal
      * @param callback_success
      * @param callback_fail
@@ -1366,7 +1365,7 @@ window.RadicalInstaller = {
                                                         btn.innerHTML = RadicalInstallerLangs.updating;
                                                     }
 
-                                                    self.installProject(item, false, false, function (data, messages) {
+                                                    self.installProject(item, false, function (data, messages) {
                                                         element.remove();
                                                     }, function () {
                                                         if (btn !== null) {
