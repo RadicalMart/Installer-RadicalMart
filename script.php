@@ -39,8 +39,9 @@ class plgInstallerRadicalinstallerInstallerScript
 
 			foreach ($find_list as $item)
 			{
+				$item = (object) $item;
 				$params_item = new Registry($item->params);
-				$find_key    = $params_item->get('product_key', '');
+				$find_key    = $params_item->get('product_key', $find_key);
 			}
 
 			if (!empty($find_key))
