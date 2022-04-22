@@ -52,8 +52,10 @@ class ProviderJoomla implements ProviderInterface
 			//проверяем что поставила джумла на расширение
 			$type    = $project['joomla']['type'];
 			$element = $project['joomla']['element'];
-			$db      = Factory::getDbo();
-			$query   = $db->getQuery(true);
+			$folder  = $project['joomla']['folder'];
+
+			$db    = Factory::getDbo();
+			$query = $db->getQuery(true);
 			$query->select(['extension_id', 'folder', 'manifest_cache', 'enabled']);
 			$query->from('#__extensions');
 			$query->where($db->quoteName('type') . '=' . $db->quote($type));
@@ -69,13 +71,14 @@ class ProviderJoomla implements ProviderInterface
 
 			$table = Table::getInstance('RadicalinstallerExtensions', 'Table');
 			$table->load(['element' => $project['element']]);
-			$table->type         = $project['install'];
-			$table->title        = $project['title'];
-			$table->element      = $project['element'];
-			$table->folder       = $extension_joomla->folder;
-			$table->version      = $version;
-			$table->project_id   = $project['id'];
-			$table->extension_id = $extension_joomla->extension_id;
+			$table->type_radicalinstaller = $project['install'];
+			$table->title                 = $project['title'];
+			$table->type                  = $type;
+			$table->element               = $element;
+			$table->folder                = $folder;
+			$table->version               = $version;
+			$table->project_id            = $project['id'];
+			$table->extension_id          = $extension_joomla->extension_id;
 
 			if (!$table->check())
 			{

@@ -10,5 +10,6 @@ CREATE TABLE `#__radicalinstaller_extensions`
     `version`               varchar(100) NOT NULL,
     `project_id`            int(10) unsigned NOT NULL,
     `extension_id`          int(10) unsigned NOT NULL,
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    KEY                     `project_id` (`project_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;

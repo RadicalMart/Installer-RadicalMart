@@ -667,7 +667,7 @@ window.RadicalInstaller = {
             RadicalInstallerUtils.modal(header, body);
 
             // запрашиваем локально у сервера, установлено ли это расширение и рисуем нужные кнопки в зависимости от состояния
-            RadicalInstallerUtils.ajaxGet(self.url + '&method=checkInstall&list=' + JSON.stringify([item.element]))
+            RadicalInstallerUtils.ajaxGet(self.url + '&method=checkInstall&list=' + JSON.stringify([item.id]))
             .done(function (json) {
                 let button_install = body.querySelector('.ri-btn-install'),
                     button_delete = body.querySelector('.ri-btn-delete'),
@@ -677,7 +677,7 @@ window.RadicalInstaller = {
                     button_install.removeAttribute('disabled');
                 }
 
-                if (find.indexOf(item.element) !== -1) {
+                if (find.indexOf(item.id) !== -1) {
                     button_install.innerHTML = '<span class="icon-checkmark-2 large-icon"></span> ' + RadicalInstallerLangs.button_reinstall;
                     button_delete.classList.remove('hide');
                 }
@@ -1073,14 +1073,14 @@ window.RadicalInstaller = {
 
         for (let i = 0; i < cards.length; i++) {
             cards[i].classList.remove('radicalinstaller-card_installed');
-            list_for_find.push(cards[i].getAttribute('data-element'));
+            list_for_find.push(cards[i].getAttribute('data-project_id'));
         }
 
         RadicalInstallerUtils.ajaxGet(this.url + '&method=checkInstall&list=' + JSON.stringify(list_for_find))
         .done( function (json) {
             let find = json.data[0];
             for (let i = 0; i < find.length; i++) {
-                let card = self.container.querySelector('.radicalinstaller-card[data-element="' + find[i] + '"]');
+                let card = self.container.querySelector('.radicalinstaller-card[data-project_id="' + find[i] + '"]');
                 if (card !== null) {
                     card.classList.add('radicalinstaller-card_installed');
                     card.setAttribute('data-installed', RadicalInstallerLangs.button_installed);
@@ -1559,6 +1559,7 @@ window.RadicalInstaller = {
             addChild('div', {
                     'class': 'radicalinstaller-card radicalinstaller-card_extension',
                     'data-element': item.element,
+                    'data-project_id': item.id,
                     'events': [
                         [
                             'click',

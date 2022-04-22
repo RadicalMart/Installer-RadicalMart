@@ -295,13 +295,13 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 
 	protected function APIProjects()
 	{
-		$id       = $this->app->input->get('category_id');
+		$id = $this->app->input->get('category_id');
 
-		if($id === 'my')
+		if ($id === 'my')
 		{
 			$key = $this->params->get('apikey', '');
 
-			if(empty($key))
+			if (empty($key))
 			{
 				return [];
 			}
@@ -350,7 +350,7 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 	{
 		$result = RadicalinstallerHelper::syncExtensions();
 
-		if($result === false)
+		if ($result === false)
 		{
 			throw new RuntimeException(Text::_('PLG_INSTALLER_RADICALINSTALLER_ERROR_SYNC'), 500);
 		}
@@ -366,26 +366,26 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 		$fields           = [];
 		$find_list_output = [];
 
-		if(count($list) === 0)
+		if (count($list) === 0)
 		{
 			return [];
 		}
 
 		foreach ($list as $value)
 		{
-			$fields[] = $this->db->quote($value);
+			$fields[] = $this->db->quote((int) $value);
 		}
 
 		$query = $this->db->getQuery(true);
 		$query
-			->select(['element'])
+			->select(['project_id'])
 			->from($this->db->quoteName('#__radicalinstaller_extensions'))
-			->where('element IN (' . implode(',', $fields) . ')');
+			->where('project_id IN (' . implode(',', $fields) . ')');
 		$find_list = $this->db->setQuery($query)->loadObjectList();
 
 		foreach ($find_list as $find)
 		{
-			$find_list_output[] = $find->element;
+			$find_list_output[] = $find->project_id;
 		}
 
 		return $find_list_output;
