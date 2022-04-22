@@ -56,6 +56,11 @@
     width: 66.6%
 }
 
+/************* Visible ***********/
+.ri-hidden {
+    display: none !important;
+}
+
 /************* Buttons ***********/
 .ri-btn-check-update {
     display: flex;

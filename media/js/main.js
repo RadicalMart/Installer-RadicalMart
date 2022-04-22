@@ -570,7 +570,7 @@ window.RadicalInstaller = {
             }
 
             body = body.add('button', {
-                'class': 'ri-btn ri-btn-default ri-btn-danger ri-btn-large ri-btn-delete hide',
+                'class': 'ri-btn ri-btn-default ri-btn-danger ri-btn-large ri-btn-delete ri-hidden',
                 'events': [
                     [
                         'click',
@@ -677,9 +677,9 @@ window.RadicalInstaller = {
                     button_install.removeAttribute('disabled');
                 }
 
-                if (find.indexOf(item.id) !== -1) {
+                if (find.indexOf(parseInt(item.id)) !== -1) {
                     button_install.innerHTML = '<span class="icon-checkmark-2 large-icon"></span> ' + RadicalInstallerLangs.button_reinstall;
-                    button_delete.classList.remove('hide');
+                    button_delete.classList.remove('ri-hidden');
                 }
 
             });
