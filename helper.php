@@ -68,6 +68,7 @@ class RadicalinstallerHelper
 			$table->version               = $extensions[$element]['version'] ?? '';
 			$table->project_id            = $sync_project['id'];
 			$table->extension_id          = $extensions[$element]['id'] ?? '';
+			$table->category_title        = $sync_project['title'];
 
 			if (!$table->check())
 			{

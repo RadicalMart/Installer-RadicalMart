@@ -33,7 +33,17 @@ HTMLHelper::_('script', 'plg_installer_radicalinstaller/utils.js', [
 	'relative' => true
 ]);
 
-HTMLHelper::_('script', 'plg_installer_radicalinstaller/main.js', [
+HTMLHelper::_('script', 'plg_installer_radicalinstaller/app.js', [
+	'version'  => filemtime(__FILE__),
+	'relative' => true
+]);
+
+HTMLHelper::_('script', 'plg_installer_radicalinstaller/ui.js', [
+	'version'  => filemtime(__FILE__),
+	'relative' => true
+]);
+
+HTMLHelper::_('script', 'plg_installer_radicalinstaller/project.js', [
 	'version'  => filemtime(__FILE__),
 	'relative' => true
 ]);
@@ -129,7 +139,9 @@ $langs = [
 <?php endif; ?>
 
 <div id="radicalinstaller-container">
-    <div class="radicalinstaller-loader">
+    <div class="radicalinstaller-form-key radicalinstaller-margin-bottom"></div>
+    <div class="radicalinstaller-toolbar radicalinstaller-margin-bottom"></div>
+    <div class="radicalinstaller-page">
         <img src="/media/plg_installer_radicalinstaller/img/loader.svg"/>
     </div>
 </div>

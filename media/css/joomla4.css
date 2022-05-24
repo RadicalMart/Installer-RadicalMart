@@ -149,6 +149,28 @@
 }
 
 
+/**************** Button groups ***************/
+.ri-btn-group {
+}
+
+.ri-btn-group-small > * {
+    padding: 4px 10px;
+    font-size: 13px;
+}
+
+.ri-btn-group > * {
+    border-radius: 0;
+}
+
+.ri-btn-group > *:first-child {
+    border-bottom-left-radius: .25rem;
+    border-top-left-radius: .25rem;
+}
+
+.ri-btn-group > *:last-child {
+    border-bottom-right-radius: .25rem;
+    border-top-right-radius: .25rem;
+}
 
 /*********** Alert **********/
 .alert.alert-message {

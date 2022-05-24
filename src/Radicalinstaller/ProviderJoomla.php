@@ -78,6 +78,7 @@ class ProviderJoomla implements ProviderInterface
 			$table->folder                = $folder;
 			$table->version               = $version;
 			$table->project_id            = $project['id'];
+			$table->category_title        = $project['title'];
 			$table->extension_id          = $extension_joomla->extension_id;
 
 			if (!$table->check())

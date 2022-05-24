@@ -52,6 +52,12 @@ class API
 	}
 
 
+	public static function groupsStartPage()
+	{
+		return self::execute('groupStartPage');
+	}
+
+
 	public static function projectList($ids)
 	{
 		return self::execute('projectList', ['projects_ids' => $ids]);

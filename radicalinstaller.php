@@ -93,6 +93,11 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 				$output = $this->APIProjects();
 			}
 
+			if ($method === 'groupsStartPage')
+			{
+				$output = $this->APIGroupsStartPage();
+			}
+
 			if ($method === 'projectList')
 			{
 				$output = $this->APIProjectList();
@@ -121,11 +126,6 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 			if ($method === 'deleteJoomla')
 			{
 				$output = $this->deleteJoomla();
-			}
-
-			if ($method === 'checkMainExtension')
-			{
-				$output = $this->checkMainExtension();
 			}
 
 			if ($method === 'checkInstall')
@@ -293,6 +293,12 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 	}
 
 
+	protected function APIGroupsStartPage()
+	{
+		return API::groupsStartPage();
+	}
+
+
 	protected function APIProjects()
 	{
 		$id = $this->app->input->get('category_id');
@@ -389,45 +395,6 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 		}
 
 		return $find_list_output;
-	}
-
-
-	protected function checkMainExtension()
-	{
-		$projects = json_decode(API::projectsMain(), JSON_OBJECT_AS_ARRAY);
-		$elements = [];
-		$find     = false;
-
-		if (!is_array($projects) || !isset($projects['items']))
-		{
-			throw new RuntimeException(Text::_('PLG_INSTALLER_RADICALINSTALLER_ERROR_SERVICE'), 500);
-		}
-		foreach ($projects['items'] as $project)
-		{
-			if (isset($project['element']))
-			{
-				$elements[] = $this->db->q($project['element']);
-			}
-		}
-
-		$query = $this->db->getQuery(true);
-		$query
-			->select($this->db->qn('element'))
-			->from($this->db->quoteName('#__radicalinstaller_extensions'))
-			->where($this->db->qn('element') . ' IN (' . implode(',', $elements) . ')');
-		$find_list = $this->db->setQuery($query)->loadObjectList();
-
-		if (count($find_list) > 0)
-		{
-			$find = true;
-		}
-
-		if (!$find)
-		{
-			return ['status' => 'notinstall', 'items' => $projects['items']];
-		}
-
-		return ['status' => 'ok'];
 	}
 
 

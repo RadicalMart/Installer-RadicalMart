@@ -8,13 +8,11 @@ window.RadicalInstaller = {
     category_load: false,
     manage: null,
     categories: null, // список категорий расширений в тулбар
-    check_main_after_install: false, // флаг для того чтобы смотреть после установки основного расширения
     button_active: null, // активная кнопка в тулбаре
     depends_wait: true, // флаг для ожидания загрузки зависимостей
     project_install: [], // список установленных расширений
     project_delete: [], // список удаляемых расширений
     buy_projects: [], // список купленных расширений
-    template_sidebar: {}, // шаблоны для сайдбара
 
     /**
      * Запуск установщика
@@ -24,25 +22,6 @@ window.RadicalInstaller = {
         self.container = document.querySelector('#radicalinstaller-container');
         self.form = document.querySelector('#adminForm');
         self.api = RadicalInstallerConfig.api;
-        self.template_sidebar = {
-            key: {
-                header: RadicalInstallerLangs.text_sidebar_key_header,
-                content: RadicalInstallerLangs.text_sidebar_key_content
-            },
-            faq: {
-                header: RadicalInstallerLangs.text_sidebar_faq_header,
-                content: RadicalInstallerLangs.text_sidebar_faq_content
-            },
-            support: {
-                header: RadicalInstallerLangs.text_sidebar_support_header,
-                content: '<div class="radicalinstaller-flex radicalinstaller-flex-wrap radicalinstaller-flex-space">' +
-                    '<a href="https://radicalmart.ru/support" class="ri-btn ri-btn-default" target="_blank">' + RadicalInstallerLangs.button_support_site + '</a>' +
-                    '<a href="mailto:support@radicalmart.ru" class="ri-btn ri-btn-default">' + RadicalInstallerLangs.button_support_email + '</a>' +
-                    '<a href="https://t.me/radicalmart" class="ri-btn ri-btn-default" target="_blank">' + RadicalInstallerLangs.button_support_telegram + '</a>' +
-                    '<a href="https://radicalmart.ru/add" class="ri-btn ri-btn-default" target="_blank">' + RadicalInstallerLangs.button_support_add + '</a>' +
-                    '</div>'
-            }
-        };
 
         // если нет ключа, то запускаем показ формы ввода ключа
         if (RadicalInstallerConfig.key === '') {
@@ -51,7 +30,6 @@ window.RadicalInstaller = {
         }
 
         // если ключ есть, то запускаем проверку установки одного из основного расширения
-        self.checkMainExtension();
     },
 
 
@@ -70,14 +48,8 @@ window.RadicalInstaller = {
         // очищаем весь основной контейнер и вставляем в него базовые элементы для каталога
         self.renderPage({
             header: RadicalInstallerLangs.text_catalog_header,
-            content: [grid.build(), pagination.build()],
-            sidebar: [
-                {header: RadicalInstallerLangs.text_sidebar_manage_header, content: self.manage.build()},
-                {header: RadicalInstallerLangs.text_sidebar_categories_header, content: self.categories.build()},
-                {template: 'support'},
-                {template: 'faq'}
-            ]
-        })
+            content: [grid.build(), pagination.build()]
+        });
 
         // запускаем показ экрана загрузки
         self.loaderInit();
@@ -162,12 +134,8 @@ window.RadicalInstaller = {
     },
 
 
-    /**
-     * Запуск показа каталога
-     */
-    showCatalog: function () {
+    showToolbar: function () {
         let self = this;
-
         self.categories = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-categories radicalinstaller-flex radicalinstaller-flex-space'});
         self.manage = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-flex radicalinstaller-flex-space'});
 
@@ -245,38 +213,38 @@ window.RadicalInstaller = {
             let url = self.url + '&method=categories';
 
             RadicalInstallerUtils.ajaxGet(url)
-            .done( function (json) {
-                json = JSON.parse(json.data);
-                let categories_items = json.items;
-                for (let i = 0; i < categories_items.length; i++) {
-                    self.categories.add('button', {
-                        'class': 'ri-btn ri-btn-default ri-btn-change-category',
-                        'data-type': 'category-' + categories_items[i].id,
-                        'events': [
-                            [
-                                'click',
-                                function (ev) {
-                                    self.changeCategory(categories_items[i].id);
-                                    ev.preventDefault();
-                                }
+                .done( function (json) {
+                    json = JSON.parse(json.data);
+                    let categories_items = json.items;
+                    for (let i = 0; i < categories_items.length; i++) {
+                        self.categories.add('button', {
+                            'class': 'ri-btn ri-btn-default ri-btn-change-category',
+                            'data-type': 'category-' + categories_items[i].id,
+                            'events': [
+                                [
+                                    'click',
+                                    function (ev) {
+                                        self.changeCategory(categories_items[i].id);
+                                        ev.preventDefault();
+                                    }
+                                ]
                             ]
-                        ]
-                    }, categories_items[i].title);
-                }
+                        }, categories_items[i].title);
+                    }
 
-                let search_categories = self.container.querySelector('.radicalinstaller-categories');
+                    let search_categories = self.container.querySelector('.radicalinstaller-categories');
 
-                if (search_categories !== null && search_categories !== undefined) {
-                    let container = search_categories.parentElement;
-                    search_categories.remove();
-                    container.append(self.categories.build());
-                }
-            });
+                    if (search_categories !== null && search_categories !== undefined) {
+                        let container = search_categories.parentElement;
+                        search_categories.remove();
+                        container.append(self.categories.build());
+                    }
+                });
         }
 
         self.checkUpdates(true);
-        self.changeCategory(self.category_id);
         load_categories();
+
     },
 
 
@@ -311,9 +279,7 @@ window.RadicalInstaller = {
                                             .done(function (response) {
 
                                                 self.syncExtensions(function(){
-                                                    self.checkMainExtension();
                                                 }, function() {
-                                                    self.checkMainExtension();
                                                 });
 
                                                 RadicalInstallerConfig.key = key_value; // можем присвоить ключ, так как сервер примет только проверенный ключ
@@ -366,6 +332,20 @@ window.RadicalInstaller = {
                 {template: 'support'},
             ]
         })
+    },
+
+
+    showStart: function () {
+        let self = this;
+
+        self.loaderShow();
+
+        RadicalInstallerUtils.ajaxGet(self.url + '&method=startpage')
+            .done(function (json) {
+                let groups = JSON.parse(json.data);
+            }).fail(function (){
+
+            });
     },
 
 
@@ -773,9 +753,7 @@ window.RadicalInstaller = {
                     .getParent();
 
             RadicalInstallerUtils.modal(header.build(), body.build(), '', '', function () {
-                if(self.check_main_after_install) {
-                    self.checkMainExtension();
-                }
+
             });
         }
 
@@ -987,7 +965,6 @@ window.RadicalInstaller = {
                     }
 
                     self.checkUpdates();
-                    self.checkMainExtension(false);
                     self.checkInstall();
                 }
 
@@ -1149,86 +1126,6 @@ window.RadicalInstaller = {
                 button_check_update.innerHTML = '<span class="' + class_list + '">' + data.count +'</span> ' + RadicalInstallerLangs.button_update;
             }
         });
-    },
-
-
-    /**
-     * Проверка на основные расширения
-     *
-     */
-    checkMainExtension: function (action) {
-        let self = this;
-
-        if(
-            action === undefined ||
-            action === null
-        ) {
-            action = true;
-        }
-
-        RadicalInstallerUtils.ajaxGet(self.url + '&method=checkMainExtension')
-            .done(function (response) {
-
-                let data = response.data[0];
-
-                if (data.status === 'ok') {
-                    if(action) {
-                        self.showCatalog();
-                    }
-                    return;
-                }
-
-                if (data.status === 'notinstall') {
-                    let grid = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-grid'}),
-                        grid_element = null;
-
-                    let sync = RadicalInstallerUtils.createElement('button', {
-                        'class': 'ri-btn ri-btn-default', 'data-type': 'installed', 'events': [
-                            [
-                                'click',
-                                function (ev) {
-                                    let button = this;
-                                    button.setAttribute('disabled', 'disabled');
-
-                                    self.syncExtensions(function(){
-                                        self.checkMainExtension();
-                                        button.removeAttribute('disabled');
-                                    }, function(){
-                                        button.removeAttribute('disabled');
-                                    });
-                                    ev.preventDefault();
-                                }
-                            ]
-                        ]
-                    }, RadicalInstallerLangs.button_sync);
-
-                    self.renderPage({
-                        header: 'Выберите главное расширение',
-                        description: 'Каталог расширений разблокируется после установки одного из главных расширений.',
-                        content: grid.build(),
-                        sidebar: [
-                            {header: 'Управление', content: sync.build()},
-                            {template: 'support'},
-                            {template: 'faq'}
-                        ]
-                    });
-
-                    self.loaderInit();
-                    self.loaderShow();
-                    grid_element = self.container.querySelector('.radicalinstaller-grid');
-
-                    for (let i=0;i<data.items.length;i++) {
-                        grid_element.append(self.renderCatalogGrid(data.items[i]).build());
-                    }
-
-                    self.setColors();
-                    self.loaderHide();
-                    self.check_main_after_install = true;
-                }
-            })
-            .fail(function (xhr) {
-                RadicalInstallerUtils.createAlert(RadicalInstallerLangs.error_check_main_extensions, 'danger', 5000);
-            });
     },
 
 
