@@ -184,3 +184,39 @@
     border: 1px solid #ffb514;
     color: #996900;
 }
+
+
+/******************** Dropdown **********************/
+.ri-btn-wrap {
+    position: relative;
+}
+
+.ri-btn-dropdown {
+    visibility: hidden;
+    position: absolute;
+    width: 100%;
+    background-color: #f9f9f9;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    transition: visibility 0.1s;
+    z-index: 6;
+}
+
+.ri-btn-wrap:hover .ri-btn-dropdown {
+    visibility: visible;
+}
+
+.ri-btn-dropdown .btn {
+    border-top: none;
+}
+
+.ri-btn-dropdown {
+    width: 280px;
+}
+
+.ri-btn-dropdown > * {
+    width: 100%;
+    text-align: left;
+    border-radius: 0;
+    border-top: none;
+    border-bottom: none;
+}

@@ -27,27 +27,87 @@ window.RadicalInstallerUI = {
 
     showPage: function (args) {
 
+
         if(args.buttons !== undefined) {
             this.container_toolbar.innerHTML = '';
             this.container_toolbar.appendChild(this.renderToolbar(args.buttons));
         }
 
         if(args.page !== undefined) {
+
             this.container_page.innerHTML = '';
+
+            if(args.page.length > 0) {
+                for(let k in args.page) {
+                    this.container_page.appendChild(args.page[k]);
+                }
+
+                return;
+            }
+
             this.container_page.appendChild(args.page);
         }
 
     },
 
 
-    renderToolbar: function (buttons) {
-        let toolbar = RadicalInstallerUtils.createElement('div', {class: 'radicalinstaller-toolbar ri-btn-group'});
+    renderToolbar: function (args) {
+        let toolbar = RadicalInstallerUtils.createElement('div', {class: 'radicalinstaller-toolbar radicalinstaller-flex radicalinstaller-child-margin-right-small'});
 
-        for(let k in buttons) {
-            toolbar.add('button', {'type': 'button', 'events': buttons[k].events, 'class': buttons[k].class}, buttons[k].label);
+        if (args.groups !== undefined) {
+
+            for(let k in args.groups) {
+                toolbar.add('div', null, RadicalInstallerUI.renderToolbarGroup(args.groups[k]));
+            }
+
+            return toolbar.build();
         }
 
+        toolbar.add('div', null, RadicalInstallerUI.renderToolbarGroup({name: 'default', items: args}));
+
         return toolbar.build();
+    },
+
+
+    renderToolbarGroup: function (buttons) {
+        let group = RadicalInstallerUtils.createElement('div', {class: 'ri-btn-group'});
+
+        for(let k in buttons.items) {
+
+            if(
+                buttons.items[k].dropdown !== undefined &&
+                buttons.items[k].items !== undefined
+            ) {
+                group = group.addChild('div', {class: 'ri-btn-wrap'});
+                group = group.add('button', {'type': 'button', 'events': buttons.items[k].dropdown.events, 'class': buttons.items[k].dropdown.class}, buttons.items[k].dropdown.label);
+                group = group.addChild('div', {class: 'ri-btn-dropdown'});
+
+                for(let i in buttons.items[k].items) {
+                    group = group.add('button', {'type': 'button', 'events': buttons.items[k].items[i].events, 'class': buttons.items[k].items[i].class}, buttons.items[k].items[i].label);
+                }
+
+                group = group.getParent();
+                group = group.getParent();
+            }
+            else {
+                group = group.add('button', {'type': 'button', 'events': buttons.items[k].events, 'class': buttons.items[k].class}, buttons.items[k].label);
+            }
+
+        }
+
+        return group.build();
+    },
+
+    renderToolbarDropdown: function (buttons) {
+        let dropdown = RadicalInstallerUtils.createElement('div', {class: 'ri-btn-dropdown'});
+
+        for(let k in buttons) {
+            dropdown = dropdown.add('button', {'type': 'button', 'events': buttons[k].events, 'class': buttons[k].class}, buttons[k].label);
+        }
+
+        dropdown = dropdown.getParent();
+
+        return dropdown.build();
     },
 
 
@@ -60,7 +120,7 @@ window.RadicalInstallerUI = {
     renderGroup: function (args) {
         let group = RadicalInstallerUtils
             .createElement('div', {class: 'radicalinstaller-group'})
-            .addChild('div', {class: 'radicalinstaller-group-header radicalinstaller-flex radicalinstaller-flex-middle radicalinstaller-margin-bottom'})
+            .addChild('div', {class: 'radicalinstaller-group-header radicalinstaller-flex radicalinstaller-flex-middle'})
                 .addChild('div', {class: 'radicalinstaller-width-auto radicalinstaller-margin-right'})
                     .add('h3', {}, args.label)
                     .getParent();
@@ -77,7 +137,21 @@ window.RadicalInstallerUI = {
         }
 
         group = group.getParent();
-        group = group.add('div', {class: 'radicalinstaller-group-content'}, args.content);
+
+        if (args.groups !== undefined) {
+
+            for(let k in args.groups) {
+                group = group.addChild('div', {class: 'radicalinstaller-group-subgroup ' + args.groups[k].class})
+                    .add('h4', {}, args.groups[k].label)
+                    .add('div', {}, args.groups[k].content)
+                    .getParent();
+            }
+
+        }
+        else
+        {
+            group = group.add('div', {class: 'radicalinstaller-group-content'}, args.content);
+        }
 
         return group.build();
     },
@@ -85,12 +159,18 @@ window.RadicalInstallerUI = {
 
     renderFormKey: function () {
         let self = this,
+            value = '',
             form = RadicalInstallerUtils.createElement('div');
+
+            if(RadicalInstallerConfig.key !== '') {
+                value = RadicalInstallerConfig.key;
+            }
+
             form = form
             .addChild('div')
                 .addChild('div', {'class': 'radicalinstaller-width-1-1'})
                     .addChild('form', {
-                        'class': 'radicalinstaller-width-2-3 form-horizontal',
+                        'class': 'form-horizontal',
                         'events': [
                             [
                                 'submit',
@@ -107,11 +187,13 @@ window.RadicalInstallerUI = {
                                     }
 
                                     // отправить аякс на сохранение ключа
-                                    RadicalInstallerUtils.ajaxPost(self.url + '&method=saveKey', {key: key_value})
+                                    RadicalInstallerUtils.ajaxPost(RadicalInstaller.url + '&method=saveKey', {key: key_value})
                                         .done(function (response) {
 
-                                            self.syncExtensions(function(){
-                                            }, function() {
+                                            RadicalInstallerProject.sync({
+                                                done: function(){
+                                                    RadicalInstaller.showStart();
+                                                }
                                             });
 
                                             RadicalInstallerConfig.key = key_value; // можем присвоить ключ, так как сервер примет только проверенный ключ
@@ -132,20 +214,14 @@ window.RadicalInstallerUI = {
                             ]
                         ]
                     })
-                        .addChild('div', {'class': 'radicalinstaller-card radicalinstaller-background-muted radicalinstaller-padding'})
-                            .addChild('div', {'class': 'control-group control-group-no-label control-group-large'})
-                                .addChild('div', {'class': 'controls'})
-                                    .add('input', {'class': 'radicalinstaller-width-1-1', 'type': 'text', 'placeholder': RadicalInstallerLangs.text_input_key, 'name': 'key'})
-                                    .getParent()
-                                .getParent()
-                                .addChild('div', {'class': 'control-group control-group-no-label control-group-large'})
-                                    .addChild('div', {'class': 'controls'})
-                                        .add('button', {'class': 'ri-btn ri-btn-default ri-btn-primary ri-btn-large', 'type': 'submit'}, RadicalInstallerLangs.button_submit)
-                                        .getParent()
-                                    .getParent()
-                                .getParent()
+                        .addChild('div', {'class': 'radicalinstaller-flex'})
+                            .add('input', {'class': 'radicalinstaller-width-500', 'type': 'text', 'placeholder': RadicalInstallerLangs.text_input_key, 'name': 'key', value: value})
+                            .add('button', {'class': 'ri-btn ri-btn-default ri-btn-primary ri-btn-large', 'type': 'submit'}, 'Сохранить')
+                            .add('button', {'class': 'ri-btn ri-btn-default ri-btn-large', 'type': 'submit'}, 'Очистить')
                             .getParent()
                         .getParent()
+                    .getParent()
+                .getParent()
 
 
         return form.build();
@@ -186,11 +262,29 @@ window.RadicalInstallerUI = {
 
 
     renderProjectCard: function (args) {
-        let self = this;
         let cover = '';
+        let version = 'неизвестно';
+        let category = '';
 
         if(args.images !== undefined && args.images.cover !== false) {
             cover = RadicalInstaller.api + '/' + args.images.cover
+        }
+
+        if(
+            args.last_version !== undefined &&
+            args.last_version !== null
+        ) {
+            let split = args.last_version.split('|');
+            version = split[1];
+        }
+
+        if(
+            args.category !== undefined &&
+            args.category  !== null &&
+            args.category.title !== undefined &&
+            args.category.title !== null
+        ) {
+            category = args.category.title;
         }
 
         let card = RadicalInstallerUtils
@@ -204,12 +298,29 @@ window.RadicalInstallerUI = {
         card = card.getParent()
                 .addChild('div', {class: 'radicalinstaller-project-card-info'})
                     .add('h4', {}, args.title)
-                    .add('div', {}, 'Категория')
-                    .add('div', {}, 'Версия')
+                    .add('div', {}, 'Категория: ' + category)
+                    .add('div', {}, 'Версия: ' + version)
                     .addChild('div', {class: 'ri-btn-group ri-btn-group-small'})
                         .add('button', {type: 'button', class: 'ri-btn ri-btn-success'}, 'Установить')
                         .add('button', {type: 'button', class: 'ri-btn ri-btn-danger'}, 'Удалить')
-                        .add('button', {type: 'button', class: 'ri-btn ri-btn-default'}, '?')
+                        .add('button', {
+                            type: 'button',
+                            class: 'ri-btn ri-btn-default',
+                            events: [
+                                [
+                                    'click',
+                                    function (event) {
+                                        let id = args.id;
+
+                                        if(args.project_id !== undefined) {
+                                            id = args.project_id;
+                                        }
+
+                                        RadicalInstaller.showProject(id);
+                                    }
+                                ]
+                            ]
+                        }, '?')
                         .getParent()
                     .getParent()
 

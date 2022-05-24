@@ -20,6 +20,10 @@
     width: 100%;
 }
 
+.radicalinstaller-width-1-2 {
+    width: 50%;
+}
+
 .radicalinstaller-width-2-3 {
     width: 66.6%
 }
@@ -32,6 +36,16 @@
     flex: 1;
 }
 
+.radicalinstaller-width-500 {
+    width: 500px;
+}
+
+@media screen and (min-width: 1600px) {
+    .radicalinstaller-width-1-2\@l {
+        width: 50%;
+    }
+}
+
 
 /************* Visible ***********/
 .ri-hidden {
@@ -39,7 +53,16 @@
 }
 
 
+/************ Backgrounds ***********/
+.radicalinstaller-background-muted {
+    background: #eee;
+}
+
 /************* Margin *************/
+.radicalinstaller-child-margin-right-small > * {
+    margin-right: 15px;
+}
+
 .radicalinstaller-margin-auto {
     margin: auto !important;
 }
@@ -158,7 +181,6 @@
 
 /*********** Group *****************/
 .radicalinstaller-group {
-    padding: 25px;
     border: 1px solid #eee;
     border-radius: 4px;
 }
@@ -168,11 +190,18 @@
     margin-top: 35px;
 }
 
+.radicalinstaller-group-header {
+    padding: 35px;
+}
+
 .radicalinstaller-group-header h3 {
     font-size: 24px;
     margin-bottom: 0;
 }
 
+.radicalinstaller-group-subgroup {
+    padding: 35px;
+}
 
 
 /************* Card **************/
@@ -190,7 +219,8 @@
     display: flex;
     align-content: center;
     align-items: center;
-    width: 180px;
+    min-width: 180px;
+    max-width: 180px;
     height: 100%;
 }
 
@@ -300,7 +330,6 @@
 }
 
 /* Generated with Bounce.js. Edit at http://goo.gl/BKCT19 */
-
 @keyframes radicalinstaller-alert-animation {
     0% { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 250, 0, 0, 1); }
     3.14% { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 160.737, 0, 0, 1); }
@@ -324,4 +353,171 @@
     66.67% { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -0.104, 0, 0, 1); }
     83.98% { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.01, 0, 0, 1); }
     100% { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+}
+
+
+
+/************ Page project ***************/
+.radicalinstaller-project-page {
+
+}
+
+.radicalinstaller-project-page_buttons {
+    margin-bottom: 35px;
+}
+
+.radicalinstaller-project-page_providers-header {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.radicalinstaller-project-page_providers-elements {
+    margin-bottom: 25px;
+    display: flex;
+    align-self: center;
+}
+
+.radicalinstaller-project-page_providers-elements_element {
+    width: 31%;
+    margin-right: 2%;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.radicalinstaller-project-page_providers-elements_element_logo {
+    width: 25%;
+    margin-right: 10px;
+}
+
+.radicalinstaller-project-page_providers-elements_element_title {
+    flex: 1;
+    font-size: 17px;
+    line-height: 21px;
+    font-weight: 500;
+}
+
+.radicalinstaller-project-page_providers-elements_element_link {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.radicalinstaller-project-page_description-header {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.radicalinstaller-project-page_description-text {
+    margin-bottom: 25px;
+    font-size: 17px;
+    line-height: 23px;
+}
+
+.radicalinstaller-project-page_gallery-header {
+    font-size: 25px;
+    font-weight: bold;
+    margin-bottom: 22px;
+}
+
+.radicalinstaller-project-page_gallery-images {
+    position: relative;
+    background: #ccc;
+    height: 300px;
+}
+
+.radicalinstaller-project-page_gallery-images-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: .1;
+    z-index: 0;
+}
+
+.radicalinstaller-project-page_gallery-images-prev,
+.radicalinstaller-project-page_gallery-images-next {
+    position: absolute;
+    border: none;
+    display: inline-block;
+    padding: 8px 16px;
+    vertical-align: middle;
+    overflow: hidden;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+    white-space: nowrap;
+    color: #000;
+    background-color: #f1f1f1;
+    box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.04), 0px 0px 2px rgba(0, 0, 0, 0.06), 0px 4px 8px rgba(0, 0, 0, 0.04);
+}
+
+.radicalinstaller-project-page_gallery-images-prev {
+    top: 50%;
+    left: 0;
+    transform: translate(0%,-50%);
+    -ms-transform: translate(-0%,-50%);
+}
+
+.radicalinstaller-project-page_gallery-images-next {
+    top: 50%;
+    right: 0;
+    transform: translate(0%,-50%);
+    -ms-transform: translate(0%,-50%);
+}
+
+.radicalinstaller-project-page_gallery-images-element {
+    position: relative;
+    animation: opac 0.8s;
+}
+
+.radicalinstaller-project-page_gallery-images-element img {
+    width: 100%;
+    object-fit: contain;
+    object-position: center;
+    max-height: 300px;
+}
+
+.radicalinstaller-project-page_gallery-images-element_caption {
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    padding: 10px 20px;
+    background: #f1f1f1;
+    color: #000;
+    font-size: 16px;
+    line-height: 20px;
+    border-radius: 4px;
+    max-width: 150px;
+    box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.04), 0px 0px 2px rgba(0, 0, 0, 0.06), 0px 4px 8px rgba(0, 0, 0, 0.04);
+}
+
+.radicalinstaller-project-page_relations {
+    margin-top: 35px;
+}
+
+.radicalinstaller-project-page_relations-header {
+    font-size: 20px;
+    line-height: 24px;
+}
+
+.radicalinstaller-project-page_relations-list {
+
+}
+
+.radicalinstaller-project-page_relations-list_link {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 18px;
+    color: #000;
+}
+
+.radicalinstaller-project-page_relations-list_link:hover {
+    color: #ccc;
+    cursor: pointer;
 }

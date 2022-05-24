@@ -85,11 +85,17 @@ window.RadicalInstallerProject = {
 
                 RadicalInstallerUtils.createAlert(RadicalInstallerLangs.text_sync + count, 'info', 5000);
 
+                if(typeof args.done === 'function') {
+                    args.done();
+                }
             })
             .fail(function (xhr) {
                 let data = JSON.parse(xhr.responseText);
                 RadicalInstallerUtils.createAlert(data.data, 'danger', 5000);
 
+                if(typeof args.fail === 'function') {
+                    args.fail();
+                }
             });
     }
 
