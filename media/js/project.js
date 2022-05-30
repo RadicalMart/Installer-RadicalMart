@@ -74,7 +74,14 @@ window.RadicalInstallerProject = {
 
 
     checkInstall: function (args) {
+        RadicalInstallerUtils.ajaxGet(RadicalInstaller.url + '&method=checkInstall&list=' + JSON.stringify(args.ids))
+            .done( function (json) {
+                let find = json.data[0];
 
+                if (typeof args.done === 'function') {
+                    args.done(find, args.ids);
+                }
+            });
     },
 
 

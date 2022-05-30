@@ -203,6 +203,13 @@
     padding: 35px;
 }
 
+.radicalinstaller-group-content {
+    padding: 0 35px;
+}
+
+.radicalinstaller-group-actions {
+    padding: 35px;
+}
 
 /************* Card **************/
 .radicalinstaller-project-card {
@@ -210,7 +217,7 @@
     flex-wrap: nowrap;
     padding: 0;
     height: 100%;
-    border: 1px solid #eee;
+    border: 1px solid #dfdfdf;
     border-radius: 4px;
 }
 

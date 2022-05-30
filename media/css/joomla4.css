@@ -124,6 +124,11 @@
     box-shadow: 0 0 0 .25rem rgba(206,72,71,.5);
 }
 
+.ri-btn:disabled,
+.ri-btn[disabled] {
+    opacity: 0.4;
+}
+
 .ri-btn-large {
     padding: 10px 15px;
     font-size: 15px;
@@ -158,16 +163,19 @@
     font-size: 13px;
 }
 
-.ri-btn-group > * {
+.ri-btn-group > *,
+.ri-btn-group > * > .ri-btn {
     border-radius: 0;
 }
 
-.ri-btn-group > *:first-child {
+.ri-btn-group > *:first-child,
+.ri-btn-group > *:first-child > .ri-btn {
     border-bottom-left-radius: .25rem;
     border-top-left-radius: .25rem;
 }
 
-.ri-btn-group > *:last-child {
+.ri-btn-group > *:last-child,
+.ri-btn-group > *:last-child > .ri-btn {
     border-bottom-right-radius: .25rem;
     border-top-right-radius: .25rem;
 }
@@ -189,6 +197,7 @@
 /******************** Dropdown **********************/
 .ri-btn-wrap {
     position: relative;
+    display: inline-block;
 }
 
 .ri-btn-dropdown {

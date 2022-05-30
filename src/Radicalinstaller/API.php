@@ -52,9 +52,9 @@ class API
 	}
 
 
-	public static function groupsStartPage()
+	public static function groupsStartPage($key = '')
 	{
-		return self::execute('groupStartPage');
+		return self::execute('groupStartPage', ['key' => $key]);
 	}
 
 
@@ -79,6 +79,18 @@ class API
 	public static function projectsMy($key = '')
 	{
 		return self::execute('projectsMy', ['key' => $key]);
+	}
+
+
+	public static function projectsKey($key = '')
+	{
+		return self::execute('projectsKey', ['key' => $key]);
+	}
+
+
+	public static function projectsFree()
+	{
+		return self::execute('projectsFree');
 	}
 
 

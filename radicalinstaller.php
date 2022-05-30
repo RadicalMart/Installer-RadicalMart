@@ -108,6 +108,16 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 				$output = $this->APIProjectsMy();
 			}
 
+			if ($method === 'projectsKey')
+			{
+				$output = $this->APIProjectsKey();
+			}
+
+			if ($method === 'projectsFree')
+			{
+				$output = $this->APIProjectsFree();
+			}
+
 			if ($method === 'project')
 			{
 				$output = $this->APIProject();
@@ -162,8 +172,11 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 		{
 			$output = $e->getMessage();
 			$app->setHeader('status', $e->getCode(), true);
+			$app->sendHeaders();
 		} finally
 		{
+			$app->setHeader('Content-Type', 'application/json');
+			$app->sendHeaders();
 			return $output;
 		}
 
@@ -295,7 +308,7 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 
 	protected function APIGroupsStartPage()
 	{
-		return API::groupsStartPage();
+		return API::groupsStartPage($this->params->get('apikey', ''));
 	}
 
 
@@ -319,18 +332,16 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 
 		$page     = $this->app->input->get('page', 1, 'int');
 		$limit    = $this->app->input->get('limit', 12, 'int');
-		$projects = API::projects($id, $page, $limit);
 
-		return $projects;
+		return API::projects($id, $page, $limit);
 	}
 
 
 	protected function APIProjectList()
 	{
 		$ids      = $this->app->input->get('ids', '{}', 'raw');
-		$projects = API::projectList($ids);
 
-		return $projects;
+		return API::projectList($ids);
 	}
 
 
@@ -346,9 +357,22 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 	protected function APIProject()
 	{
 		$id      = $this->app->input->get('project_id');
-		$project = API::project($id);
 
-		return $project;
+		return API::project($id);
+	}
+
+
+	protected function APIProjectsKey()
+	{
+		$key = $this->params->get('apikey', '');
+
+		return API::projectsKey($key);
+	}
+
+
+	protected function APIProjectsFree()
+	{
+		return API::projectsFree();
 	}
 
 
