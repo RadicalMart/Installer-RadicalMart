@@ -306,7 +306,9 @@ window.RadicalInstallerUI = {
         let grid = RadicalInstallerUtils.createElement('div'),
             current = 0,
             width = 4,
-            close = false;
+            close = false,
+            grid_row_id = 0,
+            items = [];
 
         if (window.matchMedia("(max-width: 2100px)").matches) {
             width = 3;
@@ -317,22 +319,53 @@ window.RadicalInstallerUI = {
         for(let i=0;i<args.items.length;i++) {
             current++;
             close = false;
-            grid = grid.add('div', {}, args.items[i]);
+            items.push(args.items[i]);
 
             if (current >= width) {
+                grid_row_id = RadicalInstallerUtils.randomInteger(1111111111, 9999999999);
+
+                for(let j in items) {
+                    grid = grid.add('div', {}, items[j]);
+                }
+
                 grid = grid.getParent();
-                grid = grid.add('div', {class: 'radicalinstaller-logs'});
+                grid = grid.add('div', {class: 'radicalinstaller-logs', 'data-for-row': grid_row_id});
                 grid = grid.addChild('div', {class: 'radicalinstaller-grid radicalinstaller-grid-width-1-' + width});
+
+                if(
+                    args.trigger_grid_row_end_for !== undefined &&
+                    typeof args.trigger_grid_row_end_for === 'function'
+                ) {
+                    args.trigger_grid_row_end_for(items, grid_row_id);
+                }
+
                 current = 0;
                 close = true;
+                items = [];
             }
 
         }
 
-        grid = grid.getParent();
 
         if(!close) {
-            grid = grid.add('div', {class: 'radicalinstaller-logs'});
+            grid_row_id = RadicalInstallerUtils.randomInteger(1111111111, 9999999999);
+
+            for(let j in items) {
+                grid = grid.add('div', {}, items[j]);
+            }
+
+            grid = grid.getParent();
+            grid = grid.add('div', {class: 'radicalinstaller-logs', 'data-for-row': grid_row_id});
+
+            if(
+                args.trigger_grid_row_end_for !== undefined &&
+                typeof args.trigger_grid_row_end_for === 'function'
+            ) {
+                args.trigger_grid_row_end_for(items, grid_row_id);
+            }
+
+        } else {
+            grid = grid.getParent();
         }
 
         return grid.build();

@@ -74,11 +74,13 @@ window.RadicalInstaller = {
                     }
 
                     grid_required = RadicalInstallerUI.renderProjectGrid({
-                        items: projects_card_required
+                        items: projects_card_required,
+                        trigger_grid_row_end_for: RadicalInstaller.triggerGridRowEndForCard
                     });
 
                     grid_not_required = RadicalInstallerUI.renderProjectGrid({
-                        items: projects_card_not_required
+                        items: projects_card_not_required,
+                        trigger_grid_row_end_for: RadicalInstaller.triggerGridRowEndForCard
                     });
 
                     group.buttons = [
@@ -136,7 +138,8 @@ window.RadicalInstaller = {
                     }
 
                     group.content = RadicalInstallerUI.renderProjectGrid({
-                        items: projects_card_required
+                        items: projects_card_required,
+                        trigger_grid_row_end_for: RadicalInstaller.triggerGridRowEndForCard
                     });
 
                     if(items[k].name === 'key') {
@@ -1074,6 +1077,11 @@ window.RadicalInstaller = {
             }
         }
 
+    },
+
+
+    triggerGridRowEndForCard: function(items, grid_row_id) {
+        console.log(items, grid_row_id);
     }
 
 }
