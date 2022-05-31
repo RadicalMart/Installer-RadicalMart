@@ -78,9 +78,14 @@ window.RadicalInstallerProject = {
             .done( function (json) {
                 let find = json.data[0];
 
-                if (typeof args.done === 'function') {
-                    args.done(find, args.ids);
-                }
+                RadicalInstallerUtils.ajaxGet(RadicalInstaller.url + '&method=checkUpdates')
+                    .done( function (response) {
+                        let data = JSON.parse(response.data);
+
+                        if (typeof args.done === 'function') {
+                            args.done(find, args.ids, data);
+                        }
+                    });
             });
     },
 

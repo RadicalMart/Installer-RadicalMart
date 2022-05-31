@@ -352,11 +352,24 @@ window.RadicalInstallerUI = {
         }
 
         if(
+            args.version !== undefined &&
+            args.version !== null
+        ) {
+
+            if(args.version.version !== undefined) {
+                version = args.version.version;
+            } else {
+                version = args.version;
+            }
+
+        }
+
+        if(
             args.last_version !== undefined &&
             args.last_version !== null
         ) {
             let split = args.last_version.split('|');
-            version = split[1];
+            version_last = split[1];
         }
 
         if(args.id !== undefined) {
@@ -399,7 +412,17 @@ window.RadicalInstallerUI = {
 
         if (version !== '')
         {
-            card = card.add('div', {}, 'Версия: ' + version);
+            card = card.addChild('div', {class: 'radicalinstaller-project-card-version'}, 'Версия: ')
+                .add('span', {class: 'value'}, version)
+                .add('span', {class: 'value-arrow ri-hidden'}, '->')
+                .add('span', {class: 'value-last ri-hidden'}, version_last)
+                .getParent();
+        } else {
+            card.addChild('div', {class: 'radicalinstaller-project-card-version ri-hidden'}, 'Версия: ')
+                .add('span', {class: 'value'}, version)
+                .add('span', {class: 'value-arrow ri-hidden'}, '->')
+                .add('span', {class: 'value-last ri-hidden'}, version_last)
+                .getParent();
         }
 
         card = card .addChild('div', {class: 'ri-btn-group ri-btn-group-small'})

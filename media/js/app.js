@@ -46,8 +46,10 @@ window.RadicalInstaller = {
             }
         }).then( items => {
 
+            let ids = [];
+
             for(let k in items) {
-                let ids = [];
+
                 let grid_required = '';
                 let grid_not_required = '';
                 let projects_card_required = [];
@@ -87,7 +89,7 @@ window.RadicalInstaller = {
                                 [
                                     'click',
                                     function (event) {
-                                        console.log('click');
+
                                     }
                                 ]
                             ]
@@ -180,11 +182,12 @@ window.RadicalInstaller = {
 
                 page.appendChild(RadicalInstallerUI.renderGroup(group));
 
-                RadicalInstallerProject.checkInstall({
-                    ids: ids,
-                    done: RadicalInstaller.checkInstallProjectCard
-                });
             }
+
+            RadicalInstallerProject.checkInstall({
+                ids: ids,
+                done: RadicalInstaller.checkInstallProjectCard
+            });
 
         });
 
@@ -217,8 +220,6 @@ window.RadicalInstaller = {
             let grid = '';
             let projects_card = [];
             let ids = [];
-
-            console.log(data);
 
             for(let k in data.items) {
                 projects_card.push(
@@ -965,9 +966,11 @@ window.RadicalInstaller = {
     },
 
 
-    checkInstallProjectCard: function (find_ids, ids) {
+    checkInstallProjectCard: function (find_ids, ids, updates) {
+
         for(let k in ids) {
             let cards = RadicalInstallerUI.container.querySelectorAll('[data-project="' + ids[k] + '"]');
+
             if(cards.length === 0) {
                 continue;
             }
@@ -995,10 +998,41 @@ window.RadicalInstaller = {
 
         }
 
+        if(updates.count > 0) {
+            for(let j in updates.items) {
+                let cards = RadicalInstallerUI.container.querySelectorAll('[data-project="' + updates.items[j].project_id + '"]');
+
+                if(cards.length === 0) {
+                    continue;
+                }
+
+                for(let i =0;i<cards.length;i++) {
+                    cards[i].querySelector('.ri-btn-install').innerHTML = 'Обновить';
+                    cards[i].querySelector('.radicalinstaller-project-card-version').classList.remove('ri-hidden');
+                    cards[i].querySelector('.radicalinstaller-project-card-version').querySelector('.value-last').innerHTML = updates.items[j].version_last;
+                    let version = cards[i].querySelector('.radicalinstaller-project-card-version').querySelector('.value').innerHTML;
+
+                    if(version === updates.items[j].version_last) {
+                        cards[i].querySelector('.radicalinstaller-project-card-version').querySelector('.value').innerHTML = '';
+                    }
+
+                    if(
+                        (version !== '' && updates.items[j].version_last !== '') &&
+                        (version !==  updates.items[j].version_last)
+                    ) {
+                        cards[i].querySelector('.radicalinstaller-project-card-version').querySelector('.value-arrow').classList.remove('ri-hidden');
+                    }
+
+                    cards[i].querySelector('.radicalinstaller-project-card-version').querySelector('.value-last').classList.remove('ri-hidden');
+                }
+
+            }
+        }
+
     },
 
 
-    checkInstallProjectPage: function(find_ids, ids) {
+    checkInstallProjectPage: function(find_ids, ids, updates) {
 
         for(let k in ids) {
             let project = RadicalInstallerUI.container.querySelector('[data-project="' + ids[k] + '"]');
@@ -1026,6 +1060,20 @@ window.RadicalInstaller = {
             }
 
         }
+
+        if(updates.count > 0) {
+            for(let j in updates.items) {
+                let project = RadicalInstallerUI.container.querySelector('[data-project="' + updates.items[j].project_id + '"]');
+
+                if(project === undefined || project === null) {
+                    continue;
+                }
+
+                RadicalInstallerUI.container.querySelector('.ri-btn-install').innerHTML = 'Обновить';
+
+            }
+        }
+
     }
 
 }
