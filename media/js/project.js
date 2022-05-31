@@ -85,6 +85,18 @@ window.RadicalInstallerProject = {
     },
 
 
+    checkUpdate: function (args) {
+        RadicalInstallerUtils.ajaxGet(RadicalInstaller.url + '&method=checkUpdates')
+            .done( function (response) {
+                let data = JSON.parse(response.data);
+
+                if (typeof args.done === 'function') {
+                    args.done(data);
+                }
+            });
+    },
+
+
     sync: function (args) {
         RadicalInstallerUtils.ajaxGet(RadicalInstaller.url + '&method=syncExtensions')
             .done(function (json) {

@@ -153,6 +153,28 @@
     text-decoration: underline;
 }
 
+.ri-btn-check-update {
+    /*display: flex;
+    align-self: center;
+    align-content: center;
+    align-items: center;*/
+}
+
+.ri-btn-check-update span {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    margin-right: 4px;
+    border-radius: 50%;
+    background: #a94442;
+    color: #fff;
+    font-size: 12px;
+    text-align: center;
+}
+
+.ri-btn-check-update span.empty {
+    background: #134b9e;
+}
 
 /**************** Button groups ***************/
 .ri-btn-group {

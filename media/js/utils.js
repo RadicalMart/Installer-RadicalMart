@@ -297,21 +297,21 @@ window.RadicalInstallerUtils = {
                 2. Mousing over to prevent timeout
                 3. Mousing out to start timeout
         */
-        close_button.addEventListener("click", function() {
+        close_button.addEventListener("click", function () {
             let parent = this.parentNode;
             parent.parentNode.removeChild(parent);
         });
 
-        alert.addEventListener("mouseover", function() {
+        alert.addEventListener("mouseover", function () {
             this.classList.remove("fade-out");
             clearTimeout(timeout_check);
         });
 
-        alert.addEventListener("mouseout", function() {
-            timeout_check = setTimeout(function() {
+        alert.addEventListener("mouseout", function () {
+            timeout_check = setTimeout(function () {
                 alert.className += " fade-out";
                 if (alert.parentNode) {
-                    timeout_check = setTimeout(function() {
+                    timeout_check = setTimeout(function () {
                         alert.parentNode.removeChild(alert)
                     }, 500);
                 }
@@ -325,10 +325,9 @@ window.RadicalInstallerUtils = {
         //Prepend new alert to container
         let alert_wrapper = document.getElementById("radicalinstaller-alert-wrapper");
 
-        if(
+        if (
             alert_wrapper === undefined ||
-            alert_wrapper === null)
-        {
+            alert_wrapper === null) {
             let alert_container = document.createElement('div');
             alert_container.setAttribute('id', 'radicalinstaller-alert-container');
             alert_wrapper = document.createElement('div');
@@ -340,15 +339,21 @@ window.RadicalInstallerUtils = {
         alert_wrapper.insertBefore(alert, alert_wrapper.children[0]);
 
         //If they haven't clicked close within the timeout period, fade out and remove element
-        timeout_check = setTimeout(function() {
+        timeout_check = setTimeout(function () {
             let parent = alert;
             parent.className += " fade-out";
             if (parent.parentNode) {
-                timeout_check = setTimeout(function() {
+                timeout_check = setTimeout(function () {
                     parent.parentNode.removeChild(parent)
                 }, 500);
             }
         }, timeout);
+    },
+
+
+    openInNewTab: function (url) {
+        let win = window.open(url, '_blank');
+        win.focus();
     }
 
 };

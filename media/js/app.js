@@ -9,6 +9,7 @@ window.RadicalInstaller = {
                 name: 'main',
                 items: [
                     {
+                        name: 'home',
                         label: 'Главная',
                         class: 'ri-btn ri-btn-default',
                         events: [
@@ -26,8 +27,9 @@ window.RadicalInstaller = {
                 name: 'utils',
                 items: [
                     {
+                        name: 'updated',
                         label: 'Обновления',
-                        class: 'ri-btn ri-btn-default',
+                        class: 'ri-btn ri-btn-default ri-btn-check-update',
                         events: [
                             [
                                 'click',
@@ -38,6 +40,7 @@ window.RadicalInstaller = {
                         ]
                     },
                     {
+                        name: 'installed',
                         label: 'Установленно',
                         class: 'ri-btn ri-btn-default',
                         events: [
@@ -50,6 +53,7 @@ window.RadicalInstaller = {
                         ]
                     },
                     {
+                        name: 'sync',
                         label: 'Синхронизация',
                         class: 'ri-btn ri-btn-default',
                         events: [
@@ -64,16 +68,17 @@ window.RadicalInstaller = {
                 ]
             },
             {
-                name: 'support',
+                name: 'info',
                 items: [
                     {
+                        name: 'support',
                         label: 'Поддержка',
                         class: 'ri-btn ri-btn-default',
                         events: [
                             [
                                 'click',
                                 function(event) {
-
+                                    RadicalInstallerUtils.openInNewTab(RadicalInstaller.api + '/support');
                                 }
                             ]
                         ]
@@ -91,6 +96,7 @@ window.RadicalInstaller = {
         RadicalInstallerUI.container_page = RadicalInstallerUI.container.querySelector('.radicalinstaller-page');
         this.showStart();
         this.loadCategories();
+        this.checkUpdatedProjects();
 
         RadicalInstallerUI.container_form_key.appendChild(
             RadicalInstallerUI.renderFormKey()
@@ -267,7 +273,56 @@ window.RadicalInstaller = {
 
 
     showUpdates: function () {
+        let page = RadicalInstallerUI.renderPage();
 
+        RadicalInstallerUI.showPage({
+            buttons: this.buttons_page_grid,
+            page: page
+        });
+
+        RadicalInstallerUI.loaderShow({
+            container: page,
+            wait: function (resolve, reject) {
+
+                RadicalInstallerUtils.ajaxGet(RadicalInstaller.url + '&method=checkUpdates')
+                    .done(function (response) {
+                        let data = JSON.parse(response.data);
+
+                        resolve(data);
+                    }).fail(function (xhr) {
+                    reject(xhr);
+                });
+
+            }
+        }).then( data => {
+            let grid = '';
+            let projects_card = [];
+            let ids = [];
+
+            console.log(data);
+
+            for(let k in data.items) {
+                projects_card.push(
+                    RadicalInstallerUI.renderProjectCard(data.items[k])
+                );
+                ids.push(parseInt(data.items[k].project_id));
+            }
+
+            grid = RadicalInstallerUI.renderProjectGrid({
+                items: projects_card
+            });
+
+            page.appendChild(RadicalInstallerUI.renderGroup({
+                label: 'Установлено',
+                content: grid
+            }));
+
+            RadicalInstallerProject.checkInstall({
+                ids: ids,
+                done: RadicalInstaller.checkInstallProjectCard
+            });
+
+        });
     },
 
 
@@ -373,7 +428,7 @@ window.RadicalInstaller = {
             }
         }).then(project => {
 
-            let header = RadicalInstallerUtils.createElement('div', {class: 'radicalinstaller-width-1-2@l'}),
+            let header = RadicalInstallerUtils.createElement('div', {class: 'radicalinstaller-width-1-2@l radicalinstaller-margin-bottom'}),
                 body = RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-width-1-2@l radicalinstaller-project-page'}),
                 color = '#eee',
                 docs = '',
@@ -517,7 +572,7 @@ window.RadicalInstaller = {
                     group_actions.items.push({
                         label: '<span class="icon-download large-icon"></span> ' + RadicalInstallerLangs.button_install,
                         class: 'ri-btn ri-btn-default ri-btn-success ri-btn-install',
-                        //'disabled': 'disabled',
+                        'disabled': 'disabled',
                         events: [
                             [
                                 'click',
@@ -535,7 +590,7 @@ window.RadicalInstaller = {
                             [
                                 'click',
                                 function (ev) {
-                                    window.open(RadicalInstaller.api + project.link, '_target');
+                                    RadicalInstallerUtils.openInNewTab(RadicalInstaller.api + project.link);
                                     ev.preventDefault();
                                     return false;
                                 }
@@ -548,12 +603,12 @@ window.RadicalInstaller = {
                 group_actions.items.push({
                     label: '<span class="icon-download large-icon"></span> ' + RadicalInstallerLangs.button_install,
                     class: 'ri-btn ri-btn-default ri-btn-success ri-btn-install',
-                    //disabled: 'disabled',
+                    disabled: 'disabled',
                     events: [
                         [
                             'click',
                             function (ev) {
-
+                                // todo установка
                             }
                         ]
                     ],
@@ -562,11 +617,12 @@ window.RadicalInstaller = {
 
             group_actions.items.push({
                 label: RadicalInstallerLangs.button_delete,
-                class: 'ri-btn ri-btn-default ri-btn-danger ri-btn-delete',
+                class: 'ri-btn ri-btn-default ri-btn-danger ri-btn-delete ri-hidden',
                 events: [
                     [
                         'click',
                         function (ev) {
+                            // todo удаление
                             //RadicalInstaller.deleteProject(item);
                         }
                     ]
@@ -581,7 +637,14 @@ window.RadicalInstaller = {
                 group_info.items.push({
                     label: RadicalInstallerLangs.button_docs,
                     class: 'ri-btn ri-btn-default',
-                    events: []
+                    events: [
+                        [
+                            'click',
+                            function(event) {
+                                RadicalInstallerUtils.openInNewTab(docs);
+                            }
+                        ]
+                    ]
                 });
             }
 
@@ -593,7 +656,14 @@ window.RadicalInstaller = {
                 group_info.items.push({
                     label: RadicalInstallerLangs.button_support,
                     class: 'ri-btn ri-btn-default',
-                    events: []
+                    events: [
+                        [
+                            'click',
+                            function(event) {
+                                RadicalInstallerUtils.openInNewTab(support);
+                            }
+                        ]
+                    ]
                 });
             }
 
@@ -843,6 +913,32 @@ window.RadicalInstaller = {
 
                 RadicalInstallerUI.showPage({buttons: RadicalInstaller.buttons_page_grid})
             });
+    },
+
+
+    checkUpdatedProjects: function () {
+        RadicalInstallerProject.checkUpdate({
+            done: function (items) {
+                let button_check_update = document.querySelector('.ri-btn-check-update');
+                let class_list = '';
+
+                if (parseInt(items.count) > 0) {
+                    if(alert) {
+                        RadicalInstallerUtils.createAlert(RadicalInstallerLangs.text_new_updated, 'info', 5000);
+                    }
+                } else {
+                    class_list = 'empty';
+                }
+
+                if(
+                    button_check_update !== undefined &&
+                    button_check_update !== null
+                ) {
+                    button_check_update.innerHTML = '<span class="' + class_list + '">' + items.count + '</span> ' + RadicalInstallerLangs.button_update;
+                }
+
+            }
+        })
     },
 
 
