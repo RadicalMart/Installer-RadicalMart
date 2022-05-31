@@ -113,7 +113,14 @@ window.RadicalInstallerUtils = {
             }
 
             if(typeof innerHtml === 'object') {
-                element.append(innerHtml);
+
+                if(innerHtml.length > 1) {
+                    for(let c in innerHtml) {
+                        element.append(innerHtml[c]);
+                    }
+                } else {
+                    element.append(innerHtml);
+                }
             }
 
         }
