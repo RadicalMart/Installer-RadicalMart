@@ -232,7 +232,8 @@ window.RadicalInstaller = {
             }
 
             grid = RadicalInstallerUI.renderProjectGrid({
-                items: projects_card
+                items: projects_card,
+                trigger_grid_row_end_for: RadicalInstaller.triggerGridRowEndForCard
             });
 
             page.appendChild(RadicalInstallerUI.renderGroup({
@@ -283,7 +284,8 @@ window.RadicalInstaller = {
             }
 
             grid = RadicalInstallerUI.renderProjectGrid({
-                items: projects_card
+                items: projects_card,
+                trigger_grid_row_end_for: RadicalInstaller.triggerGridRowEndForCard
             });
 
             page.appendChild(RadicalInstallerUI.renderGroup({
@@ -666,7 +668,8 @@ window.RadicalInstaller = {
             }
 
             grid = RadicalInstallerUI.renderProjectGrid({
-                items: projects_card
+                items: projects_card,
+                trigger_grid_row_end_for: RadicalInstaller.triggerGridRowEndForCard
             });
 
             page.appendChild(RadicalInstallerUI.renderGroup({
@@ -728,7 +731,8 @@ window.RadicalInstaller = {
             }
 
             grid = RadicalInstallerUI.renderProjectGrid({
-                items: projects_card
+                items: projects_card,
+                trigger_grid_row_end_for: RadicalInstaller.triggerGridRowEndForCard
             });
 
             page.appendChild(RadicalInstallerUI.renderGroup({
@@ -784,7 +788,8 @@ window.RadicalInstaller = {
             }
 
             grid = RadicalInstallerUI.renderProjectGrid({
-                items: projects_card
+                items: projects_card,
+                trigger_grid_row_end_for: RadicalInstaller.triggerGridRowEndForCard
             });
 
             page.appendChild(RadicalInstallerUI.renderGroup({
@@ -1081,7 +1086,18 @@ window.RadicalInstaller = {
 
 
     triggerGridRowEndForCard: function(items, grid_row_id) {
-        console.log(items, grid_row_id);
+        for(let i in items) {
+            let button_install = items[i].querySelector('.ri-btn-install');
+            let button_delete = items[i].querySelector('.ri-btn-delete');
+
+            if(button_install !== undefined) {
+                button_install.setAttribute('data-connect-logs-id', grid_row_id);
+            }
+
+            if(button_delete !== undefined) {
+                button_delete.setAttribute('data-connect-logs-id', grid_row_id);
+            }
+        }
     }
 
 }

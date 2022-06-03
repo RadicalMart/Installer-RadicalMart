@@ -307,14 +307,14 @@ window.RadicalInstallerUI = {
             current = 0,
             width = 4,
             close = false,
-            grid_row_id = 0,
+            grid_row_id = RadicalInstallerUtils.randomInteger(1111111111, 9999999999),
             items = [];
 
         if (window.matchMedia("(max-width: 2100px)").matches) {
             width = 3;
         }
 
-        grid = grid.addChild('div', {class: 'radicalinstaller-grid radicalinstaller-grid-width-1-' + width});
+        grid = grid.addChild('div', {class: 'radicalinstaller-grid radicalinstaller-grid-width-1-' + width, 'data-row': grid_row_id});
 
         for(let i=0;i<args.items.length;i++) {
             current++;
@@ -322,7 +322,6 @@ window.RadicalInstallerUI = {
             items.push(args.items[i]);
 
             if (current >= width) {
-                grid_row_id = RadicalInstallerUtils.randomInteger(1111111111, 9999999999);
 
                 for(let j in items) {
                     grid = grid.add('div', {}, items[j]);
@@ -330,7 +329,6 @@ window.RadicalInstallerUI = {
 
                 grid = grid.getParent();
                 grid = grid.add('div', {class: 'radicalinstaller-logs', 'data-for-row': grid_row_id});
-                grid = grid.addChild('div', {class: 'radicalinstaller-grid radicalinstaller-grid-width-1-' + width});
 
                 if(
                     args.trigger_grid_row_end_for !== undefined &&
@@ -338,6 +336,9 @@ window.RadicalInstallerUI = {
                 ) {
                     args.trigger_grid_row_end_for(items, grid_row_id);
                 }
+
+                grid_row_id = RadicalInstallerUtils.randomInteger(1111111111, 9999999999);
+                grid = grid.addChild('div', {class: 'radicalinstaller-grid radicalinstaller-grid-width-1-' + width, 'data-row': grid_row_id});
 
                 current = 0;
                 close = true;
@@ -348,14 +349,13 @@ window.RadicalInstallerUI = {
 
 
         if(!close) {
-            grid_row_id = RadicalInstallerUtils.randomInteger(1111111111, 9999999999);
 
             for(let j in items) {
                 grid = grid.add('div', {}, items[j]);
             }
 
             grid = grid.getParent();
-            grid = grid.add('div', {class: 'radicalinstaller-logs', 'data-for-row': grid_row_id});
+            grid = grid.add('div', {class: 'radicalinstaller-logs', 'data-for-row': grid_row_id, 'data-row': grid_row_id});
 
             if(
                 args.trigger_grid_row_end_for !== undefined &&
@@ -467,7 +467,52 @@ window.RadicalInstallerUI = {
                                 [
                                     'click',
                                     function (event) {
+                                        let button_install = this;
+                                        let button_delete = this.closest('.radicalinstaller-project-card').querySelector('.ri-btn-delete');
+                                        let logs_id = this.getAttribute('data-connect-logs-id');
+                                        let logs_container = RadicalInstallerUI.container.querySelector('.radicalinstaller-logs[data-for-row="' + logs_id + '"]');
+                                        logs_container.innerHTML = '';
 
+                                        button_install.setAttribute('disabled', 'disabled');
+                                        button_install.innerHTML = 'Устанавливается';
+
+                                        RadicalInstallerProject.install({
+                                            ids: [id],
+                                            success: function (response, project_install_id, position) {
+                                                let success = false;
+                                                let data = JSON.parse(response.data);
+
+                                                if (data.messages !== undefined && data.messages !== null) {
+                                                    for (let i = data.messages.length - 1; i >= 0; i--) {
+                                                        logs_container.innerHTML += '<div class="alert alert-' + data.messages[i].type + '">' + data.messages[i].message + '</div>';
+                                                    }
+                                                }
+
+                                                if (response.success === true) {
+                                                    if (data.status === undefined || data.status === null || data.status === 'fail') {
+                                                        success = false;
+                                                    } else {
+                                                        success = true;
+                                                    }
+                                                }
+
+                                                if(success) {
+                                                    button_install.innerHTML = 'Переустановить';
+
+                                                    if(
+                                                        button_delete !== undefined &&
+                                                        button_delete !== null
+                                                    ) {
+                                                        button_delete.classList.remove('ri-hidden');
+                                                        button_delete.removeAttribute('disabled');
+                                                    }
+                                                } else {
+                                                    button_install.innerHTML = 'Установить';
+                                                }
+
+                                                button_install.removeAttribute('disabled');
+                                            }
+                                        });
                                     }
                                 ]
                             ]
@@ -479,6 +524,52 @@ window.RadicalInstallerUI = {
                                 [
                                     'click',
                                     function (event) {
+
+                                        let button_install = this.closest('.radicalinstaller-project-card').querySelector('.ri-btn-install');
+                                        let button_delete = this;
+                                        let logs_id = this.getAttribute('data-connect-logs-id');
+                                        let logs_container = RadicalInstallerUI.container.querySelector('.radicalinstaller-logs[data-for-row="' + logs_id + '"]');
+                                        logs_container.innerHTML = '';
+
+                                        button_delete.setAttribute('disabled', 'disabled');
+                                        button_delete.innerHTML = 'Удаляется';
+
+                                        RadicalInstallerProject.install({
+                                            ids: [id],
+                                            success: function (response, project_install_id, position) {
+                                                let success = false;
+                                                let data = JSON.parse(response.data);
+
+                                                if (data.messages !== undefined && data.messages !== null) {
+                                                    for (let i = data.messages.length - 1; i >= 0; i--) {
+                                                        logs_container.innerHTML += '<div class="alert alert-' + data.messages[i].type + '">' + data.messages[i].message + '</div>';
+                                                    }
+                                                }
+
+                                                if (response.success === true) {
+                                                    if (data.status === undefined || data.status === null || data.status === 'fail') {
+                                                        success = false;
+                                                    } else {
+                                                        success = true;
+                                                    }
+                                                }
+
+                                                button_delete.innerHTML = 'Удалить';
+
+                                                if(success) {
+                                                    button_delete.classList.add('ri-hidden');
+
+                                                    if(
+                                                        button_install !== undefined &&
+                                                        button_install !== null
+                                                    ) {
+                                                        button_install.innerHTML = 'Установить';
+                                                    }
+                                                }
+
+                                                button_delete.removeAttribute('disabled');
+                                            }
+                                        });
 
                                     }
                                 ]
