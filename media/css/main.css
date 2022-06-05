@@ -244,6 +244,11 @@
     line-height: 17px;
 }
 
+.radicalinstaller-project-card-info h4 {
+    font-size: 16px;
+    line-height: 20px;
+}
+
 .radicalinstaller-project-card-category span {
 
 }
