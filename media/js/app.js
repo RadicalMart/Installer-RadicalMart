@@ -318,7 +318,8 @@ window.RadicalInstaller = {
                     name: 'back',
                     items: [
                         {
-                            label: 'Назад',
+                            //label: 'Назад',
+                            label: 'Главная',
                             class: 'ri-btn ri-btn-default',
                             events: [
                                 [
