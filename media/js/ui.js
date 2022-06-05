@@ -427,7 +427,6 @@ window.RadicalInstallerUI = {
             category = args.category.title;
         }
 
-        console.log(args);
         if(
             args.category !== undefined &&
             args.category  !== null &&
@@ -444,7 +443,6 @@ window.RadicalInstallerUI = {
             category_id = args.catid;
         }
 
-        //args.project_id
         let card = RadicalInstallerUtils
                 .createElement('div', {class: 'radicalinstaller-project-card', 'data-project': id, 'data-paid': paid})
                 .addChild('div', {class: 'radicalinstaller-project-card-image'});
