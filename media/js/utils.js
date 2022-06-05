@@ -116,10 +116,10 @@ window.RadicalInstallerUtils = {
 
                 if(innerHtml.length > 1) {
                     for(let c in innerHtml) {
-                        element.append(innerHtml[c]);
+                        element.appendChild(innerHtml[c]);
                     }
                 } else {
-                    element.append(innerHtml);
+                    element.appendChild(innerHtml);
                 }
             }
 

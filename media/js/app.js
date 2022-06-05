@@ -932,7 +932,7 @@ window.RadicalInstaller = {
                                 [
                                     'click',
                                     function(event) {
-                                        RadicalInstallerUtils.openInNewTab(RadicalInstaller.api + '/support');
+                                        RadicalInstallerUtils.openInNewTab(RadicalInstaller.api + '/kontakty');
                                     }
                                 ]
                             ]
@@ -944,13 +944,18 @@ window.RadicalInstaller = {
     },
 
 
-    checkUpdatedProjects: function () {
+    checkUpdatedProjects: function (show_alert) {
+
+        if(show_alert === null || show_alert === undefined) {
+            show_alert = true;
+        }
+
         RadicalInstallerProject.checkUpdate({
             done: function (items) {
                 let class_list = '';
 
                 if (parseInt(items.count) > 0) {
-                    if(alert) {
+                    if(show_alert) {
                         RadicalInstallerUtils.createAlert(RadicalInstallerLangs.text_new_updated, 'info', 5000);
                     }
                 } else {

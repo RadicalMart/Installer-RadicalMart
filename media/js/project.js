@@ -19,12 +19,13 @@ window.RadicalInstallerProject = {
                         args.success(response, args.ids[i], ids_current);
                     }
 
+                    RadicalInstaller.checkUpdatedProjects(false);
                 })
                 .fail(function () {
 
                     ids_current++;
 
-                    if (typeof args.success === 'fail') {
+                    if (typeof args.fail === 'function') {
                         args.fail(args.ids[i], ids_current);
                     }
 
@@ -48,23 +49,21 @@ window.RadicalInstallerProject = {
         }
 
 
-        RadicalInstallerUtils.ajaxGet(RadicalInstaller.url + '&method=installJoomla&id=' + args.ids[i])
+        RadicalInstallerUtils.ajaxGet(RadicalInstaller.url + '&method=deleteJoomla&id=' + args.id)
             .done(function (response) {
                 let data = JSON.parse(response.data);
 
-                ids_current++;
-
                 if (typeof args.success === 'function') {
-                    args.success(data, args.ids[i], ids_current);
+                    args.success(data, args.id);
                 }
+
+                RadicalInstaller.checkUpdatedProjects(false);
 
             })
             .fail(function () {
 
-                ids_current++;
-
-                if (typeof args.success === 'fail') {
-                    args.fail(args.ids[i], ids_current);
+                if (typeof args.fail === 'function') {
+                    args.fail(args.id);
                 }
 
             });

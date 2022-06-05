@@ -240,6 +240,26 @@
 
 .radicalinstaller-project-card-info {
     padding: 15px;
+    font-size: 13px;
+    line-height: 17px;
+}
+
+.radicalinstaller-project-card-category span {
+
+}
+
+.radicalinstaller-project-card-category a {
+    color: #1e4567 !important;
+    text-decoration: underline !important;
+    cursor: pointer;
+}
+
+.radicalinstaller-project-card-category a:hover {
+    color: #1f374f !important;
+}
+
+.radicalinstaller-project-card-actions {
+    margin-top: 10px;
 }
 
 /************ Alerts *************/
@@ -527,4 +547,18 @@
 .radicalinstaller-project-page_relations-list_link:hover {
     color: #ccc;
     cursor: pointer;
+}
+
+
+
+
+/****************** radicalinstaller-logs *********************/
+.radicalinstaller-logs {}
+
+.radicalinstaller-logs > div .alert {
+    margin: 0;
+}
+
+.radicalinstaller-logs > div + div {
+    margin-top: 15px;
 }
