@@ -83,7 +83,7 @@ window.RadicalInstaller = {
                         trigger_grid_row_end_for: RadicalInstaller.triggerGridRowEndForCard
                     });
 
-                    group.buttons = [
+                    /*group.buttons = [
                         {
                             label: 'Установить все',
                             class: 'ri-btn ri-btn-primary',
@@ -96,7 +96,7 @@ window.RadicalInstaller = {
                                 ]
                             ]
                         }
-                    ];
+                    ];*/
 
                     group.groups = [
                         {
