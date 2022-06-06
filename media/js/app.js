@@ -119,6 +119,13 @@ window.RadicalInstaller = {
                     let i = 1;
                     let max = 6;
 
+                    if(
+                        items[k].items.items === null ||
+                        items[k].items.items === undefined
+                    ) {
+                        continue;
+                    }
+
                     if(items[k].items.items.length === 0) {
                         continue;
                     }
@@ -1046,7 +1053,11 @@ window.RadicalInstaller = {
                                 [
                                     'click',
                                     function(event) {
-                                        RadicalInstallerProject.sync();
+                                        RadicalInstallerProject.sync({
+                                            done: function () {
+                                                RadicalInstaller.showStart();
+                                            }
+                                        });
                                     }
                                 ]
                             ]
@@ -1085,9 +1096,7 @@ window.RadicalInstaller = {
         if(show_toolbar === null || show_toolbar === undefined) {
             show_toolbar = true;
         }
-
-        console.log(show_alert, show_toolbar);
-
+        0
         RadicalInstallerProject.checkUpdate({
             done: function (items) {
                 let class_list = '';
@@ -1141,8 +1150,11 @@ window.RadicalInstaller = {
                         cards[i].querySelector('.ri-btn-install').innerHTML = 'Нужен ключ';
 
                         cards[i].querySelector('.ri-btn-install').addEventListener('click',function (event) {
-                            // TODO
+
+                            RadicalInstallerUtils.openInNewTab(RadicalInstaller.api + '/kontakty');
+
                             event.preventDefault();
+                            return false;
                         })
                     }
                 }
