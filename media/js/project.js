@@ -19,7 +19,6 @@ window.RadicalInstallerProject = {
                         args.success(response, args.ids[i], ids_current);
                     }
 
-                    RadicalInstaller.checkUpdatedProjects(false);
                 })
                 .fail(function () {
 
@@ -56,8 +55,6 @@ window.RadicalInstallerProject = {
                 if (typeof args.success === 'function') {
                     args.success(data, args.id);
                 }
-
-                RadicalInstaller.checkUpdatedProjects(false);
 
             })
             .fail(function () {

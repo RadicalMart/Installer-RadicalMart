@@ -51,6 +51,16 @@ window.RadicalInstallerUI = {
     },
 
 
+    getContainerToolbar: function() {
+        return this.container_toolbar;
+    },
+
+
+    getContainerPage: function() {
+        return this.container_page;
+    },
+
+
     renderToolbar: function (args) {
         let toolbar = RadicalInstallerUtils.createElement('div', {class: 'radicalinstaller-toolbar radicalinstaller-flex radicalinstaller-child-margin-right-small'});
 
@@ -547,6 +557,9 @@ window.RadicalInstallerUI = {
                                                         button_delete.classList.remove('ri-hidden');
                                                         button_delete.removeAttribute('disabled');
                                                     }
+
+                                                    RadicalInstaller.checkUpdatedProjects(false);
+
                                                 } else {
                                                     button_install.innerHTML = 'Установить';
                                                 }
@@ -624,6 +637,8 @@ window.RadicalInstallerUI = {
                                                     ) {
                                                         button_install.innerHTML = 'Установить';
                                                     }
+
+                                                    RadicalInstaller.checkUpdatedProjects(false);
                                                 }
 
                                                 button_delete.removeAttribute('disabled');
