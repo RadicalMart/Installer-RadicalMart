@@ -1055,6 +1055,7 @@ window.RadicalInstaller = {
                                     function(event) {
                                         RadicalInstallerProject.sync({
                                             done: function () {
+                                                RadicalInstaller.checkUpdatedProjects();
                                                 RadicalInstaller.showStart();
                                             }
                                         });
