@@ -412,6 +412,11 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 		$fields           = [];
 		$find_list_output = [];
 
+		if(!is_array($list))
+		{
+			$list = [];
+		}
+
 		if (count($list) === 0)
 		{
 			return [];
