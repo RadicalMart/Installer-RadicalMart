@@ -192,27 +192,43 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 			'api_key' => $this->params->get('apikey', '')
 		];
 		$update   = new ProviderJoomla($config);
-		$install  = $update->start($id);
 		$messages = [];
 
-		if ($install)
+		try
 		{
-			$message           = $app->getUserState('com_installer.message', '');
-			$extension_message = $app->getUserState('com_installer.extension_message', '');
 
-			if ($message)
+			$install  = $update->start($id);
+
+			if ($install)
 			{
-				$messages[] = ['message' => $app->getUserState('com_installer.message', ''), 'type' => 'info'];
-				$app->setUserState('com_installer.message', '');
-			}
+				$message           = $app->getUserState('com_installer.message', '');
+				$extension_message = $app->getUserState('com_installer.extension_message', '');
 
-			if ($extension_message)
+				if ($message)
+				{
+					$messages[] = ['message' => $app->getUserState('com_installer.message', ''), 'type' => 'info'];
+					$app->setUserState('com_installer.message', '');
+				}
+
+				if ($extension_message)
+				{
+					$messages[] = ['message' => $app->getUserState('com_installer.extension_message', ''), 'type' => 'info'];
+					$app->setUserState('com_installer.extension_message', '');
+				}
+
+			}
+			else
 			{
-				$messages[] = ['message' => $app->getUserState('com_installer.extension_message', ''), 'type' => 'info'];
-				$app->setUserState('com_installer.extension_message', '');
+				$messages[] = ['message' => 'Ошибка установки', 'type' => 'danger'];
 			}
-
 		}
+		catch (Exception $e)
+		{
+			$messages[] = ['message' => 'Ошибка установки.', 'type' => 'danger'];
+		}
+
+
+
 
 		$messages = array_merge($messages, $app->getMessageQueue());
 
