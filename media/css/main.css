@@ -83,6 +83,14 @@
     margin-bottom: 15px;
 }
 
+.radicalinstaller-margin-left-xsmall {
+    margin-left: 5px;
+}
+
+.radicalinstaller-margin-right-xsmall {
+    margin-right: 5px;
+}
+
 /************* Padding *************/
 .radicalinstaller-padding {
     padding: 35px !important;

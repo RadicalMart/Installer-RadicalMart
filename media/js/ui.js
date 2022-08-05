@@ -5,6 +5,7 @@ window.RadicalInstallerUI = {
     container_toolbar: null,
     container_form_key: null,
     container_loader: null,
+    icons_sprite: '/media/plg_installer_radicalinstaller/img/sprite.svg',
 
 
     loaderShow: function (args) {
@@ -89,11 +90,17 @@ window.RadicalInstallerUI = {
                 buttons.items[k].items !== undefined
             ) {
                 group = group.addChild('div', {class: 'ri-btn-wrap'});
-                group = group.add('button', {'type': 'button', 'events': buttons.items[k].dropdown.events, 'class': buttons.items[k].dropdown.class}, buttons.items[k].dropdown.label);
+                group = group.add('button', {
+                    'type': 'button',
+                    'events': buttons.items[k].dropdown.events,
+                    'class': buttons.items[k].dropdown.class},
+                    RadicalInstallerUI.renderButtonIcon(buttons.items[k].dropdown)
+                );
                 group = group.addChild('div', {class: 'ri-btn-dropdown'});
 
                 for(let i in buttons.items[k].items) {
                     let prop = {'type': 'button'};
+                    let label = RadicalInstallerUI.renderButtonIcon(buttons.items[k].items[i]);
 
                     if(buttons.items[k].items[i].events !== undefined) {
                         prop.events = buttons.items[k].items[i].events;
@@ -107,13 +114,12 @@ window.RadicalInstallerUI = {
                         prop.disabled = buttons.items[k].items[i].disabled;
                     }
 
-                    group = group.add('button', prop, buttons.items[k].items[i].label);
+                    group = group.add('button', prop, label);
                 }
 
                 group = group.getParent();
                 group = group.getParent();
-            }
-            else {
+            } else {
                 let prop = {'type': 'button'};
 
                 if(buttons.items[k].events !== undefined) {
@@ -128,13 +134,62 @@ window.RadicalInstallerUI = {
                     prop.disabled = buttons.items[k].disabled;
                 }
 
-                group = group.add('button', prop, buttons.items[k].label);
+                group = group.add('button', prop, RadicalInstallerUI.renderButtonIcon(buttons.items[k]));
             }
 
         }
 
         return group.build();
     },
+
+
+    renderIcon(options) {
+        if(
+            options.name === undefined ||
+            options.name === null
+        ) {
+            return '';
+        }
+
+        let size = 24,
+            name = options.name;
+
+        if(options.size !== undefined) {
+            size = options.size;
+        }
+
+        return '<svg width="' + size + '" height="' + size + '"><use xlink:href="'+ RadicalInstallerUI.icons_sprite + '#' + name + '"></use></svg>';
+    },
+
+    renderButtonIcon(button) {
+
+        if(button.icon !== undefined)
+        {
+            let icon_position = 'left';
+            let icon = '<svg width="20" height="20"><use xlink:href="'+ RadicalInstallerUI.icons_sprite + '#' + button.icon + '"></use></svg>';
+            let label =  button.label;
+
+            if(button.icon_position !== undefined) {
+                icon_position = button.icon_position;
+            }
+
+            if(icon_position === 'left') {
+                label = '<span class="radicalinstaller-margin-left-xsmall">' + button.label + '</span>';
+                label = icon + label;
+            }
+
+            if(icon_position === 'right') {
+                label = '<span class="radicalinstaller-margin-right-xsmall">' + button.label + '</span>';
+                label += icon;
+            }
+
+            label = '<div class="radicalinstaller-flex radicalinstaller-flex-middle">' + label +'</div>';
+            return label;
+        }
+
+        return button.label;
+    },
+
 
     renderToolbarDropdown: function (buttons) {
         let dropdown = RadicalInstallerUtils.createElement('div', {class: 'ri-btn-dropdown'});
@@ -204,6 +259,8 @@ window.RadicalInstallerUI = {
 
         if (args.actions !== undefined) {
             group = group.addChild('div', {class: 'radicalinstaller-group-actions'});
+
+
 
             for (let k in args.actions) {
                 group = group.add('button', {
@@ -488,15 +545,17 @@ window.RadicalInstallerUI = {
 
         if (version !== '')
         {
-            card = card.addChild('div', {class: 'radicalinstaller-project-card-version'}, 'Версия: ')
+            card = card.addChild('div', {class: 'radicalinstaller-project-card-version radicalinstaller-flex radicalinstaller-flex-middle'})
+                .add('span', {class: 'radicalinstaller-margin-right-xsmall'}, 'Версия')
                 .add('span', {class: 'value'}, version)
-                .add('span', {class: 'value-arrow ri-hidden'}, '->')
+                .add('span', {class: 'value-arrow ri-hidden'}, RadicalInstallerUI.renderIcon({name: 'ri-right', size: 17}))
                 .add('span', {class: 'value-last ri-hidden'}, version_last)
                 .getParent();
         } else {
-            card.addChild('div', {class: 'radicalinstaller-project-card-version ri-hidden'}, 'Версия: ')
+            card.addChild('div', {class: 'radicalinstaller-project-card-version radicalinstaller-flex radicalinstaller-flex-middle ri-hidden'})
+                .add('span', {class: 'radicalinstaller-margin-right-xsmall'}, 'Версия')
                 .add('span', {class: 'value'}, version)
-                .add('span', {class: 'value-arrow ri-hidden'}, '->')
+                .add('span', {class: 'value-arrow ri-hidden'}, RadicalInstallerUI.renderIcon({name: 'ri-right', size: 17}))
                 .add('span', {class: 'value-last ri-hidden'}, version_last)
                 .getParent();
         }
@@ -678,7 +737,7 @@ window.RadicalInstallerUI = {
                                     }
                                 ]
                             ]
-                        }, '?')
+                        }, RadicalInstallerUI.renderIcon({name: 'ri-info', size: 18}))
                         .getParent()
                     .getParent()
 

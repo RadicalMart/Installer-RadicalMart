@@ -327,6 +327,7 @@ window.RadicalInstaller = {
                         {
                             //label: 'Назад',
                             label: 'Главная',
+                            icon: 'ri-home',
                             class: 'ri-btn ri-btn-default',
                             events: [
                                 [
@@ -520,7 +521,8 @@ window.RadicalInstaller = {
 
             if (check_install) {
                 group_actions.items.push({
-                    label: '<span class="icon-download large-icon"></span> ' + RadicalInstallerLangs.button_install,
+                    label: RadicalInstallerLangs.button_install,
+                    icon: 'ri-download',
                     class: 'ri-btn ri-btn-default ri-btn-success ri-btn-install',
                     disabled: 'disabled',
                     events: [
@@ -565,7 +567,7 @@ window.RadicalInstaller = {
                                         }
 
                                         if(success) {
-                                            button_install.innerHTML = 'Переустановить';
+                                            button_install.querySelector('span').innerHTML = 'Переустановить';
 
                                             if(
                                                 button_delete !== undefined &&
@@ -577,13 +579,13 @@ window.RadicalInstaller = {
 
                                             RadicalInstaller.checkUpdatedProjects(false, false);
                                         } else {
-                                            button_install.innerHTML = 'Установить';
+                                            button_install.querySelector('span').innerHTML = 'Установить';
                                         }
 
                                         button_install.removeAttribute('disabled');
                                     },
                                     fail: function() {
-                                        button_install.innerHTML = 'Установить';
+                                        button_install.querySelector('span').innerHTML = 'Установить';
                                         button_install.removeAttribute('disabled');
                                         logs_container.append(RadicalInstallerUI.renderLogsClose());
                                         logs_container.append(
@@ -604,6 +606,7 @@ window.RadicalInstaller = {
             } else {
                 group_actions.items.push({
                     label: RadicalInstallerLangs.button_buy,
+                    icon: 'ri-link',
                     class: 'ri-btn ri-btn-default ri-btn-success',
                     events: [
                         [
@@ -620,6 +623,7 @@ window.RadicalInstaller = {
 
             group_actions.items.push({
                 label: RadicalInstallerLangs.button_delete,
+                icon: 'ri-trash',
                 class: 'ri-btn ri-btn-default ri-btn-danger ri-btn-delete ri-hidden',
                 events: [
                     [
@@ -705,6 +709,7 @@ window.RadicalInstaller = {
             ) {
                 group_info.items.push({
                     label: RadicalInstallerLangs.button_docs,
+                    icon: 'ri-link',
                     class: 'ri-btn ri-btn-default',
                     events: [
                         [
@@ -725,6 +730,7 @@ window.RadicalInstaller = {
                 group_info.items.push({
                     label: RadicalInstallerLangs.button_support,
                     class: 'ri-btn ri-btn-default',
+                    icon: 'ri-link',
                     events: [
                         [
                             'click',
@@ -955,6 +961,8 @@ window.RadicalInstaller = {
                 let items = {
                     dropdown: {
                         label: 'Категория',
+                        icon: 'ri-down',
+                        icon_position: 'right',
                         class: 'ri-btn ri-btn-default',
                         events: []
                     },
@@ -1003,6 +1011,7 @@ window.RadicalInstaller = {
                     items: [
                         {
                             name: 'home',
+                            icon: 'ri-home',
                             label: 'Главная',
                             class: 'ri-btn ri-btn-default',
                             events: [
@@ -1034,6 +1043,7 @@ window.RadicalInstaller = {
                         },
                         {
                             name: 'installed',
+                            icon: 'ri-download',
                             label: 'Установленно',
                             class: 'ri-btn ri-btn-default',
                             events: [
@@ -1047,6 +1057,7 @@ window.RadicalInstaller = {
                         },
                         {
                             name: 'sync',
+                            icon: 'ri-sync',
                             label: 'Синхронизация',
                             class: 'ri-btn ri-btn-default',
                             events: [
@@ -1070,6 +1081,7 @@ window.RadicalInstaller = {
                     items: [
                         {
                             name: 'support',
+                            icon: 'ri-support',
                             label: 'Поддержка',
                             class: 'ri-btn ri-btn-default',
                             events: [
@@ -1212,11 +1224,11 @@ window.RadicalInstaller = {
             RadicalInstallerUI.container.querySelector('.ri-btn-install').removeAttribute('disabled');
 
             if(find_ids.indexOf(parseInt(ids[k])) !== -1) {
-                RadicalInstallerUI.container.querySelector('.ri-btn-install').innerHTML = 'Переустановить';
-                RadicalInstallerUI.container.querySelector('.ri-btn-delete').classList.remove('ri-hidden');
+                RadicalInstallerUI.container.querySelector('.ri-btn-install').querySelector('span').innerHTML = 'Переустановить';
+                RadicalInstallerUI.container.querySelector('.ri-btn-delete').querySelector('span').classList.remove('ri-hidden');
             } else {
                 if(paid === 'paid' && RadicalInstallerConfig.key === '') {
-                    RadicalInstallerUI.container.querySelector('.ri-btn-install').innerHTML = 'Нужен ключ';
+                    RadicalInstallerUI.container.querySelector('.ri-btn-install').querySelector('span').innerHTML = 'Нужен ключ';
 
                     RadicalInstallerUI.container.querySelector('.ri-btn-install').addEventListener('click',function (event) {
                         // TODO
