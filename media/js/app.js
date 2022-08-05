@@ -1225,13 +1225,13 @@ window.RadicalInstaller = {
 
             if(find_ids.indexOf(parseInt(ids[k])) !== -1) {
                 RadicalInstallerUI.container.querySelector('.ri-btn-install').querySelector('span').innerHTML = 'Переустановить';
-                RadicalInstallerUI.container.querySelector('.ri-btn-delete').querySelector('span').classList.remove('ri-hidden');
+                RadicalInstallerUI.container.querySelector('.ri-btn-delete').classList.remove('ri-hidden');
             } else {
                 if(paid === 'paid' && RadicalInstallerConfig.key === '') {
                     RadicalInstallerUI.container.querySelector('.ri-btn-install').querySelector('span').innerHTML = 'Нужен ключ';
 
                     RadicalInstallerUI.container.querySelector('.ri-btn-install').addEventListener('click',function (event) {
-                        // TODO
+                        // TODO отправлять на покупку
                         event.preventDefault();
                     })
                 }

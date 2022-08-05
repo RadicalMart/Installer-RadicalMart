@@ -161,6 +161,7 @@ window.RadicalInstallerUI = {
         return '<svg width="' + size + '" height="' + size + '"><use xlink:href="'+ RadicalInstallerUI.icons_sprite + '#' + name + '"></use></svg>';
     },
 
+
     renderButtonIcon(button) {
 
         if(button.icon !== undefined)
