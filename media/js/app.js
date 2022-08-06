@@ -40,15 +40,15 @@ window.RadicalInstaller = {
                         let items = JSON.parse(response.data);
                         resolve(items);
                     }).fail(function (xhr) {
-                        reject(xhr);
-                    });
+                    reject(xhr);
+                });
 
             }
         }).then( items => {
 
             let ids = [];
 
-            for(let k in items) {
+            for(let k=0;k<items.length;k++) {
 
                 let grid_required = '';
                 let grid_not_required = '';
@@ -59,14 +59,14 @@ window.RadicalInstaller = {
                 };
 
                 if(items[k].items_required !== undefined) {
-                    for(let c in items[k].items_required) {
+                    for(let c=0;c<items[k].items_required.length;c++) {
                         projects_card_required.push(
                             RadicalInstallerUI.renderProjectCard(items[k].items_required[c])
                         );
                         ids.push(parseInt(items[k].items_required[c].id));
                     }
 
-                    for(let c in items[k].items_not_required) {
+                    for(let c=0;c<items[k].items_not_required.length;c++) {
                         projects_card_not_required.push(
                             RadicalInstallerUI.renderProjectCard(items[k].items_not_required[c])
                         );
@@ -130,9 +130,11 @@ window.RadicalInstaller = {
                         continue;
                     }
 
-                    for(let c in items[k].items.items) {
+                    console.log(items[k].items.items.length);
 
-                        if(i > max) {
+                    for(let c=0;c<items[k].items.items.length;c++) {
+
+                        if(c >= 6) {
                             break;
                         }
 
@@ -140,8 +142,6 @@ window.RadicalInstaller = {
                             RadicalInstallerUI.renderProjectCard(items[k].items.items[c])
                         );
                         ids.push(parseInt(items[k].items.items[c].id));
-
-                        i++;
                     }
 
                     group.content = RadicalInstallerUI.renderProjectGrid({
@@ -189,7 +189,6 @@ window.RadicalInstaller = {
 
                 }
 
-
                 page.appendChild(RadicalInstallerUI.renderGroup(group));
 
             }
@@ -231,7 +230,7 @@ window.RadicalInstaller = {
             let projects_card = [];
             let ids = [];
 
-            for(let k in data.items) {
+            for(let k=0;k<data.items.length;k++) {
                 projects_card.push(
                     RadicalInstallerUI.renderProjectCard(data.items[k])
                 );
@@ -283,7 +282,7 @@ window.RadicalInstaller = {
             let projects_card = [];
             let ids = [];
 
-            for(let k in items) {
+            for(let k=0;k<items.length;k++) {
                 projects_card.push(
                     RadicalInstallerUI.renderProjectCard(items[k])
                 );
@@ -357,8 +356,8 @@ window.RadicalInstaller = {
                         let project = JSON.parse(response.data);
                         resolve(project);
                     }).fail(function (xhr) {
-                        reject(xhr);
-                    });
+                    reject(xhr);
+                });
             }
         }).then(project => {
 
@@ -805,7 +804,7 @@ window.RadicalInstaller = {
             let projects_card = [];
             let ids = [];
 
-            for(let k in data.items) {
+            for(let k=0;k<data.items.length;k++) {
                 projects_card.push(
                     RadicalInstallerUI.renderProjectCard(data.items[k])
                 );
@@ -868,7 +867,7 @@ window.RadicalInstaller = {
                 items = JSON.parse(items);
             }
 
-            for(let k in items.items) {
+            for(let k=0;k<items.items.length;k++) {
                 projects_card.push(
                     RadicalInstallerUI.renderProjectCard(items.items[k])
                 );
@@ -925,7 +924,7 @@ window.RadicalInstaller = {
                 items = JSON.parse(items);
             }
 
-            for(let k in items.items) {
+            for(let k=0;k<items.items.length;k++) {
                 projects_card.push(
                     RadicalInstallerUI.renderProjectCard(items.items[k])
                 );
@@ -989,7 +988,7 @@ window.RadicalInstaller = {
                     });
                 }
 
-                for(let k in RadicalInstaller.buttons_page_main.groups) {
+                for(let k=0;k<RadicalInstaller.buttons_page_main.groups.length;k++) {
 
                     if(RadicalInstaller.buttons_page_main.groups[k].name === 'main') {
                         RadicalInstaller.buttons_page_main.groups[k].items.push(items);
@@ -1122,9 +1121,9 @@ window.RadicalInstaller = {
                     class_list = 'empty';
                 }
 
-                for(let k in RadicalInstaller.buttons_page_main.groups) {
-                    for(let c in RadicalInstaller.buttons_page_main.groups[k]) {
-                        for (let j in RadicalInstaller.buttons_page_main.groups[k].items) {
+                for(let k=0;k<RadicalInstaller.buttons_page_main.groups.length;k++) {
+                    for(let c=0;c<RadicalInstaller.buttons_page_main.groups[k].length;c++) {
+                        for (let j=0;j<RadicalInstaller.buttons_page_main.groups[k].items.length;j++) {
                             if (RadicalInstaller.buttons_page_main.groups[k].items[j].name === 'updated') {
                                 RadicalInstaller.buttons_page_main.groups[k].items[j].label = '<span class="' + class_list + '">' + items.count + '</span> ' + RadicalInstallerLangs.button_update
                             }
@@ -1143,7 +1142,7 @@ window.RadicalInstaller = {
 
     checkInstallProjectCard: function (find_ids, ids, updates) {
 
-        for(let k in ids) {
+        for(let k=0;k<ids.length;k++) {
             let cards = RadicalInstallerUI.container.querySelectorAll('[data-project="' + ids[k] + '"]');
 
             if(cards.length === 0) {
@@ -1177,7 +1176,7 @@ window.RadicalInstaller = {
         }
 
         if(updates.count > 0) {
-            for(let j in updates.items) {
+            for(let j=0;j<updates.items.length;j++) {
                 let cards = RadicalInstallerUI.container.querySelectorAll('[data-project="' + updates.items[j].project_id + '"]');
 
                 if(cards.length === 0) {
@@ -1212,7 +1211,7 @@ window.RadicalInstaller = {
 
     checkInstallProjectPage: function(find_ids, ids, updates) {
 
-        for(let k in ids) {
+        for(let k=0;k<ids.length;k++) {
             let project = RadicalInstallerUI.container.querySelector('[data-project="' + ids[k] + '"]');
 
             if(project === undefined || project === null) {
@@ -1240,7 +1239,7 @@ window.RadicalInstaller = {
         }
 
         if(updates.count > 0) {
-            for(let j in updates.items) {
+            for(let j=0;j<updates.items.length;j++) {
                 let project = RadicalInstallerUI.container.querySelector('[data-project="' + updates.items[j].project_id + '"]');
 
                 if(project === undefined || project === null) {
@@ -1256,7 +1255,7 @@ window.RadicalInstaller = {
 
 
     triggerGridRowEndForCard: function(items, grid_row_id) {
-        for(let i in items) {
+        for(let i=0;i<items.length;i++) {
             let button_install = items[i].querySelector('.ri-btn-install');
             let button_delete = items[i].querySelector('.ri-btn-delete');
 

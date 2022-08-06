@@ -91,7 +91,8 @@ window.RadicalInstallerUtils = {
         let element = document.createElement(tag);
 
         for(let keyAttr in attr) {
-            if(keyAttr === 'events') {
+            if(keyAttr === 'events' && attr[keyAttr] !== undefined) {
+
                 let eventsLength = attr[keyAttr].length;
                 for(let i=0;i<eventsLength;i++) {
                     element.addEventListener(attr[keyAttr][i][0], attr[keyAttr][i][1]);
@@ -115,7 +116,7 @@ window.RadicalInstallerUtils = {
             if(typeof innerHtml === 'object') {
 
                 if(innerHtml.length > 1) {
-                    for(let c in innerHtml) {
+                    for(let c=0;c<innerHtml.length;c++) {
                         element.appendChild(innerHtml[c]);
                     }
                 } else {
@@ -201,25 +202,25 @@ window.RadicalInstallerUtils = {
 
         let modal = this.createElement('div', {'class': 'radicalinstaller-modal ' + classForModal})
             .addChild('div', {'class': 'radicalinstaller-modal_container'})
-                .add('button', {
-                    'class': 'btn btn-danger radicalinstaller-modal_close',
-                    'events': [
-                        ['click', function (ev) {
-                            let modalBackground = document.querySelector('.radicalinstaller-modal_background');
+            .add('button', {
+                'class': 'btn btn-danger radicalinstaller-modal_close',
+                'events': [
+                    ['click', function (ev) {
+                        let modalBackground = document.querySelector('.radicalinstaller-modal_background');
 
-                            modalBackground.classList.remove('active');
-                            this.closest('.radicalinstaller-modal').remove();
+                        modalBackground.classList.remove('active');
+                        this.closest('.radicalinstaller-modal').remove();
 
-                            if(callback_close !== undefined && callback_close !== null) {
-                                callback_close();
-                            }
-                        }]
-                    ]}, '<span class="icon-delete large-icon"></span> ' + RadicalInstallerLangs.button_close)
-                .add('div', {'class': 'radicalinstaller-modal_header'}, header)
-                    .addChild('div', {'class': 'radicalinstaller-modal_body-wrap'})
-                        .add('div', {'class': 'radicalinstaller-modal_body'}, body)
-                        .getParent()
-                .getParent();
+                        if(callback_close !== undefined && callback_close !== null) {
+                            callback_close();
+                        }
+                    }]
+                ]}, '<span class="icon-delete large-icon"></span> ' + RadicalInstallerLangs.button_close)
+            .add('div', {'class': 'radicalinstaller-modal_header'}, header)
+            .addChild('div', {'class': 'radicalinstaller-modal_body-wrap'})
+            .add('div', {'class': 'radicalinstaller-modal_body'}, body)
+            .getParent()
+            .getParent();
 
 
         if(modalBackground === null) {
@@ -244,18 +245,18 @@ window.RadicalInstallerUtils = {
 
         let modal = this.createElement('div', {'class': 'radicalinstaller-modal radicalinstaller-modal-iframe'})
             .addChild('div', {'class': 'radicalinstaller-modal_container'})
-                .add('button', {
-                    'class': 'btn btn-danger btn-large radicalinstaller-modal_close',
-                    'events': [
-                        ['click', function (ev) {
-                            let modalBackground = document.querySelector('.radicalinstaller-modal_background');
+            .add('button', {
+                'class': 'btn btn-danger btn-large radicalinstaller-modal_close',
+                'events': [
+                    ['click', function (ev) {
+                        let modalBackground = document.querySelector('.radicalinstaller-modal_background');
 
-                            modalBackground.classList.remove('active');
-                            this.closest('.radicalinstaller-modal').remove();
-                        }]
-                    ]}, '<span class="icon-delete large-icon"></span> ' + RadicalInstallerLangs.button_close)
-                .add('div', {'class': 'radicalinstaller-modal_header'}, header)
-                .add('iframe', {'class': 'radicalinstaller-modal_iframe', 'src': url})
+                        modalBackground.classList.remove('active');
+                        this.closest('.radicalinstaller-modal').remove();
+                    }]
+                ]}, '<span class="icon-delete large-icon"></span> ' + RadicalInstallerLangs.button_close)
+            .add('div', {'class': 'radicalinstaller-modal_header'}, header)
+            .add('iframe', {'class': 'radicalinstaller-modal_iframe', 'src': url})
             .getParent();
 
 
