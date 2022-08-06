@@ -130,8 +130,6 @@ window.RadicalInstaller = {
                         continue;
                     }
 
-                    console.log(items[k].items.items.length);
-
                     for(let c=0;c<items[k].items.items.length;c++) {
 
                         if(c >= 6) {
@@ -1141,6 +1139,8 @@ window.RadicalInstaller = {
 
 
     checkInstallProjectCard: function (find_ids, ids, updates) {
+
+        console.log(find_ids, ids);
 
         for(let k=0;k<ids.length;k++) {
             let cards = RadicalInstallerUI.container.querySelectorAll('[data-project="' + ids[k] + '"]');

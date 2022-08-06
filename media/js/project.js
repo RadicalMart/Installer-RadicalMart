@@ -77,6 +77,14 @@ window.RadicalInstallerProject = {
                     .done( function (response) {
                         let data = JSON.parse(response.data);
 
+                        for(let i=0;i<find.length;i++) {
+                            find[i] = parseInt(find[i]);
+                        }
+
+                        for(let i=0;i<args.ids.length;i++) {
+                            args.ids[i] = parseInt(args.ids[i]);
+                        }
+
                         if (typeof args.done === 'function') {
                             args.done(find, args.ids, data);
                         }
