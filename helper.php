@@ -60,15 +60,15 @@ class RadicalinstallerHelper
 			$table   = Table::getInstance('RadicalinstallerExtensions', 'Table');
 			$table->load(['type' => $type, 'folder' => $folder, 'element' => $element]);
 
-			$table->title                 = $sync_project['title'];
-			$table->type_radicalinstaller = $sync_project['install'];
-			$table->type                  = $type;
-			$table->element               = $element;
-			$table->folder                = $folder ?? '';
-			$table->version               = $extensions[$element]['version'] ?? '';
-			$table->project_id            = $sync_project['id'];
-			$table->extension_id          = $extensions[$element]['id'] ?? '';
-			$table->category_title        = $sync_project['title'];
+			$table->title          = $sync_project['title'];
+			$table->provider       = $sync_project['install'];
+			$table->type           = $type;
+			$table->element        = $element;
+			$table->folder         = $folder ?? '';
+			$table->version        = $extensions[$element]['version'] ?? '';
+			$table->project_id     = $sync_project['id'];
+			$table->extension_id   = $extensions[$element]['id'] ?? '';
+			$table->category_title = $sync_project['title'];
 
 			if (!$table->check())
 			{

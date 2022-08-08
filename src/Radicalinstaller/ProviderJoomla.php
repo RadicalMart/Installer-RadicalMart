@@ -45,7 +45,7 @@ class ProviderJoomla implements ProviderInterface
 
 		Factory::getApplication()->getLanguage()->load('com_installer');
 		\JModelLegacy::addIncludePath(JPATH_ROOT . '/administrator/components/com_installer/models');
-		$model  = \JModelLegacy::getInstance('Install', 'InstallerModel');
+		$model = \JModelLegacy::getInstance('Install', 'InstallerModel');
 
 		try
 		{
@@ -76,20 +76,20 @@ class ProviderJoomla implements ProviderInterface
 
 				$table = Table::getInstance('RadicalinstallerExtensions', 'Table');
 				$table->load([
-					'type' => $type,
+					'type'    => $type,
 					'element' => $element,
-					'folder' => $folder
+					'folder'  => $folder
 				]);
 
-				$table->type_radicalinstaller = $project['install'];
-				$table->title                 = $project['title'];
-				$table->type                  = $type;
-				$table->element               = $element;
-				$table->folder                = $folder;
-				$table->version               = $version;
-				$table->project_id            = $project['id'];
-				$table->category_title        = $project['title'];
-				$table->extension_id          = $extension_joomla->extension_id;
+				$table->provider       = $project['install'];
+				$table->title          = $project['title'];
+				$table->type           = $type;
+				$table->element        = $element;
+				$table->folder         = $folder;
+				$table->version        = $version;
+				$table->project_id     = $project['id'];
+				$table->category_title = $project['title'];
+				$table->extension_id   = $extension_joomla->extension_id;
 
 				if (!$table->check())
 				{
@@ -101,7 +101,7 @@ class ProviderJoomla implements ProviderInterface
 
 			}
 		}
-		catch(Exception $e)
+		catch (Exception $e)
 		{
 			$result = false;
 		}
