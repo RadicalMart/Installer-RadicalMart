@@ -127,6 +127,8 @@
 .ri-btn:disabled,
 .ri-btn[disabled] {
     opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
 }
 
 .ri-btn-large {

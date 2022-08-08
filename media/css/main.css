@@ -575,8 +575,6 @@
 }
 
 
-
-
 /****************** radicalinstaller-logs *********************/
 .radicalinstaller-logs {}
 
@@ -584,6 +582,10 @@
     margin: 0;
 }
 
-.radicalinstaller-logs > div + div {
+.radicalinstaller-logs > div  {
+    margin-bottom: 15px;
+}
+
+.radicalinstaller-logs > div:first-child {
     margin-top: 15px;
 }
