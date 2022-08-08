@@ -576,7 +576,10 @@
 
 
 /****************** radicalinstaller-logs *********************/
-.radicalinstaller-logs {}
+.radicalinstaller-logs {
+    background: #eee;
+    border-radius: 4px;
+}
 
 .radicalinstaller-logs > div .alert {
     margin: 0;
@@ -584,8 +587,14 @@
 
 .radicalinstaller-logs > div  {
     margin-bottom: 15px;
+    padding: 0 15px;
 }
 
 .radicalinstaller-logs > div:first-child {
+    padding-top: 15px;
     margin-top: 15px;
+}
+
+.radicalinstaller-logs > div:last-child {
+    padding-bottom: 15px;
 }

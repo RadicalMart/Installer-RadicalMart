@@ -505,7 +505,11 @@ window.RadicalInstaller = {
                 }, '❯');
                 header = header.getParent();
             } else {
-                if (project.images !== undefined) {
+                if (
+                    project.images !== undefined &&
+                    project.images.cover !== undefined &&
+                    project.images.cover !== false
+                ) {
                     header = header.addChild('div', {'class': 'radicalinstaller-project-page_gallery-images', 'data-active': 1})
                         .add('div', {
                             'class': 'radicalinstaller-project-page_gallery-images-background',
@@ -518,11 +522,11 @@ window.RadicalInstaller = {
                         .add('img', {
                             'src': RadicalInstaller.api + '/' + project.images.cover
                         })
+                        .getParent()
                         .getParent();
                 }
-            }
 
-            header = header.getParent();
+            }
 
             body = body.add('h2', {'class': 'radicalinstaller-project-page_gallery-header'}, project.title);
             let check_install = false;
