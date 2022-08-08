@@ -9,6 +9,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Log\Log;
 use Joomla\CMS\Table\Table;
 use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Version;
 use Joomla\Filesystem\File;
 use Joomla\Filesystem\Folder;
 use Joomla\Registry\Registry;
@@ -89,7 +90,19 @@ class ProviderYoolayouts implements ProviderInterface
 		$url_curl->setScheme($this->scheme);
 		$url_curl->setHost($this->host);
 		$request = $curlTransport->request('GET', $url_curl, $data);
-		$body    = json_decode($request->body, JSON_OBJECT_AS_ARRAY);
+
+		if (((new Version())->isCompatible('4.0')))
+		{
+			$body = $request->body;
+
+			$body = (!empty($body)) ? $request->body : false;
+		}
+		else
+		{
+			$body = (!empty($response->body)) ? $response->body : false;
+		}
+
+		$body = json_decode($body, JSON_OBJECT_AS_ARRAY);
 
 		//если сервер прислал ошибку, то пишем и выходим
 		if ($request->code !== 200)
@@ -204,7 +217,7 @@ class ProviderYoolayouts implements ProviderInterface
 			}
 		}
 
-		$this->addMessage(Text::_('Макет был успешно установлен. Вы можете его увидеть в макетах конструктора YOOtheme PRO'), 'info');
+		$this->addMessage(Text::_('Макет был успешно установлен. Вы можете его увидеть в макетах конструктора YOOtheme PRO'));
 
 		return true;
 
@@ -222,7 +235,7 @@ class ProviderYoolayouts implements ProviderInterface
 		$query->where($conditions);
 		$db->setQuery($query);
 
-		$this->addMessage(Text::_('Макет был успешно удален'), 'success');
+		$this->addMessage(Text::_('Макет был успешно удален'));
 
 		return $db->execute();
 	}
@@ -240,7 +253,7 @@ class ProviderYoolayouts implements ProviderInterface
 	}
 
 
-	public function addMessage($msg, $type)
+	public function addMessage($msg, $type = 'info')
 	{
 		$this->messages[] = ['message' => $msg, 'type' => $type];
 	}

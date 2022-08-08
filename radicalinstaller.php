@@ -214,14 +214,9 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 
 		try
 		{
-
-			$install = $provider->start($id);
-
-			if ($install)
-			{
-				$messages = $provider->getMessages();
-			}
-			else
+			$install  = $provider->start($id);
+			$messages = $provider->getMessages();
+			if (!$install)
 			{
 				$messages[] = ['message' => 'Ошибка установки', 'type' => 'danger'];
 			}
@@ -255,13 +250,8 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 
 		$provider = new $provider_class();
 		$result   = $provider->delete($id);
-		$messages = [];
+		$messages = $provider->getMessages();
 
-		if ($result)
-		{
-			$messages = $provider->getMessages();
-		}
-		
 		return json_encode(['status' => $result ? 'ok' : 'fail', 'messages' => $messages]);
 	}
 
