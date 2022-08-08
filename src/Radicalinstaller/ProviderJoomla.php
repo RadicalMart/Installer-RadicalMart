@@ -75,7 +75,12 @@ class ProviderJoomla implements ProviderInterface
 				}
 
 				$table = Table::getInstance('RadicalinstallerExtensions', 'Table');
-				$table->load(['element' => $project['element']]);
+				$table->load([
+					'type' => $type,
+					'element' => $element,
+					'folder' => $folder
+				]);
+
 				$table->type_radicalinstaller = $project['install'];
 				$table->title                 = $project['title'];
 				$table->type                  = $type;
