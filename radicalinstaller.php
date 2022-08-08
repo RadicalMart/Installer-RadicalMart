@@ -218,12 +218,12 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 			$messages = $provider->getMessages();
 			if (!$install)
 			{
-				$messages[] = ['message' => 'Ошибка установки', 'type' => 'danger'];
+				$messages[] = ['message' => 'Не удалось установить расширение', 'type' => 'danger'];
 			}
 		}
 		catch (Exception $e)
 		{
-			$messages[] = ['message' => 'Ошибка установки', 'type' => 'danger'];
+			$messages[] = ['message' => 'Не удалось установить расширение', 'type' => 'danger'];
 		}
 
 		return json_encode(['status' => $install ? 'ok' : 'fail', 'messages' => $messages]);

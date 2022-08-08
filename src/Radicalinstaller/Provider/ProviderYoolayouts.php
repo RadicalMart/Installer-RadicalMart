@@ -58,7 +58,7 @@ class ProviderYoolayouts implements ProviderInterface
 
 		if (!$yootheme)
 		{
-			$this->addMessage(Text::_('Не установлен YOOtheme Pro'), 'warning');
+			$this->addMessage(Text::_('Не установлен YOOtheme Pro'), 'danger');
 
 			return false;
 		}
@@ -69,7 +69,7 @@ class ProviderYoolayouts implements ProviderInterface
 
 		if (!Zip::hasNativeSupport())
 		{
-			$this->addMessage(Text::_('Нет поддержки zip архивов'), 'warning');
+			$this->addMessage(Text::_('Нет поддержки zip архивов'), 'danger');
 
 			return false;
 		}
