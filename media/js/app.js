@@ -224,6 +224,16 @@ window.RadicalInstaller = {
 
             }
         }).then( data => {
+
+            if(data.items.length === 0) {
+                page.appendChild(RadicalInstallerUI.renderGroup({
+                    label: 'Обновление',
+                    content: RadicalInstallerUI.renderAlert({message: 'Обновлений нет. Все установленные расширения имеют актуальную версию.'})
+                }));
+
+                return;
+            }
+
             let grid = '';
             let projects_card = [];
             let ids = [];
@@ -241,7 +251,7 @@ window.RadicalInstaller = {
             });
 
             page.appendChild(RadicalInstallerUI.renderGroup({
-                label: 'Установлено',
+                label: 'Обновление',
                 content: grid
             }));
 
@@ -276,6 +286,17 @@ window.RadicalInstaller = {
 
             }
         }).then( items => {
+
+            if(items.length === 0) {
+                page.appendChild(RadicalInstallerUI.renderGroup({
+                    label: 'Установлено',
+                    content: RadicalInstallerUI.renderAlert({message: 'Установленных расширений нет. Откройте раздел "Главная" и выберите расширение для установки.'})
+                }));
+
+                return;
+            }
+
+
             let grid = '';
             let projects_card = [];
             let ids = [];

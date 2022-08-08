@@ -1,10 +1,13 @@
 /************* Buttons ***********/
 .ri-btn {
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    align-content: center;
     padding: 5px 13px;
     border: 1px solid transparent;
     font-size: 13px;
     line-height: 1.5;
+    min-height: 30px;
     white-space: nowrap;
     text-align: center;
     vertical-align: middle;
@@ -166,6 +169,10 @@
 
 /**************** Button groups ***************/
 .ri-btn-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    align-content: center;
 }
 
 .ri-btn-group-small > * {
@@ -176,6 +183,12 @@
 .ri-btn-group > *,
 .ri-btn-group > * > .ri-btn {
     border-radius: 0;
+    border-left-width: 0;
+}
+
+.ri-btn-group > *:first-child,
+.ri-btn-group > *:first-child > .ri-btn {
+    border-left-width: 1px;
 }
 
 .ri-btn-group > *:first-child,
@@ -225,4 +238,10 @@
     border-radius: 0;
     border-top: none;
     border-bottom: none;
+}
+
+
+/******************* Form key ***********************/
+.radicalinstaller-input-key {
+    min-height: 35px;
 }

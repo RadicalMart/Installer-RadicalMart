@@ -218,6 +218,13 @@ window.RadicalInstallerUI = {
     },
 
 
+    renderAlert: function (args) {
+        let alert = RadicalInstallerUtils.createElement('div', {class: 'radicalinstaller-alert radicalinstaller-alert-info'}, args.message);
+
+        return alert.build();
+    },
+
+
     renderGroup: function (args) {
         let group = RadicalInstallerUtils
             .createElement('div', {class: 'radicalinstaller-group'});
@@ -343,29 +350,31 @@ window.RadicalInstallerUI = {
             })
             .addChild('div', {'class': 'radicalinstaller-flex'})
             .add('input', {
-                class: 'radicalinstaller-input-key radicalinstaller-width-500',
+                class: 'radicalinstaller-input-key radicalinstaller-width-500 radicalinstaller-margin-right-xsmall',
                 type: 'text',
                 placeholder: RadicalInstallerLangs.text_input_key,
                 name: 'key',
                 value: value
             })
-            .add('button', {
-                class: 'ri-btn ri-btn-default ri-btn-primary ri-btn-large',
-                type: 'submit'
-            }, 'Сохранить')
-            .add('button', {
-                class: 'ri-btn ri-btn-default ri-btn-large',
-                type: 'submit',
-                events: [
-                    [
-                        'click',
-                        function(event) {
-                            document.querySelector('.radicalinstaller-input-key').value = '';
-                            event.preventDefault();
-                        }
+            .addChild('div', {class: 'ri-btn-group'})
+                .add('button', {
+                    class: 'ri-btn ri-btn-default ri-btn-primary ri-btn-large',
+                    type: 'submit'
+                }, 'Сохранить')
+                .add('button', {
+                    class: 'ri-btn ri-btn-default ri-btn-large',
+                    type: 'submit',
+                    events: [
+                        [
+                            'click',
+                            function(event) {
+                                document.querySelector('.radicalinstaller-input-key').value = '';
+                                event.preventDefault();
+                            }
+                        ]
                     ]
-                ]
-            }, 'Очистить')
+                }, 'Очистить')
+            .getParent()
             .getParent()
             .getParent()
             .getParent()
@@ -752,11 +761,6 @@ window.RadicalInstallerUI = {
     },
 
 
-    renderAlert: function (args) {
-        return '';
-    },
-
-
     renderLogsClose: function (args) {
         let wrap = RadicalInstallerUtils.createElement('div');
 
@@ -781,7 +785,7 @@ window.RadicalInstallerUI = {
 
 
     renderLoader: function () {
-        return RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-loader'})
+        return RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-loader radicalinstaller-flex radicalinstaller-flex-center radicalinstaller-flex-middle'})
             .add('img', {'src': RadicalInstaller.assets + '/img/loader.svg'}).build();
 
     }

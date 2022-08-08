@@ -91,6 +91,10 @@
     margin-right: 5px;
 }
 
+.radicalinstaller-margin-right-xsmall {
+    margin-right: 5px;
+}
+
 /************* Padding *************/
 .radicalinstaller-padding {
     padding: 35px !important;
@@ -189,11 +193,16 @@
 }
 
 
+/************ Page ******************/
+.radicalinstaller-page {
+
+}
 
 /*********** Group *****************/
 .radicalinstaller-group {
     border: 1px solid #eee;
     border-radius: 4px;
+    padding: 35px;
 }
 
 .radicalinstaller-group +
@@ -202,7 +211,7 @@
 }
 
 .radicalinstaller-group-header {
-    padding: 35px;
+    margin-bottom: 35px;
 }
 
 .radicalinstaller-group-header h3 {
@@ -211,15 +220,15 @@
 }
 
 .radicalinstaller-group-subgroup {
-    padding: 35px;
+    padding: 0;
 }
 
 .radicalinstaller-group-content {
-    padding: 0 35px;
+    padding: 0;
 }
 
 .radicalinstaller-group-actions {
-    padding: 35px;
+    margin-top: 35px;
 }
 
 /************* Card **************/
@@ -303,16 +312,16 @@
     border-radius: 3px;
     border: 1px solid transparent;
     cursor: default;
-    transition: all 0.5s ease-in-out;   /* Edit for fadeout time */
-    -webkit-user-select: none;  /* Chrome all / Safari all */
-    -moz-user-select: none;     /* Firefox all */
-    -ms-user-select: none;      /* IE 10+ */
-    user-select: none;          /* Likely future */
+    transition: all 0.5s ease-in-out;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .radicalinstaller-alert span {
-    opacity: 0.7;
-    transition: all 0.25s ease-in-out;   /* Edit for fadeout time */
+    /*opacity: 0.7;*/
+    transition: all 0.25s ease-in-out;
 }
 
 .radicalinstaller-alert span:hover {
