@@ -1,4 +1,4 @@
-<?php namespace Radicalinstaller;
+<?php namespace Radicalinstaller\Provider;
 
 defined('_JEXEC') or die;
 
@@ -9,10 +9,9 @@ use Joomla\CMS\Session\Session;
 use Joomla\CMS\Table\Table;
 use Joomla\CMS\Uri\Uri;
 use Joomla\Registry\Registry;
+use Radicalinstaller\API;
+use Radicalinstaller\Config;
 
-/**
- * Class ProviderJoomla
- */
 class ProviderJoomla implements ProviderInterface
 {
 
@@ -76,12 +75,13 @@ class ProviderJoomla implements ProviderInterface
 
 				$table = Table::getInstance('RadicalinstallerExtensions', 'Table');
 				$table->load([
-					'type'    => $type,
-					'element' => $element,
-					'folder'  => $folder
+					'provider' => $project['provider'],
+					'type'     => $type,
+					'element'  => $element,
+					'folder'   => $folder
 				]);
 
-				$table->provider       = $project['install'];
+				$table->provider       = $project['provider'];
 				$table->title          = $project['title'];
 				$table->type           = $type;
 				$table->element        = $element;
@@ -112,7 +112,6 @@ class ProviderJoomla implements ProviderInterface
 
 	public function delete($id)
 	{
-
 		$table = Table::getInstance('RadicalinstallerExtensions', 'Table');
 		$table->load(['project_id' => $id]);
 		Factory::getApplication()->getLanguage()->load('com_installer');
@@ -126,6 +125,30 @@ class ProviderJoomla implements ProviderInterface
 
 	public function toggleEnable($id)
 	{
+	}
+
+
+	public function getMessages()
+	{
+		$app      = Factory::getApplication();
+		$messages = [];
+
+		$message           = $app->getUserState('com_installer.message', '');
+		$extension_message = $app->getUserState('com_installer.extension_message', '');
+
+		if ($message)
+		{
+			$messages[] = ['message' => $app->getUserState('com_installer.message', ''), 'type' => 'info'];
+			$app->setUserState('com_installer.message', '');
+		}
+
+		if ($extension_message)
+		{
+			$messages[] = ['message' => $app->getUserState('com_installer.extension_message', ''), 'type' => 'info'];
+			$app->setUserState('com_installer.extension_message', '');
+		}
+
+		return $messages;
 	}
 
 
@@ -151,5 +174,12 @@ class ProviderJoomla implements ProviderInterface
 
 		return $valid;
 	}
+
+
+	public function toggleDisable($id)
+	{
+		// TODO: Implement toggleDisable() method.
+	}
+
 
 }

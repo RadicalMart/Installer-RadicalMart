@@ -61,7 +61,7 @@ class RadicalinstallerHelper
 			$table->load(['type' => $type, 'folder' => $folder, 'element' => $element]);
 
 			$table->title          = $sync_project['title'];
-			$table->provider       = $sync_project['install'];
+			$table->provider       = $sync_project['provider'];
 			$table->type           = $type;
 			$table->element        = $element;
 			$table->folder         = $folder ?? '';

@@ -128,14 +128,14 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 				$output = $this->APIGetForInstallDepends();
 			}
 
-			if ($method === 'installJoomla')
+			if ($method === 'install')
 			{
-				$output = $this->installJoomla();
+				$output = $this->install();
 			}
 
-			if ($method === 'deleteJoomla')
+			if ($method === 'delete')
 			{
-				$output = $this->deleteJoomla();
+				$output = $this->delete();
 			}
 
 			if ($method === 'checkInstall')
@@ -177,45 +177,49 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 		{
 			$app->setHeader('Content-Type', 'application/json');
 			$app->sendHeaders();
+
+			//var_dump($output);die();
+
 			return $output;
 		}
 
 	}
 
 
-	protected function installJoomla()
+	protected function install()
 	{
-		$app      = Factory::getApplication();
-		$input    = $app->input;
-		$id       = $input->get('id', '', 'int');
-		$config   = [
+
+		$app            = Factory::getApplication();
+		$input          = $app->input;
+		$id             = $input->get('id', '', 'int');
+		$project        = json_decode(API::project($id), JSON_OBJECT_AS_ARRAY);
+		$provider_class = '\\Radicalinstaller\\Provider\\Provider' . ucfirst(strtolower(!empty($project['provider']) ? $project['provider'] : 'joomla'));
+		$config         = [
 			'api_key' => $this->params->get('apikey', '')
 		];
-		$update   = new ProviderJoomla($config);
+		$install        = false;
+
+		if (!class_exists($provider_class))
+		{
+			return json_encode([
+				'status'   => 'fail',
+				'messages' => [
+					'Не найден провайдер для установки'
+				]
+			]);
+		}
+
+		$provider = new $provider_class($config);
 		$messages = [];
 
 		try
 		{
 
-			$install  = $update->start($id);
+			$install = $provider->start($id);
 
 			if ($install)
 			{
-				$message           = $app->getUserState('com_installer.message', '');
-				$extension_message = $app->getUserState('com_installer.extension_message', '');
-
-				if ($message)
-				{
-					$messages[] = ['message' => $app->getUserState('com_installer.message', ''), 'type' => 'info'];
-					$app->setUserState('com_installer.message', '');
-				}
-
-				if ($extension_message)
-				{
-					$messages[] = ['message' => $app->getUserState('com_installer.extension_message', ''), 'type' => 'info'];
-					$app->setUserState('com_installer.extension_message', '');
-				}
-
+				$messages = $provider->getMessages();
 			}
 			else
 			{
@@ -224,48 +228,40 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 		}
 		catch (Exception $e)
 		{
-			$messages[] = ['message' => 'Ошибка установки.', 'type' => 'danger'];
+			$messages[] = ['message' => 'Ошибка установки', 'type' => 'danger'];
 		}
-
-
-
-
-		$messages = array_merge($messages, $app->getMessageQueue());
 
 		return json_encode(['status' => $install ? 'ok' : 'fail', 'messages' => $messages]);
 	}
 
 
-	protected function deleteJoomla()
+	protected function delete()
 	{
-		$app      = Factory::getApplication();
-		$input    = $app->input;
-		$id       = $input->get('id', '', 'int');
-		$update   = new ProviderJoomla();
-		$result   = $update->delete($id);
+		$app     = Factory::getApplication();
+		$input   = $app->input;
+		$id      = $input->get('id', '', 'int');
+		$project = json_decode(API::project($id), JSON_OBJECT_AS_ARRAY);;
+		$provider_class = '\\Radicalinstaller\\Provider\\Provider' . ucfirst(strtolower(!empty($project['provider']) ? $project['provider'] : 'joomla'));
+
+		if (!class_exists($provider_class))
+		{
+			return json_encode([
+				'status'   => 'fail',
+				'messages' => [
+					'Не найден провайдер для удаления'
+				]
+			]);
+		}
+
+		$provider = new $provider_class();
+		$result   = $provider->delete($id);
 		$messages = [];
 
 		if ($result)
 		{
-			$message           = $app->getUserState('com_installer.message', '');
-			$extension_message = $app->getUserState('com_installer.extension_message', '');
-
-			if ($message)
-			{
-				$messages[] = ['message' => $app->getUserState('com_installer.message', ''), 'type' => 'info'];
-				$app->setUserState('com_installer.message', '');
-			}
-
-			if ($extension_message)
-			{
-				$messages[] = ['message' => $app->getUserState('com_installer.extension_message', ''), 'type' => 'info'];
-				$app->setUserState('com_installer.extension_message', '');
-			}
-
+			$messages = $provider->getMessages();
 		}
-
-		$messages = array_merge($messages, $app->getMessageQueue());
-
+		
 		return json_encode(['status' => $result ? 'ok' : 'fail', 'messages' => $messages]);
 	}
 
@@ -316,6 +312,12 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 	}
 
 
+	protected function APIMinimal()
+	{
+		return API::minimal();
+	}
+
+
 	protected function APICategories()
 	{
 		return API::categories();
@@ -346,8 +348,8 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 			return $projects;
 		}
 
-		$page     = $this->app->input->get('page', 1, 'int');
-		$limit    = $this->app->input->get('limit', 12, 'int');
+		$page  = $this->app->input->get('page', 1, 'int');
+		$limit = $this->app->input->get('limit', 12, 'int');
 
 		return API::projects($id, $page, $limit);
 	}
@@ -355,7 +357,7 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 
 	protected function APIProjectList()
 	{
-		$ids      = $this->app->input->get('ids', '{}', 'raw');
+		$ids = $this->app->input->get('ids', '{}', 'raw');
 
 		return API::projectList($ids);
 	}
@@ -372,7 +374,7 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 
 	protected function APIProject()
 	{
-		$id      = $this->app->input->get('project_id');
+		$id = $this->app->input->get('project_id');
 
 		return API::project($id);
 	}
@@ -412,7 +414,7 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 		$fields           = [];
 		$find_list_output = [];
 
-		if(!is_array($list))
+		if (!is_array($list))
 		{
 			$list = [];
 		}

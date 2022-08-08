@@ -1,4 +1,4 @@
-<?php namespace Radicalinstaller;
+<?php namespace Radicalinstaller\Provider;
 
 defined('_JEXEC') or die;
 
@@ -11,6 +11,11 @@ interface ProviderInterface
     public function delete($id);
 
 
+	public function getMessages();
+
+
     public function toggleEnable($id);
 
+
+	public function toggleDisable($id);
 }

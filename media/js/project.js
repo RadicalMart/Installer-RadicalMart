@@ -10,7 +10,7 @@ window.RadicalInstallerProject = {
                 args.wait(args.ids[i]);
             }
 
-            RadicalInstallerUtils.ajaxGet(RadicalInstaller.url + '&method=installJoomla&id=' + args.ids[i])
+            RadicalInstallerUtils.ajaxGet(RadicalInstaller.url + '&method=install&id=' + args.ids[i])
                 .done(function (response) {
 
                     ids_current++;
@@ -48,7 +48,7 @@ window.RadicalInstallerProject = {
         }
 
 
-        RadicalInstallerUtils.ajaxGet(RadicalInstaller.url + '&method=deleteJoomla&id=' + args.id)
+        RadicalInstallerUtils.ajaxGet(RadicalInstaller.url + '&method=delete&id=' + args.id)
             .done(function (response) {
                 let data = JSON.parse(response.data);
 

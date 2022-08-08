@@ -36,6 +36,12 @@ class API
 	}
 
 
+	public static function minimal()
+	{
+		return self::execute('minimal');
+	}
+
+
 	public static function categories()
 	{
 		return self::execute('categories');
