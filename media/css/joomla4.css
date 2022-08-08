@@ -188,12 +188,15 @@
 .ri-btn-group > *,
 .ri-btn-group > * > .ri-btn {
     border-radius: 0;
+    border-left-width: 0;
+
 }
 
 .ri-btn-group > *:first-child,
 .ri-btn-group > *:first-child > .ri-btn {
     border-bottom-left-radius: .25rem;
     border-top-left-radius: .25rem;
+    border-left-width: 1px;
 }
 
 .ri-btn-group > *:last-child,
