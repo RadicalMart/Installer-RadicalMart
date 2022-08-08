@@ -1131,7 +1131,7 @@ window.RadicalInstaller = {
         if(show_toolbar === null || show_toolbar === undefined) {
             show_toolbar = true;
         }
-        0
+
         RadicalInstallerProject.checkUpdate({
             done: function (items) {
                 let class_list = '';
@@ -1145,7 +1145,7 @@ window.RadicalInstaller = {
                 }
 
                 for(let k=0;k<RadicalInstaller.buttons_page_main.groups.length;k++) {
-                    for(let c=0;c<RadicalInstaller.buttons_page_main.groups[k].length;c++) {
+                    for(let c=0;c<RadicalInstaller.buttons_page_main.groups[k].items.length;c++) {
                         for (let j=0;j<RadicalInstaller.buttons_page_main.groups[k].items.length;j++) {
                             if (RadicalInstaller.buttons_page_main.groups[k].items[j].name === 'updated') {
                                 RadicalInstaller.buttons_page_main.groups[k].items[j].label = '<span class="' + class_list + '">' + items.count + '</span> ' + RadicalInstallerLangs.button_update
