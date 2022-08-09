@@ -6,10 +6,8 @@ use Joomla\Archive\Zip;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Http\Transport\CurlTransport;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\Log\Log;
 use Joomla\CMS\Table\Table;
 use Joomla\CMS\Uri\Uri;
-use Joomla\CMS\Version;
 use Joomla\Filesystem\File;
 use Joomla\Filesystem\Folder;
 use Joomla\Registry\Registry;
@@ -63,7 +61,7 @@ class ProviderYoolayouts implements ProviderInterface
 			return false;
 		}
 
-		$project = json_decode(API::project($id), JSON_OBJECT_AS_ARRAY);
+		$project = json_decode(API::project($id), true);
 
 		$zip = new Zip;
 
@@ -91,19 +89,6 @@ class ProviderYoolayouts implements ProviderInterface
 		$url_curl->setHost($this->host);
 		$request = $curlTransport->request('GET', $url_curl, $data);
 
-		if (((new Version())->isCompatible('4.0')))
-		{
-			$body = $request->body;
-
-			$body = (!empty($body)) ? $request->body : false;
-		}
-		else
-		{
-			$body = (!empty($response->body)) ? $response->body : false;
-		}
-
-		$body = json_decode($body, JSON_OBJECT_AS_ARRAY);
-
 		//если сервер прислал ошибку, то пишем и выходим
 		if ($request->code !== 200)
 		{
@@ -111,6 +96,9 @@ class ProviderYoolayouts implements ProviderInterface
 
 			return false;
 		}
+
+		$body = (!empty($request->body)) ? $request->body : false;
+		$body = json_decode($body, true);
 
 		//если ключ установлен, но не находится такой на сервере
 		if (is_array($body) && isset($body['message']) && ($body['message'] === 'forbidden'))
@@ -158,7 +146,7 @@ class ProviderYoolayouts implements ProviderInterface
 				// Add new items
 				foreach ($files as $file)
 				{
-					$item = json_decode(file_get_contents($this->filepath_extract . DIRECTORY_SEPARATOR . $file), JSON_OBJECT_AS_ARRAY);
+					$item = json_decode(file_get_contents($this->filepath_extract . DIRECTORY_SEPARATOR . $file), true);
 
 					if (!is_array($item))
 					{
@@ -177,7 +165,7 @@ class ProviderYoolayouts implements ProviderInterface
 				}
 
 				// Update plugin
-				$yootheme->custom_data            = ($custom_data) ? $custom_data : array();
+				$yootheme->custom_data            = ($custom_data) ?: array();
 				$yootheme->custom_data['library'] = $items;
 				$yootheme->custom_data            = json_encode($yootheme->custom_data);
 
@@ -278,7 +266,6 @@ class ProviderYoolayouts implements ProviderInterface
 			//удаляем архив
 			if (!File::delete($this->filepath))
 			{
-				Log::add(Text::_('PLG_UIKIT_HIKASHOP_ERROR_DELETE_ZIP'), Log::ERROR, 'plg_system_uikithikashop');
 				Factory::getApplication()->enqueueMessage(Text::_('PLG_UIKIT_HIKASHOP_ERROR_DELETE_ZIP'), 'notice');
 			}
 		}
@@ -288,7 +275,6 @@ class ProviderYoolayouts implements ProviderInterface
 			//удаляем временную папку
 			if (!Folder::delete($this->filepath_extract))
 			{
-				Log::add(Text::_('PLG_UIKIT_HIKASHOP_ERROR_DELETE_TMP_FOLDER'), Log::ERROR, 'plg_system_uikithikashop');
 				Factory::getApplication()->enqueueMessage(Text::_('PLG_UIKIT_HIKASHOP_ERROR_DELETE_TMP_FOLDER'), 'notice');
 			}
 		}

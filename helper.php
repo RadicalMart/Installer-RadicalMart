@@ -26,9 +26,10 @@ class RadicalinstallerHelper
 		{
 			$extensions_for_api[] = implode('.', [$item->type, $item->folder, $item->element]);
 		}
-
+		
 		// отсылаем на сервер radicalmart.ru и получаем ответ об установленных расширениях
-		$sync_projects = json_decode(API::syncExtensions(json_encode($extensions_for_api)), JSON_OBJECT_AS_ARRAY);
+		$sync_projects = json_decode(API::syncExtensions(json_encode($extensions_for_api)), true);
+
 
 		if (!is_array($sync_projects))
 		{

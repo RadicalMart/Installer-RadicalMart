@@ -317,7 +317,7 @@ window.RadicalInstallerUI = {
                             let key_value = event.target.querySelector('[name=key]').value;
 
                             if (key_value.length < 30) {
-                                RadicalInstallerUtils.createAlert(RadicalInstallerLangs.error_key, 'danger', 5000);
+                                RadicalInstallerUtils.createAlert(RadicalInstallerLangs.alert_key_error, 'danger', 5000);
                                 return;
                             }
 
@@ -341,7 +341,7 @@ window.RadicalInstallerUI = {
                                         return;
                                     }
 
-                                    RadicalInstallerUtils.createAlert(RadicalInstallerLangs.error_service, 'danger', 5000);
+                                    RadicalInstallerUtils.createAlert(RadicalInstallerLangs.alert_service_error, 'danger', 5000);
                                 });
 
                             return false;
@@ -361,7 +361,7 @@ window.RadicalInstallerUI = {
             .add('button', {
                 class: 'ri-btn ri-btn-default ri-btn-primary ri-btn-large',
                 type: 'submit'
-            }, 'Сохранить')
+            }, RadicalInstallerLangs.save)
             .add('button', {
                 class: 'ri-btn ri-btn-default ri-btn-large',
                 type: 'submit',
@@ -374,7 +374,7 @@ window.RadicalInstallerUI = {
                         }
                     ]
                 ]
-            }, 'Очистить')
+            }, RadicalInstallerLangs.clean)
             .getParent()
             .getParent()
             .getParent()
@@ -552,7 +552,7 @@ window.RadicalInstallerUI = {
         if (category !== '') {
             if (category_id !== '') {
                 card = card.add('div', {class: 'radicalinstaller-project-card-category'}, [
-                    RadicalInstallerUtils.createElement('span', {}, 'Категория ').build(),
+                    RadicalInstallerUtils.createElement('span', {}, RadicalInstallerLangs.category + ' ').build(),
                     RadicalInstallerUtils.createElement('a', {
                         events: [
                             [
@@ -566,13 +566,13 @@ window.RadicalInstallerUI = {
                     }, category).build(),
                 ]);
             } else {
-                card = card.add('div', {class: 'radicalinstaller-project-card-category'}, '<span>Категория </span>' + '<span>' + category + '</span>');
+                card = card.add('div', {class: 'radicalinstaller-project-card-category'}, '<span>' + RadicalInstallerLangs.category + ' </span>' + '<span>' + category + '</span>');
             }
         }
 
         if (version !== '') {
             card = card.addChild('div', {class: 'radicalinstaller-project-card-version radicalinstaller-flex radicalinstaller-flex-middle'})
-                .add('span', {class: 'radicalinstaller-margin-right-xsmall'}, 'Версия')
+                .add('span', {class: 'radicalinstaller-margin-right-xsmall'}, RadicalInstallerLangs.version)
                 .add('span', {class: 'value'}, version)
                 .add('span', {class: 'value-arrow ri-hidden'}, RadicalInstallerUI.renderIcon({
                     name: 'ri-right',
@@ -582,7 +582,7 @@ window.RadicalInstallerUI = {
                 .getParent();
         } else {
             card.addChild('div', {class: 'radicalinstaller-project-card-version radicalinstaller-flex radicalinstaller-flex-middle ri-hidden'})
-                .add('span', {class: 'radicalinstaller-margin-right-xsmall'}, 'Версия')
+                .add('span', {class: 'radicalinstaller-margin-right-xsmall'}, RadicalInstallerLangs.version)
                 .add('span', {class: 'value'}, version)
                 .add('span', {class: 'value-arrow ri-hidden'}, RadicalInstallerUI.renderIcon({
                     name: 'ri-right',
@@ -608,7 +608,7 @@ window.RadicalInstallerUI = {
                             logs_container.innerHTML = '';
 
                             button_install.setAttribute('disabled', 'disabled');
-                            button_install.innerHTML = 'Устанавливается';
+                            button_install.innerHTML = RadicalInstallerLangs.install_proccess;
 
                             RadicalInstallerProject.install({
                                 ids: [id],
@@ -644,7 +644,7 @@ window.RadicalInstallerUI = {
                                     }
 
                                     if (success) {
-                                        button_install.innerHTML = 'Переустановить';
+                                        button_install.innerHTML = RadicalInstallerLangs.reinstall;
 
                                         if (
                                             button_delete !== undefined &&
@@ -657,20 +657,20 @@ window.RadicalInstallerUI = {
                                         RadicalInstaller.checkUpdatedProjects(false);
 
                                     } else {
-                                        button_install.innerHTML = 'Установить';
+                                        button_install.innerHTML = RadicalInstallerLangs.install;
                                     }
 
                                     button_install.removeAttribute('disabled');
                                 },
                                 fail: function () {
-                                    button_install.innerHTML = 'Установить';
+                                    button_install.innerHTML = RadicalInstallerLangs.install;
                                     button_install.removeAttribute('disabled');
                                     logs_container.append(RadicalInstallerUI.renderLogsClose());
                                     logs_container.append(
                                         RadicalInstallerUtils.createElement(
                                             'div',
                                             {},
-                                            '<div class="alert alert-danger">' + 'Не удалось установить расширение' + '</div>'
+                                            '<div class="alert alert-danger">' + RadicalInstallerLangs.text_install_error + '</div>'
                                         ).build()
                                     );
                                 }
@@ -678,7 +678,7 @@ window.RadicalInstallerUI = {
                         }
                     ]
                 ]
-            }, 'Установить')
+            }, RadicalInstallerLangs.install)
             .add('button', {
                 type: 'button',
                 class: 'ri-btn ri-btn-delete ri-btn-danger ri-hidden',
@@ -694,7 +694,7 @@ window.RadicalInstallerUI = {
                             logs_container.innerHTML = '';
 
                             button_delete.setAttribute('disabled', 'disabled');
-                            button_delete.innerHTML = 'Удаляется';
+                            button_delete.innerHTML = RadicalInstallerLangs.delete_process;
 
                             RadicalInstallerProject.delete({
                                 id: [id],
@@ -722,7 +722,7 @@ window.RadicalInstallerUI = {
                                         success = true;
                                     }
 
-                                    button_delete.innerHTML = 'Удалить';
+                                    button_delete.innerHTML = RadicalInstallerLangs.delete;
 
                                     if (success) {
                                         button_delete.classList.add('ri-hidden');
@@ -731,7 +731,7 @@ window.RadicalInstallerUI = {
                                             button_install !== undefined &&
                                             button_install !== null
                                         ) {
-                                            button_install.innerHTML = 'Установить';
+                                            button_install.innerHTML = RadicalInstallerLangs.install;
                                         }
 
                                         RadicalInstaller.checkUpdatedProjects(false);
@@ -740,14 +740,14 @@ window.RadicalInstallerUI = {
                                     button_delete.removeAttribute('disabled');
                                 },
                                 fail: function () {
-                                    button_delete.innerHTML = 'Удалить';
+                                    button_delete.innerHTML = RadicalInstallerLangs.delete;
                                     button_delete.removeAttribute('disabled');
                                     logs_container.append(RadicalInstallerUI.renderLogsClose());
                                     logs_container.append(
                                         RadicalInstallerUtils.createElement(
                                             'div',
                                             {},
-                                            '<div class="alert alert-danger">' + 'Не удалось удалить расширение' + '</div>'
+                                            '<div class="alert alert-danger">' + RadicalInstallerLangs.text_delete_error + '</div>'
                                         ).build()
                                     );
                                 }
@@ -756,7 +756,7 @@ window.RadicalInstallerUI = {
                         }
                     ]
                 ]
-            }, 'Удалить')
+            }, RadicalInstallerLangs.delete)
             .add('button', {
                 type: 'button',
                 class: 'ri-btn ri-btn-default',
@@ -799,7 +799,7 @@ window.RadicalInstallerUI = {
                     }
                 ]
             ]
-        }, 'Закрыть все сообщения')
+        }, RadicalInstallerLangs.message_close)
 
         return wrap.build();
     },

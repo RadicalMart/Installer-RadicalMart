@@ -83,29 +83,14 @@ window.RadicalInstaller = {
                         trigger_grid_row_end_for: RadicalInstaller.triggerGridRowEndForCard
                     });
 
-                    /*group.buttons = [
-                        {
-                            label: 'Установить все',
-                            class: 'ri-btn ri-btn-primary',
-                            events: [
-                                [
-                                    'click',
-                                    function (event) {
-
-                                    }
-                                ]
-                            ]
-                        }
-                    ];*/
-
                     group.groups = [
                         {
-                            label: 'Основные расширения',
+                            label: RadicalInstallerLangs.group_main,
                             class: 'radicalinstaller-background-muted',
                             content: grid_required
                         },
                         {
-                            label: 'Дополнительные расширения',
+                            label: RadicalInstallerLangs.group_other,
                             class: '',
                             content: grid_not_required
                         }
@@ -151,7 +136,7 @@ window.RadicalInstaller = {
 
                         group.actions = [
                             {
-                                label: 'Просмотреть все',
+                                label: RadicalInstallerLangs.view_all,
                                 class: 'ri-btn ri-btn-primary',
                                 events: [
                                     [
@@ -170,7 +155,7 @@ window.RadicalInstaller = {
 
                         group.actions = [
                             {
-                                label: 'Просмотреть все',
+                                label: RadicalInstallerLangs.view_all,
                                 class: 'ri-btn ri-btn-primary',
                                 events: [
                                     [
@@ -227,8 +212,8 @@ window.RadicalInstaller = {
 
             if(data.items.length === 0) {
                 page.appendChild(RadicalInstallerUI.renderGroup({
-                    label: 'Обновление',
-                    content: RadicalInstallerUI.renderAlert({message: 'Обновлений нет. Все установленные расширения имеют актуальную версию.'})
+                    label: RadicalInstallerLangs.updated,
+                    content: RadicalInstallerUI.renderAlert({message: RadicalInstallerLangs.text_updated_no})
                 }));
 
                 return;
@@ -251,7 +236,7 @@ window.RadicalInstaller = {
             });
 
             page.appendChild(RadicalInstallerUI.renderGroup({
-                label: 'Обновление',
+                label: RadicalInstallerLangs.updated,
                 content: grid
             }));
 
@@ -289,8 +274,8 @@ window.RadicalInstaller = {
 
             if(items.length === 0) {
                 page.appendChild(RadicalInstallerUI.renderGroup({
-                    label: 'Установлено',
-                    content: RadicalInstallerUI.renderAlert({message: 'Установленных расширений нет. Откройте раздел "Главная" и выберите расширение для установки.'})
+                    label: RadicalInstallerLangs.installed,
+                    content: RadicalInstallerUI.renderAlert({message: RadicalInstallerLangs.text_installed_no})
                 }));
 
                 return;
@@ -314,7 +299,7 @@ window.RadicalInstaller = {
             });
 
             page.appendChild(RadicalInstallerUI.renderGroup({
-                label: 'Установлено',
+                label: RadicalInstallerLangs.installed,
                 content: grid
             }));
 
@@ -344,7 +329,7 @@ window.RadicalInstaller = {
                     items: [
                         {
                             //label: 'Назад',
-                            label: 'Главная',
+                            label: RadicalInstallerLangs.home,
                             icon: 'ri-home',
                             class: 'ri-btn ri-btn-default',
                             events: [
@@ -435,7 +420,7 @@ window.RadicalInstaller = {
                         'class': 'radicalinstaller-project-page_gallery-images-background',
                         'style': 'background-color: ' + color
                     });
-                for (let i = 0; i < item.gallery.length; i++) {
+                for (let i=0;i<item.gallery.length;i++) {
                     header = header.addChild('div', {
                         'class': 'radicalinstaller-project-page_gallery-images-element',
                         'style': i === 0 ? 'display:block' : 'display:none'
@@ -543,7 +528,7 @@ window.RadicalInstaller = {
 
             if (check_install) {
                 group_actions.items.push({
-                    label: RadicalInstallerLangs.button_install,
+                    label: RadicalInstallerLangs.install,
                     icon: 'ri-download',
                     class: 'ri-btn ri-btn-default ri-btn-success ri-btn-install',
                     disabled: 'disabled',
@@ -558,7 +543,7 @@ window.RadicalInstaller = {
                                 logs_container.innerHTML = '';
 
                                 button_install.setAttribute('disabled', 'disabled');
-                                button_install.innerHTML = 'Устанавливается';
+                                button_install.querySelector('span').innerHTML = RadicalInstallerLangs.install_process;
 
                                 RadicalInstallerProject.install({
                                     ids: [id],
@@ -589,7 +574,7 @@ window.RadicalInstaller = {
                                         }
 
                                         if(success) {
-                                            button_install.querySelector('span').innerHTML = 'Переустановить';
+                                            button_install.querySelector('span').innerHTML = RadicalInstallerLangs.reinstall;
 
                                             if(
                                                 button_delete !== undefined &&
@@ -601,20 +586,20 @@ window.RadicalInstaller = {
 
                                             RadicalInstaller.checkUpdatedProjects(false, false);
                                         } else {
-                                            button_install.querySelector('span').innerHTML = 'Установить';
+                                            button_install.querySelector('span').innerHTML = RadicalInstallerLangs.install;
                                         }
 
                                         button_install.removeAttribute('disabled');
                                     },
                                     fail: function() {
-                                        button_install.querySelector('span').innerHTML = 'Установить';
+                                        button_install.querySelector('span').innerHTML = RadicalInstallerLangs.install;
                                         button_install.removeAttribute('disabled');
                                         logs_container.append(RadicalInstallerUI.renderLogsClose());
                                         logs_container.append(
                                             RadicalInstallerUtils.createElement(
                                                 'div',
                                                 {},
-                                                '<div class="alert alert-danger">' + 'Не удалось установить расширение' + '</div>'
+                                                '<div class="alert alert-danger">' + RadicalInstallerLangs.text_install_error + '</div>'
                                             ).build()
                                         );
                                     }
@@ -627,7 +612,7 @@ window.RadicalInstaller = {
                 });
             } else {
                 group_actions.items.push({
-                    label: RadicalInstallerLangs.button_buy,
+                    label: RadicalInstallerLangs.need_key,
                     icon: 'ri-link',
                     class: 'ri-btn ri-btn-default ri-btn-success',
                     events: [
@@ -644,7 +629,7 @@ window.RadicalInstaller = {
             }
 
             group_actions.items.push({
-                label: RadicalInstallerLangs.button_delete,
+                label: RadicalInstallerLangs.delete,
                 icon: 'ri-trash',
                 class: 'ri-btn ri-btn-default ri-btn-danger ri-btn-delete ri-hidden',
                 events: [
@@ -660,7 +645,7 @@ window.RadicalInstaller = {
                             logs_container.innerHTML = '';
 
                             button_delete.setAttribute('disabled', 'disabled');
-                            button_delete.innerHTML = 'Удаляется';
+                            button_delete.querySelector('span').innerHTML = RadicalInstallerLangs.delete_process;
 
                             RadicalInstallerProject.delete({
                                 id: [id],
@@ -688,7 +673,7 @@ window.RadicalInstaller = {
                                         success = true;
                                     }
 
-                                    button_delete.innerHTML = 'Удалить';
+                                    button_delete.innerHTML = RadicalInstallerLangs.delete;
 
                                     if(success) {
                                         button_delete.classList.add('ri-hidden');
@@ -697,7 +682,7 @@ window.RadicalInstaller = {
                                             button_install !== undefined &&
                                             button_install !== null
                                         ) {
-                                            button_install.innerHTML = 'Установить';
+                                            button_install.innerHTML = RadicalInstallerLangs.install;
                                         }
 
                                         RadicalInstaller.checkUpdatedProjects(false, false);
@@ -706,14 +691,14 @@ window.RadicalInstaller = {
                                     button_delete.removeAttribute('disabled');
                                 },
                                 fail: function() {
-                                    button_delete.innerHTML = 'Удалить';
+                                    button_delete.innerHTML = RadicalInstallerLangs.delete;
                                     button_delete.removeAttribute('disabled');
                                     logs_container.append(RadicalInstallerUI.renderLogsClose());
                                     logs_container.append(
                                         RadicalInstallerUtils.createElement(
                                             'div',
                                             {},
-                                            '<div class="alert alert-danger">' + 'Не удалось удалить расширение' + '</div>'
+                                            '<div class="alert alert-danger">' + RadicalInstallerLangs.text_delete_error + '</div>'
                                         ).build()
                                     );
                                 }
@@ -730,7 +715,7 @@ window.RadicalInstaller = {
                 docs !== ''
             ) {
                 group_info.items.push({
-                    label: RadicalInstallerLangs.button_docs,
+                    label: RadicalInstallerLangs.docs,
                     icon: 'ri-link',
                     class: 'ri-btn ri-btn-default',
                     events: [
@@ -750,7 +735,7 @@ window.RadicalInstaller = {
                 support !== ''
             ) {
                 group_info.items.push({
-                    label: RadicalInstallerLangs.button_support,
+                    label: RadicalInstallerLangs.support,
                     class: 'ri-btn ri-btn-default',
                     icon: 'ri-link',
                     events: [
@@ -775,7 +760,7 @@ window.RadicalInstaller = {
                 if(project.introtext !== undefined && project.introtext !== '') {
                     body = body.add('div', {'class': 'radicalinstaller-project-page_description-text'}, project.introtext);
                 } else {
-                    body = body.add('div', {'class': 'radicalinstaller-project-page_description-text'}, RadicalInstallerLangs.text_no_description);
+                    body = body.add('div', {'class': 'radicalinstaller-project-page_description-text'}, RadicalInstallerLangs.description_no);
                 }
             }
 
@@ -903,7 +888,7 @@ window.RadicalInstaller = {
             });
 
             page.appendChild(RadicalInstallerUI.renderGroup({
-                label: 'Доступные по ключу',
+                label: RadicalInstallerLangs.group_key,
                 content: grid
             }));
 
@@ -960,7 +945,7 @@ window.RadicalInstaller = {
             });
 
             page.appendChild(RadicalInstallerUI.renderGroup({
-                label: 'Бесплатные',
+                label: RadicalInstallerLangs.group_free,
                 content: grid
             }));
 
@@ -982,7 +967,7 @@ window.RadicalInstaller = {
                 let categories_items = json.items;
                 let items = {
                     dropdown: {
-                        label: 'Категория',
+                        label: RadicalInstallerLangs.category,
                         icon: 'ri-down',
                         icon_position: 'right',
                         class: 'ri-btn ri-btn-default',
@@ -1034,7 +1019,7 @@ window.RadicalInstaller = {
                         {
                             name: 'home',
                             icon: 'ri-home',
-                            label: 'Главная',
+                            label: RadicalInstallerLangs.home,
                             class: 'ri-btn ri-btn-default',
                             events: [
                                 [
@@ -1052,7 +1037,7 @@ window.RadicalInstaller = {
                     items: [
                         {
                             name: 'updated',
-                            label: 'Обновления',
+                            label: RadicalInstallerLangs.updated,
                             class: 'ri-btn ri-btn-default ri-btn-check-update',
                             events: [
                                 [
@@ -1066,7 +1051,7 @@ window.RadicalInstaller = {
                         {
                             name: 'installed',
                             icon: 'ri-download',
-                            label: 'Установленно',
+                            label: RadicalInstallerLangs.installed,
                             class: 'ri-btn ri-btn-default',
                             events: [
                                 [
@@ -1080,7 +1065,7 @@ window.RadicalInstaller = {
                         {
                             name: 'sync',
                             icon: 'ri-sync',
-                            label: 'Синхронизация',
+                            label: RadicalInstallerLangs.sync,
                             class: 'ri-btn ri-btn-default',
                             events: [
                                 [
@@ -1104,7 +1089,7 @@ window.RadicalInstaller = {
                         {
                             name: 'support',
                             icon: 'ri-support',
-                            label: 'Поддержка',
+                            label: RadicalInstallerLangs.support,
                             class: 'ri-btn ri-btn-default',
                             events: [
                                 [
@@ -1138,7 +1123,7 @@ window.RadicalInstaller = {
 
                 if (parseInt(items.count) > 0) {
                     if(show_alert) {
-                        RadicalInstallerUtils.createAlert(RadicalInstallerLangs.text_new_updated, 'info', 5000);
+                        RadicalInstallerUtils.createAlert(RadicalInstallerLangs.text_updated_new, 'info', 5000);
                     }
                 } else {
                     class_list = 'empty';
@@ -1148,7 +1133,7 @@ window.RadicalInstaller = {
                     for(let c=0;c<RadicalInstaller.buttons_page_main.groups[k].items.length;c++) {
                         for (let j=0;j<RadicalInstaller.buttons_page_main.groups[k].items.length;j++) {
                             if (RadicalInstaller.buttons_page_main.groups[k].items[j].name === 'updated') {
-                                RadicalInstaller.buttons_page_main.groups[k].items[j].label = '<span class="' + class_list + '">' + items.count + '</span> ' + RadicalInstallerLangs.button_update
+                                RadicalInstaller.buttons_page_main.groups[k].items[j].label = '<span class="' + class_list + '">' + items.count + '</span> ' + RadicalInstallerLangs.updated
                             }
                         }
                     }
@@ -1178,11 +1163,11 @@ window.RadicalInstaller = {
                 cards[i].querySelector('.ri-btn-install').removeAttribute('disabled');
 
                 if(find_ids.indexOf(parseInt(ids[k])) !== -1) {
-                    cards[i].querySelector('.ri-btn-install').innerHTML = 'Переустановить';
+                    cards[i].querySelector('.ri-btn-install').innerHTML = RadicalInstallerLangs.reinstall;
                     cards[i].querySelector('.ri-btn-delete').classList.remove('ri-hidden');
                 } else {
                     if(paid === 'paid' && RadicalInstallerConfig.key === '') {
-                        cards[i].querySelector('.ri-btn-install').innerHTML = 'Нужен ключ';
+                        cards[i].querySelector('.ri-btn-install').innerHTML = RadicalInstallerLangs.need_key;
 
                         cards[i].querySelector('.ri-btn-install').addEventListener('click',function (event) {
 
@@ -1207,7 +1192,7 @@ window.RadicalInstaller = {
                 }
 
                 for(let i =0;i<cards.length;i++) {
-                    cards[i].querySelector('.ri-btn-install').innerHTML = 'Обновить';
+                    cards[i].querySelector('.ri-btn-install').innerHTML = RadicalInstallerLangs.update;
                     cards[i].querySelector('.radicalinstaller-project-card-version').classList.remove('ri-hidden');
                     cards[i].querySelector('.radicalinstaller-project-card-version').querySelector('.value-last').innerHTML = updates.items[j].version_last;
                     let version = cards[i].querySelector('.radicalinstaller-project-card-version').querySelector('.value').innerHTML;
@@ -1246,11 +1231,11 @@ window.RadicalInstaller = {
             RadicalInstallerUI.container.querySelector('.ri-btn-install').removeAttribute('disabled');
 
             if(find_ids.indexOf(parseInt(ids[k])) !== -1) {
-                RadicalInstallerUI.container.querySelector('.ri-btn-install').querySelector('span').innerHTML = 'Переустановить';
+                RadicalInstallerUI.container.querySelector('.ri-btn-install').querySelector('span').innerHTML = RadicalInstallerLangs.reinstall;
                 RadicalInstallerUI.container.querySelector('.ri-btn-delete').classList.remove('ri-hidden');
             } else {
                 if(paid === 'paid' && RadicalInstallerConfig.key === '') {
-                    RadicalInstallerUI.container.querySelector('.ri-btn-install').querySelector('span').innerHTML = 'Нужен ключ';
+                    RadicalInstallerUI.container.querySelector('.ri-btn-install').querySelector('span').innerHTML = RadicalInstallerLangs.need_key;
 
                     RadicalInstallerUI.container.querySelector('.ri-btn-install').addEventListener('click',function (event) {
                         // TODO отправлять на покупку
@@ -1269,7 +1254,7 @@ window.RadicalInstaller = {
                     continue;
                 }
 
-                RadicalInstallerUI.container.querySelector('.ri-btn-install').innerHTML = 'Обновить';
+                RadicalInstallerUI.container.querySelector('.ri-btn-install').innerHTML = RadicalInstallerLangs.update;
 
             }
         }
