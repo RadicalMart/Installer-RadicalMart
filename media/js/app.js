@@ -40,9 +40,8 @@ window.RadicalInstaller = {
                         let items = JSON.parse(response.data);
                         resolve(items);
                     }).fail(function (xhr) {
-                    reject(xhr);
-                });
-
+                        reject(xhr);
+                    });
             }
         }).then( items => {
 

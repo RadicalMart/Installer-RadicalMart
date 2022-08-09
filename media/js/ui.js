@@ -608,7 +608,7 @@ window.RadicalInstallerUI = {
                             logs_container.innerHTML = '';
 
                             button_install.setAttribute('disabled', 'disabled');
-                            button_install.innerHTML = RadicalInstallerLangs.install_proccess;
+                            button_install.innerHTML = RadicalInstallerLangs.install_process;
 
                             RadicalInstallerProject.install({
                                 ids: [id],
