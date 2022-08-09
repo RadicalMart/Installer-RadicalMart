@@ -271,7 +271,7 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 		}
 
 		$projects_from_server = API::projectListCheckVersion($ids);
-		$projects_from_server = json_decode($projects_from_server, JSON_OBJECT_AS_ARRAY);
+		$projects_from_server = json_decode($projects_from_server, true);
 		$projects             = [];
 		$projects_for_update  = [];
 
@@ -279,6 +279,11 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 		{
 			foreach ($projects_from_server as $project_from_server)
 			{
+				if(!isset($project_from_server['id']))
+				{
+					continue;
+				}
+
 				$projects[(int) $project_from_server['id']] = $project_from_server;
 			}
 
