@@ -56,7 +56,7 @@ class ProviderYoolayouts implements ProviderInterface
 
 		if (!$yootheme)
 		{
-			$this->addMessage(Text::_('Не установлен YOOtheme Pro'), 'danger');
+			$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_ERROR_YOOTHEME_PRO'), 'danger');
 
 			return false;
 		}
@@ -67,7 +67,7 @@ class ProviderYoolayouts implements ProviderInterface
 
 		if (!Zip::hasNativeSupport())
 		{
-			$this->addMessage(Text::_('Нет поддержки zip архивов'), 'danger');
+			$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_ERROR_ZIP'), 'danger');
 
 			return false;
 		}
@@ -92,7 +92,7 @@ class ProviderYoolayouts implements ProviderInterface
 		//если сервер прислал ошибку, то пишем и выходим
 		if ($request->code !== 200)
 		{
-			$this->addMessage(Text::_('Не удалось скачать архив с сервера'), 'warning');
+			$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_ERROR_ARCHIVE_SERVICE'), 'warning');
 
 			return false;
 		}
@@ -103,7 +103,7 @@ class ProviderYoolayouts implements ProviderInterface
 		//если ключ установлен, но не находится такой на сервере
 		if (is_array($body) && isset($body['message']) && ($body['message'] === 'forbidden'))
 		{
-			$this->addMessage(Text::_('Не правильный ключ'), 'warning');
+			$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_ERROR_KEY'), 'warning');
 
 			return false;
 		}
@@ -205,7 +205,7 @@ class ProviderYoolayouts implements ProviderInterface
 			}
 		}
 
-		$this->addMessage(Text::_('Макет был успешно установлен. Вы можете его увидеть в макетах конструктора YOOtheme PRO'));
+		$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_PROVIDER_YOOTHEMEPRO_LAYOUTS_INSTALLED'));
 
 		return true;
 
@@ -223,7 +223,7 @@ class ProviderYoolayouts implements ProviderInterface
 		$query->where($conditions);
 		$db->setQuery($query);
 
-		$this->addMessage(Text::_('Макет был успешно удален'));
+		$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_PROVIDER_YOOTHEMEPRO_LAYOUTS_DELETED'));
 
 		return $db->execute();
 	}
@@ -266,7 +266,7 @@ class ProviderYoolayouts implements ProviderInterface
 			//удаляем архив
 			if (!File::delete($this->filepath))
 			{
-				Factory::getApplication()->enqueueMessage(Text::_('PLG_UIKIT_HIKASHOP_ERROR_DELETE_ZIP'), 'notice');
+				$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_ERROR_DELETE_ZIP'), 'danger');
 			}
 		}
 
@@ -275,7 +275,7 @@ class ProviderYoolayouts implements ProviderInterface
 			//удаляем временную папку
 			if (!Folder::delete($this->filepath_extract))
 			{
-				Factory::getApplication()->enqueueMessage(Text::_('PLG_UIKIT_HIKASHOP_ERROR_DELETE_TMP_FOLDER'), 'notice');
+				$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_ERROR_DELETE_TMP_FOLDER'), 'danger');
 			}
 		}
 
