@@ -41,7 +41,7 @@ window.RadicalInstallerProject = {
 
     delete: function (args) {
 
-        let is_delete = confirm(RadicalInstallerLangs.question_extension_delete);
+        let is_delete = confirm(RadicalInstallerLangs.text_question_delete);
 
         if (!is_delete) {
             return;

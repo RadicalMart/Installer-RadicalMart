@@ -694,7 +694,6 @@ window.RadicalInstallerUI = {
                             logs_container.innerHTML = '';
 
                             button_delete.setAttribute('disabled', 'disabled');
-                            button_delete.innerHTML = RadicalInstallerLangs.delete_process;
 
                             RadicalInstallerProject.delete({
                                 id: [id],
@@ -702,9 +701,13 @@ window.RadicalInstallerUI = {
                                     let success = false;
                                     let data = response;
 
-                                    logs_container.append(RadicalInstallerUI.renderLogsClose());
 
-                                    if (data.messages !== undefined && data.messages !== null) {
+                                    if (
+                                        data.messages !== undefined && data.messages !== null &&
+                                        data.messages.length > 0
+                                    ) {
+                                        logs_container.append(RadicalInstallerUI.renderLogsClose());
+
                                         for (let i = data.messages.length - 1; i >= 0; i--) {
                                             logs_container.append(
                                                 RadicalInstallerUtils.createElement(
@@ -722,8 +725,6 @@ window.RadicalInstallerUI = {
                                         success = true;
                                     }
 
-                                    button_delete.innerHTML = RadicalInstallerLangs.delete;
-
                                     if (success) {
                                         button_delete.classList.add('ri-hidden');
 
@@ -740,7 +741,6 @@ window.RadicalInstallerUI = {
                                     button_delete.removeAttribute('disabled');
                                 },
                                 fail: function () {
-                                    button_delete.innerHTML = RadicalInstallerLangs.delete;
                                     button_delete.removeAttribute('disabled');
                                     logs_container.append(RadicalInstallerUI.renderLogsClose());
                                     logs_container.append(
@@ -756,7 +756,7 @@ window.RadicalInstallerUI = {
                         }
                     ]
                 ]
-            }, RadicalInstallerLangs.delete)
+            }, RadicalInstallerUI.renderIcon({name: 'ri-trash', size: 18}))
             .add('button', {
                 type: 'button',
                 class: 'ri-btn ri-btn-default',
