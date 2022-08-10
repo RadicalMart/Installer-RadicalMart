@@ -236,6 +236,7 @@ window.RadicalInstaller = {
                                     let button = this;
 
                                     button.innerHTML = RadicalInstallerLangs.install_process;
+                                    button.setAttribute('disabled', 'disabled');
 
                                     RadicalInstallerProject.install({
                                         ids: [RadicalInstaller.installer_service_id],
@@ -245,6 +246,7 @@ window.RadicalInstaller = {
                                         fail: function(id) {
                                             alert(RadicalInstallerLangs.text_updated_force_error);
                                             button.innerHTML = RadicalInstallerLangs.update;
+                                            button.removeAttribute('disabled');
                                         }
                                     });
                                 }
