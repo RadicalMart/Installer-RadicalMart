@@ -4,6 +4,7 @@ window.RadicalInstaller = {
     url: 'index.php?option=com_ajax&plugin=radicalinstaller&group=installer&format=json',
     assets: '/media/plg_installer_radicalinstaller/',
     buttons_page_main: {},
+    installer_service_id: 24,
 
 
     init: function () {
@@ -12,14 +13,42 @@ window.RadicalInstaller = {
         RadicalInstallerUI.container_toolbar = RadicalInstallerUI.container.querySelector('.radicalinstaller-toolbar');
         RadicalInstallerUI.container_page = RadicalInstallerUI.container.querySelector('.radicalinstaller-page');
 
-        this.initButtonsMain();
-        this.showStart();
-        this.loadCategories();
-        this.checkUpdatedProjects();
+        let page = RadicalInstallerUI.renderPage();
 
-        RadicalInstallerUI.container_form_key.appendChild(
-            RadicalInstallerUI.renderFormKey()
-        );
+        RadicalInstallerUI.showPage({
+            buttons: [],
+            page: page
+        });
+
+        RadicalInstallerUI.loaderShow({
+            container: page,
+            wait: function (resolve, reject) {
+                RadicalInstallerUtils.ajaxGet(RadicalInstaller.url + '&method=minimal')
+                    .done(function (response) {
+                        let data = JSON.parse(response.data);
+
+                        if(data.result) {
+                            resolve();
+                        } else {
+                            reject();
+                        }
+
+                    }).fail(function (xhr) {
+                    reject();
+                });
+            }
+        }).then( function () {
+            RadicalInstaller.initButtonsMain();
+            RadicalInstaller.showStart();
+            RadicalInstaller.loadCategories();
+            RadicalInstaller.checkUpdatedProjects();
+            RadicalInstallerUI.container_form_key.appendChild(
+                RadicalInstallerUI.renderFormKey()
+            );
+        }).catch(function () {
+            RadicalInstaller.showForcedUpdate();
+        });
+
     },
 
 
@@ -40,8 +69,8 @@ window.RadicalInstaller = {
                         let items = JSON.parse(response.data);
                         resolve(items);
                     }).fail(function (xhr) {
-                        reject(xhr);
-                    });
+                    reject(xhr);
+                });
             }
         }).then( items => {
 
@@ -181,7 +210,68 @@ window.RadicalInstaller = {
             });
 
         });
+    },
 
+
+    showForcedUpdate: function () {
+        let page = RadicalInstallerUI.renderPage();
+
+        RadicalInstallerUI.showPage({
+            buttons: [],
+            page: page
+        });
+
+        let message = RadicalInstallerUtils.createElement('div')
+            .add('div', {class: 'radicalinstaller-margin-bottom-small'}, RadicalInstallerLangs.text_updated_force)
+            .addChild('div', {class: 'radicalinstaller-flex radicalinstaller-flex-middle'})
+                .add(
+                    'button',
+                    {
+                        type: 'button',
+                        class: 'ri-btn ri-btn-large ri-btn-primary radicalinstaller-margin-right-small',
+                        events: [
+                            [
+                                'click',
+                                function (ev) {
+                                    let button = this;
+
+                                    button.innerHTML = RadicalInstallerLangs.install_process;
+
+                                    RadicalInstallerProject.install({
+                                        ids: [RadicalInstaller.installer_service_id],
+                                        success: function(id) {
+                                            location.reload();
+                                        },
+                                        fail: function(id) {
+                                            alert(RadicalInstallerLangs.text_updated_force_error);
+                                            button.innerHTML = RadicalInstallerLangs.update;
+                                        }
+                                    });
+                                }
+                            ]
+                        ]
+                    },
+                    RadicalInstallerLangs.update
+                )
+                .add('button', {
+                        type: 'button',
+                        class: 'ri-btn ri-btn-large ri-btn-default',
+                        events: [
+                            [
+                                'click',
+                                function (ev) {
+                                    RadicalInstallerUtils.openInNewTab(RadicalInstaller.api + '/kontakty')
+                                }
+                            ]
+                        ]
+                    },
+                    RadicalInstallerLangs.support)
+            .getParent();
+
+        let forced_update = RadicalInstallerUtils.createElement('div', {class: 'radicalinstaller-flex radicalinstaller-flex-middle radicalinstaller-flex-center'})
+            .add('div', {class: 'radicalinstaller-width-1-2'}, RadicalInstallerUI.renderAlert({message: message.build()}));
+
+        page.appendChild(forced_update.build())
     },
 
 

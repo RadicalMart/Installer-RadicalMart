@@ -2,6 +2,7 @@
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Table\Table;
+use Joomla\Registry\Registry;
 use Radicalinstaller\API;
 
 class RadicalinstallerHelper
@@ -26,7 +27,7 @@ class RadicalinstallerHelper
 		{
 			$extensions_for_api[] = implode('.', [$item->type, $item->folder, $item->element]);
 		}
-		
+
 		// отсылаем на сервер radicalmart.ru и получаем ответ об установленных расширениях
 		$sync_projects = json_decode(API::syncExtensions(json_encode($extensions_for_api)), true);
 
@@ -84,6 +85,23 @@ class RadicalinstallerHelper
 		}
 
 		return $count;
+	}
+
+
+	public static function getVersion()
+	{
+		$db    = Factory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select(['extension_id', 'folder', 'manifest_cache', 'enabled']);
+		$query->from('#__extensions');
+		$query->where($db->quoteName('type') . '=' . $db->q('plugin'));
+		$query->where($db->quoteName('folder') . '=' . $db->q('installer'));
+		$query->where($db->quoteName('element') . '=' . $db->q('radicalinstaller'));
+		$extension_joomla = $db->setQuery($query)->loadObject();
+		$manifest_cache   = new Registry($extension_joomla->manifest_cache);
+		$version          = $manifest_cache->get('version');
+
+		return $version;
 	}
 
 

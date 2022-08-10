@@ -83,6 +83,12 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 
 		try
 		{
+
+			if ($method === 'minimal')
+			{
+				$output = $this->APIMinimal();
+			}
+
 			if ($method === 'categories')
 			{
 				$output = $this->APICategories();
@@ -177,8 +183,6 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 		{
 			$app->setHeader('Content-Type', 'application/json');
 			$app->sendHeaders();
-
-			//var_dump($output);die();
 
 			return $output;
 		}
@@ -279,7 +283,7 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 		{
 			foreach ($projects_from_server as $project_from_server)
 			{
-				if(!isset($project_from_server['id']))
+				if (!isset($project_from_server['id']))
 				{
 					continue;
 				}
@@ -309,7 +313,20 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 
 	protected function APIMinimal()
 	{
-		return API::minimal();
+		$response        = json_decode(API::minimal(), true);
+		$current_version = RadicalinstallerHelper::getVersion();
+		$result          = true;
+
+		if (
+			isset($response['version']) &&
+			!empty($current_version) &&
+			version_compare($current_version, $response['version'], '<')
+		)
+		{
+			$result = false;
+		}
+
+		return json_encode(['result' => $result]);
 	}
 
 
