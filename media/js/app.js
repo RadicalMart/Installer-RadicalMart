@@ -228,7 +228,7 @@ window.RadicalInstaller = {
                     'button',
                     {
                         type: 'button',
-                        class: 'ri-btn ri-btn-large ri-btn-primary radicalinstaller-margin-right-small',
+                        class: 'ri-btn ri-btn-large ri-btn-default radicalinstaller-margin-right-small',
                         events: [
                             [
                                 'click',
