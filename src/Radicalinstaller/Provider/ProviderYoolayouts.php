@@ -214,14 +214,63 @@ class ProviderYoolayouts implements ProviderInterface
 
 	public function delete($id)
 	{
-		$db         = Factory::getDbo();
-		$query      = $this->db->getQuery(true);
+		$db = Factory::getDbo();
+
+		// проверка что стоит ютим про вообще
+		$query    = $db->getQuery(true)
+			->select(['e.extension_id', 'e.custom_data'])
+			->from($db->quoteName('#__extensions', 'e'))
+			->where($db->quoteName('e.type') . ' = ' . $db->quote('plugin'))
+			->where($db->quoteName('e.element') . ' = ' . $db->quote('yootheme'))
+			->where($db->quoteName('e.folder') . ' = ' . $db->quote('system'));
+		$yootheme = $db->setQuery($query)->loadObject();
+
+		if (!$yootheme)
+		{
+			$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_ERROR_YOOTHEME_PRO'), 'danger');
+
+			return false;
+		}
+
+
+		$query      = $db->getQuery(true);
 		$conditions = [
 			$db->quoteName('project_id') . ' = ' . (int) $id,
 		];
 		$query->delete($db->quoteName('#__radicalinstaller_extensions'));
 		$query->where($conditions);
 		$db->setQuery($query);
+		$project = $db->setQuery($query)->loadObject();
+
+		if ($custom_data = $yootheme->custom_data)
+		{
+			$custom_data = json_decode($custom_data, true);
+			$items = [];
+
+			if (is_array($custom_data) && !empty($custom_data['library']))
+			{
+
+				foreach ($custom_data['library'] as $key => $item)
+				{
+					if (strpos($key, 'radicalinstaller_yoolayouts_' . $project['element']) !== false)
+					{
+						continue;
+					}
+
+					$items[$key] = $item;
+				}
+			}
+
+			$yootheme->custom_data            = ($custom_data) ?: [];
+			$yootheme->custom_data['library'] = $items;
+			$yootheme->custom_data            = json_encode($yootheme->custom_data);
+
+			if (!$db->updateObject('#__extensions', $yootheme, array('extension_id')))
+			{
+				return false;
+			}
+		}
+
 
 		$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_PROVIDER_YOOTHEMEPRO_LAYOUTS_DELETED'));
 
