@@ -30,13 +30,17 @@
 		</server>
 	</updateservers>
 
-
 	<install>
 		<sql>
 			<file driver="mysql" charset="utf8">sql/install/mysql/mysql.sql</file>
 		</sql>
 	</install>
 
+	<update>
+		<schemas>
+			<schemapath type="mysql">sql/updates/mysql</schemapath>
+		</schemas>
+	</update>
 
 	<uninstall>
 		<sql>
