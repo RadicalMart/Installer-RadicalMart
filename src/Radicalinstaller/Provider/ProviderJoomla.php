@@ -93,10 +93,12 @@ class ProviderJoomla implements ProviderInterface
 
 				if (!$table->check())
 				{
+					return false;
 				}
 
 				if (!$table->store())
 				{
+					return false;
 				}
 
 			}

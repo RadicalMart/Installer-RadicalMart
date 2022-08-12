@@ -136,8 +136,6 @@ class ProviderYoolayouts implements ProviderInterface
 					{
 						foreach ($custom_data['library'] as $key => $item)
 						{
-							$keys[]      = $key;
-							$names[]     = $item['name'];
 							$items[$key] = $item;
 						}
 					}
@@ -148,7 +146,7 @@ class ProviderYoolayouts implements ProviderInterface
 				{
 					$item = json_decode(file_get_contents($this->filepath_extract . DIRECTORY_SEPARATOR . $file), true);
 
-					if (!is_array($item))
+					if (!is_array($item) || $item['name'])
 					{
 						return false;
 					}
@@ -174,7 +172,6 @@ class ProviderYoolayouts implements ProviderInterface
 					return false;
 				}
 
-
 				//записываем обновление
 				$table = Table::getInstance('RadicalinstallerExtensions', 'Table');
 				$table->load([
@@ -194,11 +191,13 @@ class ProviderYoolayouts implements ProviderInterface
 
 				if (!$table->check())
 				{
+					return false;
 					//Log::add(Text::_('PLG_UIKIT_HIKASHOP_ERROR_ZIP_EXTRACT'), Log::ERROR, 'plg_system_uikithikashop');
 				}
 
 				if (!$table->store())
 				{
+					return false;
 					//Log::add(Text::_('PLG_UIKIT_HIKASHOP_ERROR_ZIP_EXTRACT'), Log::ERROR, 'plg_system_uikithikashop');
 				}
 
