@@ -130,6 +130,10 @@
     flex-wrap: wrap;
 }
 
+.radicalinstaller-flex-nowrap {
+    flex-wrap: nowrap;
+}
+
 .radicalinstaller-flex-center {
     justify-content: center;
     justify-items: center;

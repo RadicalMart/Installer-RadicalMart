@@ -2,20 +2,22 @@
 
 defined('_JEXEC') or die;
 
-use Exception;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\Session\Session;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Table\Table;
-use Joomla\CMS\Uri\Uri;
 use Joomla\Registry\Registry;
 use Radicalinstaller\API;
 use Radicalinstaller\Config;
+use Throwable;
 
 class ProviderJoomla implements ProviderInterface
 {
 
 	protected $config = [];
+
+
+	protected $messages = [];
 
 
 	public function __construct($config = [])
@@ -31,7 +33,7 @@ class ProviderJoomla implements ProviderInterface
 	{
 		$app     = Factory::getApplication();
 		$input   = $app->input;
-		$project = json_decode(API::project($id), JSON_OBJECT_AS_ARRAY);
+		$project = json_decode(API::project($id), true);
 		$url     = $this->scheme . '://' . $this->host . $project['download'];
 
 		if (isset($this->config['api_key']))
@@ -43,8 +45,8 @@ class ProviderJoomla implements ProviderInterface
 		$input->set('install_url', $url);
 
 		Factory::getApplication()->getLanguage()->load('com_installer');
-		\JModelLegacy::addIncludePath(JPATH_ROOT . '/administrator/components/com_installer/models');
-		$model = \JModelLegacy::getInstance('Install', 'InstallerModel');
+		BaseDatabaseModel::addIncludePath(JPATH_ROOT . '/administrator/components/com_installer/models');
+		$model = BaseDatabaseModel::getInstance('Install', 'InstallerModel');
 
 		try
 		{
@@ -101,10 +103,19 @@ class ProviderJoomla implements ProviderInterface
 					return false;
 				}
 
+				$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_PROVIDER_JOOMLA_INSTALLED'));
 			}
 		}
-		catch (Exception $e)
+		catch (Throwable $e)
 		{
+			$this->addMessage(
+				Text::sprintf('PLG_INSTALLER_RADICALINSTALLER_ERROR_THROWABLE',
+					(string) $e->getLine(),
+					(string) $e->getFile(),
+					(string) $e->getMessage()
+				),
+				'danger'
+			);
 			$result = false;
 		}
 
@@ -117,9 +128,29 @@ class ProviderJoomla implements ProviderInterface
 		$table = Table::getInstance('RadicalinstallerExtensions', 'Table');
 		$table->load(['project_id' => $id]);
 		Factory::getApplication()->getLanguage()->load('com_installer');
-		\JModelLegacy::addIncludePath(JPATH_ROOT . '/administrator/components/com_installer/models');
-		$model  = \JModelLegacy::getInstance('Manage', 'InstallerModel');
-		$result = $model->remove([$table->extension_id]);
+		BaseDatabaseModel::addIncludePath(JPATH_ROOT . '/administrator/components/com_installer/models');
+		$model = BaseDatabaseModel::getInstance('Manage', 'InstallerModel');
+		try
+		{
+			$result = $model->remove([$table->extension_id]);
+
+			if ($result)
+			{
+				$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_PROVIDER_JOOMLA_DELETED'));
+			}
+		}
+		catch (Throwable $e)
+		{
+			$this->addMessage(
+				Text::sprintf('PLG_INSTALLER_RADICALINSTALLER_ERROR_THROWABLE',
+					(string) $e->getLine(),
+					(string) $e->getFile(),
+					(string) $e->getMessage()
+				),
+				'danger'
+			);
+			$result = false;
+		}
 
 		return $result;
 	}
@@ -130,10 +161,16 @@ class ProviderJoomla implements ProviderInterface
 	}
 
 
+	public function addMessage($msg, $type = 'info')
+	{
+		$this->messages[] = ['message' => $msg, 'type' => $type];
+	}
+
+
 	public function getMessages()
 	{
 		$app      = Factory::getApplication();
-		$messages = [];
+		$messages = $this->messages;
 
 		$message           = $app->getUserState('com_installer.message', '');
 		$extension_message = $app->getUserState('com_installer.extension_message', '');
@@ -151,30 +188,6 @@ class ProviderJoomla implements ProviderInterface
 		}
 
 		return $messages;
-	}
-
-
-	private function checkToken($method = 'post', $redirect = true)
-	{
-		$valid = Session::checkToken($method);
-		$app   = Factory::getApplication();
-
-		if (!$valid && $redirect)
-		{
-			$referrer = $app->input->server->getString('HTTP_REFERER');
-
-			if (!Uri::isInternal($referrer))
-			{
-				$referrer = 'index.php';
-			}
-
-			$app = Factory::getApplication();
-			$app->enqueueMessage(Text::_('JINVALID_TOKEN_NOTICE'), 'warning');
-
-			return false;
-		}
-
-		return $valid;
 	}
 
 

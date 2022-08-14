@@ -179,7 +179,8 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 			$output = $e->getMessage();
 			$app->setHeader('status', $e->getCode(), true);
 			$app->sendHeaders();
-		} finally
+		}
+		finally
 		{
 			$app->setHeader('Content-Type', 'application/json');
 			$app->sendHeaders();
