@@ -146,7 +146,7 @@ class ProviderYoolayouts implements ProviderInterface
 				{
 					$item = json_decode(file_get_contents($this->filepath_extract . DIRECTORY_SEPARATOR . $file), true);
 
-					if (!is_array($item) || $item['name'])
+					if (empty($item['name']))
 					{
 						return false;
 					}
