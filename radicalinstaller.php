@@ -179,8 +179,7 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 			$output = $e->getMessage();
 			$app->setHeader('status', $e->getCode(), true);
 			$app->sendHeaders();
-		}
-		finally
+		} finally
 		{
 			$app->setHeader('Content-Type', 'application/json');
 			$app->sendHeaders();
@@ -209,7 +208,10 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 			return json_encode([
 				'status'   => 'fail',
 				'messages' => [
-					'Не найден провайдер для установки'
+					[
+						'message' => Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_INSTALL_PROVIDER_NO_FOUND'),
+						'type'    => 'danger'
+					]
 				]
 			]);
 		}
@@ -221,14 +223,15 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 		{
 			$install  = $provider->start($id);
 			$messages = $provider->getMessages();
+
 			if (!$install)
 			{
-				$messages[] = ['message' => 'Не удалось установить расширение', 'type' => 'danger'];
+				$messages[] = ['message' => Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_INSTALL_ERROR'), 'type' => 'danger'];
 			}
 		}
 		catch (Exception $e)
 		{
-			$messages[] = ['message' => 'Не удалось установить расширение', 'type' => 'danger'];
+			$messages[] = ['message' => Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_INSTALL_ERROR'), 'type' => 'danger'];
 		}
 
 		return json_encode(['status' => $install ? 'ok' : 'fail', 'messages' => $messages]);
@@ -248,7 +251,10 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 			return json_encode([
 				'status'   => 'fail',
 				'messages' => [
-					'Не найден провайдер для удаления'
+					[
+						'message' => Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_DELETE_PROVIDER_NO_FOUND'),
+						'type'    => 'danger'
+					]
 				]
 			]);
 		}
