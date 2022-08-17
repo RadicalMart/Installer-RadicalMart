@@ -7,7 +7,6 @@ use Joomla\CMS\Layout\FileLayout;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Version;
 use Radicalinstaller\API;
-use Radicalinstaller\ProviderJoomla;
 
 JLoader::register('RadicalinstallerHelper', __DIR__ . '/helper.php');
 
