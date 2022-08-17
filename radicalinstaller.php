@@ -195,7 +195,7 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 		$app            = Factory::getApplication();
 		$input          = $app->input;
 		$id             = $input->get('id', '', 'int');
-		$project        = json_decode(API::project($id), JSON_OBJECT_AS_ARRAY);
+		$project        = json_decode(API::project($id), true);
 		$provider_class = '\\Radicalinstaller\\Provider\\Provider' . ucfirst(strtolower(!empty($project['provider']) ? $project['provider'] : 'joomla'));
 		$config         = [
 			'api_key' => $this->params->get('apikey', '')
@@ -242,7 +242,7 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 		$app     = Factory::getApplication();
 		$input   = $app->input;
 		$id      = $input->get('id', '', 'int');
-		$project = json_decode(API::project($id), JSON_OBJECT_AS_ARRAY);;
+		$project = json_decode(API::project($id), true);;
 		$provider_class = '\\Radicalinstaller\\Provider\\Provider' . ucfirst(strtolower(!empty($project['provider']) ? $project['provider'] : 'joomla'));
 
 		if (!class_exists($provider_class))
@@ -428,7 +428,7 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 	protected function checkInstall()
 	{
 		$list             = $this->app->input->getString('list', '{}');
-		$list             = json_decode($list, JSON_OBJECT_AS_ARRAY);
+		$list             = json_decode($list, true);
 		$fields           = [];
 		$find_list_output = [];
 
@@ -472,7 +472,7 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 			throw new RuntimeException(Text::_('PLG_INSTALLER_RADICALINSTALLER_ERROR_KEY'), 401);
 		}
 
-		$result = json_decode(API::checkKey($key), JSON_OBJECT_AS_ARRAY);
+		$result = json_decode(API::checkKey($key), true);
 
 		if (
 			is_array($result) &&
