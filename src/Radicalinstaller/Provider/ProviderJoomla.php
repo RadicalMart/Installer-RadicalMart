@@ -103,11 +103,15 @@ class ProviderJoomla implements ProviderInterface
 					return false;
 				}
 
-				$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_PROVIDER_JOOMLA_INSTALLED'));
+				// TODO лог
+
+				//$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_PROVIDER_JOOMLA_INSTALLED'));
 			}
 			else
 			{
-				$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_INSTALL_ERROR'), 'error');
+				// TODO лог
+
+				//$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_INSTALL_ERROR'), 'error');
 			}
 		}
 		catch (Throwable $e)
@@ -140,7 +144,9 @@ class ProviderJoomla implements ProviderInterface
 
 			if ($result)
 			{
-				$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_PROVIDER_JOOMLA_DELETED'));
+				// TODO лог
+
+				//$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_PROVIDER_JOOMLA_DELETED'));
 			}
 		}
 		catch (Throwable $e)
