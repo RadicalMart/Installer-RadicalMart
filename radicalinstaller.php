@@ -163,11 +163,6 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 				$output = $this->syncExtensions();
 			}
 
-			if ($method === 'toggleEnabled')
-			{
-				$output = $this->toggleEnabled();
-			}
-
 			if ($method === 'saveKey')
 			{
 				$output = $this->saveKey();
