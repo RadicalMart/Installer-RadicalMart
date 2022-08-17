@@ -105,6 +105,10 @@ class ProviderJoomla implements ProviderInterface
 
 				$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_PROVIDER_JOOMLA_INSTALLED'));
 			}
+			else
+			{
+				$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_INSTALL_ERROR'), 'error');
+			}
 		}
 		catch (Throwable $e)
 		{
@@ -114,7 +118,7 @@ class ProviderJoomla implements ProviderInterface
 					(string) $e->getFile(),
 					(string) $e->getMessage()
 				),
-				'danger'
+				'error'
 			);
 			$result = false;
 		}
@@ -147,7 +151,7 @@ class ProviderJoomla implements ProviderInterface
 					(string) $e->getFile(),
 					(string) $e->getMessage()
 				),
-				'danger'
+				'error'
 			);
 			$result = false;
 		}
@@ -170,22 +174,24 @@ class ProviderJoomla implements ProviderInterface
 	public function getMessages()
 	{
 		$app      = Factory::getApplication();
-		$messages = $this->messages;
+		$messages = array_merge($this->messages, Factory::getApplication()->getMessageQueue());
 
-		$message           = $app->getUserState('com_installer.message', '');
 		$extension_message = $app->getUserState('com_installer.extension_message', '');
-
-		if ($message)
-		{
-			$messages[] = ['message' => $app->getUserState('com_installer.message', ''), 'type' => 'info'];
-			$app->setUserState('com_installer.message', '');
-		}
 
 		if ($extension_message)
 		{
 			$messages[] = ['message' => $app->getUserState('com_installer.extension_message', ''), 'type' => 'info'];
 			$app->setUserState('com_installer.extension_message', '');
 		}
+
+		/*
+		$message           = $app->getUserState('com_installer.message', '');
+
+		if ($message)
+		{
+			$messages[] = ['message' => $app->getUserState('com_installer.message', ''), 'type' => 'info'];
+			$app->setUserState('com_installer.message', '');
+		}*/
 
 		return $messages;
 	}

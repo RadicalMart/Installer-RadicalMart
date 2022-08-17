@@ -56,7 +56,7 @@ class ProviderYoolayouts implements ProviderInterface
 
 		if (!$yootheme)
 		{
-			$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_ERROR_YOOTHEME_PRO'), 'danger');
+			$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_ERROR_YOOTHEME_PRO'), 'error');
 
 			return false;
 		}
@@ -67,7 +67,7 @@ class ProviderYoolayouts implements ProviderInterface
 
 		if (!Zip::hasNativeSupport())
 		{
-			$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_ERROR_ZIP'), 'danger');
+			$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_ERROR_ZIP'), 'error');
 
 			return false;
 		}
@@ -92,7 +92,7 @@ class ProviderYoolayouts implements ProviderInterface
 		//если сервер прислал ошибку, то пишем и выходим
 		if ($request->code !== 200)
 		{
-			$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_ERROR_ARCHIVE_SERVICE'), 'warning');
+			$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_ERROR_ARCHIVE_SERVICE'), 'error');
 
 			return false;
 		}
@@ -103,7 +103,7 @@ class ProviderYoolayouts implements ProviderInterface
 		//если ключ установлен, но не находится такой на сервере
 		if (is_array($body) && isset($body['message']) && ($body['message'] === 'forbidden'))
 		{
-			$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_ERROR_KEY'), 'warning');
+			$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_ERROR_KEY'), 'error');
 
 			return false;
 		}
@@ -226,7 +226,7 @@ class ProviderYoolayouts implements ProviderInterface
 
 		if (!$yootheme)
 		{
-			$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_ERROR_YOOTHEME_PRO'), 'danger');
+			$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_ERROR_YOOTHEME_PRO'), 'error');
 
 			return false;
 		}

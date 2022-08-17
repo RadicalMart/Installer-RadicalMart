@@ -217,11 +217,6 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 		{
 			$install  = $provider->start($id);
 			$messages = $provider->getMessages();
-
-			if (!$install)
-			{
-				$messages[] = ['message' => Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_INSTALL_ERROR'), 'type' => 'danger'];
-			}
 		}
 		catch (Exception $e)
 		{
