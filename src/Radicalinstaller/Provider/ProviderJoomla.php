@@ -116,6 +116,8 @@ class ProviderJoomla implements ProviderInterface
 		}
 		catch (Throwable $e)
 		{
+			$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_INSTALL_ERROR'), 'error');
+
 			$this->addMessage(
 				Text::sprintf('PLG_INSTALLER_RADICALINSTALLER_ERROR_THROWABLE',
 					(string) $e->getLine(),
@@ -151,6 +153,7 @@ class ProviderJoomla implements ProviderInterface
 		}
 		catch (Throwable $e)
 		{
+			$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_PROVIDER_JOOMLA_DELETED'));
 			$this->addMessage(
 				Text::sprintf('PLG_INSTALLER_RADICALINSTALLER_ERROR_THROWABLE',
 					(string) $e->getLine(),
