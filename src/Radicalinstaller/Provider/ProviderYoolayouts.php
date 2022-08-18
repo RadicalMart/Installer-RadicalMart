@@ -156,7 +156,7 @@ class ProviderYoolayouts implements ProviderInterface
 
 					// Check name
 					$key          = 'radicalinstaller_yoolayouts_' . $project['element'] . '_' . $item['name'];
-					$item['name'] = $project['title'] . ' v' . $project['version']['version'] . '. ' . implode($filename_split);
+					$item['name'] = $project['title'] . ' v' . $project['version']['version'] . ((count($files) > 1) ? ('. ' . implode($filename_split)) : '');
 
 					// Add to items
 					$items[$key] = $item;
