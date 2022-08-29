@@ -253,3 +253,27 @@
 .radicalinstaller-input-key {
     min-height: 35px;
 }
+
+
+/************* accordion ***************/
+.ri-tab-label {
+    color: #fff;
+    background-color: #2384d3;
+}
+
+.ri-tab-label:hover {
+    color: #fff;
+    background-color: #2384d3;
+}
+
+.ri-tabs input:checked + .ri-tab-label {
+    background-color: #185b91;
+}
+
+.ri-tab-close {
+    color: #fff;
+}
+
+.ri-tab-close:hover {
+    background: #fff;
+}

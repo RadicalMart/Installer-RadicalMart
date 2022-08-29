@@ -256,3 +256,26 @@
     border-top: none;
     border-bottom: none;
 }
+
+/************* accordion ***************/
+.ri-tab-label {
+    background: var(--template-bg-dark-60);
+    color: var(--template-text-light);
+}
+
+.ri-tab-label:hover {
+    background-color: var(--template-bg-dark-70);
+}
+
+.ri-tabs input:checked + .ri-tab-label {
+    background-color: var(--template-bg-dark-70);
+    border-color: var(--template-bg-dark-90);
+}
+
+.ri-tab-close {
+    background: var(--template-text-light);
+}
+
+.ri-tab-close:hover {
+    background: var(--template-text-light);
+}

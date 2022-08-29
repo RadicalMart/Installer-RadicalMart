@@ -238,6 +238,7 @@ window.RadicalInstallerUI = {
             args.buttons !== undefined
         ) {
 
+            let logs_id = RadicalInstallerUtils.randomInteger(11111111, 9999999);
 
             group = group.addChild('div', {class: 'radicalinstaller-group-header radicalinstaller-flex radicalinstaller-flex-middle'})
                 .addChild('div', {class: 'radicalinstaller-width-auto radicalinstaller-margin-right'})
@@ -251,7 +252,8 @@ window.RadicalInstallerUI = {
                     group = group.add('button', {
                         'type': 'button',
                         'events': args.buttons[k].events,
-                        class: args.buttons[k].class
+                        'class': args.buttons[k].class,
+                        'data-connect-logs-id': logs_id
                     }, args.buttons[k].label);
                 }
 
@@ -259,6 +261,7 @@ window.RadicalInstallerUI = {
             }
 
             group = group.getParent();
+            group = group.add('div', {class: 'radicalinstaller-logs', 'data-for-row': logs_id});
         }
 
         if (args.groups !== undefined) {
@@ -361,7 +364,7 @@ window.RadicalInstallerUI = {
             .add('button', {
                 class: 'ri-btn ri-btn-default ri-btn-primary ri-btn-large',
                 type: 'submit'
-            }, RadicalInstallerLangs.save)
+            }, RadicalInstallerLangs.key_view)
             .add('button', {
                 class: 'ri-btn ri-btn-default ri-btn-large',
                 type: 'submit',
@@ -612,10 +615,10 @@ window.RadicalInstallerUI = {
 
                             RadicalInstallerProject.install({
                                 ids: [id],
-                                success: function (response, project_install_id, position) {
+                                success: function (responses) {
                                     let success = false;
                                     let data = [];
-                                    data = JSON.parse(response.data);
+                                    data = JSON.parse(responses[0].data);
 
                                     if (
                                         data.messages !== undefined &&
@@ -635,7 +638,7 @@ window.RadicalInstallerUI = {
                                         }
                                     }
 
-                                    if (response.success === true) {
+                                    if (responses[0].success === true) {
                                         if (data.status === undefined || data.status === null || data.status === 'fail') {
                                             success = false;
                                         } else {
@@ -662,7 +665,7 @@ window.RadicalInstallerUI = {
 
                                     button_install.removeAttribute('disabled');
                                 },
-                                fail: function () {
+                                fail: function (responses) {
                                     button_install.innerHTML = RadicalInstallerLangs.install;
                                     button_install.removeAttribute('disabled');
                                     logs_container.append(RadicalInstallerUI.renderLogsClose());
@@ -781,6 +784,23 @@ window.RadicalInstallerUI = {
         return card.build();
     },
 
+
+    renderAccordeon: function (args) {
+        let container = RadicalInstallerUtils.createElement('div', {class: 'ri-tabs'});
+
+        console.log(args.items);
+
+        for(let i=0;i<args.items.length;i++) {
+            container = container
+                .addChild('div', {class: 'ri-tab'})
+                    .add('input', {type: 'checkbox', id: 'chck' + i})
+                    .add('label', {class: 'ri-tab-label', 'for': 'chck' + i}, args.items[i].label)
+                    .add('div', {class: 'ri-tab-content'}, args.items[i].content)
+                    .getParent();
+        }
+
+        return container.build();
+    },
 
     renderLogsClose: function (args) {
         let wrap = RadicalInstallerUtils.createElement('div');

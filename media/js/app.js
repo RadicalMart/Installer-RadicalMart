@@ -82,6 +82,7 @@ window.RadicalInstaller = {
                 let grid_not_required = '';
                 let projects_card_required = [];
                 let projects_card_not_required = [];
+                let ids_required = [];
                 let group = {
                     label: items[k].title,
                 };
@@ -92,6 +93,7 @@ window.RadicalInstaller = {
                             RadicalInstallerUI.renderProjectCard(items[k].items_required[c])
                         );
                         ids.push(parseInt(items[k].items_required[c].id));
+                        ids_required.push(parseInt(items[k].items_required[c].id))
                     }
 
                     for(let c=0;c<items[k].items_not_required.length;c++) {
@@ -110,6 +112,127 @@ window.RadicalInstaller = {
                         items: projects_card_not_required,
                         trigger_grid_row_end_for: RadicalInstaller.triggerGridRowEndForCard
                     });
+
+                    if(items[k].name === 'meta')
+                    {
+                        group.buttons = [
+                            {
+                                label: RadicalInstallerLangs.install_meta,
+                                class: 'ri-btn ri-btn-primary',
+                                events: [
+                                    [
+                                        'click', function(ev) {
+                                            let button_install = this;
+                                            let subgroup = this.closest('.radicalinstaller-group');
+                                            let logs_id = this.getAttribute('data-connect-logs-id');
+                                            let logs_container = RadicalInstallerUI.container.querySelector('.radicalinstaller-logs[data-for-row="' + logs_id + '"]');
+                                            logs_container.innerHTML = '';
+                                            button_install.setAttribute('disabled', 'disabled');
+                                            button_install.innerHTML = RadicalInstallerLangs.install_process;
+                                            subgroup.classList.add('ri-area-disabled');
+                                            RadicalInstallerProject.install({
+                                            ids: ids_required,
+                                            success: function (responses) {
+                                                let success = false;
+                                                let success_break = false;
+                                                let data = [];
+                                                let messages = [];
+                                                logs_container.append(RadicalInstallerUI.renderLogsClose());
+
+                                                for (let k=0;k<responses.length;k++) {
+                                                    data = JSON.parse(responses[k].data);
+
+                                                    if (
+                                                        data.messages !== undefined &&
+                                                        data.messages !== null &&
+                                                        data.messages.length > 0
+                                                    ) {
+
+                                                        for (let i = data.messages.length - 1; i >= 0; i--) {
+                                                            messages.push(
+                                                                RadicalInstallerUtils.createElement(
+                                                                    'div',
+                                                                    {},
+                                                                    '<div class="alert alert-' + data.messages[i].type + '">' + data.messages[i].message + '</div>'
+                                                                ).build()
+                                                            );
+                                                        }
+                                                    }
+
+                                                    if (responses[k].success === true && !success_break) {
+                                                        if (data.status === undefined || data.status === null || data.status === 'fail') {
+                                                            success = false;
+                                                            success_break = true;
+                                                        } else {
+                                                            success = true;
+                                                        }
+                                                    }
+
+                                                }
+
+
+                                                if(success) {
+
+                                                    logs_container.append(
+                                                        RadicalInstallerUtils.createElement(
+                                                            'div',
+                                                            {},
+                                                            '<div class="alert alert-info">' + RadicalInstallerLangs.text_installed_meta + '</div>'
+                                                        ).build()
+                                                    );
+
+                                                    logs_container.append(
+                                                        RadicalInstallerUI.renderAccordeon({
+                                                            items: [
+                                                                {
+                                                                    label: 'Подробности',
+                                                                    content: messages
+                                                                }
+                                                            ]
+                                                        })
+                                                    );
+
+                                                } else {
+
+                                                    logs_container.append(
+                                                        RadicalInstallerUtils.createElement(
+                                                            'div',
+                                                            {},
+                                                            '<div class="alert alert-danger">' + RadicalInstallerLangs.text_installed_meta_error + '</div>'
+                                                        ).build()
+                                                    );
+
+                                                    for (let k=0;k<messages.length;k++) {
+                                                        logs_container.append(messages[k]);
+                                                    }
+
+                                                }
+
+                                                RadicalInstaller.checkUpdatedProjects(false);
+                                                button_install.innerHTML = RadicalInstallerLangs.install_meta;
+                                                button_install.removeAttribute('disabled');
+                                                subgroup.classList.remove('ri-area-disabled');
+                                            },
+                                            fail: function () {
+                                                button_install.innerHTML = RadicalInstallerLangs.install;
+                                                button_install.removeAttribute('disabled');
+                                                subgroup.classList.remove('ri-area-disabled');
+                                                logs_container.append(RadicalInstallerUI.renderLogsClose());
+                                                logs_container.append(
+                                                    RadicalInstallerUtils.createElement(
+                                                        'div',
+                                                        {},
+                                                        '<div class="alert alert-danger">' + RadicalInstallerLangs.text_install_error + '</div>'
+                                                    ).build()
+                                                );
+                                            }
+                                        });
+                                        }
+                                    ]
+                                ]
+                            }
+                        ];
+                    }
 
                     group.groups = [
                         {
@@ -145,7 +268,7 @@ window.RadicalInstaller = {
 
                     for(let c=0;c<items[k].items.items.length;c++) {
 
-                        if(c >= 6) {
+                        if(items[k].name === 'free' && c >= max) {
                             break;
                         }
 
@@ -159,25 +282,6 @@ window.RadicalInstaller = {
                         items: projects_card_required,
                         trigger_grid_row_end_for: RadicalInstaller.triggerGridRowEndForCard
                     });
-
-                    if(items[k].name === 'key') {
-
-                        group.actions = [
-                            {
-                                label: RadicalInstallerLangs.view_all,
-                                class: 'ri-btn ri-btn-primary',
-                                events: [
-                                    [
-                                        'click',
-                                        function (event) {
-                                            RadicalInstaller.showProjectsKey();
-                                        }
-                                    ]
-                                ]
-                            }
-                        ];
-
-                    }
 
                     if(items[k].name === 'free') {
 
@@ -240,10 +344,10 @@ window.RadicalInstaller = {
 
                                     RadicalInstallerProject.install({
                                         ids: [RadicalInstaller.installer_service_id],
-                                        success: function(id) {
+                                        success: function(responses) {
                                             location.reload();
                                         },
-                                        fail: function(id) {
+                                        fail: function(responses) {
                                             alert(RadicalInstallerLangs.text_updated_force_error);
                                             button.innerHTML = RadicalInstallerLangs.update;
                                             button.removeAttribute('disabled');
@@ -638,9 +742,9 @@ window.RadicalInstaller = {
 
                                 RadicalInstallerProject.install({
                                     ids: [id],
-                                    success: function (response, project_install_id, position) {
+                                    success: function (responses) {
                                         let success = false;
-                                        let data = JSON.parse(response.data);
+                                        let data = JSON.parse(responses[0].data);
 
                                         logs_container.append(RadicalInstallerUI.renderLogsClose());
 
@@ -656,7 +760,7 @@ window.RadicalInstaller = {
                                             }
                                         }
 
-                                        if (response.success === true) {
+                                        if (responses[0].success === true) {
                                             if (data.status === undefined || data.status === null || data.status === 'fail') {
                                                 success = false;
                                             } else {
@@ -682,7 +786,7 @@ window.RadicalInstaller = {
 
                                         button_install.removeAttribute('disabled');
                                     },
-                                    fail: function() {
+                                    fail: function(responses) {
                                         button_install.querySelector('span').innerHTML = RadicalInstallerLangs.install;
                                         button_install.removeAttribute('disabled');
                                         logs_container.append(RadicalInstallerUI.renderLogsClose());

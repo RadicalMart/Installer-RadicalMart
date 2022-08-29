@@ -2,7 +2,9 @@ window.RadicalInstallerProject = {
 
     install: function (args) {
         let ids_count = args.ids.length,
-            ids_current = 0;
+            ids_current = 0,
+            responses = [],
+            flag_break = false;
 
         for (let i = 0; i < ids_count; i++) {
 
@@ -10,22 +12,44 @@ window.RadicalInstallerProject = {
                 args.wait(args.ids[i]);
             }
 
+            if(flag_break) {
+                break;
+            }
+
             RadicalInstallerUtils.ajaxGet(RadicalInstaller.url + '&method=install&id=' + args.ids[i])
                 .done(function (response) {
 
                     ids_current++;
+                    responses.push(response);
 
-                    if (typeof args.success === 'function') {
-                        args.success(response, args.ids[i], ids_current);
+                    if(
+                        flag_break === false &&
+                        ids_current === ids_count &&
+                        typeof args.success === 'function'
+                    ) {
+                        args.success(responses);
+                    }
+
+                    if(
+                        flag_break &&
+                        typeof args.fail === 'function'
+                    ) {
+                        args.fail(responses);
                     }
 
                 })
-                .fail(function () {
+                .fail(function (response) {
 
                     ids_current++;
+                    flag_break = true;
 
-                    if (typeof args.fail === 'function') {
-                        args.fail(args.ids[i], ids_current);
+                    responses.push(response);
+
+                    if(
+                        flag_break &&
+                        typeof args.fail === 'function'
+                    ) {
+                        args.fail(responses);
                     }
 
                 });

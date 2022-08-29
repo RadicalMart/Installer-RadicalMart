@@ -52,6 +52,12 @@
     display: none !important;
 }
 
+/*********** disabled ***************/
+.ri-area-disabled {
+    opacity: .6;
+    pointer-events: none;
+    cursor: not-allowed;
+}
 
 /************ Backgrounds ***********/
 .radicalinstaller-background-muted {
@@ -228,7 +234,7 @@
 }
 
 .radicalinstaller-group-subgroup {
-    padding: 0;
+    padding: 20px;
 }
 
 .radicalinstaller-group-content {
@@ -580,6 +586,74 @@
 .radicalinstaller-project-page_relations-list_link:hover {
     color: #ccc;
     cursor: pointer;
+}
+
+
+/************** accordion *****************/
+.ri-tabs {
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.ri-tab {
+    width: 100%;
+    color: white;
+    overflow: hidden;
+}
+
+.ri-tab-label {
+    display: flex;
+    justify-content: space-between;
+    padding: 1em;
+    cursor: pointer;
+}
+
+.ri-tab-label::after {
+    content: "❯";
+    width: 1em;
+    height: 1em;
+    text-align: center;
+    transition: all 0.35s;
+}
+
+.ri-tab-content {
+    max-height: 0;
+    padding: 0;
+    transition: all 0.35s;
+}
+
+.ri-tab-content > div  {
+    margin-bottom: 15px;
+    padding: 0 15px;
+}
+
+.ri-tab-content > div:first-child {
+    padding-top: 15px;
+    margin-top: 15px;
+}
+
+.ri-tab-content > div:last-child {
+    padding-bottom: 15px;
+}
+
+.ri-tab-close {
+    display: flex;
+    justify-content: flex-end;
+    padding: 1em;
+    font-size: 0.75em;
+    cursor: pointer;
+}
+
+.ri-tabs input {
+    display: none;
+}
+
+.ri-tabs input:checked + .ri-tabtab-label::after {
+    transform: rotate(90deg);
+}
+
+.ri-tabs input:checked ~ .ri-tab-content {
+    max-height: 100vh;
 }
 
 

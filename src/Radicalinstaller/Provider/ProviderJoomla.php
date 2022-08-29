@@ -193,6 +193,8 @@ class ProviderJoomla implements ProviderInterface
 			$app->setUserState('com_installer.extension_message', '');
 		}
 
+		$app->setUserState('com_installer.message', '');
+
 		/*
 		$message           = $app->getUserState('com_installer.message', '');
 
