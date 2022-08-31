@@ -237,6 +237,10 @@
     padding: 20px;
 }
 
+.radicalinstaller-group-subgroup:last-child {
+    padding-bottom: 0;
+}
+
 .radicalinstaller-group-content {
     padding: 0;
 }
@@ -258,6 +262,8 @@
 .radicalinstaller-project-card-image {
     background-color: #eee;
     display: flex;
+    justify-content: center;
+    justify-items: center;
     align-content: center;
     align-items: center;
     min-width: 180px;
@@ -270,6 +276,12 @@
     height: 100%;
     object-fit: contain;
     object-position: center;
+}
+
+.radicalinstaller-project-card-image img.icon {
+    width: 50%;
+    height: 100%;
+    opacity: .5;
 }
 
 .radicalinstaller-project-card-info {
@@ -606,6 +618,7 @@
     justify-content: space-between;
     padding: 1em;
     cursor: pointer;
+    border-radius: 4px;
 }
 
 .ri-tab-label::after {

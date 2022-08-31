@@ -470,7 +470,8 @@ window.RadicalInstallerUI = {
 
 
     renderProjectCard: function (args) {
-        let cover = '';
+        let cover = '/media/plg_installer_radicalinstaller/img/extension.svg';
+        let cover_class = 'icon';
         let version = '';
         let version_last = '';
         let category = '';
@@ -479,7 +480,8 @@ window.RadicalInstallerUI = {
         let paid = 'free';
 
         if (args.images !== undefined && args.images.cover !== false) {
-            cover = RadicalInstaller.api + '/' + args.images.cover
+            cover = RadicalInstaller.api + '/' + args.images.cover;
+            cover_class = 'cover';
         }
 
         if (
@@ -545,7 +547,7 @@ window.RadicalInstallerUI = {
             .addChild('div', {class: 'radicalinstaller-project-card-image'});
 
         if (cover !== '') {
-            card.add('img', {src: cover})
+            card.add('img', {src: cover, class: cover_class})
         }
 
         card = card.getParent()
@@ -787,8 +789,6 @@ window.RadicalInstallerUI = {
 
     renderAccordeon: function (args) {
         let container = RadicalInstallerUtils.createElement('div', {class: 'ri-tabs'});
-
-        console.log(args.items);
 
         for(let i=0;i<args.items.length;i++) {
             container = container

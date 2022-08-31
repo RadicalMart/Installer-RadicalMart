@@ -106,7 +106,9 @@ $langs = [
     <div class="radicalinstaller-form-key radicalinstaller-margin-bottom"></div>
     <div class="radicalinstaller-toolbar radicalinstaller-margin-bottom"></div>
     <div class="radicalinstaller-page">
-        <img src="/media/plg_installer_radicalinstaller/img/loader.svg"/>
+        <div class="radicalinstaller-loader radicalinstaller-flex radicalinstaller-flex-center radicalinstaller-flex-middle">
+            <img src="/media/plg_installer_radicalinstaller/img/loader.svg"/>
+        </div>
     </div>
 </div>
 <script type="text/javascript">
