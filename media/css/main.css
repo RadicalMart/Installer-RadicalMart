@@ -230,6 +230,7 @@
 
 .radicalinstaller-group-header h3 {
     font-size: 24px;
+    margin-top: 0;
     margin-bottom: 0;
 }
 
@@ -307,6 +308,14 @@
 
 .radicalinstaller-project-card-category a:hover {
     color: #1f374f !important;
+}
+
+.radicalinstaller-project-card-version .value-arrow {
+    display: flex;
+    justify-items: center;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
 }
 
 .radicalinstaller-project-card-actions {

@@ -580,7 +580,7 @@ window.RadicalInstallerUI = {
                 .add('span', {class: 'radicalinstaller-margin-right-xsmall'}, RadicalInstallerLangs.version)
                 .add('span', {class: 'value'}, version)
                 .add('span', {class: 'value-arrow ri-hidden'}, RadicalInstallerUI.renderIcon({
-                    name: 'ri-right',
+                    name: 'ri-arrow-right',
                     size: 17
                 }))
                 .add('span', {class: 'value-last ri-hidden'}, version_last)
@@ -590,7 +590,7 @@ window.RadicalInstallerUI = {
                 .add('span', {class: 'radicalinstaller-margin-right-xsmall'}, RadicalInstallerLangs.version)
                 .add('span', {class: 'value'}, version)
                 .add('span', {class: 'value-arrow ri-hidden'}, RadicalInstallerUI.renderIcon({
-                    name: 'ri-right',
+                    name: 'ri-arrow-right',
                     size: 17
                 }))
                 .add('span', {class: 'value-last ri-hidden'}, version_last)
