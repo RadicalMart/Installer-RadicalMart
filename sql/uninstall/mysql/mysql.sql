@@ -1,1 +1,1 @@
-DROP TABLE IF EXISTS `#__radicalinstaller_extensions`;
+DROP TABLE IF EXISTS `#__sovmart_extensions`;

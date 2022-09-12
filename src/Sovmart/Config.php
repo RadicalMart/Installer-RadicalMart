@@ -1,4 +1,4 @@
-<?php namespace Radicalinstaller;
+<?php namespace Sovmart;
 
 defined('_JEXEC') or die;
 
@@ -17,7 +17,7 @@ class Config
 	 * @var string
 	 * @since version
 	 */
-	public static $host = 'radicalmart.ru';
+	public static $host = 'sovmart.ru';
 
 
 }

@@ -2,7 +2,7 @@
 
 use Joomla\CMS\Table\Table;
 
-class TableRadicalinstallerExtensions extends Table
+class TableSovmartExtensions extends Table
 {
 
     /**
@@ -14,7 +14,7 @@ class TableRadicalinstallerExtensions extends Table
      */
     public function __construct(JDatabaseDriver $db)
     {
-        parent::__construct('#__radicalinstaller_extensions', 'id', $db);
+        parent::__construct('#__sovmart_extensions', 'id', $db);
     }
 
 }

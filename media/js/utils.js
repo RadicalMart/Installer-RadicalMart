@@ -1,4 +1,4 @@
-window.RadicalInstallerUtils = {
+window.SovmartUtils = {
     ajaxGet: function (url, data) {
         let self = this,
             request = new XMLHttpRequest();
@@ -67,8 +67,8 @@ window.RadicalInstallerUtils = {
 
         let ajax_proxy = new Proxy(ajax, {
             get: function (target_original, prop, receiver) {
-                let F = function (...args) {
-                }
+                let F = function (...args) {};
+
                 return new Proxy(F, {
                     apply: function (target, thisArg, argumentsList) {
                         target_original[prop] = argumentsList[0];
@@ -215,7 +215,7 @@ window.RadicalInstallerUtils = {
                             callback_close();
                         }
                     }]
-                ]}, '<span class="icon-delete large-icon"></span> ' + RadicalInstallerLangs.button_close)
+                ]}, '<span class="icon-delete large-icon"></span> ' + SovmartLangs.button_close)
             .add('div', {'class': 'radicalinstaller-modal_header'}, header)
             .addChild('div', {'class': 'radicalinstaller-modal_body-wrap'})
             .add('div', {'class': 'radicalinstaller-modal_body'}, body)
@@ -254,7 +254,7 @@ window.RadicalInstallerUtils = {
                         modalBackground.classList.remove('active');
                         this.closest('.radicalinstaller-modal').remove();
                     }]
-                ]}, '<span class="icon-delete large-icon"></span> ' + RadicalInstallerLangs.button_close)
+                ]}, '<span class="icon-delete large-icon"></span> ' + SovmartLangs.button_close)
             .add('div', {'class': 'radicalinstaller-modal_header'}, header)
             .add('iframe', {'class': 'radicalinstaller-modal_iframe', 'src': url})
             .getParent();

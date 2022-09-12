@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension version="3.*" type="plugin" method="upgrade" group="installer">
-	<name>PLG_INSTALLER_RADICALINSTALLER</name>
+	<name>PLG_INSTALLER_SOVMART</name>
 	<author>Cymbal</author>
 	<creationDate>01.06.2022</creationDate>
 	<copyright>Delo-Design</copyright>
@@ -8,25 +8,25 @@
 	<authorEmail>cymbal@delo-design.ru</authorEmail>
 	<authorUrl>https://delo-design.ru</authorUrl>
 	<version>1.3.2</version>
-	<description>PLG_INSTALLER_RADICALINSTALLER_PLUGIN_XML_DESCRIPTION</description>
+	<description>PLG_INSTALLER_SOVMART_PLUGIN_XML_DESCRIPTION</description>
 	<scriptfile>script.php</scriptfile>
 
 	<languages folder="language">
-		<language tag="en-GB">en-GB/en-GB.plg_installer_radicalinstaller.ini</language>
-		<language tag="en-GB">en-GB/en-GB.plg_installer_radicalinstaller.sys.ini</language>
-		<language tag="ru-RU">ru-RU/ru-RU.plg_installer_radicalinstaller.ini</language>
-		<language tag="ru-RU">ru-RU/ru-RU.plg_installer_radicalinstaller.sys.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_installer_sovmart.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_installer_sovmart.sys.ini</language>
+		<language tag="ru-RU">ru-RU/ru-RU.plg_installer_sovmart.ini</language>
+		<language tag="ru-RU">ru-RU/ru-RU.plg_installer_sovmart.sys.ini</language>
 	</languages>
 
-	<media folder="media" destination="plg_installer_radicalinstaller">
+	<media folder="media" destination="plg_installer_sovmart">
 		<folder>css</folder>
 		<folder>img</folder>
 		<folder>js</folder>
 	</media>
 
 	<updateservers>
-		<server type="extension" priority="1" name="RadicalInstaller">
-			https://radicalmart.ru/update?element=radicalinstaller
+		<server type="extension" priority="1" name="SovmartInstaller">
+			https://sovmart.ru/update?element=sovmart
 		</server>
 	</updateservers>
 
@@ -54,8 +54,8 @@
 		<folder>sql</folder>
 		<folder>tables</folder>
 		<folder>tmpl</folder>
-		<filename plugin="radicalinstaller">radicalinstaller.php</filename>
-		<filename plugin="radicalinstaller">helper.php</filename>
+		<filename plugin="sovmart">sovmart.php</filename>
+		<filename plugin="sovmart">helper.php</filename>
 	</files>
 
 	<config>
@@ -63,7 +63,7 @@
 			<fieldset name="basic">
 				<field name="apikey"
 					   type="text"
-					   label="PLG_INSTALLER_RADICALINSTALLER_API_KEY"
+					   label="PLG_INSTALLER_SOVMART_API_KEY"
 					   default=""/>
 			</fieldset>
 		</fields>

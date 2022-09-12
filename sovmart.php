@@ -6,25 +6,25 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\FileLayout;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Version;
-use Radicalinstaller\API;
+use Sovmart\API;
 
-JLoader::register('RadicalinstallerHelper', __DIR__ . '/helper.php');
+JLoader::register('SovmartHelper', __DIR__ . '/helper.php');
 
 if ((new Version())->isCompatible('4.0'))
 {
-	JLoader::registerNamespace('Radicalinstaller', __DIR__ . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Radicalinstaller', false, 'psr4');
+	JLoader::registerNamespace('Sovmart', __DIR__ . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Sovmart', false, 'psr4');
 }
 else
 {
-	JLoader::registerNamespace('Radicalinstaller', __DIR__ . DIRECTORY_SEPARATOR . 'src', false, 'psr4');
+	JLoader::registerNamespace('Sovmart', __DIR__ . DIRECTORY_SEPARATOR . 'src', false, 'psr4');
 }
 
 
 /**
- * PlgInstallerRadicalinstaller Plugin.
+ * PlgInstallerSovmart Plugin.
  *
  */
-class PlgInstallerRadicalinstaller extends CMSPlugin
+class PlgInstallerSovmart extends CMSPlugin
 {
 
 
@@ -41,10 +41,10 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 	{
 
 		$tab          = [];
-		$tab['name']  = 'radicalinstaller';
-		$tab['label'] = Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT');
+		$tab['name']  = 'sovmart';
+		$tab['label'] = Text::_('PLG_INSTALLER_SOVMART_TEXT');
 
-		$content        = new FileLayout('default', JPATH_ROOT . '/plugins/installer/radicalinstaller/tmpl');
+		$content        = new FileLayout('default', JPATH_ROOT . '/plugins/installer/sovmart/tmpl');
 		$tab['content'] = $content->render(['params' => $this->params]);
 
 		return $tab;
@@ -62,14 +62,14 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 		$conditions = [
 			$this->db->quoteName('extension_id') . ' = ' . (int) $identifier,
 		];
-		$query->delete($this->db->quoteName('#__radicalinstaller_extensions'));
+		$query->delete($this->db->quoteName('#__sovmart_extensions'));
 		$query->where($conditions);
 		$this->db->setQuery($query);
 		$this->db->execute();
 	}
 
 
-	public function onAjaxRadicalinstaller()
+	public function onAjaxSovmart()
 	{
 		$app    = Factory::getApplication();
 		$method = $app->input->get('method');
@@ -191,7 +191,7 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 		$input          = $app->input;
 		$id             = $input->get('id', '', 'int');
 		$project        = json_decode(API::project($id), true);
-		$provider_class = '\\Radicalinstaller\\Provider\\Provider' . ucfirst(strtolower(!empty($project['provider']) ? $project['provider'] : 'joomla'));
+		$provider_class = '\\Sovmart\\Provider\\Provider' . ucfirst(strtolower(!empty($project['provider']) ? $project['provider'] : 'joomla'));
 		$config         = [
 			'api_key' => $this->params->get('apikey', '')
 		];
@@ -203,7 +203,7 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 				'status'   => 'fail',
 				'messages' => [
 					[
-						'message' => Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_INSTALL_PROVIDER_NO_FOUND'),
+						'message' => Text::_('PLG_INSTALLER_SOVMART_TEXT_INSTALL_PROVIDER_NO_FOUND'),
 						'type'    => 'danger'
 					]
 				]
@@ -220,7 +220,7 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 		}
 		catch (Exception $e)
 		{
-			$messages[] = ['message' => Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_INSTALL_ERROR'), 'type' => 'danger'];
+			$messages[] = ['message' => Text::_('PLG_INSTALLER_SOVMART_TEXT_INSTALL_ERROR'), 'type' => 'danger'];
 		}
 
 		return json_encode(['status' => $install ? 'ok' : 'fail', 'messages' => $messages]);
@@ -233,7 +233,7 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 		$input   = $app->input;
 		$id      = $input->get('id', '', 'int');
 		$project = json_decode(API::project($id), true);;
-		$provider_class = '\\Radicalinstaller\\Provider\\Provider' . ucfirst(strtolower(!empty($project['provider']) ? $project['provider'] : 'joomla'));
+		$provider_class = '\\Sovmart\\Provider\\Provider' . ucfirst(strtolower(!empty($project['provider']) ? $project['provider'] : 'joomla'));
 
 		if (!class_exists($provider_class))
 		{
@@ -241,7 +241,7 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 				'status'   => 'fail',
 				'messages' => [
 					[
-						'message' => Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_DELETE_PROVIDER_NO_FOUND'),
+						'message' => Text::_('PLG_INSTALLER_SOVMART_TEXT_DELETE_PROVIDER_NO_FOUND'),
 						'type'    => 'danger'
 					]
 				]
@@ -262,7 +262,7 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 		$query = $this->db->getQuery(true);
 		$query
 			->select(['id', 'title', 'version', 'project_id'])
-			->from($this->db->quoteName('#__radicalinstaller_extensions'));
+			->from($this->db->quoteName('#__sovmart_extensions'));
 		$projects_install = $this->db->setQuery($query)->loadObjectList();
 
 		foreach ($projects_install as $project_install)
@@ -310,7 +310,7 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 	protected function APIMinimal()
 	{
 		$response        = json_decode(API::minimal(), true);
-		$current_version = RadicalinstallerHelper::getVersion();
+		$current_version = SovmartHelper::getVersion();
 		$result          = true;
 
 		if (
@@ -404,11 +404,11 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 
 	protected function syncExtensions()
 	{
-		$result = RadicalinstallerHelper::syncExtensions();
+		$result = SovmartHelper::syncExtensions();
 
 		if ($result === false)
 		{
-			throw new RuntimeException(Text::_('PLG_INSTALLER_RADICALINSTALLER_ERROR_SYNC'), 500);
+			throw new RuntimeException(Text::_('PLG_INSTALLER_SOVMART_ERROR_SYNC'), 500);
 		}
 
 		return $result;
@@ -440,7 +440,7 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 		$query = $this->db->getQuery(true);
 		$query
 			->select(['project_id'])
-			->from($this->db->quoteName('#__radicalinstaller_extensions'))
+			->from($this->db->quoteName('#__sovmart_extensions'))
 			->where('project_id IN (' . implode(',', $fields) . ')');
 		$find_list = $this->db->setQuery($query)->loadObjectList();
 
@@ -459,7 +459,7 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 
 		if (empty($key))
 		{
-			throw new RuntimeException(Text::_('PLG_INSTALLER_RADICALINSTALLER_ERROR_KEY'), 401);
+			throw new RuntimeException(Text::_('PLG_INSTALLER_SOVMART_ERROR_KEY'), 401);
 		}
 
 		$result = json_decode(API::checkKey($key), true);
@@ -477,7 +477,7 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 			];
 
 			$conditions = [
-				$this->db->qn('element') . ' = ' . $this->db->q('radicalinstaller'),
+				$this->db->qn('element') . ' = ' . $this->db->q('sovmart'),
 				$this->db->qn('folder') . ' = ' . $this->db->q('installer'),
 			];
 
@@ -487,7 +487,7 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 
 			if (!$result)
 			{
-				throw new RuntimeException(Text::_('PLG_INSTALLER_RADICALINSTALLER_ERROR_DATABASE_SAVE'), 500);
+				throw new RuntimeException(Text::_('PLG_INSTALLER_SOVMART_ERROR_DATABASE_SAVE'), 500);
 			}
 
 			$this->cleanCache('_system');
@@ -496,7 +496,7 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 			return ['status' => 'ok'];
 		}
 
-		throw new RuntimeException(Text::_('PLG_INSTALLER_RADICALINSTALLER_ERROR_KEY'), 401);
+		throw new RuntimeException(Text::_('PLG_INSTALLER_SOVMART_ERROR_KEY'), 401);
 	}
 
 
@@ -505,7 +505,7 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 		$query = $this->db->getQuery(true);
 		$query
 			->select('*')
-			->from($this->db->quoteName('#__radicalinstaller_extensions'));
+			->from($this->db->quoteName('#__sovmart_extensions'));
 		$list_installed = $this->db->setQuery($query)->loadObjectList();
 
 		return $list_installed;
@@ -518,11 +518,11 @@ class PlgInstallerRadicalinstaller extends CMSPlugin
 		$query = $this->db->getQuery(true);
 		$query
 			->select(['type'])
-			->from($this->db->quoteName('#__radicalinstaller_extensions'))
+			->from($this->db->quoteName('#__sovmart_extensions'))
 			->where('id = ' . $this->db->quote($id));
 		$item   = $this->db->setQuery($query);
 		$result = false;
-		$class  = '\\Radicalinstaller\\Provider' . ucfirst(strtolower($item->type));
+		$class  = '\\Sovmart\\Provider' . ucfirst(strtolower($item->type));
 
 		if (class_exists($class))
 		{

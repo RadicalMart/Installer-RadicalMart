@@ -4,7 +4,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Installer\InstallerAdapter;
 use Joomla\Registry\Registry;
 
-class plgInstallerRadicalinstallerInstallerScript
+class plgInstallerSovmartInstallerScript
 {
 
 
@@ -26,7 +26,7 @@ class plgInstallerRadicalinstallerInstallerScript
 			$find_key        = '';
 			$plugin          = new stdClass();
 			$plugin->type    = 'plugin';
-			$plugin->element = 'radicalinstaller';
+			$plugin->element = 'sovmart';
 			$plugin->folder  = 'installer';
 			$plugin->enabled = 1;
 

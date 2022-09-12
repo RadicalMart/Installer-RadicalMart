@@ -1,15 +1,15 @@
-window.RadicalInstallerUI = {
+window.SovmartUI = {
 
     container: null,
     container_page: null,
     container_toolbar: null,
     container_form_key: null,
     container_loader: null,
-    icons_sprite: '/media/plg_installer_radicalinstaller/img/sprite.svg',
+    icons_sprite: '/media/plg_installer_sovmart/img/sprite.svg',
 
 
     loaderShow: function (args) {
-        let loader = RadicalInstallerUtils.createElement('div', {}, this.renderLoader()).build();
+        let loader = SovmartUtils.createElement('div', {}, this.renderLoader()).build();
         args.container.append(loader);
         let promise = new Promise(args.wait);
 
@@ -63,18 +63,18 @@ window.RadicalInstallerUI = {
 
 
     renderToolbar: function (args) {
-        let toolbar = RadicalInstallerUtils.createElement('div', {class: 'radicalinstaller-toolbar radicalinstaller-flex radicalinstaller-child-margin-right-small'});
+        let toolbar = SovmartUtils.createElement('div', {class: 'radicalinstaller-toolbar radicalinstaller-flex radicalinstaller-child-margin-right-small'});
 
         if (args.groups !== undefined) {
 
             for (let k = 0; k < args.groups.length; k++) {
-                toolbar.add('div', null, RadicalInstallerUI.renderToolbarGroup(args.groups[k]));
+                toolbar.add('div', null, SovmartUI.renderToolbarGroup(args.groups[k]));
             }
 
             return toolbar.build();
         }
 
-        toolbar.add('div', null, RadicalInstallerUI.renderToolbarGroup({name: 'default', items: args}));
+        toolbar.add('div', null, SovmartUI.renderToolbarGroup({name: 'default', items: args}));
 
         return toolbar.build();
     },
@@ -88,7 +88,7 @@ window.RadicalInstallerUI = {
             return '';
         }
 
-        let group = RadicalInstallerUtils.createElement('div', {class: 'ri-btn-group'});
+        let group = SovmartUtils.createElement('div', {class: 'ri-btn-group'});
 
         for (let k = 0; k < buttons.items.length; k++) {
 
@@ -102,13 +102,13 @@ window.RadicalInstallerUI = {
                         'events': buttons.items[k].dropdown.events,
                         'class': buttons.items[k].dropdown.class
                     },
-                    RadicalInstallerUI.renderButtonIcon(buttons.items[k].dropdown)
+                    SovmartUI.renderButtonIcon(buttons.items[k].dropdown)
                 );
                 group = group.addChild('div', {class: 'ri-btn-dropdown'});
 
                 for (let i = 0; i < buttons.items[k].items.length; i++) {
                     let prop = {'type': 'button'};
-                    let label = RadicalInstallerUI.renderButtonIcon(buttons.items[k].items[i]);
+                    let label = SovmartUI.renderButtonIcon(buttons.items[k].items[i]);
 
                     if (buttons.items[k].items[i].events !== undefined) {
                         prop.events = buttons.items[k].items[i].events;
@@ -142,7 +142,7 @@ window.RadicalInstallerUI = {
                     prop.disabled = buttons.items[k].disabled;
                 }
 
-                group = group.add('button', prop, RadicalInstallerUI.renderButtonIcon(buttons.items[k]));
+                group = group.add('button', prop, SovmartUI.renderButtonIcon(buttons.items[k]));
             }
 
         }
@@ -166,7 +166,7 @@ window.RadicalInstallerUI = {
             size = options.size;
         }
 
-        return '<svg width="' + size + '" height="' + size + '"><use xlink:href="' + RadicalInstallerUI.icons_sprite + '#' + name + '"></use></svg>';
+        return '<svg width="' + size + '" height="' + size + '"><use xlink:href="' + SovmartUI.icons_sprite + '#' + name + '"></use></svg>';
     },
 
 
@@ -174,7 +174,7 @@ window.RadicalInstallerUI = {
 
         if (button.icon !== undefined) {
             let icon_position = 'left';
-            let icon = '<svg width="20" height="20"><use xlink:href="' + RadicalInstallerUI.icons_sprite + '#' + button.icon + '"></use></svg>';
+            let icon = '<svg width="20" height="20"><use xlink:href="' + SovmartUI.icons_sprite + '#' + button.icon + '"></use></svg>';
             let label = button.label;
 
             if (button.icon_position !== undefined) {
@@ -200,7 +200,7 @@ window.RadicalInstallerUI = {
 
 
     renderToolbarDropdown: function (buttons) {
-        let dropdown = RadicalInstallerUtils.createElement('div', {class: 'ri-btn-dropdown'});
+        let dropdown = SovmartUtils.createElement('div', {class: 'ri-btn-dropdown'});
 
         for (let k = 0; k < buttons.length; k++) {
             dropdown = dropdown.add('button', {
@@ -217,20 +217,20 @@ window.RadicalInstallerUI = {
 
 
     renderPage: function (args) {
-        let page = RadicalInstallerUtils.createElement('div', {class: 'radicalinstaller-page'});
+        let page = SovmartUtils.createElement('div', {class: 'radicalinstaller-page'});
         return page.build();
     },
 
 
     renderAlert: function (args) {
-        let alert = RadicalInstallerUtils.createElement('div', {class: 'radicalinstaller-alert radicalinstaller-alert-info'}, args.message);
+        let alert = SovmartUtils.createElement('div', {class: 'radicalinstaller-alert radicalinstaller-alert-info'}, args.message);
 
         return alert.build();
     },
 
 
     renderGroup: function (args) {
-        let group = RadicalInstallerUtils
+        let group = SovmartUtils
             .createElement('div', {class: 'radicalinstaller-group'});
 
         if (
@@ -238,7 +238,7 @@ window.RadicalInstallerUI = {
             args.buttons !== undefined
         ) {
 
-            let logs_id = RadicalInstallerUtils.randomInteger(11111111, 9999999);
+            let logs_id = SovmartUtils.randomInteger(11111111, 9999999);
 
             group = group.addChild('div', {class: 'radicalinstaller-group-header radicalinstaller-flex radicalinstaller-flex-middle'})
                 .addChild('div', {class: 'radicalinstaller-width-auto radicalinstaller-margin-right'})
@@ -299,10 +299,10 @@ window.RadicalInstallerUI = {
     renderFormKey: function () {
         let self = this,
             value = '',
-            form = RadicalInstallerUtils.createElement('div');
+            form = SovmartUtils.createElement('div');
 
-        if (RadicalInstallerConfig.key !== '') {
-            value = RadicalInstallerConfig.key;
+        if (SovmartConfig.key !== '') {
+            value = SovmartConfig.key;
         }
 
         form = form
@@ -320,31 +320,31 @@ window.RadicalInstallerUI = {
                             let key_value = event.target.querySelector('[name=key]').value;
 
                             if (key_value.length < 30) {
-                                RadicalInstallerUtils.createAlert(RadicalInstallerLangs.alert_key_error, 'danger', 5000);
+                                SovmartUtils.createAlert(SovmartLangs.alert_key_error, 'danger', 5000);
                                 return;
                             }
 
                             // отправить аякс на сохранение ключа
-                            RadicalInstallerUtils.ajaxPost(RadicalInstaller.url + '&method=saveKey', {key: key_value})
+                            SovmartUtils.ajaxPost(Sovmart.url + '&method=saveKey', {key: key_value})
                                 .done(function (response) {
 
-                                    RadicalInstallerProject.sync({
+                                    SovmartProject.sync({
                                         done: function () {
-                                            RadicalInstaller.showStart();
+                                            Sovmart.showStart();
                                         }
                                     });
 
-                                    RadicalInstallerConfig.key = key_value; // можем присвоить ключ, так как сервер примет только проверенный ключ
+                                    SovmartConfig.key = key_value; // можем присвоить ключ, так как сервер примет только проверенный ключ
                                 })
                                 .fail(function (xhr) {
                                     let response = JSON.parse(xhr.responseText);
 
                                     if (response !== null && response.data[0] !== undefined) {
-                                        RadicalInstallerUtils.createAlert(response.data[0], 'danger', 5000);
+                                        SovmartUtils.createAlert(response.data[0], 'danger', 5000);
                                         return;
                                     }
 
-                                    RadicalInstallerUtils.createAlert(RadicalInstallerLangs.alert_service_error, 'danger', 5000);
+                                    SovmartUtils.createAlert(SovmartLangs.alert_service_error, 'danger', 5000);
                                 });
 
                             return false;
@@ -356,7 +356,7 @@ window.RadicalInstallerUI = {
             .add('input', {
                 class: 'radicalinstaller-input-key radicalinstaller-width-500 radicalinstaller-margin-right-xsmall',
                 type: 'text',
-                placeholder: RadicalInstallerLangs.text_input_key,
+                placeholder: SovmartLangs.text_input_key,
                 name: 'key',
                 value: value
             })
@@ -364,7 +364,7 @@ window.RadicalInstallerUI = {
             .add('button', {
                 class: 'ri-btn ri-btn-default ri-btn-primary ri-btn-large',
                 type: 'submit'
-            }, RadicalInstallerLangs.key_view)
+            }, SovmartLangs.key_view)
             .add('button', {
                 class: 'ri-btn ri-btn-default ri-btn-large',
                 type: 'submit',
@@ -377,7 +377,7 @@ window.RadicalInstallerUI = {
                         }
                     ]
                 ]
-            }, RadicalInstallerLangs.clean)
+            }, SovmartLangs.clean)
             .getParent()
             .getParent()
             .getParent()
@@ -390,11 +390,11 @@ window.RadicalInstallerUI = {
 
 
     renderProjectGrid: function (args) {
-        let grid = RadicalInstallerUtils.createElement('div'),
+        let grid = SovmartUtils.createElement('div'),
             current = 0,
             width = 4,
             close = false,
-            grid_row_id = RadicalInstallerUtils.randomInteger(1111111111, 9999999999),
+            grid_row_id = SovmartUtils.randomInteger(1111111111, 9999999999),
             items = [];
 
         if (window.matchMedia("(max-width: 2100px)").matches) {
@@ -427,7 +427,7 @@ window.RadicalInstallerUI = {
                     args.trigger_grid_row_end_for(items, grid_row_id);
                 }
 
-                grid_row_id = RadicalInstallerUtils.randomInteger(1111111111, 9999999999);
+                grid_row_id = SovmartUtils.randomInteger(1111111111, 9999999999);
                 grid = grid.addChild('div', {
                     class: 'radicalinstaller-grid radicalinstaller-grid-width-1-' + width,
                     'data-row': grid_row_id
@@ -470,7 +470,7 @@ window.RadicalInstallerUI = {
 
 
     renderProjectCard: function (args) {
-        let cover = '/media/plg_installer_radicalinstaller/img/extension.svg';
+        let cover = '/media/PLG_INSTALLER_SOVMART/img/extension.svg';
         let cover_class = 'icon';
         let version = '';
         let version_last = '';
@@ -480,7 +480,7 @@ window.RadicalInstallerUI = {
         let paid = 'free';
 
         if (args.images !== undefined && args.images.cover !== false) {
-            cover = RadicalInstaller.api + '/' + args.images.cover;
+            cover = Sovmart.api + '/' + args.images.cover;
             cover_class = 'cover';
         }
 
@@ -542,7 +542,7 @@ window.RadicalInstallerUI = {
             category_id = args.catid;
         }
 
-        let card = RadicalInstallerUtils
+        let card = SovmartUtils
             .createElement('div', {class: 'radicalinstaller-project-card', 'data-project': id, 'data-paid': paid})
             .addChild('div', {class: 'radicalinstaller-project-card-image'});
 
@@ -557,13 +557,13 @@ window.RadicalInstallerUI = {
         if (category !== '') {
             if (category_id !== '') {
                 card = card.add('div', {class: 'radicalinstaller-project-card-category'}, [
-                    RadicalInstallerUtils.createElement('span', {}, RadicalInstallerLangs.category + ' ').build(),
-                    RadicalInstallerUtils.createElement('a', {
+                    SovmartUtils.createElement('span', {}, SovmartLangs.category + ' ').build(),
+                    SovmartUtils.createElement('a', {
                         events: [
                             [
                                 'click',
                                 function (event) {
-                                    RadicalInstaller.showCategory(category_id, category);
+                                    Sovmart.showCategory(category_id, category);
                                     event.preventDefault();
                                 }
                             ]
@@ -571,15 +571,15 @@ window.RadicalInstallerUI = {
                     }, category).build(),
                 ]);
             } else {
-                card = card.add('div', {class: 'radicalinstaller-project-card-category'}, '<span>' + RadicalInstallerLangs.category + ' </span>' + '<span>' + category + '</span>');
+                card = card.add('div', {class: 'radicalinstaller-project-card-category'}, '<span>' + SovmartLangs.category + ' </span>' + '<span>' + category + '</span>');
             }
         }
 
         if (version !== '') {
             card = card.addChild('div', {class: 'radicalinstaller-project-card-version radicalinstaller-flex radicalinstaller-flex-middle'})
-                .add('span', {class: 'radicalinstaller-margin-right-xsmall'}, RadicalInstallerLangs.version)
+                .add('span', {class: 'radicalinstaller-margin-right-xsmall'}, SovmartLangs.version)
                 .add('span', {class: 'value'}, version)
-                .add('span', {class: 'value-arrow ri-hidden'}, RadicalInstallerUI.renderIcon({
+                .add('span', {class: 'value-arrow ri-hidden'}, SovmartUI.renderIcon({
                     name: 'ri-arrow-right',
                     size: 17
                 }))
@@ -587,9 +587,9 @@ window.RadicalInstallerUI = {
                 .getParent();
         } else {
             card.addChild('div', {class: 'radicalinstaller-project-card-version radicalinstaller-flex radicalinstaller-flex-middle ri-hidden'})
-                .add('span', {class: 'radicalinstaller-margin-right-xsmall'}, RadicalInstallerLangs.version)
+                .add('span', {class: 'radicalinstaller-margin-right-xsmall'}, SovmartLangs.version)
                 .add('span', {class: 'value'}, version)
-                .add('span', {class: 'value-arrow ri-hidden'}, RadicalInstallerUI.renderIcon({
+                .add('span', {class: 'value-arrow ri-hidden'}, SovmartUI.renderIcon({
                     name: 'ri-arrow-right',
                     size: 17
                 }))
@@ -609,13 +609,13 @@ window.RadicalInstallerUI = {
                             let button_install = this;
                             let button_delete = this.closest('.radicalinstaller-project-card').querySelector('.ri-btn-delete');
                             let logs_id = this.getAttribute('data-connect-logs-id');
-                            let logs_container = RadicalInstallerUI.container.querySelector('.radicalinstaller-logs[data-for-row="' + logs_id + '"]');
+                            let logs_container = SovmartUI.container.querySelector('.radicalinstaller-logs[data-for-row="' + logs_id + '"]');
                             logs_container.innerHTML = '';
 
                             button_install.setAttribute('disabled', 'disabled');
-                            button_install.innerHTML = RadicalInstallerLangs.install_process;
+                            button_install.innerHTML = SovmartLangs.install_process;
 
-                            RadicalInstallerProject.install({
+                            SovmartProject.install({
                                 ids: [id],
                                 success: function (responses) {
                                     let success = false;
@@ -627,11 +627,11 @@ window.RadicalInstallerUI = {
                                         data.messages !== null &&
                                         data.messages.length > 0
                                     ) {
-                                        logs_container.append(RadicalInstallerUI.renderLogsClose());
+                                        logs_container.append(SovmartUI.renderLogsClose());
 
                                         for (let i = data.messages.length - 1; i >= 0; i--) {
                                             logs_container.append(
-                                                RadicalInstallerUtils.createElement(
+                                                SovmartUtils.createElement(
                                                     'div',
                                                     {},
                                                     '<div class="alert alert-' + data.messages[i].type + '">' + data.messages[i].message + '</div>'
@@ -649,7 +649,7 @@ window.RadicalInstallerUI = {
                                     }
 
                                     if (success) {
-                                        button_install.innerHTML = RadicalInstallerLangs.reinstall;
+                                        button_install.innerHTML = SovmartLangs.reinstall;
 
                                         if (
                                             button_delete !== undefined &&
@@ -659,23 +659,23 @@ window.RadicalInstallerUI = {
                                             button_delete.removeAttribute('disabled');
                                         }
 
-                                        RadicalInstaller.checkUpdatedProjects(false);
+                                        Sovmart.checkUpdatedProjects(false);
 
                                     } else {
-                                        button_install.innerHTML = RadicalInstallerLangs.install;
+                                        button_install.innerHTML = SovmartLangs.install;
                                     }
 
                                     button_install.removeAttribute('disabled');
                                 },
                                 fail: function (responses) {
-                                    button_install.innerHTML = RadicalInstallerLangs.install;
+                                    button_install.innerHTML = SovmartLangs.install;
                                     button_install.removeAttribute('disabled');
-                                    logs_container.append(RadicalInstallerUI.renderLogsClose());
+                                    logs_container.append(SovmartUI.renderLogsClose());
                                     logs_container.append(
-                                        RadicalInstallerUtils.createElement(
+                                        SovmartUtils.createElement(
                                             'div',
                                             {},
-                                            '<div class="alert alert-danger">' + RadicalInstallerLangs.text_install_error + '</div>'
+                                            '<div class="alert alert-danger">' + SovmartLangs.text_install_error + '</div>'
                                         ).build()
                                     );
                                 }
@@ -683,7 +683,7 @@ window.RadicalInstallerUI = {
                         }
                     ]
                 ]
-            }, RadicalInstallerLangs.install)
+            }, SovmartLangs.install)
             .add('button', {
                 type: 'button',
                 class: 'ri-btn ri-btn-delete ri-btn-danger ri-hidden',
@@ -695,12 +695,12 @@ window.RadicalInstallerUI = {
                             let button_install = this.closest('.radicalinstaller-project-card').querySelector('.ri-btn-install');
                             let button_delete = this;
                             let logs_id = this.getAttribute('data-connect-logs-id');
-                            let logs_container = RadicalInstallerUI.container.querySelector('.radicalinstaller-logs[data-for-row="' + logs_id + '"]');
+                            let logs_container = SovmartUI.container.querySelector('.radicalinstaller-logs[data-for-row="' + logs_id + '"]');
                             logs_container.innerHTML = '';
 
                             button_delete.setAttribute('disabled', 'disabled');
 
-                            RadicalInstallerProject.delete({
+                            SovmartProject.delete({
                                 id: [id],
                                 success: function (response, project_delete_id) {
                                     let success = false;
@@ -711,11 +711,11 @@ window.RadicalInstallerUI = {
                                         data.messages !== undefined && data.messages !== null &&
                                         data.messages.length > 0
                                     ) {
-                                        logs_container.append(RadicalInstallerUI.renderLogsClose());
+                                        logs_container.append(SovmartUI.renderLogsClose());
 
                                         for (let i = data.messages.length - 1; i >= 0; i--) {
                                             logs_container.append(
-                                                RadicalInstallerUtils.createElement(
+                                                SovmartUtils.createElement(
                                                     'div',
                                                     {},
                                                     '<div class="alert alert-' + data.messages[i].type + '">' + data.messages[i].message + '</div>'
@@ -737,22 +737,22 @@ window.RadicalInstallerUI = {
                                             button_install !== undefined &&
                                             button_install !== null
                                         ) {
-                                            button_install.innerHTML = RadicalInstallerLangs.install;
+                                            button_install.innerHTML = SovmartLangs.install;
                                         }
 
-                                        RadicalInstaller.checkUpdatedProjects(false);
+                                        Sovmart.checkUpdatedProjects(false);
                                     }
 
                                     button_delete.removeAttribute('disabled');
                                 },
                                 fail: function () {
                                     button_delete.removeAttribute('disabled');
-                                    logs_container.append(RadicalInstallerUI.renderLogsClose());
+                                    logs_container.append(SovmartUI.renderLogsClose());
                                     logs_container.append(
-                                        RadicalInstallerUtils.createElement(
+                                        SovmartUtils.createElement(
                                             'div',
                                             {},
-                                            '<div class="alert alert-danger">' + RadicalInstallerLangs.text_delete_error + '</div>'
+                                            '<div class="alert alert-danger">' + SovmartLangs.text_delete_error + '</div>'
                                         ).build()
                                     );
                                 }
@@ -761,7 +761,7 @@ window.RadicalInstallerUI = {
                         }
                     ]
                 ]
-            }, RadicalInstallerUI.renderIcon({name: 'ri-trash', size: 18}))
+            }, SovmartUI.renderIcon({name: 'ri-trash', size: 18}))
             .add('button', {
                 type: 'button',
                 class: 'ri-btn ri-btn-default',
@@ -775,11 +775,11 @@ window.RadicalInstallerUI = {
                                 id = args.project_id;
                             }
 
-                            RadicalInstaller.showProject(id);
+                            Sovmart.showProject(id);
                         }
                     ]
                 ]
-            }, RadicalInstallerUI.renderIcon({name: 'ri-info', size: 18}))
+            }, SovmartUI.renderIcon({name: 'ri-info', size: 18}))
             .getParent()
             .getParent()
 
@@ -788,7 +788,7 @@ window.RadicalInstallerUI = {
 
 
     renderAccordeon: function (args) {
-        let container = RadicalInstallerUtils.createElement('div', {class: 'ri-tabs'});
+        let container = SovmartUtils.createElement('div', {class: 'ri-tabs'});
 
         for(let i=0;i<args.items.length;i++) {
             container = container
@@ -803,7 +803,7 @@ window.RadicalInstallerUI = {
     },
 
     renderLogsClose: function (args) {
-        let wrap = RadicalInstallerUtils.createElement('div');
+        let wrap = SovmartUtils.createElement('div');
 
         wrap = wrap.add('button', {
             type: 'button',
@@ -819,15 +819,15 @@ window.RadicalInstallerUI = {
                     }
                 ]
             ]
-        }, RadicalInstallerLangs.message_close)
+        }, SovmartLangs.message_close)
 
         return wrap.build();
     },
 
 
     renderLoader: function () {
-        return RadicalInstallerUtils.createElement('div', {'class': 'radicalinstaller-loader radicalinstaller-flex radicalinstaller-flex-center radicalinstaller-flex-middle'})
-            .add('img', {'src': RadicalInstaller.assets + '/img/loader.svg'}).build();
+        return SovmartUtils.createElement('div', {'class': 'radicalinstaller-loader radicalinstaller-flex radicalinstaller-flex-center radicalinstaller-flex-middle'})
+            .add('img', {'src': Sovmart.assets + '/img/loader.svg'}).build();
 
     }
 

@@ -1,4 +1,4 @@
-<?php namespace Radicalinstaller\Provider;
+<?php namespace Sovmart\Provider;
 
 defined('_JEXEC') or die;
 
@@ -11,8 +11,8 @@ use Joomla\CMS\Uri\Uri;
 use Joomla\Filesystem\File;
 use Joomla\Filesystem\Folder;
 use Joomla\Registry\Registry;
-use Radicalinstaller\API;
-use Radicalinstaller\Config;
+use Sovmart\API;
+use Sovmart\Config;
 
 class ProviderYoolayouts implements ProviderInterface
 {
@@ -34,7 +34,7 @@ class ProviderYoolayouts implements ProviderInterface
 
 	public function __construct($config = [])
 	{
-		Table::addIncludePath(JPATH_ROOT . '/plugins/installer/radicalinstaller/tables');
+		Table::addIncludePath(JPATH_ROOT . '/plugins/installer/sovmart/tables');
 		$this->scheme = Config::$scheme;
 		$this->host   = Config::$host;
 		$this->config = $config;
@@ -56,7 +56,7 @@ class ProviderYoolayouts implements ProviderInterface
 
 		if (!$yootheme)
 		{
-			$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_ERROR_YOOTHEME_PRO'), 'error');
+			$this->addMessage(Text::_('PLG_INSTALLER_SOVMART_ERROR_YOOTHEME_PRO'), 'error');
 
 			return false;
 		}
@@ -67,7 +67,7 @@ class ProviderYoolayouts implements ProviderInterface
 
 		if (!Zip::hasNativeSupport())
 		{
-			$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_ERROR_ZIP'), 'error');
+			$this->addMessage(Text::_('PLG_INSTALLER_SOVMART_ERROR_ZIP'), 'error');
 
 			return false;
 		}
@@ -92,7 +92,7 @@ class ProviderYoolayouts implements ProviderInterface
 		//если сервер прислал ошибку, то пишем и выходим
 		if ($request->code !== 200)
 		{
-			$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_ERROR_ARCHIVE_SERVICE'), 'error');
+			$this->addMessage(Text::_('PLG_INSTALLER_SOVMART_ERROR_ARCHIVE_SERVICE'), 'error');
 
 			return false;
 		}
@@ -103,7 +103,7 @@ class ProviderYoolayouts implements ProviderInterface
 		//если ключ установлен, но не находится такой на сервере
 		if (is_array($body) && isset($body['message']) && ($body['message'] === 'forbidden'))
 		{
-			$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_ERROR_KEY'), 'error');
+			$this->addMessage(Text::_('PLG_INSTALLER_SOVMART_ERROR_KEY'), 'error');
 
 			return false;
 		}
@@ -155,7 +155,7 @@ class ProviderYoolayouts implements ProviderInterface
 					$ext            = array_pop($filename_split);
 
 					// Check name
-					$key          = 'radicalinstaller_yoolayouts_' . $project['element'] . '_' . $item['name'];
+					$key          = 'sovmart_yoolayouts_' . $project['element'] . '_' . $item['name'];
 					$item['name'] = $project['title'] . ' v' . $project['version']['version'] . ((count($files) > 1) ? ('. ' . implode($filename_split)) : '');
 
 					// Add to items
@@ -173,7 +173,7 @@ class ProviderYoolayouts implements ProviderInterface
 				}
 
 				//записываем обновление
-				$table = Table::getInstance('RadicalinstallerExtensions', 'Table');
+				$table = Table::getInstance('SovmartExtensions', 'Table');
 				$table->load([
 					'provider' => $project['provider'],
 					'element'  => $project['element'],
@@ -204,7 +204,7 @@ class ProviderYoolayouts implements ProviderInterface
 			}
 		}
 
-		$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_PROVIDER_YOOTHEMEPRO_LAYOUTS_INSTALLED'));
+		$this->addMessage(Text::_('PLG_INSTALLER_SOVMART_TEXT_PROVIDER_YOOTHEMEPRO_LAYOUTS_INSTALLED'));
 
 		return true;
 
@@ -226,7 +226,7 @@ class ProviderYoolayouts implements ProviderInterface
 
 		if (!$yootheme)
 		{
-			$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_ERROR_YOOTHEME_PRO'), 'error');
+			$this->addMessage(Text::_('PLG_INSTALLER_SOVMART_ERROR_YOOTHEME_PRO'), 'error');
 
 			return false;
 		}
@@ -236,7 +236,7 @@ class ProviderYoolayouts implements ProviderInterface
 		$conditions = [
 			$db->quoteName('project_id') . ' = ' . (int) $id,
 		];
-		$query->delete($db->quoteName('#__radicalinstaller_extensions'));
+		$query->delete($db->quoteName('#__sovmart_extensions'));
 		$query->where($conditions);
 		$db->setQuery($query);
 		$project = $db->setQuery($query)->loadObject();
@@ -251,7 +251,7 @@ class ProviderYoolayouts implements ProviderInterface
 
 				foreach ($custom_data['library'] as $key => $item)
 				{
-					if (strpos($key, 'radicalinstaller_yoolayouts_' . $project['element']) !== false)
+					if (strpos($key, 'sovmart_yoolayouts_' . $project['element']) !== false)
 					{
 						continue;
 					}
@@ -271,7 +271,7 @@ class ProviderYoolayouts implements ProviderInterface
 		}
 
 
-		$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_PROVIDER_YOOTHEMEPRO_LAYOUTS_DELETED'));
+		$this->addMessage(Text::_('PLG_INSTALLER_SOVMART_TEXT_PROVIDER_YOOTHEMEPRO_LAYOUTS_DELETED'));
 
 		return $db->execute();
 	}
@@ -314,7 +314,7 @@ class ProviderYoolayouts implements ProviderInterface
 			//удаляем архив
 			if (!File::delete($this->filepath))
 			{
-				$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_ERROR_DELETE_ZIP'), 'danger');
+				$this->addMessage(Text::_('PLG_INSTALLER_SOVMART_ERROR_DELETE_ZIP'), 'danger');
 			}
 		}
 
@@ -323,7 +323,7 @@ class ProviderYoolayouts implements ProviderInterface
 			//удаляем временную папку
 			if (!Folder::delete($this->filepath_extract))
 			{
-				$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_ERROR_DELETE_TMP_FOLDER'), 'danger');
+				$this->addMessage(Text::_('PLG_INSTALLER_SOVMART_ERROR_DELETE_TMP_FOLDER'), 'danger');
 			}
 		}
 

@@ -1,4 +1,4 @@
-window.RadicalInstallerProject = {
+window.SovmartProject = {
 
     install: function (args) {
         let ids_count = args.ids.length,
@@ -16,7 +16,7 @@ window.RadicalInstallerProject = {
                 break;
             }
 
-            RadicalInstallerUtils.ajaxGet(RadicalInstaller.url + '&method=install&id=' + args.ids[i])
+            SovmartUtils.ajaxGet(Sovmart.url + '&method=install&id=' + args.ids[i])
                 .done(function (response) {
 
                     ids_current++;
@@ -65,14 +65,14 @@ window.RadicalInstallerProject = {
 
     delete: function (args) {
 
-        let is_delete = confirm(RadicalInstallerLangs.text_question_delete);
+        let is_delete = confirm(SovmartLangs.text_question_delete);
 
         if (!is_delete) {
             return;
         }
 
 
-        RadicalInstallerUtils.ajaxGet(RadicalInstaller.url + '&method=delete&id=' + args.id)
+        SovmartUtils.ajaxGet(Sovmart.url + '&method=delete&id=' + args.id)
             .done(function (response) {
                 let data = JSON.parse(response.data);
 
@@ -93,11 +93,11 @@ window.RadicalInstallerProject = {
 
 
     checkInstall: function (args) {
-        RadicalInstallerUtils.ajaxGet(RadicalInstaller.url + '&method=checkInstall&list=' + JSON.stringify(args.ids))
+        SovmartUtils.ajaxGet(Sovmart.url + '&method=checkInstall&list=' + JSON.stringify(args.ids))
             .done( function (json) {
                 let find = json.data[0];
 
-                RadicalInstallerUtils.ajaxGet(RadicalInstaller.url + '&method=checkUpdates')
+                SovmartUtils.ajaxGet(Sovmart.url + '&method=checkUpdates')
                     .done( function (response) {
                         let data = JSON.parse(response.data);
 
@@ -118,7 +118,7 @@ window.RadicalInstallerProject = {
 
 
     checkUpdate: function (args) {
-        RadicalInstallerUtils.ajaxGet(RadicalInstaller.url + '&method=checkUpdates')
+        SovmartUtils.ajaxGet(Sovmart.url + '&method=checkUpdates')
             .done( function (response) {
                 let data = JSON.parse(response.data);
 
@@ -130,11 +130,11 @@ window.RadicalInstallerProject = {
 
 
     sync: function (args) {
-        RadicalInstallerUtils.ajaxGet(RadicalInstaller.url + '&method=syncExtensions')
+        SovmartUtils.ajaxGet(Sovmart.url + '&method=syncExtensions')
             .done(function (json) {
                 let count = json.data;
 
-                RadicalInstallerUtils.createAlert(RadicalInstallerLangs.text_sync + count, 'info', 5000);
+                SovmartUtils.createAlert(SovmartLangs.text_sync + count, 'info', 5000);
 
                 if(typeof args.done === 'function') {
                     args.done();
@@ -142,7 +142,7 @@ window.RadicalInstallerProject = {
             })
             .fail(function (xhr) {
                 let data = JSON.parse(xhr.responseText);
-                RadicalInstallerUtils.createAlert(data.data, 'danger', 5000);
+                SovmartUtils.createAlert(data.data, 'danger', 5000);
 
                 if(typeof args.fail === 'function') {
                     args.fail();

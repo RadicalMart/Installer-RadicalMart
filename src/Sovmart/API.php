@@ -1,4 +1,4 @@
-<?php namespace Radicalinstaller;
+<?php namespace Sovmart;
 
 defined('_JEXEC') or die;
 

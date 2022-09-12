@@ -3,9 +3,9 @@
 use Joomla\CMS\Factory;
 use Joomla\CMS\Table\Table;
 use Joomla\Registry\Registry;
-use Radicalinstaller\API;
+use Sovmart\API;
 
-class RadicalinstallerHelper
+class SovmartHelper
 {
 
 
@@ -50,7 +50,7 @@ class RadicalinstallerHelper
 		unset($extensions_for_api);
 		unset($params);
 
-		Table::addIncludePath(JPATH_ROOT . '/plugins/installer/radicalinstaller/tables');
+		Table::addIncludePath(JPATH_ROOT . '/plugins/installer/sovmart/tables');
 
 		$count = count($sync_projects);
 
@@ -59,7 +59,7 @@ class RadicalinstallerHelper
 			$type    = $sync_project['joomla']['type'];
 			$element = $sync_project['joomla']['element'];
 			$folder  = $sync_project['joomla']['folder'];
-			$table   = Table::getInstance('RadicalinstallerExtensions', 'Table');
+			$table   = Table::getInstance('SovmartExtensions', 'Table');
 			$table->load(['type' => $type, 'folder' => $folder, 'element' => $element]);
 
 			$table->title          = $sync_project['title'];
@@ -96,7 +96,7 @@ class RadicalinstallerHelper
 		$query->from('#__extensions');
 		$query->where($db->quoteName('type') . '=' . $db->q('plugin'));
 		$query->where($db->quoteName('folder') . '=' . $db->q('installer'));
-		$query->where($db->quoteName('element') . '=' . $db->q('radicalinstaller'));
+		$query->where($db->quoteName('element') . '=' . $db->q('sovmart'));
 		$extension_joomla = $db->setQuery($query)->loadObject();
 		$manifest_cache   = new Registry($extension_joomla->manifest_cache);
 		$version          = $manifest_cache->get('version');

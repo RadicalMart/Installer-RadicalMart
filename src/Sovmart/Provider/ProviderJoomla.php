@@ -1,4 +1,4 @@
-<?php namespace Radicalinstaller\Provider;
+<?php namespace Sovmart\Provider;
 
 defined('_JEXEC') or die;
 
@@ -7,8 +7,8 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Table\Table;
 use Joomla\Registry\Registry;
-use Radicalinstaller\API;
-use Radicalinstaller\Config;
+use Sovmart\API;
+use Sovmart\Config;
 use Throwable;
 
 class ProviderJoomla implements ProviderInterface
@@ -22,7 +22,7 @@ class ProviderJoomla implements ProviderInterface
 
 	public function __construct($config = [])
 	{
-		Table::addIncludePath(JPATH_ROOT . '/plugins/installer/radicalinstaller/tables');
+		Table::addIncludePath(JPATH_ROOT . '/plugins/installer/sovmart/tables');
 		$this->scheme = Config::$scheme;
 		$this->host   = Config::$host;
 		$this->config = $config;
@@ -75,7 +75,7 @@ class ProviderJoomla implements ProviderInterface
 					$version = $project['version']['version'];
 				}
 
-				$table = Table::getInstance('RadicalinstallerExtensions', 'Table');
+				$table = Table::getInstance('SovmartExtensions', 'Table');
 				$table->load([
 					'provider' => $project['provider'],
 					'type'     => $type,
@@ -105,21 +105,21 @@ class ProviderJoomla implements ProviderInterface
 
 				// TODO лог
 
-				//$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_PROVIDER_JOOMLA_INSTALLED'));
+				//$this->addMessage(Text::_('PLG_INSTALLER_SOVMART_TEXT_PROVIDER_JOOMLA_INSTALLED'));
 			}
 			else
 			{
 				// TODO лог
 
-				//$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_INSTALL_ERROR'), 'error');
+				//$this->addMessage(Text::_('PLG_INSTALLER_SOVMART_TEXT_INSTALL_ERROR'), 'error');
 			}
 		}
 		catch (Throwable $e)
 		{
-			$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_INSTALL_ERROR'), 'error');
+			$this->addMessage(Text::_('PLG_INSTALLER_SOVMART_TEXT_INSTALL_ERROR'), 'error');
 
 			$this->addMessage(
-				Text::sprintf('PLG_INSTALLER_RADICALINSTALLER_ERROR_THROWABLE',
+				Text::sprintf('PLG_INSTALLER_SOVMART_ERROR_THROWABLE',
 					(string) $e->getLine(),
 					(string) $e->getFile(),
 					(string) $e->getMessage()
@@ -135,7 +135,7 @@ class ProviderJoomla implements ProviderInterface
 
 	public function delete($id)
 	{
-		$table = Table::getInstance('RadicalinstallerExtensions', 'Table');
+		$table = Table::getInstance('SovmartExtensions', 'Table');
 		$table->load(['project_id' => $id]);
 		Factory::getApplication()->getLanguage()->load('com_installer');
 		BaseDatabaseModel::addIncludePath(JPATH_ROOT . '/administrator/components/com_installer/models');
@@ -148,14 +148,14 @@ class ProviderJoomla implements ProviderInterface
 			{
 				// TODO лог
 
-				//$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_PROVIDER_JOOMLA_DELETED'));
+				//$this->addMessage(Text::_('PLG_INSTALLER_SOVMART_TEXT_PROVIDER_JOOMLA_DELETED'));
 			}
 		}
 		catch (Throwable $e)
 		{
-			$this->addMessage(Text::_('PLG_INSTALLER_RADICALINSTALLER_TEXT_PROVIDER_JOOMLA_DELETED'));
+			$this->addMessage(Text::_('PLG_INSTALLER_SOVMART_TEXT_PROVIDER_JOOMLA_DELETED'));
 			$this->addMessage(
-				Text::sprintf('PLG_INSTALLER_RADICALINSTALLER_ERROR_THROWABLE',
+				Text::sprintf('PLG_INSTALLER_SOVMART_ERROR_THROWABLE',
 					(string) $e->getLine(),
 					(string) $e->getFile(),
 					(string) $e->getMessage()
