@@ -14,10 +14,6 @@ interface ProviderInterface
 	public function getMessages();
 
 
-	public function toggleEnable($id);
-
-
-	public function toggleDisable($id);
-
+	public function sync();
 
 }

@@ -7,6 +7,7 @@ use Joomla\CMS\Layout\FileLayout;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Version;
 use Sovmart\API;
+use Sovmart\Provider\FactoryProvider;
 
 JLoader::register('SovmartHelper', __DIR__ . '/helper.php');
 
@@ -404,11 +405,12 @@ class PlgInstallerSovmart extends CMSPlugin
 
 	protected function syncExtensions()
 	{
-		$result = SovmartHelper::syncExtensions();
+		$result    = 0;
+		$providers = FactoryProvider::getInstance();
 
-		if ($result === false)
+		foreach ($providers as $provider)
 		{
-			throw new RuntimeException(Text::_('PLG_INSTALLER_SOVMART_ERROR_SYNC'), 500);
+			$result += $provider->sync();
 		}
 
 		return $result;

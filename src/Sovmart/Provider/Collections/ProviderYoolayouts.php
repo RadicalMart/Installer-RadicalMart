@@ -1,4 +1,4 @@
-<?php namespace Sovmart\Provider;
+<?php namespace Sovmart\Provider\Collections;
 
 defined('_JEXEC') or die;
 
@@ -13,6 +13,7 @@ use Joomla\Filesystem\Folder;
 use Joomla\Registry\Registry;
 use Sovmart\API;
 use Sovmart\Config;
+use Sovmart\Provider\ProviderInterface;
 
 class ProviderYoolayouts implements ProviderInterface
 {
@@ -244,7 +245,7 @@ class ProviderYoolayouts implements ProviderInterface
 		if ($custom_data = $yootheme->custom_data)
 		{
 			$custom_data = json_decode($custom_data, true);
-			$items = [];
+			$items       = [];
 
 			if (is_array($custom_data) && !empty($custom_data['library']))
 			{
@@ -277,18 +278,6 @@ class ProviderYoolayouts implements ProviderInterface
 	}
 
 
-	public function toggleEnable($id)
-	{
-		// TODO: Implement toggleEnable() method.
-	}
-
-
-	public function toggleDisable($id)
-	{
-		// TODO: Implement toggleDisable() method.
-	}
-
-
 	public function addMessage($msg, $type = 'info')
 	{
 		$this->messages[] = ['message' => $msg, 'type' => $type];
@@ -298,6 +287,18 @@ class ProviderYoolayouts implements ProviderInterface
 	public function getMessages()
 	{
 		return $this->messages;
+	}
+
+
+	public function sync()
+	{
+		// смотрим на локальные
+
+		// собираем коллекцию с версиями и названием element
+
+		// отправляем на сервер и сравниваем
+
+		return 0;
 	}
 
 
