@@ -113,7 +113,7 @@ window.Sovmart = {
                         trigger_grid_row_end_for: Sovmart.triggerGridRowEndForCard
                     });
 
-                    if(items[k].name === 'meta')
+                    if(items[k].name === 'kit')
                     {
                         group.buttons = [
                             {
