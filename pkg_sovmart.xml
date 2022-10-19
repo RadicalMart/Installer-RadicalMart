@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.*" type="package" method="upgrade">
+    <name>PKG_SOVMART</name>
+    <packagename>sovmart</packagename>
+    <author>Cymbal</author>
+    <creationDate>19.10.2022</creationDate>
+    <copyright>commerce</copyright>
+    <license>commerce</license>
+    <authorEmail>cymbal@delo-design.ru</authorEmail>
+    <authorUrl>https://delo-deisgn.ru</authorUrl>
+    <version>1.0.0</version>
+    <description>PKG_SOVMART_XML_DESCRIPTION</description>
+    <scriptfile>script.php</scriptfile>
+    <languages folder="language">
+        <language tag="en-GB">en-GB/en-GB.pkg_sovmart.ini</language>
+        <language tag="en-GB">en-GB/en-GB.pkg_sovmart.sys.ini</language>
+        <language tag="ru-RU">ru-RU/ru-RU.pkg_sovmart.ini</language>
+        <language tag="ru-RU">ru-RU/ru-RU.pkg_sovmart.sys.ini</language>
+    </languages>
+    <files>
+        <file type="plugin" group="installer" id="plg_installer_sovmart">installer</file>
+    </files>
+</extension>

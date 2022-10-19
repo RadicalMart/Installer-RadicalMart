@@ -186,6 +186,7 @@ class ProviderYoolayouts implements ProviderInterface
 				$table->element        = $project['element'];
 				$table->folder         = '';
 				$table->version        = $project['version']['version'];
+				$table->branch         = 'stable';
 				$table->project_id     = $project['id'];
 				$table->category_title = $project['title'];
 				$table->extension_id   = 0;
