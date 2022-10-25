@@ -1,8 +1,8 @@
 window.Sovmart = {
 
     api: 'https://sovmart.ru',
-    url: 'index.php?option=com_ajax&plugin=radicalinstaller&group=installer&format=json',
-    assets: '/media/PLG_INSTALLER_SOVMART/',
+    url: 'index.php?option=com_ajax&plugin=sovmart&group=installer&format=json',
+    assets: '/media/plg_installer_sovmart/',
     buttons_page_main: {},
     installer_service_id: 24,
 

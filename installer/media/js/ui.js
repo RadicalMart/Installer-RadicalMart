@@ -470,7 +470,7 @@ window.SovmartUI = {
 
 
     renderProjectCard: function (args) {
-        let cover = '/media/PLG_INSTALLER_SOVMART/img/extension.svg';
+        let cover = '/media/plg_installer_sovmart/img/extension.svg';
         let cover_class = 'icon';
         let version = '';
         let version_last = '';
