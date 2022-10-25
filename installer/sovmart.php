@@ -192,7 +192,7 @@ class PlgInstallerSovmart extends CMSPlugin
 		$input          = $app->input;
 		$id             = $input->get('id', '', 'int');
 		$project        = json_decode(API::project($id), true);
-		$provider_class = '\\Sovmart\\Provider\\Provider' . ucfirst(strtolower(!empty($project['provider']) ? $project['provider'] : 'joomla'));
+		$provider_class = '\\Sovmart\\Provider\\Collections\\Provider' . ucfirst(strtolower(!empty($project['provider']) ? $project['provider'] : 'joomla'));
 		$config         = [
 			'api_key' => $this->params->get('apikey', '')
 		];
@@ -234,7 +234,7 @@ class PlgInstallerSovmart extends CMSPlugin
 		$input   = $app->input;
 		$id      = $input->get('id', '', 'int');
 		$project = json_decode(API::project($id), true);;
-		$provider_class = '\\Sovmart\\Provider\\Provider' . ucfirst(strtolower(!empty($project['provider']) ? $project['provider'] : 'joomla'));
+		$provider_class = '\\Sovmart\\Provider\\Collections\\Provider' . ucfirst(strtolower(!empty($project['provider']) ? $project['provider'] : 'joomla'));
 
 		if (!class_exists($provider_class))
 		{

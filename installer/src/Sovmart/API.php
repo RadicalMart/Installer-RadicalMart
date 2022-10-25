@@ -147,16 +147,22 @@ class API
 	private static function execute($method, $data = [], $type = "GET")
 	{
 
+		if (JDEBUG)
+		{
+			return static::executeDebug($method, $data, $type);
+		}
+
 		$lang = Factory::getLanguage();
 
 		$data_build = http_build_query(
-			array_merge(['method' => $method], self::$data_request, $data, ['lang' => $lang->getTag()])
+			array_merge($data, ['lang' => $lang->getTag()])
 		);
 
 		$curlTransport = new CurlTransport(new Registry());
 		$uri           = (new Uri());
 		$uri->setScheme(Config::$scheme);
 		$uri->setHost(Config::$host);
+		$uri->setPath(Config::$path);
 		$response = $curlTransport->request($type, $uri, $data_build);
 
 		if (((new Version())->isCompatible('4.0')))
@@ -167,6 +173,27 @@ class API
 		}
 
 		return (!empty($response->body)) ? $response->body : false;
+	}
+
+
+	private static function executeDebug($method, $data = [], $type = "GET")
+	{
+		$url  = Config::$scheme . '://' . Config::$host . Config::$path . $method;
+		$lang = Factory::getLanguage();
+
+		$data_build = http_build_query(
+			array_merge($data, ['lang' => $lang->getTag()])
+		);
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_HEADER, 0);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_URL, $url . '?' . $data_build);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+		$result = curl_exec($ch);
+		curl_close($ch);
+
+		return $result;
 	}
 
 }
