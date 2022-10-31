@@ -301,3 +301,9 @@
     padding: 25px 41px 25px 41px;
     background: rgb(243, 247, 252);
 }
+
+
+/************* Logs ***************/
+.radicalinstaller-group + .radicalinstaller-group .radicalinstaller-logs {
+    background-color: #fff;
+}
