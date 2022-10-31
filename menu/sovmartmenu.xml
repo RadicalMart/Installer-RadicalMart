@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="plugin" version="3.8" group="system" method="upgrade">
+    <name>PLG_SOVMARTMENU</name>
+    <creationDate>31.10.2022</creationDate>
+    <author>Cymbal</author>
+    <authorEmail>cymbal@delo-design.ru</authorEmail>
+    <authorUrl>https://www.norrnext.com</authorUrl>
+    <copyright>Copyright © 2020 Delo Design &amp; NorrNext. All rights reserved.</copyright>
+    <license>GNU General Public License version 3 or later; see license.txt</license>
+    <version>1.0</version>
+    <description>PLG_SOVMARTMENU_XML_DESCRIPTION</description>
+    
+    <languages folder="language">
+        <language tag="en-GB">en-GB/en-GB.plg_system_sovmartmenu.ini</language>
+        <language tag="en-GB">en-GB/en-GB.plg_system_sovmartmenu.sys.ini</language>
+        <language tag="ru-RU">ru-RU/ru-RU.plg_system_sovmartmenu.ini</language>
+        <language tag="ru-RU">ru-RU/ru-RU.plg_system_sovmartmenu.sys.ini</language>
+    </languages>
+
+    <files>
+        <filename plugin="sovmartmenu">sovmartmenu.php</filename>
+        <folder>language</folder>
+    </files>
+
+</extension>
