@@ -9,6 +9,7 @@ use Joomla\CMS\Table\Table;
 use Joomla\Registry\Registry;
 use Sovmart\API;
 use Sovmart\Config;
+use Sovmart\Provider\ProviderInterface;
 use Throwable;
 
 class ProviderJoomla implements ProviderInterface
@@ -224,7 +225,7 @@ class ProviderJoomla implements ProviderInterface
 		}
 
 		// отсылаем на сервер radicalmart.ru и получаем ответ об установленных расширениях
-		$sync_projects = json_decode(API::syncExtensions(json_encode($extensions_for_api)), true);
+		$sync_projects = json_decode(API::syncExtensions('joomla', json_encode($extensions_for_api)), true);
 
 		if (!is_array($sync_projects))
 		{
@@ -250,15 +251,22 @@ class ProviderJoomla implements ProviderInterface
 
 		foreach ($sync_projects as $sync_project)
 		{
+
 			$type    = $sync_project['provider_data']['type'];
 			$element = $sync_project['provider_data']['element'];
 			$folder  = $sync_project['provider_data']['folder'];
 			$table   = Table::getInstance('SovmartExtensions', 'Table');
-			$table->load(['type' => $type, 'folder' => $folder, 'element' => $element]);
+			$table->load([
+				'provider' => $sync_project['provider'],
+				'type'     => $type,
+				'folder'   => $folder,
+				'element'  => $element
+			]);
 
 			$table->title          = $sync_project['title'];
 			$table->provider       = $sync_project['provider'];
 			$table->type           = $type;
+			$table->branch         = 'stable';
 			$table->element        = $element;
 			$table->folder         = $folder ?? '';
 			$table->version        = $extensions[$element]['version'] ?? '';
@@ -269,11 +277,15 @@ class ProviderJoomla implements ProviderInterface
 			if (!$table->check())
 			{
 				// TODO отдать ошибку
+				$count--;
+				continue;
 			}
 
 			if (!$table->store())
 			{
 				// TODO отдать ошибку
+				$count--;
+				continue;
 			}
 
 		}

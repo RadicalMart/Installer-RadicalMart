@@ -230,6 +230,7 @@ window.SovmartUI = {
 
 
     renderGroup: function (args) {
+        let logs_id = SovmartUtils.randomInteger(11111111, 9999999);
         let group = SovmartUtils
             .createElement('div', {class: 'radicalinstaller-group'});
 
@@ -237,8 +238,6 @@ window.SovmartUI = {
             (args.label !== undefined && args.label !== '') ||
             args.buttons !== undefined
         ) {
-
-            let logs_id = SovmartUtils.randomInteger(11111111, 9999999);
 
             group = group.addChild('div', {class: 'radicalinstaller-group-header radicalinstaller-flex radicalinstaller-flex-middle'})
                 .addChild('div', {class: 'radicalinstaller-width-auto radicalinstaller-margin-right'})
@@ -268,8 +267,28 @@ window.SovmartUI = {
 
             for (let k = 0; k < args.groups.length; k++) {
                 group = group.addChild('div', {class: 'radicalinstaller-group-subgroup ' + args.groups[k].class})
+                    .addChild('div', {class: 'radicalinstaller-margin-bottom radicalinstaller-flex radicalinstaller-flex-middle'})
+                    .addChild('div', {class: 'radicalinstaller-width-auto radicalinstaller-margin-right'})
                     .add('h4', {}, args.groups[k].label)
-                    .add('div', {}, args.groups[k].content)
+                    .getParent();
+
+                if (args.groups[k].buttons !== undefined) {
+                    group = group.addChild('div', {class: 'radicalinstaller-width-expand'});
+
+                    for (let j = 0; j < args.groups[k].buttons.length; j++) {
+                        group = group.add('button', {
+                            'type': 'button',
+                            'events': args.groups[k].buttons[j].events,
+                            'class': args.groups[k].buttons[j].class,
+                            'data-connect-logs-id': logs_id
+                        }, args.groups[k].buttons[j].label);
+                    }
+
+                    group = group.getParent();
+                }
+
+                group = group.getParent();
+                group = group.add('div', {}, args.groups[k].content)
                     .getParent();
             }
 
@@ -392,13 +411,13 @@ window.SovmartUI = {
     renderProjectGrid: function (args) {
         let grid = SovmartUtils.createElement('div'),
             current = 0,
-            width = 4,
+            width = 5,
             close = false,
             grid_row_id = SovmartUtils.randomInteger(1111111111, 9999999999),
             items = [];
 
         if (window.matchMedia("(max-width: 2100px)").matches) {
-            width = 3;
+            width = 4;
         }
 
         grid = grid.addChild('div', {
@@ -475,7 +494,8 @@ window.SovmartUI = {
         let version = '';
         let version_last = '';
         let category = '';
-        let category_id = '';
+        let category_id = 0;
+        let description = 'Описание отсутствует';
         let id;
         let paid = 'free';
 
@@ -513,17 +533,12 @@ window.SovmartUI = {
             id = args.project_id;
         }
 
-        if (args.download_type === 'paid') {
-            paid = 'paid';
+        if (args.introtext !== undefined && args.introtext !== '') {
+            description = args.introtext;
         }
 
-        if (
-            args.category !== undefined &&
-            args.category !== null &&
-            args.category.title !== undefined &&
-            args.category.title !== null
-        ) {
-            category = args.category.title;
+        if (args.download_type === 'paid') {
+            paid = 'paid';
         }
 
         if (
@@ -532,48 +547,80 @@ window.SovmartUI = {
             args.category.id !== undefined &&
             args.category.id !== null
         ) {
-            category_id = args.category.id;
+            category_id = parseInt(args.category.id);
         }
 
         if (
             args.catid !== undefined &&
             args.catid !== null
         ) {
-            category_id = args.catid;
+            category_id = parseInt(args.catid);
+        }
+
+        let categories_list = [];
+        let categories = SovmartUtils
+            .createElement('div', {class: 'radicalinstaller-project-categories'});
+
+        if(category_id > 0)
+        {
+            for(let i=0;i<Sovmart.categories.length;i++) {
+                if(Sovmart.categories[i].id !== category_id) {
+                    continue;
+                }
+
+                categories_list.push({
+                    id: Sovmart.categories[i].id,
+                    title: Sovmart.categories[i].title
+                });
+
+                if(Sovmart.categories[i].level <= 1) {
+                    continue;
+                }
+
+                let level_current = Sovmart.categories[i].level;
+
+                for(let j=i;j>=0;j--) {
+
+                    if(Math.abs(level_current - Sovmart.categories[j].level) === 0) {
+                        continue;
+                    }
+
+                    level_current = Sovmart.categories[j].level;
+
+                    categories_list.unshift({
+                        id: Sovmart.categories[j].id,
+                        title: Sovmart.categories[j].title
+                    });
+                }
+            }
+
+            for (let i=0;i<categories_list.length;i++) {
+                categories.add('a', {'data-id': categories_list[i].id,
+                    'events': [
+                        [
+                            'click', function (event) {
+                                Sovmart.showCategory(categories_list[i].id)
+                                event.preventDefault();
+                            }
+                        ]
+                    ]
+                }, categories_list[i].title);
+            }
         }
 
         let card = SovmartUtils
             .createElement('div', {class: 'radicalinstaller-project-card', 'data-project': id, 'data-paid': paid})
+            .addChild('div', {class: 'radicalinstaller-project-card-header'})
             .addChild('div', {class: 'radicalinstaller-project-card-image'});
 
         if (cover !== '') {
-            card.add('img', {src: cover, class: cover_class})
+            card = card.add('img', {src: cover, class: cover_class})
         }
+
 
         card = card.getParent()
             .addChild('div', {class: 'radicalinstaller-project-card-info'})
             .add('h4', {}, args.title);
-
-        if (category !== '') {
-            if (category_id !== '') {
-                card = card.add('div', {class: 'radicalinstaller-project-card-category'}, [
-                    SovmartUtils.createElement('span', {}, SovmartLangs.category + ' ').build(),
-                    SovmartUtils.createElement('a', {
-                        events: [
-                            [
-                                'click',
-                                function (event) {
-                                    Sovmart.showCategory(category_id, category);
-                                    event.preventDefault();
-                                }
-                            ]
-                        ]
-                    }, category).build(),
-                ]);
-            } else {
-                card = card.add('div', {class: 'radicalinstaller-project-card-category'}, '<span>' + SovmartLangs.category + ' </span>' + '<span>' + category + '</span>');
-            }
-        }
 
         if (version !== '') {
             card = card.addChild('div', {class: 'radicalinstaller-project-card-version radicalinstaller-flex radicalinstaller-flex-middle'})
@@ -597,10 +644,114 @@ window.SovmartUI = {
                 .getParent();
         }
 
-        card = card.addChild('div', {class: 'radicalinstaller-project-card-actions ri-btn-group ri-btn-group-small'})
+        card = card
+            .getParent()
+            .getParent()
+            .add('div', {}, categories.build())
+            .add('div', {class: 'radicalinstaller-project-card-description'}, description);
+
+        card = card.addChild('div', {class: 'radicalinstaller-project-card-actions'})
+            .addChild('div', {class: 'ri-btn-group ri-btn-group-small'})
             .add('button', {
                 type: 'button',
-                class: 'ri-btn ri-btn-install ri-btn-success',
+                class: 'ri-btn ri-btn-default',
+                events: [
+                    [
+                        'click',
+                        function (event) {
+                            let id = args.id;
+
+                            if (args.project_id !== undefined) {
+                                id = args.project_id;
+                            }
+
+                            Sovmart.showProject(id);
+                        }
+                    ]
+                ]
+            }, SovmartUI.renderIcon({name: 'ri-info', size: 18}))
+            .add('button', {
+                type: 'button',
+                class: 'ri-btn ri-btn-delete ri-btn-danger ri-hidden',
+                events: [
+                    [
+                        'click',
+                        function (event) {
+
+                            let button_install = this.closest('.radicalinstaller-project-card').querySelector('.ri-btn-install');
+                            let button_delete = this;
+                            let logs_id = this.getAttribute('data-connect-logs-id');
+                            let logs_container = SovmartUI.container.querySelector('.radicalinstaller-logs[data-for-row="' + logs_id + '"]');
+                            logs_container.innerHTML = '';
+
+                            button_delete.setAttribute('disabled', 'disabled');
+
+                            SovmartProject.delete({
+                                id: [id],
+                                success: function (response, project_delete_id) {
+                                    let success = false;
+                                    let data = response;
+
+
+                                    if (
+                                        data.messages !== undefined && data.messages !== null &&
+                                        data.messages.length > 0
+                                    ) {
+                                        logs_container.append(SovmartUI.renderLogsClose());
+
+                                        for (let i = data.messages.length - 1; i >= 0; i--) {
+                                            logs_container.append(
+                                                SovmartUtils.createElement(
+                                                    'div',
+                                                    {},
+                                                    '<div class="alert alert-' + data.messages[i].type + '">' + data.messages[i].message + '</div>'
+                                                ).build()
+                                            );
+                                        }
+                                    }
+
+                                    if (data.status === undefined || data.status === null || data.status === 'fail') {
+                                        success = false;
+                                    } else {
+                                        success = true;
+                                    }
+
+                                    if (success) {
+                                        button_delete.classList.add('ri-hidden');
+
+                                        if (
+                                            button_install !== undefined &&
+                                            button_install !== null
+                                        ) {
+                                            button_install.innerHTML = SovmartLangs.install;
+                                        }
+
+                                        Sovmart.checkUpdatedProjects(false);
+                                    }
+
+                                    button_delete.removeAttribute('disabled');
+                                },
+                                fail: function () {
+                                    button_delete.removeAttribute('disabled');
+                                    logs_container.append(SovmartUI.renderLogsClose());
+                                    logs_container.append(
+                                        SovmartUtils.createElement(
+                                            'div',
+                                            {},
+                                            '<div class="alert alert-danger">' + SovmartLangs.text_delete_error + '</div>'
+                                        ).build()
+                                    );
+                                }
+                            });
+
+                        }
+                    ]
+                ]
+            }, SovmartUI.renderIcon({name: 'ri-trash', size: 18}))
+            .getParent()
+            .add('button', {
+                type: 'button',
+                class: 'ri-btn ri-btn-install ri-btn-success ri-btn-small',
                 disabled: 'disabled',
                 events: [
                     [
@@ -684,103 +835,6 @@ window.SovmartUI = {
                     ]
                 ]
             }, SovmartLangs.install)
-            .add('button', {
-                type: 'button',
-                class: 'ri-btn ri-btn-delete ri-btn-danger ri-hidden',
-                events: [
-                    [
-                        'click',
-                        function (event) {
-
-                            let button_install = this.closest('.radicalinstaller-project-card').querySelector('.ri-btn-install');
-                            let button_delete = this;
-                            let logs_id = this.getAttribute('data-connect-logs-id');
-                            let logs_container = SovmartUI.container.querySelector('.radicalinstaller-logs[data-for-row="' + logs_id + '"]');
-                            logs_container.innerHTML = '';
-
-                            button_delete.setAttribute('disabled', 'disabled');
-
-                            SovmartProject.delete({
-                                id: [id],
-                                success: function (response, project_delete_id) {
-                                    let success = false;
-                                    let data = response;
-
-
-                                    if (
-                                        data.messages !== undefined && data.messages !== null &&
-                                        data.messages.length > 0
-                                    ) {
-                                        logs_container.append(SovmartUI.renderLogsClose());
-
-                                        for (let i = data.messages.length - 1; i >= 0; i--) {
-                                            logs_container.append(
-                                                SovmartUtils.createElement(
-                                                    'div',
-                                                    {},
-                                                    '<div class="alert alert-' + data.messages[i].type + '">' + data.messages[i].message + '</div>'
-                                                ).build()
-                                            );
-                                        }
-                                    }
-
-                                    if (data.status === undefined || data.status === null || data.status === 'fail') {
-                                        success = false;
-                                    } else {
-                                        success = true;
-                                    }
-
-                                    if (success) {
-                                        button_delete.classList.add('ri-hidden');
-
-                                        if (
-                                            button_install !== undefined &&
-                                            button_install !== null
-                                        ) {
-                                            button_install.innerHTML = SovmartLangs.install;
-                                        }
-
-                                        Sovmart.checkUpdatedProjects(false);
-                                    }
-
-                                    button_delete.removeAttribute('disabled');
-                                },
-                                fail: function () {
-                                    button_delete.removeAttribute('disabled');
-                                    logs_container.append(SovmartUI.renderLogsClose());
-                                    logs_container.append(
-                                        SovmartUtils.createElement(
-                                            'div',
-                                            {},
-                                            '<div class="alert alert-danger">' + SovmartLangs.text_delete_error + '</div>'
-                                        ).build()
-                                    );
-                                }
-                            });
-
-                        }
-                    ]
-                ]
-            }, SovmartUI.renderIcon({name: 'ri-trash', size: 18}))
-            .add('button', {
-                type: 'button',
-                class: 'ri-btn ri-btn-default',
-                events: [
-                    [
-                        'click',
-                        function (event) {
-                            let id = args.id;
-
-                            if (args.project_id !== undefined) {
-                                id = args.project_id;
-                            }
-
-                            Sovmart.showProject(id);
-                        }
-                    ]
-                ]
-            }, SovmartUI.renderIcon({name: 'ri-info', size: 18}))
-            .getParent()
             .getParent()
 
         return card.build();
@@ -790,13 +844,13 @@ window.SovmartUI = {
     renderAccordeon: function (args) {
         let container = SovmartUtils.createElement('div', {class: 'ri-tabs'});
 
-        for(let i=0;i<args.items.length;i++) {
+        for (let i = 0; i < args.items.length; i++) {
             container = container
                 .addChild('div', {class: 'ri-tab'})
-                    .add('input', {type: 'checkbox', id: 'chck' + i})
-                    .add('label', {class: 'ri-tab-label', 'for': 'chck' + i}, args.items[i].label)
-                    .add('div', {class: 'ri-tab-content'}, args.items[i].content)
-                    .getParent();
+                .add('input', {type: 'checkbox', id: 'chck' + i})
+                .add('label', {class: 'ri-tab-label', 'for': 'chck' + i}, args.items[i].label)
+                .add('div', {class: 'ri-tab-content'}, args.items[i].content)
+                .getParent();
         }
 
         return container.build();

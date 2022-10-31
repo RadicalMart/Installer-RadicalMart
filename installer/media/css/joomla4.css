@@ -178,6 +178,7 @@
     background: #134b9e;
 }
 
+
 /**************** Button groups ***************/
 .ri-btn-group {
 }
@@ -257,7 +258,8 @@
     border-bottom: none;
 }
 
-/************* accordion ***************/
+
+/************* Accordion ***************/
 .ri-tab-label {
     background: var(--template-bg-dark-60);
     color: var(--template-text-light);
@@ -278,4 +280,24 @@
 
 .ri-tab-close:hover {
     background: var(--template-text-light);
+}
+
+
+/************* Main container ***************/
+#radicalinstaller-container {
+    margin-bottom: -20px;
+}
+
+
+/************* Group ***************/
+.radicalinstaller-group {
+    padding: 25px 0;
+}
+
+
+/************* Card ***************/
+.radicalinstaller-group + .radicalinstaller-group {
+    margin: 0px -41px;
+    padding: 25px 41px 25px 41px;
+    background: rgb(243, 247, 252);
 }

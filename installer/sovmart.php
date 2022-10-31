@@ -405,6 +405,7 @@ class PlgInstallerSovmart extends CMSPlugin
 
 	protected function syncExtensions()
 	{
+
 		$result    = 0;
 		$providers = FactoryProvider::getInstance();
 
