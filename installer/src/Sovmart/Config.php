@@ -20,4 +20,11 @@ class Config
 	public static $host = 'sovmart.ru';
 
 
+	/**
+	 * @var string
+	 * @since version
+	 */
+	public static $path = '/api/v1/swprojects/';
+
+
 }
