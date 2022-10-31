@@ -4,8 +4,8 @@
     <packagename>sovmart</packagename>
     <author>Cymbal</author>
     <creationDate>19.10.2022</creationDate>
-    <copyright>commerce</copyright>
-    <license>commerce</license>
+    <copyright>Delo-Design</copyright>
+    <license>GNU General Public License version 3; see LICENSE.txt</license>
     <authorEmail>cymbal@delo-design.ru</authorEmail>
     <authorUrl>https://delo-deisgn.ru</authorUrl>
     <version>1.0.0</version>
@@ -19,5 +19,6 @@
     </languages>
     <files>
         <file type="plugin" group="installer" id="plg_installer_sovmart">installer</file>
+        <file type="plugin" group="quickicon" id="plg_quickicon_sovmarticon">quickicon</file>
     </files>
 </extension>
