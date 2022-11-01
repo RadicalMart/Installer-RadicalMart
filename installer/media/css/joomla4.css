@@ -294,14 +294,21 @@
     padding: 25px 0;
 }
 
-
-/************* Card ***************/
 .radicalinstaller-group + .radicalinstaller-group {
     margin: 0px -41px;
     padding: 25px 41px 25px 41px;
     background: rgb(243, 247, 252);
 }
 
+
+/************* Card ***************/
+.radicalinstaller-project-categories a:not([href]):not([class]) {
+    color: var(--template-link-color);
+}
+
+.radicalinstaller-project-categories a:not([href]):not([class]):hover {
+    color: var(--template-link-hover-color);
+}
 
 /************* Logs ***************/
 .radicalinstaller-group + .radicalinstaller-group .radicalinstaller-logs {
