@@ -9,7 +9,8 @@
     <license>GNU General Public License version 3 or later; see license.txt</license>
     <version>1.0</version>
     <description>PLG_SOVMARTMENU_XML_DESCRIPTION</description>
-    
+    <scriptfile>script.php</scriptfile>
+
     <languages folder="language">
         <language tag="en-GB">en-GB/en-GB.plg_system_sovmartmenu.ini</language>
         <language tag="en-GB">en-GB/en-GB.plg_system_sovmartmenu.sys.ini</language>
