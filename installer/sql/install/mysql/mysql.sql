@@ -4,6 +4,7 @@ CREATE TABLE `#__sovmart_extensions`
     `id`             int(10) unsigned NOT NULL AUTO_INCREMENT,
     `title`          varchar(512)  NOT NULL,
     `provider`       varchar(512)  NOT NULL,
+    `cover`          varchar(1024)  NOT NULL,
     `type`           varchar(512)  NOT NULL,
     `element`        varchar(512)  NOT NULL,
     `folder`         varchar(512)  NOT NULL,

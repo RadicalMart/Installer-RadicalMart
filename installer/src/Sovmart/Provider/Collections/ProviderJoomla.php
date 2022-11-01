@@ -86,6 +86,7 @@ class ProviderJoomla implements ProviderInterface
 
 				$table->provider       = $project['provider'];
 				$table->title          = $project['title'];
+				$table->cover          = $sync_project['images']['cover'] ?? '';
 				$table->type           = $type;
 				$table->element        = $element;
 				$table->folder         = $folder;
@@ -265,6 +266,7 @@ class ProviderJoomla implements ProviderInterface
 
 			$table->title          = $sync_project['title'];
 			$table->provider       = $sync_project['provider'];
+			$table->cover          = $sync_project['images']['cover'] ?? '';
 			$table->type           = $type;
 			$table->branch         = 'stable';
 			$table->element        = $element;

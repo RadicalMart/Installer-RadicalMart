@@ -182,6 +182,7 @@ class ProviderYoolayouts implements ProviderInterface
 
 				$table->provider       = $project['provider'];
 				$table->title          = $project['title'];
+				$table->cover          = $sync_project['images']['cover'] ?? '';
 				$table->type           = 'layout';
 				$table->element        = $project['element'];
 				$table->folder         = '';
