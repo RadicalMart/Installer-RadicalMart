@@ -8,6 +8,7 @@ use Joomla\Database\DatabaseDriver;
 class plgSystemSovmartmenu extends CMSPlugin
 {
 
+
 	protected $app;
 
 
@@ -17,12 +18,16 @@ class plgSystemSovmartmenu extends CMSPlugin
 	protected $autoloadLanguage = true;
 
 
+	protected $loadAdminMenu = false;
+
+
 	public function onPreprocessMenuItems($context, $children)
 	{
 
 		if (
 			!$this->app->isClient('administrator') ||
-			!Factory::getUser()->authorise('core.manage', 'com_installer')
+			!Factory::getUser()->authorise('core.manage', 'com_installer') ||
+			$this->loadAdminMenu === true
 		)
 		{
 			return;
@@ -33,7 +38,7 @@ class plgSystemSovmartmenu extends CMSPlugin
 			'type'      => 'component',
 			'link'      => 'index.php?option=com_installer&view=install#sovmart',
 			'element'   => 'com_installer',
-			'class'     => 'class:puzzle-piece',
+			'class'     => 'class:upload',
 			'ajaxbadge' => null,
 			'dashboard' => false
 		]);
@@ -41,6 +46,7 @@ class plgSystemSovmartmenu extends CMSPlugin
 		/* @var $root AdministratorMenuItem */
 		$root = $children[0]->getParent();
 		$root->addChild($parent);
+		$this->loadAdminMenu = true;
 
 	}
 
