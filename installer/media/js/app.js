@@ -977,6 +977,9 @@ window.Sovmart = {
                                             '<div class="alert alert-danger">' + SovmartLangs.text_delete_error + '</div>'
                                         ).build()
                                     );
+                                },
+                                cancel: function() {
+                                    button_delete.removeAttribute('disabled');
                                 }
                             });
 

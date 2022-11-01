@@ -68,6 +68,11 @@ window.SovmartProject = {
         let is_delete = confirm(SovmartLangs.text_question_delete);
 
         if (!is_delete) {
+
+            if (typeof args.cancel === 'function') {
+                args.cancel(args.id);
+            }
+
             return;
         }
 
