@@ -18,8 +18,8 @@
         <language tag="ru-RU">ru-RU/ru-RU.pkg_sovmart.sys.ini</language>
     </languages>
     <files>
-        <file type="plugin" group="installer" id="plg_installer_sovmart">installer</file>
-        <file type="plugin" group="quickicon" id="plg_quickicon_sovmarticon">quickicon</file>
-        <file type="plugin" group="system" id="plg_system_sovmartmenu">menu</file>
+        <file type="plugin" group="installer" id="sovmart">installer</file>
+        <file type="plugin" group="quickicon" id="sovmarticon">quickicon</file>
+        <file type="plugin" group="system" id="sovmartmenu">menu</file>
     </files>
 </extension>
