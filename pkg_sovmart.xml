@@ -20,5 +20,6 @@
     <files>
         <file type="plugin" group="installer" id="plg_installer_sovmart">installer</file>
         <file type="plugin" group="quickicon" id="plg_quickicon_sovmarticon">quickicon</file>
+        <file type="plugin" group="system" id="plg_system_sovmartmenu">menu</file>
     </files>
 </extension>
