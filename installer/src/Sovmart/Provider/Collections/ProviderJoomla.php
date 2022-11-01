@@ -263,7 +263,7 @@ class ProviderJoomla implements ProviderInterface
 				'folder'   => $folder,
 				'element'  => $element
 			]);
-
+			
 			$table->title          = $sync_project['title'];
 			$table->provider       = $sync_project['provider'];
 			$table->cover          = $sync_project['images']['cover'] ?? '';

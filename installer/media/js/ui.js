@@ -499,8 +499,20 @@ window.SovmartUI = {
         let id;
         let paid = 'free';
 
-        if (args.images !== undefined && args.images.cover !== false) {
+        if (
+            args.images !== undefined &&
+            args.images.cover !== false &&
+            args.images.cover !== ''
+        ) {
             cover = Sovmart.api + '/' + args.images.cover;
+            cover_class = 'cover';
+        }
+
+        if (
+            args.cover !== undefined &&
+            args.cover !== ''
+        ) {
+            cover = Sovmart.api + '/' + args.cover;
             cover_class = 'cover';
         }
 
