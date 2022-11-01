@@ -262,7 +262,7 @@ class PlgInstallerSovmart extends CMSPlugin
 		$ids   = [];
 		$query = $this->db->getQuery(true);
 		$query
-			->select(['id', 'title', 'version', 'project_id'])
+			->select(['id', 'title', 'version', 'cover', 'project_id'])
 			->from($this->db->quoteName('#__sovmart_extensions'));
 		$projects_install = $this->db->setQuery($query)->loadObjectList();
 
