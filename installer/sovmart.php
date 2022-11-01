@@ -460,9 +460,31 @@ class PlgInstallerSovmart extends CMSPlugin
 	{
 		$key = trim($this->app->input->getString('key'));
 
+		// сохраняем пустой ключ
 		if (empty($key))
 		{
-			throw new RuntimeException(Text::_('PLG_INSTALLER_SOVMART_ERROR_KEY'), 401);
+
+			$this->params->set('apikey', '');
+			$query  = $this->db->getQuery(true);
+			$fields = [
+				$this->db->qn('params') . ' = ' . $this->db->q($this->params->toString())
+			];
+
+			$conditions = [
+				$this->db->qn('element') . ' = ' . $this->db->q('sovmart'),
+				$this->db->qn('folder') . ' = ' . $this->db->q('installer'),
+			];
+
+			$query->update($this->db->quoteName('#__extensions'))->set($fields)->where($conditions);
+			$this->db->setQuery($query);
+			$result = $this->db->execute();
+
+			if (!$result)
+			{
+				throw new RuntimeException(Text::_('PLG_INSTALLER_SOVMART_ERROR_DATABASE_SAVE'), 500);
+			}
+
+			return ['status' => 'ok'];
 		}
 
 		$result = json_decode(API::checkKey($key), true);

@@ -338,8 +338,8 @@ window.SovmartUI = {
 
                             let key_value = event.target.querySelector('[name=key]').value;
 
-                            if (key_value.length < 30) {
-                                SovmartUtils.createAlert(SovmartLangs.alert_key_error, 'danger', 5000);
+                            if (key_value.length < 30 && key_value.length !== 0) {
+                                SovmartUtils.createAlert(SovmartLangs.text_key_error, 'danger', 5000);
                                 return;
                             }
 
@@ -392,7 +392,6 @@ window.SovmartUI = {
                         'click',
                         function (event) {
                             document.querySelector('.radicalinstaller-input-key').value = '';
-                            event.preventDefault();
                         }
                     ]
                 ]
