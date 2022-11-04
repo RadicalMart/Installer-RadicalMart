@@ -16,12 +16,7 @@ class API
 	 * @var string[]
 	 * @since version
 	 */
-	private static $data_request = [
-		'option' => 'com_ajax',
-		'plugin' => 'swprojectsapi',
-		'group'  => 'system',
-		'format' => 'json',
-	];
+	private static $data_request = [];
 
 
 	/**
@@ -155,14 +150,14 @@ class API
 		$lang = Factory::getLanguage();
 
 		$data_build = http_build_query(
-			array_merge($data, ['lang' => $lang->getTag()])
+			array_merge($data, static::$data_request, ['lang' => $lang->getTag()])
 		);
 
 		$curlTransport = new CurlTransport(new Registry());
 		$uri           = (new Uri());
 		$uri->setScheme(Config::$scheme);
 		$uri->setHost(Config::$host);
-		$uri->setPath(Config::$path);
+		$uri->setPath(Config::$path . $method);
 		$response = $curlTransport->request($type, $uri, $data_build);
 
 		if (((new Version())->isCompatible('4.0')))
@@ -182,7 +177,7 @@ class API
 		$lang = Factory::getLanguage();
 
 		$data_build = http_build_query(
-			array_merge($data, ['lang' => $lang->getTag()])
+			array_merge($data, static::$data_request, ['lang' => $lang->getTag()])
 		);
 
 		$ch = curl_init();
