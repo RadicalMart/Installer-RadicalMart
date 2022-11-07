@@ -37,11 +37,6 @@ class ProviderJoomla implements ProviderInterface
 		$project = json_decode(API::project($id), true);
 		$url     = $this->scheme . '://' . $this->host . $project['download'];
 
-		if (isset($this->config['api_key']))
-		{
-			$url .= ((strpos($url, '?') === false ? '?' : '&')) . 'download_key=' . $this->config['api_key'];
-		}
-
 		$input->set('installtype', 'url');
 		$input->set('install_url', $url);
 

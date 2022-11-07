@@ -7,6 +7,7 @@ use Joomla\CMS\Layout\FileLayout;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Version;
 use Sovmart\API;
+use Sovmart\Config;
 use Sovmart\Provider\FactoryProvider;
 
 JLoader::register('SovmartHelper', __DIR__ . '/helper.php');
@@ -67,6 +68,23 @@ class PlgInstallerSovmart extends CMSPlugin
 		$query->where($conditions);
 		$this->db->setQuery($query);
 		$this->db->execute();
+	}
+
+
+	public function onInstallerBeforePackageDownload(&$url, &$headers)
+	{
+		if (
+			parse_url($url, PHP_URL_HOST) === Config::$host &&
+			!strpos($url, 'download_key=') &&
+			$key = $this->params->get('apikey')
+		)
+		{
+
+			$url .= ((strpos($url, '?') === false ? '?' : '&')) . 'download_key=' . $key;
+
+		}
+
+		return true;
 	}
 
 
