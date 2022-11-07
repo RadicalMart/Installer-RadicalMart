@@ -26,7 +26,7 @@
 
 	<updateservers>
 		<server type="extension" priority="1" name="SovmartInstaller">
-			https://sovmart.ru/update?element=sovmart
+			https://sovmart.ru/update?element=plg_installer_sovmart
 		</server>
 	</updateservers>
 
