@@ -1,3 +1,7 @@
+.radicalinstaller-container * {
+    box-sizing: border-box;
+}
+
 /************* Buttons ***********/
 .ri-btn {
     display: flex;
@@ -254,6 +258,16 @@
     min-height: 35px;
 }
 
+
+/************* Group ***************/
+.radicalinstaller-group {
+    padding: 25px 0;
+}
+
+.radicalinstaller-group:nth-child(2n) {
+    padding: 35px 25px;
+    background: #F0F0F0;
+}
 
 /************* accordion ***************/
 .ri-tab-label {

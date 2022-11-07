@@ -264,6 +264,7 @@
     height: 100%;
     border-radius: 4px;
     position: relative;
+    box-sizing: border-box;
     padding-bottom: 50px;
     background: #fff;
     border: 1px solid #dfdfdf;
@@ -292,6 +293,7 @@
 }
 
 .radicalinstaller-project-card-image img {
+    max-width: none;
     height: 100%;
 }
 
@@ -360,6 +362,7 @@
     left: 0;
     right: 0;
     bottom: 0;
+    box-sizing: border-box;
     display: flex;
     justify-content: space-between;
     border-top: 1px solid #dfdfdf;
