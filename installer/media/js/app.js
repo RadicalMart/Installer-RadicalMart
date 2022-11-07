@@ -328,7 +328,11 @@ window.Sovmart = {
                 if (items[k].items !== undefined) {
                     projects_card_required = [];
                     let i = 1;
-                    let max = 8;
+                    let max = 10;
+
+                    if (window.matchMedia("(max-width: 2100px)").matches) {
+                        max = 8;
+                    }
 
                     if (
                         items[k].items.items === null ||

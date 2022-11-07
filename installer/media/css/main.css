@@ -182,7 +182,9 @@
     width: calc(25% - 30px);
 }
 
-
+.radicalinstaller-grid-width-1-5 > * {
+    width: calc(20% - 30px);
+}
 
 /*********** Form *****************/
 .control-group-large:last-child {
