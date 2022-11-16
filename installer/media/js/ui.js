@@ -263,6 +263,15 @@ window.SovmartUI = {
             group = group.add('div', {class: 'radicalinstaller-logs', 'data-for-row': logs_id});
         }
 
+        if (
+            (args.description !== undefined && args.description !== '')
+        )
+        {
+            group = group.addChild('div', {class: 'radicalinstaller-group-description'})
+                .add('p', {}, args.description)
+                .getParent();
+        }
+
         if (args.groups !== undefined) {
 
             for (let k = 0; k < args.groups.length; k++) {

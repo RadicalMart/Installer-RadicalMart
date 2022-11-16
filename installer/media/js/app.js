@@ -163,6 +163,7 @@ window.Sovmart = {
                 let ids_required = [];
                 let group = {
                     label: items[k].title,
+                    description: items[k].description,
                 };
 
                 if (items[k].items_required !== undefined) {
