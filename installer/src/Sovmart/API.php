@@ -131,6 +131,12 @@ class API
 	}
 
 
+	public static function search($search)
+	{
+		return self::execute('search', ['q' => $search]);
+	}
+
+
 	/**
 	 * @param          $method
 	 * @param   array  $data

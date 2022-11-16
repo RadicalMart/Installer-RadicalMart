@@ -208,6 +208,13 @@
     border-top-right-radius: .25rem;
 }
 
+/*********** Form **********/
+.ri-input {
+    border: 1px solid hsl(var(--hue),20%,80%);;
+    padding: 0 10px;
+}
+
+
 /*********** Alert **********/
 .alert.alert-message {
     background-color: var(--template-bg-dark-10);

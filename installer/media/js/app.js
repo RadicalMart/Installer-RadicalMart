@@ -1281,6 +1281,7 @@ window.Sovmart = {
 
 
     initButtonsMain: function () {
+        let self = this;
         this.buttons_page_main = {
             groups: [
                 {
@@ -1366,6 +1367,84 @@ window.Sovmart = {
                                     'click',
                                     function (event) {
                                         SovmartUtils.openInNewTab(Sovmart.api + '/kontakty');
+                                    }
+                                ]
+                            ]
+                        }
+                    ]
+                },
+                {
+                    name: 'search',
+                    items: [
+                        {
+                            type: 'forminput',
+                            name: 'search',
+                            label: SovmartLangs.search,
+                            events: [
+                                [
+                                    'submit',
+                                    function (event) {
+                                        event.preventDefault();
+                                        let form = this;
+                                        let q = form.querySelector('input').value;
+                                        let page = SovmartUI.renderPage();
+
+                                        if(q.length < 3)
+                                        {
+                                            SovmartUtils.createAlert(
+                                                SovmartLangs.text_search_error_small,
+                                                'danger',
+                                                5000
+                                            );
+
+                                            return;
+                                        }
+
+                                        SovmartUI.showPage({
+                                            page: page
+                                        });
+
+                                        SovmartUI.loaderShow({
+                                            container: page,
+                                            wait: function (resolve, reject) {
+
+                                                SovmartUtils.ajaxGet(Sovmart.url + '&method=search&q=' + encodeURIComponent(q))
+                                                    .done(function (response) {
+                                                        let data = JSON.parse(response.data);
+                                                        resolve(data);
+                                                    }).fail(function (xhr) {
+                                                    reject(xhr);
+                                                });
+
+                                            }
+                                        }).then(data => {
+                                            let grid = '';
+                                            let projects_card = [];
+                                            let ids = [];
+
+                                            for (let k = 0; k < data.items.length; k++) {
+                                                projects_card.push(
+                                                    SovmartUI.renderProjectCard(data.items[k])
+                                                );
+                                                ids.push(data.items[k].id);
+                                            }
+
+                                            grid = SovmartUI.renderProjectGrid({
+                                                items: projects_card,
+                                                trigger_grid_row_end_for: Sovmart.triggerGridRowEndForCard
+                                            });
+
+                                            page.appendChild(SovmartUI.renderGroup({
+                                                label: SovmartLangs.text_search_by + q,
+                                                content: grid
+                                            }));
+
+                                            SovmartProject.checkInstall({
+                                                ids: ids,
+                                                done: Sovmart.checkInstallProjectCard
+                                            });
+
+                                        });
                                     }
                                 ]
                             ]

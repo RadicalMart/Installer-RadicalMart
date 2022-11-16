@@ -96,53 +96,85 @@ window.SovmartUI = {
                 buttons.items[k].dropdown !== undefined &&
                 buttons.items[k].items !== undefined
             ) {
-                group = group.addChild('div', {class: 'ri-btn-wrap'});
-                group = group.add('button', {
-                        'type': 'button',
-                        'events': buttons.items[k].dropdown.events,
-                        'class': buttons.items[k].dropdown.class
-                    },
-                    SovmartUI.renderButtonIcon(buttons.items[k].dropdown)
-                );
-                group = group.addChild('div', {class: 'ri-btn-dropdown'});
 
-                for (let i = 0; i < buttons.items[k].items.length; i++) {
-                    let prop = {'type': 'button'};
-                    let label = SovmartUI.renderButtonIcon(buttons.items[k].items[i]);
+                let type = 'button';
 
-                    if (buttons.items[k].items[i].events !== undefined) {
-                        prop.events = buttons.items[k].items[i].events;
-                    }
-
-                    if (buttons.items[k].items[i].class !== undefined) {
-                        prop.class = buttons.items[k].items[i].class;
-                    }
-
-                    if (buttons.items[k].items[i].disabled !== undefined) {
-                        prop.disabled = buttons.items[k].items[i].disabled;
-                    }
-
-                    group = group.add('button', prop, label);
+                if(buttons.items[k].type !== undefined) {
+                    type = buttons.items[k].type;
                 }
 
-                group = group.getParent();
-                group = group.getParent();
+                if(type === 'button') {
+
+                    group = group.addChild('div', {class: 'ri-btn-wrap'});
+                    group = group.add('button', {
+                            'type': 'button',
+                            'events': buttons.items[k].dropdown.events,
+                            'class': buttons.items[k].dropdown.class
+                        },
+                        SovmartUI.renderButtonIcon(buttons.items[k].dropdown)
+                    );
+                    group = group.addChild('div', {class: 'ri-btn-dropdown'});
+
+                    for (let i = 0; i < buttons.items[k].items.length; i++) {
+                        let prop = {'type': 'button'};
+                        let label = SovmartUI.renderButtonIcon(buttons.items[k].items[i]);
+
+                        if (buttons.items[k].items[i].events !== undefined) {
+                            prop.events = buttons.items[k].items[i].events;
+                        }
+
+                        if (buttons.items[k].items[i].class !== undefined) {
+                            prop.class = buttons.items[k].items[i].class;
+                        }
+
+                        if (buttons.items[k].items[i].disabled !== undefined) {
+                            prop.disabled = buttons.items[k].items[i].disabled;
+                        }
+
+                        group = group.add('button', prop, label);
+                    }
+
+                    group = group.getParent();
+                    group = group.getParent();
+                }
+
+                if(type === 'forminput') {
+
+                }
             } else {
-                let prop = {'type': 'button'};
 
-                if (buttons.items[k].events !== undefined) {
-                    prop.events = buttons.items[k].events;
+                let type = 'button';
+
+                if(buttons.items[k].type !== undefined) {
+                    type = buttons.items[k].type;
                 }
 
-                if (buttons.items[k].class !== undefined) {
-                    prop.class = buttons.items[k].class;
+                if(type === 'button') {
+                    let prop = {'type': 'button'};
+
+                    if (buttons.items[k].events !== undefined) {
+                        prop.events = buttons.items[k].events;
+                    }
+
+                    if (buttons.items[k].class !== undefined) {
+                        prop.class = buttons.items[k].class;
+                    }
+
+                    if (buttons.items[k].disabled !== undefined) {
+                        prop.disabled = buttons.items[k].disabled;
+                    }
+
+                    group = group.add('button', prop, SovmartUI.renderButtonIcon(buttons.items[k]));
+
                 }
 
-                if (buttons.items[k].disabled !== undefined) {
-                    prop.disabled = buttons.items[k].disabled;
+
+                if(type === 'forminput') {
+                    group = group.addChild('form', {class: 'ri-toolbar-form', events: buttons.items[k].events})
+                        .add('input', {class: 'ri-input', placeholder: buttons.items[k].label, type: 'text'})
+                        .getParent();
                 }
 
-                group = group.add('button', prop, SovmartUI.renderButtonIcon(buttons.items[k]));
             }
 
         }
@@ -382,7 +414,7 @@ window.SovmartUI = {
             })
             .addChild('div', {'class': 'radicalinstaller-flex'})
             .add('input', {
-                class: 'radicalinstaller-input-key radicalinstaller-width-500 radicalinstaller-margin-right-xsmall',
+                class: 'ri-input radicalinstaller-input-key radicalinstaller-width-500 radicalinstaller-margin-right-xsmall',
                 type: 'text',
                 placeholder: SovmartLangs.text_input_key,
                 name: 'key',

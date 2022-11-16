@@ -186,6 +186,11 @@ class PlgInstallerSovmart extends CMSPlugin
 			{
 				$output = $this->saveKey();
 			}
+
+			if ($method === 'search')
+			{
+				$output = $this->search();
+			}
 		}
 		catch (Exception $e)
 		{
@@ -552,6 +557,12 @@ class PlgInstallerSovmart extends CMSPlugin
 		$list_installed = $this->db->setQuery($query)->loadObjectList();
 
 		return $list_installed;
+	}
+
+
+	protected function search()
+	{
+		return API::search($this->app->input->getString('q', ''));
 	}
 
 
