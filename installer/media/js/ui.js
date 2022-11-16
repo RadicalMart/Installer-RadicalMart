@@ -268,7 +268,7 @@ window.SovmartUI = {
         )
         {
             group = group.addChild('div', {class: 'radicalinstaller-group-description'})
-                .add('p', {}, args.description)
+                .add('div', {}, args.description)
                 .getParent();
         }
 
