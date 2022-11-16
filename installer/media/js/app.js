@@ -186,11 +186,6 @@ window.Sovmart = {
                         trigger_grid_row_end_for: Sovmart.triggerGridRowEndForCard
                     });
 
-                    grid_not_required = SovmartUI.renderProjectGrid({
-                        items: projects_card_not_required,
-                        trigger_grid_row_end_for: Sovmart.triggerGridRowEndForCard
-                    });
-
 
                     group.groups = [
                         {
@@ -314,14 +309,23 @@ window.Sovmart = {
                                 }
                             ],
                             content: grid_required
-                        },
-                        {
-                            label: SovmartLangs.group_other,
-                            class: '',
-                            content: grid_not_required
                         }
                     ];
 
+                    if(projects_card_not_required.length > 0)
+                    {
+                        grid_not_required = SovmartUI.renderProjectGrid({
+                            items: projects_card_not_required,
+                            trigger_grid_row_end_for: Sovmart.triggerGridRowEndForCard
+                        });
+
+                        group.groups.push( {
+                            label: SovmartLangs.group_other,
+                            class: '',
+                            content: grid_not_required
+                        });
+
+                    }
                 }
 
 
