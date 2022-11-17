@@ -2,11 +2,13 @@
 
 defined('_JEXEC') or die;
 
+use Exception;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Table\Table;
 use Joomla\Registry\Registry;
+use RuntimeException;
 use Sovmart\API;
 use Sovmart\Config;
 use Sovmart\Provider\ProviderInterface;
@@ -52,9 +54,9 @@ class ProviderJoomla implements ProviderInterface
 			if ($result)
 			{
 				//проверяем что поставила джумла на расширение
-				$type    = $project['provider_data']['type'];
-				$element = $project['provider_data']['element'];
-				$folder  = $project['provider_data']['folder'];
+				$type    = $project['provider_data']['type'] ?? '';
+				$element = $project['provider_data']['element'] ?? '';
+				$folder  = $project['provider_data']['folder'] ?? '';
 
 				$db    = Factory::getDbo();
 				$query = $db->getQuery(true);
@@ -63,6 +65,12 @@ class ProviderJoomla implements ProviderInterface
 				$query->where($db->quoteName('type') . '=' . $db->quote($type));
 				$query->where($db->quoteName('element') . '=' . $db->quote($element));
 				$extension_joomla = $db->setQuery($query)->loadObject();
+
+				if(empty($extension_joomla->manifest_cache))
+				{
+					throw new RuntimeException('Not found installed extension');
+				}
+
 				$manifest_cache   = new Registry($extension_joomla->manifest_cache);
 				$version          = $manifest_cache->get('version');
 
@@ -258,7 +266,7 @@ class ProviderJoomla implements ProviderInterface
 				'folder'   => $folder,
 				'element'  => $element
 			]);
-			
+
 			$table->title          = $sync_project['title'];
 			$table->provider       = $sync_project['provider'];
 			$table->cover          = $sync_project['images']['cover'] ?? '';
