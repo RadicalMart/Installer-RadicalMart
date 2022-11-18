@@ -70,14 +70,14 @@ window.Sovmart = {
                             for (let i = 0; i < categories_items.length; i++) {
 
                                 if (
-                                    (i > 1) &&
+                                    (i > 0) &&
                                     categories_items[i].level > categories_items[i - 1].level
                                 ) {
                                     parent_title = categories_items[i - 1].title + '/';
                                 }
 
                                 if (
-                                    (i > 1) &&
+                                    (i > 0) &&
                                     categories_items[i].level < categories_items[i - 1].level
                                 ) {
                                     parent_title = '';
