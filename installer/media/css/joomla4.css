@@ -292,7 +292,6 @@
 
 /************* Main container ***************/
 #radicalinstaller-container {
-    margin-bottom: -20px;
 }
 
 
@@ -307,6 +306,9 @@
     background: rgb(243, 247, 252);
 }
 
+.radicalinstaller-group:last-child {
+    margin-bottom: -20px;
+}
 
 /************* Card ***************/
 .radicalinstaller-project-categories a:not([href]):not([class]) {
