@@ -77,7 +77,12 @@ class plgInstallerSovmartInstallerScript
 
 			foreach ($folders as $folder)
 			{
-				Folder::delete($path . '/' . $folder);
+				if (
+					in_array($folder, ['install', 'update'])
+				)
+				{
+					Folder::delete($path . '/' . $folder);
+				}
 			}
 		}
 		catch (Throwable $e)
