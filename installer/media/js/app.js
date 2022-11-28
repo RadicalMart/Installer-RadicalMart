@@ -356,6 +356,10 @@ window.Sovmart = {
                             break;
                         }
 
+                        if (items[k].name === 'paid' && c >= max) {
+                            break;
+                        }
+
                         projects_card_required.push(
                             SovmartUI.renderProjectCard(items[k].items.items[c])
                         );
@@ -378,6 +382,25 @@ window.Sovmart = {
                                         'click',
                                         function (event) {
                                             Sovmart.showProjectsFree();
+                                        }
+                                    ]
+                                ]
+                            }
+                        ];
+
+                    }
+
+                    if (items[k].name === 'paid') {
+
+                        group.actions = [
+                            {
+                                label: SovmartLangs.view_all,
+                                class: 'ri-btn ri-btn-primary',
+                                events: [
+                                    [
+                                        'click',
+                                        function (event) {
+                                            Sovmart.showProjectsPaid();
                                         }
                                     ]
                                 ]
@@ -1274,10 +1297,64 @@ window.Sovmart = {
         });
     },
 
+    showProjectsPaid: function () {
+        let page = SovmartUI.renderPage();
 
-    loadCategories: function () {
+        SovmartUI.showPage({
+            buttons: this.buttons_page_main,
+            page: page
+        });
 
+        SovmartUI.loaderShow({
+            container: page,
+            wait: function (resolve, reject) {
+
+                SovmartUtils.ajaxGet(Sovmart.url + '&method=projectsPaid')
+                    .done(function (response) {
+                        let items = response.data[0];
+                        resolve(items);
+                    }).fail(function (xhr) {
+                    reject(xhr);
+                });
+
+            }
+        }).then(items => {
+            let grid = '';
+            let projects_card = [];
+            let ids = [];
+
+            // это кастыль пока что
+            if (items.items === undefined) {
+                items = JSON.parse(items);
+            }
+
+            for (let k = 0; k < items.items.length; k++) {
+                projects_card.push(
+                    SovmartUI.renderProjectCard(items.items[k])
+                );
+                ids.push(parseInt(items.items[k].id));
+            }
+
+            grid = SovmartUI.renderProjectGrid({
+                items: projects_card,
+                trigger_grid_row_end_for: Sovmart.triggerGridRowEndForCard
+            });
+
+            page.appendChild(SovmartUI.renderGroup({
+                label: SovmartLangs.group_paid,
+                content: grid
+            }));
+
+            SovmartProject.checkInstall({
+                ids: ids,
+                done: Sovmart.checkInstallProjectCard
+            });
+
+        });
     },
+
+
+    loadCategories: function () {},
 
 
     initButtonsMain: function () {

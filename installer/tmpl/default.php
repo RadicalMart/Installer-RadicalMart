@@ -51,6 +51,7 @@ HTMLHelper::_('script', 'plg_installer_sovmart/project.js', [
 $langs = [
 	'group_key'                 => Text::_('PLG_INSTALLER_SOVMART_GROUP_KEY'),
 	'group_free'                => Text::_('PLG_INSTALLER_SOVMART_GROUP_FREE'),
+	'group_paid'                => Text::_('PLG_INSTALLER_SOVMART_GROUP_PAID'),
 	'group_main'                => Text::_('PLG_INSTALLER_SOVMART_GROUP_MAIN'),
 	'group_other'               => Text::_('PLG_INSTALLER_SOVMART_GROUP_OTHER'),
 	'api_key'                   => Text::_('PLG_INSTALLER_SOVMART_API_KEY'),

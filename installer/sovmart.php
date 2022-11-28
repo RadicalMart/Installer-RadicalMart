@@ -137,6 +137,11 @@ class PlgInstallerSovmart extends CMSPlugin
 				$output = $this->APIProjectsKey();
 			}
 
+			if ($method === 'projectsPaid')
+			{
+				$output = $this->APIProjectsPaid();
+			}
+
 			if ($method === 'projectsFree')
 			{
 				$output = $this->APIProjectsFree();
@@ -417,6 +422,12 @@ class PlgInstallerSovmart extends CMSPlugin
 		$key = $this->params->get('apikey', '');
 
 		return API::projectsKey($key);
+	}
+
+
+	protected function APIProjectsPaid()
+	{
+		return API::projectsPaid();
 	}
 
 

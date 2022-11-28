@@ -89,6 +89,12 @@ class API
 	}
 
 
+	public static function projectsPaid()
+	{
+		return self::execute('projectsPaid');
+	}
+
+
 	public static function projectsFree()
 	{
 		return self::execute('projectsFree');
