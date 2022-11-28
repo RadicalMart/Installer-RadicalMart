@@ -12,6 +12,8 @@ defined('_JEXEC') or die;
 class ProviderJoomlamirror extends ProviderJoomla
 {
 
+	protected $name = 'joomlamirror';
+
 	public function start($id)
 	{
 		$app     = Factory::getApplication();
@@ -116,11 +118,6 @@ class ProviderJoomlamirror extends ProviderJoomla
 		}
 
 		return $result;
-	}
-
-	public function sync()
-	{
-		return 0;
 	}
 
 }

@@ -17,6 +17,8 @@ use Throwable;
 class ProviderJoomla implements ProviderInterface
 {
 
+	protected $name = 'joomla';
+
 	protected $config = [];
 
 
@@ -229,11 +231,11 @@ class ProviderJoomla implements ProviderInterface
 		}
 
 		// отсылаем на сервер radicalmart.ru и получаем ответ об установленных расширениях
-		$sync_projects = json_decode(API::syncExtensions('joomla', json_encode($extensions_for_api)), true);
+		$sync_projects = json_decode(API::syncExtensions($this->name, json_encode($extensions_for_api)), true);
 
 		if (!is_array($sync_projects))
 		{
-			return false;
+			return 0;
 		}
 
 		foreach ($list as $item)
