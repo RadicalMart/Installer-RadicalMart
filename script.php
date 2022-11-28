@@ -3,7 +3,7 @@
 use Joomla\CMS\Installer\InstallerAdapter;
 use Joomla\Filesystem\Folder;
 
-class pkgsovmartInstallerScript
+class pkg_sovmartInstallerScript
 {
 
 
@@ -23,7 +23,6 @@ class pkgsovmartInstallerScript
 
 	protected function triggerScriptTrigger($name)
 	{
-		//$path = JPATH_ROOT . '/plugins/installer/sovmart/scripttrigger/' . $name;
 		$path = __DIR__ . '/scripttrigger/' . $name;
 
 		if (!file_exists($path))
