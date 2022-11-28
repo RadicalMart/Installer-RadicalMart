@@ -2,7 +2,6 @@
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Installer\InstallerAdapter;
-use Joomla\Filesystem\Folder;
 use Joomla\Registry\Registry;
 
 class plgInstallerSovmartInstallerScript
@@ -57,64 +56,7 @@ class plgInstallerSovmartInstallerScript
 
 		}
 
-		$this->triggerScriptTrigger($type);
-		$this->deleteScriptTrigger();
 	}
 
-
-	protected function deleteScriptTrigger()
-	{
-		try
-		{
-			$path = JPATH_ROOT . '/plugins/installer/sovmart/scripttrigger';
-
-			if (!file_exists($path))
-			{
-				return;
-			}
-
-			$folders = Folder::folders($path);
-
-			foreach ($folders as $folder)
-			{
-				if (
-					in_array($folder, ['install', 'update'])
-				)
-				{
-					Folder::delete($path . '/' . $folder);
-				}
-			}
-		}
-		catch (Throwable $e)
-		{
-
-		}
-	}
-
-
-	protected function triggerScriptTrigger($name)
-	{
-		$path = JPATH_ROOT . '/plugins/installer/sovmart/scripttrigger/' . $name;
-
-		if (!file_exists($path))
-		{
-			return;
-		}
-
-		$files = Folder::files($path);
-
-		foreach ($files as $file)
-		{
-			try
-			{
-				include_once $path . '/' . $file;
-			}
-			catch (Throwable $e)
-			{
-
-			}
-		}
-
-	}
 
 }

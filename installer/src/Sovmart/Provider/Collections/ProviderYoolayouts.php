@@ -18,6 +18,7 @@ use Sovmart\Provider\ProviderInterface;
 class ProviderYoolayouts implements ProviderInterface
 {
 
+	protected $name = 'yoolayouts';
 
 	/**
 	 * Путь для распаковки zip архива
@@ -156,8 +157,8 @@ class ProviderYoolayouts implements ProviderInterface
 					$ext            = array_pop($filename_split);
 
 					// Check name
-					$key          = 'sovmart_yoolayouts_' . $project['element'] . '_' . $item['name'];
-					$item['name'] = $project['title'] . ' v' . $project['version']['version'] . ((count($files) > 1) ? ('. ' . implode($filename_split)) : '');
+					$key          = 'sovmart_yoolayouts_' . $project['element'];
+					$item['name'] = $project['title'] . '; ' . ((count($files) > 1) ? (implode($filename_split) . '; ') : '') . 'v' . $project['version']['version'];
 
 					// Add to items
 					$items[$key] = $item;
@@ -195,13 +196,11 @@ class ProviderYoolayouts implements ProviderInterface
 				if (!$table->check())
 				{
 					return false;
-					//Log::add(Text::_('PLG_UIKIT_HIKASHOP_ERROR_ZIP_EXTRACT'), Log::ERROR, 'plg_system_uikithikashop');
 				}
 
 				if (!$table->store())
 				{
 					return false;
-					//Log::add(Text::_('PLG_UIKIT_HIKASHOP_ERROR_ZIP_EXTRACT'), Log::ERROR, 'plg_system_uikithikashop');
 				}
 
 			}
@@ -294,9 +293,44 @@ class ProviderYoolayouts implements ProviderInterface
 
 	public function sync()
 	{
+		$db = Factory::getDbo();
+
+		// проверка что стоит ютим про вообще
+		$query    = $db->getQuery(true)
+			->select(['e.extension_id', 'e.custom_data'])
+			->from($db->quoteName('#__extensions', 'e'))
+			->where($db->quoteName('e.type') . ' = ' . $db->quote('plugin'))
+			->where($db->quoteName('e.element') . ' = ' . $db->quote('yootheme'))
+			->where($db->quoteName('e.folder') . ' = ' . $db->quote('system'));
+		$yootheme = $db->setQuery($query)->loadObject();
+
+		if (!$yootheme)
+		{
+			return 0;
+		}
+
 		// смотрим на локальные
+		$custom_data = json_decode($yootheme->custom_data, true);
+
+		if (empty($custom_data['library']))
+		{
+			return 0;
+		}
+
+		$items = [];
 
 		// собираем коллекцию с версиями и названием element
+		foreach ($custom_data['library'] as $key => $item)
+		{
+			if (strpos('sovmart_yoolayouts_', $item['name']) === false)
+			{
+				continue;
+			}
+
+			$items[] = [
+				'element' => str_replace('sovmart_yoolayouts_', '', $item['name'])
+			];
+		}
 
 		// отправляем на сервер и сравниваем
 
