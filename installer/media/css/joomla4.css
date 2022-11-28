@@ -300,7 +300,7 @@
     padding: 25px 0;
 }
 
-.radicalinstaller-group + .radicalinstaller-group {
+.radicalinstaller-group:nth-child(even) {
     margin: 0px -41px;
     padding: 25px 41px 25px 41px;
     background: rgb(243, 247, 252);

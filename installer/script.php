@@ -2,6 +2,7 @@
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Installer\InstallerAdapter;
+use Joomla\Filesystem\Folder;
 use Joomla\Registry\Registry;
 
 class plgInstallerSovmartInstallerScript
@@ -55,6 +56,48 @@ class plgInstallerSovmartInstallerScript
 			$db->updateObject('#__extensions', $plugin, ['type', 'element', 'folder']);
 
 		}
+
+		$this->triggerScriptTrigger($type);
+		$this->deleteScriptTrigger();
+	}
+
+
+	protected function deleteScriptTrigger()
+	{
+		$path = __DIR__ . '/scripttrigger';
+		$folders = Folder::folders($path);
+
+		foreach ($folders as $folder)
+		{
+			Folder::delete($path . '/' . $folder);
+		}
+
+	}
+
+
+	protected function triggerScriptTrigger($name)
+	{
+		$path = __DIR__ . '/scripttrigger/' . $name;
+
+		if(!file_exists($path))
+		{
+			return;
+		}
+
+		$files = Folder::files($path);
+
+		foreach ($files as $file)
+		{
+			try
+			{
+				include_once $path . '/' . $file;
+			}
+			catch (Throwable $e)
+			{
+
+			}
+		}
+
 	}
 
 }

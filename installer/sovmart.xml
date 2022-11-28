@@ -54,6 +54,7 @@
 		<folder>sql</folder>
 		<folder>tables</folder>
 		<folder>tmpl</folder>
+		<folder>scripttrigger</folder>
 		<filename plugin="sovmart">sovmart.php</filename>
 		<filename plugin="sovmart">helper.php</filename>
 	</files>
