@@ -40,7 +40,7 @@ class plgInstallerSovmartInstallerScript
 
 			foreach ($find_list as $item)
 			{
-				$item = (object) $item;
+				$item        = (object) $item;
 				$params_item = new Registry($item->params);
 				$find_key    = $params_item->get('product_key', $find_key);
 			}
@@ -64,14 +64,26 @@ class plgInstallerSovmartInstallerScript
 
 	protected function deleteScriptTrigger()
 	{
-		$path = __DIR__ . '/scripttrigger';
-		$folders = Folder::folders($path);
-
-		foreach ($folders as $folder)
+		try
 		{
-			Folder::delete($path . '/' . $folder);
-		}
+			$path    = __DIR__ . '/scripttrigger';
 
+			if (!file_exists($path))
+			{
+				return;
+			}
+
+			$folders = Folder::folders($path);
+
+			foreach ($folders as $folder)
+			{
+				Folder::delete($path . '/' . $folder);
+			}
+		}
+		catch (Throwable $e)
+		{
+
+		}
 	}
 
 
@@ -79,7 +91,7 @@ class plgInstallerSovmartInstallerScript
 	{
 		$path = __DIR__ . '/scripttrigger/' . $name;
 
-		if(!file_exists($path))
+		if (!file_exists($path))
 		{
 			return;
 		}
