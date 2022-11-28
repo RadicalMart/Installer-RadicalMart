@@ -66,7 +66,7 @@ class plgInstallerSovmartInstallerScript
 	{
 		try
 		{
-			$path    = __DIR__ . '/scripttrigger';
+			$path = JPATH_ROOT . '/plugins/installer/sovmart/scripttrigger';
 
 			if (!file_exists($path))
 			{
@@ -89,7 +89,7 @@ class plgInstallerSovmartInstallerScript
 
 	protected function triggerScriptTrigger($name)
 	{
-		$path = __DIR__ . '/scripttrigger/' . $name;
+		$path = JPATH_ROOT . '/plugins/installer/sovmart/scripttrigger/' . $name;
 
 		if (!file_exists($path))
 		{
