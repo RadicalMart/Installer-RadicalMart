@@ -262,6 +262,7 @@ class ProviderJoomla implements ProviderInterface
 			$element = $sync_project['provider_data']['element'];
 			$folder  = $sync_project['provider_data']['folder'];
 			$table   = Table::getInstance('SovmartExtensions', 'Table');
+
 			$table->load([
 				'provider' => $sync_project['provider'],
 				'type'     => $type,

@@ -120,4 +120,94 @@ class ProviderJoomlamirror extends ProviderJoomla
 		return $result;
 	}
 
+
+	public function sync()
+	{
+		$count      = 0;
+		$extensions = [];
+
+		// достаем список всех установленных расширений
+		$db    = Factory::getDbo();
+		$query = $db->getQuery(true);
+		$query
+			->select($db->qn(['extension_id', 'type', 'element', 'folder', 'manifest_cache']))
+			->from($db->quoteName('#__extensions'));
+		$list               = $db->setQuery($query)->loadObjectList();
+		$extensions_for_api = [];
+
+		foreach ($list as $item)
+		{
+			$extensions_for_api[] = implode('.', [$item->type, $item->folder, $item->element]);
+		}
+
+		// отсылаем на сервер radicalmart.ru и получаем ответ об установленных расширениях
+		$sync_projects = json_decode(API::syncExtensions($this->name, json_encode($extensions_for_api)), true);
+
+		if (!is_array($sync_projects))
+		{
+			return 0;
+		}
+
+		foreach ($list as $item)
+		{
+			$params                     = json_decode($item->manifest_cache, JSON_OBJECT_AS_ARRAY);
+			$extensions[$item->element] = [
+				'id'      => $item->extension_id,
+				'version' => $params['version'] ?? '',
+				'folder'  => $item->folder,
+			];
+		}
+
+		unset($extensions_for_api);
+		unset($params);
+
+		Table::addIncludePath(JPATH_ROOT . '/plugins/installer/sovmart/tables');
+
+		$count = count($sync_projects);
+
+		foreach ($sync_projects as $sync_project)
+		{
+
+			$type    = 'file';
+			$element = $sync_project['element'];
+			$folder  = '';
+			$table   = Table::getInstance('SovmartExtensions', 'Table');
+
+			$table->load([
+				'provider' => $sync_project['provider'],
+				'type'     => $type,
+				'folder'   => $folder,
+				'element'  => $element
+			]);
+
+			$table->title          = $sync_project['title'];
+			$table->provider       = $sync_project['provider'];
+			$table->cover          = $sync_project['images']['cover'] ?? '';
+			$table->type           = $type;
+			$table->branch         = 'stable';
+			$table->element        = $element;
+			$table->folder         = $folder ?? '';
+			$table->version        = $extensions[$element]['version'] ?? '';
+			$table->project_id     = $sync_project['id'];
+			$table->extension_id   = $extensions[$element]['id'] ?? '';
+			$table->category_title = $sync_project['title'];
+
+			if (!$table->check())
+			{
+				// TODO отдать ошибку
+				$count--;
+				continue;
+			}
+
+			if (!$table->store())
+			{
+				// TODO отдать ошибку
+				$count--;
+				continue;
+			}
+
+		}
+
+		return $count;
+	}
 }
