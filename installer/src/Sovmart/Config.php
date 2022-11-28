@@ -17,7 +17,7 @@ class Config
 	 * @var string
 	 * @since version
 	 */
-	public static $host = 'sovmart.test';
+	public static $host = 'sovmart.ru';
 
 
 	/**
