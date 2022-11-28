@@ -3,7 +3,7 @@
 use Joomla\CMS\Installer\InstallerAdapter;
 use Joomla\Filesystem\Folder;
 
-class pkgSovmartInstallerScript
+class pkgsovmartInstallerScript
 {
 
 
