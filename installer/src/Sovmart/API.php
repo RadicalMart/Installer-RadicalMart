@@ -13,10 +13,19 @@ class API
 
 
 	/**
+	 *
 	 * @var string[]
 	 * @since version
 	 */
 	private static $data_request = [];
+
+
+	/**
+	 *
+	 * @var string[]
+	 * @since version
+	 */
+	private static $data_headers = [];
 
 
 	/**
@@ -27,13 +36,31 @@ class API
 	 */
 	public static function setKey($key)
 	{
-		self::$data_request['key'] = $key;
+		static::$data_request['key'] = $key;
+	}
+
+
+	/**
+	 * @param $token
+	 *
+	 *
+	 * @since version
+	 */
+	public static function setToken($token)
+	{
+		static::$data_headers['Authorization'] = 'Bearer ' . $token;
 	}
 
 
 	public static function minimal()
 	{
 		return self::execute('minimal');
+	}
+
+
+	public static function checkToken()
+	{
+		return self::execute('token/check');
 	}
 
 
@@ -55,82 +82,44 @@ class API
 
 	public static function groupsStartPage($key = '')
 	{
-		return self::execute('groupStartPage', ['key' => $key]);
+		return self::execute('startpage', ['key' => $key]);
 	}
 
 
 	public static function projectList($ids)
 	{
-		return self::execute('projectList', ['projects_ids' => $ids]);
-	}
-
-
-	public static function projectsMain()
-	{
-		return self::execute('projectsMain');
+		return self::execute('projects/ids', ['projects_ids' => $ids]);
 	}
 
 
 	public static function project($id)
 	{
-		return self::execute('project', ['project_id' => $id]);
-	}
-
-
-	public static function projectsMy($key = '')
-	{
-		return self::execute('projectsMy', ['key' => $key]);
-	}
-
-
-	public static function projectsKey($key = '')
-	{
-		return self::execute('projectsKey', ['key' => $key]);
+		return self::execute('projects/' . $id);
 	}
 
 
 	public static function projectsPaid()
 	{
-		return self::execute('projectsPaid');
+		return self::execute('projects/paid');
 	}
 
 
 	public static function projectsFree()
 	{
-		return self::execute('projectsFree');
+		return self::execute('projects/free');
 	}
 
 
 	public static function projectListCheckVersion($ids)
 	{
-		return self::execute('projectListCheckVersion', ['projects_ids' => json_encode($ids)]);
-	}
-
-
-	public static function getForInstallDepends($id)
-	{
-		return self::execute('getForInstallDepends', ['project_id' => json_encode($id)]);
-	}
-
-
-	public static function projectFile($id)
-	{
-		return self::execute('projectFile', ['project_id' => $id]);
-	}
-
-
-	public static function checkKey($key)
-	{
-		return self::execute(
-			'checkKey', ['key' => $key]
-		);
+		return self::execute('projects/checkversion', ['projects_ids' => json_encode($ids)]);
 	}
 
 
 	public static function syncExtensions($provider, $list = '')
 	{
 		return self::execute(
-			'syncExtensions',
+			'projects/sync',
 			['provider' => $provider, 'extensions' => $list],
 			'POST'
 		);
@@ -170,7 +159,7 @@ class API
 		$uri->setScheme(Config::$scheme);
 		$uri->setHost(Config::$host);
 		$uri->setPath(Config::$path . $method);
-		$response = $curlTransport->request($type, $uri, $data_build);
+		$response = $curlTransport->request($type, $uri, $data_build, static::$data_headers);
 
 		if (((new Version())->isCompatible('4.0')))
 		{
@@ -192,9 +181,18 @@ class API
 			array_merge($data, static::$data_request, ['lang' => $lang->getTag()])
 		);
 
+		$headers_build = [];
+
+		foreach (static::$data_headers as $key => $value)
+		{
+			$headers_build[] = $key . ': ' . $value;
+		}
+
 		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_HEADER, 0);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers_build);
+		curl_setopt($ch, CURLOPT_HEADER, 1);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 
 		if ($type === 'GET')
 		{
@@ -208,12 +206,15 @@ class API
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $data_build);
 		}
 
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 
-		$result = curl_exec($ch);
+		$response    = curl_exec($ch);
+		$header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+		$header      = substr($response, 0, $header_size);
+		$body        = substr($response, $header_size);
+
 		curl_close($ch);
 
-		return $result;
+		return $body;
 	}
 
 }

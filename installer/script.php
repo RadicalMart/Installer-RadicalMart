@@ -44,12 +44,15 @@ class plgInstallerSovmartInstallerScript
 				$find_key    = $params_item->get('product_key', $find_key);
 			}
 
+			$params = new Registry();
+			$params->set('sync', 1);
+
 			if (!empty($find_key))
 			{
-				$params = new Registry();
 				$params->set('apikey', $find_key);
-				$plugin->params = $params->toString();
 			}
+
+			$plugin->params = $params->toString();
 
 			// Update record
 			$db->updateObject('#__extensions', $plugin, ['type', 'element', 'folder']);

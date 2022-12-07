@@ -2,7 +2,6 @@
 
 defined('_JEXEC') or die;
 
-use Exception;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
@@ -39,7 +38,7 @@ class ProviderJoomla implements ProviderInterface
 		$app     = Factory::getApplication();
 		$input   = $app->input;
 		$project = json_decode(API::project($id), true);
-		$url     = $this->scheme . '://' . $this->host . $project['download'];
+		$url     = $this->scheme . '://' . $this->host . $project['attributes']['download'];
 
 		$input->set('installtype', 'url');
 		$input->set('install_url', $url);
@@ -56,9 +55,9 @@ class ProviderJoomla implements ProviderInterface
 			if ($result)
 			{
 				//проверяем что поставила джумла на расширение
-				$type    = $project['provider_data']['type'] ?? '';
-				$element = $project['provider_data']['element'] ?? '';
-				$folder  = $project['provider_data']['folder'] ?? '';
+				$type    = $project['attributes']['provider_data']['type'] ?? '';
+				$element = $project['attributes']['provider_data']['element'] ?? '';
+				$folder  = $project['attributes']['provider_data']['folder'] ?? '';
 
 				$db    = Factory::getDbo();
 				$query = $db->getQuery(true);
@@ -68,37 +67,37 @@ class ProviderJoomla implements ProviderInterface
 				$query->where($db->quoteName('element') . '=' . $db->quote($element));
 				$extension_joomla = $db->setQuery($query)->loadObject();
 
-				if(empty($extension_joomla->manifest_cache))
+				if (empty($extension_joomla->manifest_cache))
 				{
 					throw new RuntimeException('Not found installed extension');
 				}
 
-				$manifest_cache   = new Registry($extension_joomla->manifest_cache);
-				$version          = $manifest_cache->get('version');
+				$manifest_cache = new Registry($extension_joomla->manifest_cache);
+				$version        = $manifest_cache->get('version');
 
-				if (isset($project['version']['version']))
+				if (isset($project['attributes']['version']['version']))
 				{
-					$version = $project['version']['version'];
+					$version = $project['attributes']['version']['version'];
 				}
 
 				$table = Table::getInstance('SovmartExtensions', 'Table');
 				$table->load([
-					'provider' => $project['provider'],
+					'provider' => strtolower($project['attributes']['provider']),
 					'type'     => $type,
 					'element'  => $element,
 					'folder'   => $folder
 				]);
 
-				$table->provider       = $project['provider'];
-				$table->title          = $project['title'];
-				$table->cover          = $sync_project['images']['cover'] ?? '';
+				$table->provider       = $project['attributes']['provider'];
+				$table->title          = $project['attributes']['title'];
+				$table->cover          = $project['attributes']['images']['cover'] ?? '';
 				$table->type           = $type;
 				$table->element        = $element;
 				$table->folder         = $folder;
 				$table->version        = $version;
 				$table->branch         = 'stable';
-				$table->project_id     = $project['id'];
-				$table->category_title = $project['title'];
+				$table->project_id     = $project['attributes']['id'];
+				$table->category_title = $project['attributes']['title'];
 				$table->extension_id   = $extension_joomla->extension_id;
 
 				if (!$table->check())
@@ -233,10 +232,15 @@ class ProviderJoomla implements ProviderInterface
 		// отсылаем на сервер radicalmart.ru и получаем ответ об установленных расширениях
 		$sync_projects = json_decode(API::syncExtensions($this->name, json_encode($extensions_for_api)), true);
 
-		if (!is_array($sync_projects))
+		if (
+			!is_array($sync_projects) ||
+			!isset($sync_projects['data'])
+		)
 		{
 			return 0;
 		}
+
+		$sync_projects = $sync_projects['data'];
 
 		foreach ($list as $item)
 		{
@@ -255,32 +259,33 @@ class ProviderJoomla implements ProviderInterface
 
 		$count = count($sync_projects);
 
+
 		foreach ($sync_projects as $sync_project)
 		{
 
-			$type    = $sync_project['provider_data']['type'];
-			$element = $sync_project['provider_data']['element'];
-			$folder  = $sync_project['provider_data']['folder'];
+			$type    = $sync_project['attributes']['provider_data']['type'];
+			$element = $sync_project['attributes']['provider_data']['element'];
+			$folder  = $sync_project['attributes']['provider_data']['folder'];
 			$table   = Table::getInstance('SovmartExtensions', 'Table');
 
 			$table->load([
-				'provider' => $sync_project['provider'],
+				'provider' => $sync_project['attributes']['provider'],
 				'type'     => $type,
 				'folder'   => $folder,
 				'element'  => $element
 			]);
 
-			$table->title          = $sync_project['title'];
-			$table->provider       = $sync_project['provider'];
-			$table->cover          = $sync_project['images']['cover'] ?? '';
+			$table->title          = $sync_project['attributes']['title'];
+			$table->provider       = $sync_project['attributes']['provider'];
+			$table->cover          = $sync_project['attributes']['images']['cover'] ?? '';
 			$table->type           = $type;
 			$table->branch         = 'stable';
 			$table->element        = $element;
 			$table->folder         = $folder ?? '';
-			$table->version        = $extensions[$element]['version'] ?? '';
-			$table->project_id     = $sync_project['id'];
+			$table->version        = $extensions[$element]['attributes']['version'] ?? '';
+			$table->project_id     = $sync_project['attributes']['id'];
 			$table->extension_id   = $extensions[$element]['id'] ?? '';
-			$table->category_title = $sync_project['title'];
+			$table->category_title = $sync_project['attributes']['title'];
 
 			if (!$table->check())
 			{

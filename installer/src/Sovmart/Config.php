@@ -24,7 +24,7 @@ class Config
 	 * @var string
 	 * @since version
 	 */
-	public static $path = '/api/v1/swprojects/';
+	public static $path = '/api/v1/';
 
 
 }

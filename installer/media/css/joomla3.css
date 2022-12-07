@@ -1,4 +1,4 @@
-.radicalinstaller-container * {
+.sovmart-container * {
     box-sizing: border-box;
 }
 
@@ -254,41 +254,17 @@
 
 
 /******************* Form key ***********************/
-.radicalinstaller-input-key {
+.sovmart-input-key {
     min-height: 35px;
 }
 
 
 /************* Group ***************/
-.radicalinstaller-group {
+.sovmart-group {
     padding: 25px 0;
 }
 
-.radicalinstaller-group:nth-child(2n) {
+.sovmart-group:nth-child(2n) {
     padding: 35px 25px;
     background: #F0F0F0;
-}
-
-
-/************* accordion ***************/
-.ri-tab-label {
-    color: #fff;
-    background-color: #2384d3;
-}
-
-.ri-tab-label:hover {
-    color: #fff;
-    background-color: #2384d3;
-}
-
-.ri-tabs input:checked + .ri-tab-label {
-    background-color: #185b91;
-}
-
-.ri-tab-close {
-    color: #fff;
-}
-
-.ri-tab-close:hover {
-    background: #fff;
 }

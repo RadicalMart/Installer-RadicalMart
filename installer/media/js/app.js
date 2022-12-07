@@ -9,10 +9,10 @@ window.Sovmart = {
 
 
     init: function () {
-        SovmartUI.container = document.querySelector('#radicalinstaller-container');
-        SovmartUI.container_form_key = SovmartUI.container.querySelector('.radicalinstaller-form-key');
-        SovmartUI.container_toolbar = SovmartUI.container.querySelector('.radicalinstaller-toolbar');
-        SovmartUI.container_page = SovmartUI.container.querySelector('.radicalinstaller-page');
+        SovmartUI.container = document.querySelector('#sovmart-container');
+        SovmartUI.container_header = SovmartUI.container.querySelector('.sovmart-header');
+        SovmartUI.container_toolbar = SovmartUI.container.querySelector('.sovmart-toolbar');
+        SovmartUI.container_page = SovmartUI.container.querySelector('.sovmart-page');
 
         let page = SovmartUI.renderPage();
 
@@ -48,7 +48,7 @@ window.Sovmart = {
                     SovmartUtils.ajaxGet(url)
                         .done(function (json) {
                             json = JSON.parse(json.data);
-                            let categories_items = json.items;
+                            let categories_items = json.data;
                             let items = {
                                 dropdown: {
                                     label: SovmartLangs.category,
@@ -64,34 +64,36 @@ window.Sovmart = {
                                 items: []
                             };
 
-                            Sovmart.categories = categories_items;
+                            Sovmart.categories = [];
                             let parent_title = '';
 
                             for (let i = 0; i < categories_items.length; i++) {
 
+                                Sovmart.categories.push(categories_items[i].attributes);
+
                                 if (
                                     (i > 0) &&
-                                    categories_items[i].level > categories_items[i - 1].level
+                                    categories_items[i].attributes.level > categories_items[i - 1].attributes.level
                                 ) {
-                                    parent_title = categories_items[i - 1].title + '/';
+                                    parent_title = categories_items[i - 1].attributes.title + '/';
                                 }
 
                                 if (
                                     (i > 0) &&
-                                    categories_items[i].level < categories_items[i - 1].level
+                                    categories_items[i].attributes.level < categories_items[i - 1].attributes.level
                                 ) {
                                     parent_title = '';
                                 }
 
                                 items.items.push({
-                                    'label': parent_title + '' + categories_items[i].title,
+                                    'label': parent_title + '' + categories_items[i].attributes.title,
                                     'class': 'ri-btn ri-btn-default ri-btn-change-category',
-                                    'data-type': 'category-' + categories_items[i].id,
+                                    'data-type': 'category-' + categories_items[i].attributes.id,
                                     'events': [
                                         [
                                             'click',
                                             function (ev) {
-                                                Sovmart.showCategory(categories_items[i].id);
+                                                Sovmart.showCategory(categories_items[i].attributes.id);
                                             }
                                         ]
                                     ]
@@ -116,11 +118,29 @@ window.Sovmart = {
                     });
                 }
             }).then(function () {
-                Sovmart.showStart();
-                Sovmart.checkUpdatedProjects();
-                SovmartUI.container_form_key.appendChild(
-                    SovmartUI.renderFormKey()
-                );
+
+                if(SovmartConfig.sync) {
+                    SovmartProject.sync({
+                        done: function () {
+                            Sovmart.checkUpdatedProjects();
+                            Sovmart.showStart();
+                        }
+                    });
+                } else {
+                    Sovmart.showStart();
+                    Sovmart.checkUpdatedProjects();
+                }
+
+
+                let header = SovmartUtils.createElement('div', {class: 'sovmart-flex'})
+
+                header = header
+                    .add('div', {class: 'sovmart-width-expand'}, SovmartUI.renderFormSearch())
+                    .add('div', {class: 'sovmart-width-auto'},
+                        (SovmartConfig.name !== '' && SovmartConfig.token !== '') ? SovmartUI.renderAuth() : SovmartUI.renderNoAuth()
+            );
+
+                SovmartUI.container_header.appendChild(header.build());
             });
 
         }).catch(function () {
@@ -129,6 +149,9 @@ window.Sovmart = {
 
     },
 
+    reload: function () {
+        window.location.reload();
+    },
 
     showStart: function () {
         let page = SovmartUI.renderPage();
@@ -142,10 +165,10 @@ window.Sovmart = {
             container: page,
             wait: function (resolve, reject) {
 
-                SovmartUtils.ajaxGet(Sovmart.url + '&method=groupsStartPage')
+                SovmartUtils.ajaxGet(Sovmart.url + '&method=startpage')
                     .done(function (response) {
                         let items = JSON.parse(response.data);
-                        resolve(items);
+                        resolve(items.data.attributes);
                     }).fail(function (xhr) {
                     reject(xhr);
                 });
@@ -154,6 +177,8 @@ window.Sovmart = {
 
             let ids = [];
 
+
+
             for (let k = 0; k < items.length; k++) {
 
                 let grid_required = '';
@@ -161,6 +186,7 @@ window.Sovmart = {
                 let projects_card_required = [];
                 let projects_card_not_required = [];
                 let ids_required = [];
+                let accordeon = {};
                 let group = {
                     label: items[k].title,
                     description: items[k].description,
@@ -187,22 +213,25 @@ window.Sovmart = {
                         trigger_grid_row_end_for: Sovmart.triggerGridRowEndForCard
                     });
 
+                    if(items[k].items_not_required !== undefined && items[k].items_not_required.length > 0) {
+                        accordeon.label = 'Показать состав ядра';
+                        accordeon.label_close = 'Скрыть состав ядра';
+                    }
 
                     group.groups = [
                         {
-                            label: SovmartLangs.group_main,
                             class: '',
-                            buttons: [
-                                {
-                                    label: SovmartLangs.install_meta,
+                            accordeon: accordeon,
+                            buttons: [{
+                                    label: 'Установить ' + items[k].title,
                                     class: 'ri-btn ri-btn-primary',
                                     events: [
                                         [
                                             'click', function (ev) {
                                             let button_install = this;
-                                            let subgroup = this.closest('.radicalinstaller-group');
+                                            let subgroup = this.closest('.sovmart-group');
                                             let logs_id = this.getAttribute('data-connect-logs-id');
-                                            let logs_container = SovmartUI.container.querySelector('.radicalinstaller-logs[data-for-row="' + logs_id + '"]');
+                                            let logs_container = SovmartUI.container.querySelector('.sovmart-logs[data-for-row="' + logs_id + '"]');
                                             logs_container.innerHTML = '';
                                             button_install.setAttribute('disabled', 'disabled');
                                             button_install.innerHTML = SovmartLangs.install_process;
@@ -259,13 +288,11 @@ window.Sovmart = {
                                                         );
 
                                                         logs_container.append(
-                                                            SovmartUI.renderAccordeon({
-                                                                items: [
-                                                                    {
-                                                                        label: 'Подробности установки',
-                                                                        content: messages
-                                                                    }
-                                                                ]
+                                                            SovmartUI.renderToggle({
+                                                                label: 'Показать подробности установки',
+                                                                label_close: 'Свернуть подробности установки',
+                                                                label_class: 'ri-btn-default',
+                                                                content: messages
                                                             })
                                                         );
 
@@ -320,7 +347,7 @@ window.Sovmart = {
                             trigger_grid_row_end_for: Sovmart.triggerGridRowEndForCard
                         });
 
-                        group.groups.push( {
+                        group.groups.push({
                             label: SovmartLangs.group_other,
                             class: '',
                             content: grid_not_required
@@ -340,17 +367,17 @@ window.Sovmart = {
                     }
 
                     if (
-                        items[k].items.items === null ||
-                        items[k].items.items === undefined
+                        items[k].items === null ||
+                        items[k].items === undefined
                     ) {
                         continue;
                     }
 
-                    if (items[k].items.items.length === 0) {
+                    if (items[k].items.length === 0) {
                         continue;
                     }
 
-                    for (let c = 0; c < items[k].items.items.length; c++) {
+                    for (let c = 0; c < items[k].items.length; c++) {
 
                         if (items[k].name === 'free' && c >= max) {
                             break;
@@ -361,9 +388,9 @@ window.Sovmart = {
                         }
 
                         projects_card_required.push(
-                            SovmartUI.renderProjectCard(items[k].items.items[c])
+                            SovmartUI.renderProjectCard(items[k].items[c])
                         );
-                        ids.push(parseInt(items[k].items.items[c].id));
+                        ids.push(parseInt(items[k].items[c].id));
                     }
 
                     group.content = SovmartUI.renderProjectGrid({
@@ -420,6 +447,7 @@ window.Sovmart = {
                 done: Sovmart.checkInstallProjectCard
             });
 
+
         });
     },
 
@@ -433,13 +461,13 @@ window.Sovmart = {
         });
 
         let message = SovmartUtils.createElement('div')
-            .add('div', {class: 'radicalinstaller-margin-bottom-small'}, SovmartLangs.text_updated_force)
-            .addChild('div', {class: 'radicalinstaller-flex radicalinstaller-flex-middle'})
+            .add('div', {class: 'sovmart-margin-bottom-small'}, SovmartLangs.text_updated_force)
+            .addChild('div', {class: 'sovmart-flex sovmart-flex-middle'})
             .add(
                 'button',
                 {
                     type: 'button',
-                    class: 'ri-btn ri-btn-large ri-btn-default radicalinstaller-margin-right-small',
+                    class: 'ri-btn ri-btn-large ri-btn-default sovmart-margin-right-small',
                     events: [
                         [
                             'click',
@@ -481,8 +509,8 @@ window.Sovmart = {
                 SovmartLangs.support)
             .getParent();
 
-        let forced_update = SovmartUtils.createElement('div', {class: 'radicalinstaller-flex radicalinstaller-flex-middle radicalinstaller-flex-center'})
-            .add('div', {class: 'radicalinstaller-width-1-2'}, SovmartUI.renderAlert({message: message.build()}));
+        let forced_update = SovmartUtils.createElement('div', {class: 'sovmart-flex sovmart-flex-middle sovmart-flex-center'})
+            .add('div', {class: 'sovmart-width-1-2'}, SovmartUI.renderAlert({message: message.build()}));
 
         page.appendChild(forced_update.build())
     },
@@ -500,7 +528,7 @@ window.Sovmart = {
             container: page,
             wait: function (resolve, reject) {
 
-                SovmartUtils.ajaxGet(Sovmart.url + '&method=checkUpdates')
+                SovmartUtils.ajaxGet(Sovmart.url + '&method=checkupdates')
                     .done(function (response) {
                         let data = JSON.parse(response.data);
 
@@ -563,7 +591,7 @@ window.Sovmart = {
             container: page,
             wait: function (resolve, reject) {
 
-                SovmartUtils.ajaxGet(Sovmart.url + '&method=installedList')
+                SovmartUtils.ajaxGet(Sovmart.url + '&method=installedlist')
                     .done(function (response) {
                         let items = response.data[0];
                         resolve(items);
@@ -660,91 +688,91 @@ window.Sovmart = {
                 SovmartUtils.ajaxGet(Sovmart.url + '&method=project&project_id=' + id)
                     .done(function (response) {
                         let project = JSON.parse(response.data);
-                        resolve(project);
+                        resolve(project.data);
                     }).fail(function (xhr) {
                     reject(xhr);
                 });
             }
         }).then(project => {
 
-            let header = SovmartUtils.createElement('div', {class: 'radicalinstaller-width-1-2@l radicalinstaller-margin-bottom'}),
-                body = SovmartUtils.createElement('div', {class: 'radicalinstaller-width-1-2@l radicalinstaller-project-page'}),
+            let header = SovmartUtils.createElement('div', {class: 'sovmart-width-1-2@l sovmart-margin-bottom'}),
+                body = SovmartUtils.createElement('div', {class: 'sovmart-width-1-2@l sovmart-project-page'}),
                 color = '#eee',
                 docs = '',
                 support = '',
                 paid = 'free';
 
-            if (project.download_type === 'paid') {
+            if (project.attributes.download_type === 'paid') {
                 paid = 'paid';
             }
 
             // проверяем наличие поддержки у расширения
             if (
-                project.urls.support !== undefined &&
-                project.urls.support !== false &&
-                project.urls.support !== ''
+                project.attributes.urls.support !== undefined &&
+                project.attributes.urls.support !== false &&
+                project.attributes.urls.support !== ''
             ) {
-                support = project.urls.support;
+                support = project.attributes.urls.support;
             }
 
             // проверяем наличии документации у расширения
             if (
-                project.urls.documentation !== undefined &&
-                project.urls.documentation !== false &&
-                project.urls.documentation !== ''
+                project.attributes.urls.documentation !== undefined &&
+                project.attributes.urls.documentation !== false &&
+                project.attributes.urls.documentation !== ''
             ) {
-                docs = project.urls.documentation;
+                docs = project.attributes.urls.documentation;
             }
 
             if (
-                project.documentation !== undefined &&
-                project.documentation !== false &&
-                project.documentation !== ''
+                project.attributes.documentation !== undefined &&
+                project.attributes.documentation !== false &&
+                project.attributes.documentation !== ''
             ) {
-                docs = Sovmart.api + project.documentation;
+                docs = Sovmart.api + project.attributes.documentation;
             }
 
-            if (project.params !== undefined) {
+            if (project.attributes.params !== undefined) {
                 if (
-                    project.params.attrs_color !== undefined &&
-                    project.params.attrs_color !== ''
+                    project.attributes.params.attrs_color !== undefined &&
+                    project.attributes.params.attrs_color !== ''
                 ) {
-                    color = project.params.attrs_color;
+                    color = project.attributes.params.attrs_color;
                 }
             }
 
-            header = header.add('div', {class: 'radicalinstaller-logs'});
+            header = header.add('div', {class: 'sovmart-logs'});
 
             // проверяем наличии галереи у расширения и генерируем DOM, если она есть
-            if (project.gallery.length > 0) {
+            if (project.attributes.gallery.length > 0) {
                 header = header.addChild('div', {
-                    'class': 'radicalinstaller-project-page_gallery-images',
+                    'class': 'sovmart-project-page_gallery-images',
                     'data-active': 1
                 })
                     .add('div', {
-                        'class': 'radicalinstaller-project-page_gallery-images-background',
+                        'class': 'sovmart-project-page_gallery-images-background',
                         'style': 'background-color: ' + color
                     });
-                for (let i = 0; i < item.gallery.length; i++) {
+                for (let i = 0; i < project.attributes.gallery.length; i++) {
                     header = header.addChild('div', {
-                        'class': 'radicalinstaller-project-page_gallery-images-element',
+                        'class': 'sovmart-project-page_gallery-images-element',
                         'style': i === 0 ? 'display:block' : 'display:none'
                     })
                         .add('img', {
-                            'alt': project.gallery[i].text,
-                            'src': self.api + '/' + project.gallery[i].src
+                            'alt': project.attributes.gallery[i].text,
+                            'src': Sovmart.api + '/' + project.attributes.gallery[i].src
                         })
-                        .add('div', {'class': 'radicalinstaller-project-page_gallery-images-element_caption'}, project.gallery[i].text)
+                        .add('div', {'class': 'sovmart-project-page_gallery-images-element_caption'}, project.attributes.gallery[i].text)
                         .getParent();
                 }
 
                 header = header.add('button', {
-                    'class': 'radicalinstaller-project-page_gallery-images-prev', 'events': [
+                    'class': 'sovmart-project-page_gallery-images-prev', 'events': [
                         [
                             'click', function (ev) {
                             let i,
-                                slideshow = this.closest(".radicalinstaller-project-page_gallery-images"),
-                                slides = slideshow.querySelectorAll('.radicalinstaller-project-page_gallery-images-element'),
+                                slideshow = this.closest(".sovmart-project-page_gallery-images"),
+                                slides = slideshow.querySelectorAll('.sovmart-project-page_gallery-images-element'),
                                 active = parseInt(slideshow.getAttribute('data-active')) - 1;
 
                             if (active > slides.length) {
@@ -767,12 +795,12 @@ window.Sovmart = {
                 }, '❮');
 
                 header = header.add('button', {
-                    'class': 'radicalinstaller-project-page_gallery-images-next', 'events': [
+                    'class': 'sovmart-project-page_gallery-images-next', 'events': [
                         [
                             'click', function (ev) {
                             let i,
-                                slideshow = this.closest(".radicalinstaller-project-page_gallery-images"),
-                                slides = slideshow.querySelectorAll('.radicalinstaller-project-page_gallery-images-element'),
+                                slideshow = this.closest(".sovmart-project-page_gallery-images"),
+                                slides = slideshow.querySelectorAll('.sovmart-project-page_gallery-images-element'),
                                 active = parseInt(slideshow.getAttribute('data-active')) + 1;
 
                             if (active > slides.length) {
@@ -796,24 +824,24 @@ window.Sovmart = {
                 header = header.getParent();
             } else {
                 if (
-                    project.images !== undefined &&
-                    project.images.cover !== undefined &&
-                    project.images.cover !== false
+                    project.attributes.images !== undefined &&
+                    project.attributes.images.cover !== undefined &&
+                    project.attributes.images.cover !== false
                 ) {
                     header = header.addChild('div', {
-                        'class': 'radicalinstaller-project-page_gallery-images',
+                        'class': 'sovmart-project-page_gallery-images',
                         'data-active': 1
                     })
                         .add('div', {
-                            'class': 'radicalinstaller-project-page_gallery-images-background',
+                            'class': 'sovmart-project-page_gallery-images-background',
                             'style': 'background-color: ' + color
                         });
                     header = header.addChild('div', {
-                        'class': 'radicalinstaller-project-page_gallery-images-element',
+                        'class': 'sovmart-project-page_gallery-images-element',
                         'style': 'display:block'
                     })
                         .add('img', {
-                            'src': Sovmart.api + '/' + project.images.cover
+                            'src': Sovmart.api + '/' + project.attributes.images.cover
                         })
                         .getParent()
                         .getParent();
@@ -821,120 +849,91 @@ window.Sovmart = {
 
             }
 
-            body = body.add('h2', {'class': 'radicalinstaller-project-page_gallery-header'}, project.title);
-            let check_install = false;
+            body = body.add('h2', {'class': 'sovmart-project-page_gallery-header'}, project.attributes.title);
 
-            if (project.download_type === 'free') {
-                check_install = true;
-            }
+            group_actions.items.push({
+                label: SovmartLangs.install,
+                icon: 'ri-download',
+                class: 'ri-btn ri-btn-default ri-btn-success ri-btn-install',
+                disabled: 'disabled',
+                events: [
+                    [
+                        'click',
+                        function (ev) {
+                            let button_install = this;
+                            let button_delete = SovmartUI.getContainerToolbar().querySelector('.ri-btn-delete');
+                            let logs_container = SovmartUI.getContainerPage().querySelector('.sovmart-logs');
 
-            if (project.download_type === 'paid') {
-                if (SovmartConfig.key !== '') {
-                    check_install = true;
-                }
-            }
+                            logs_container.innerHTML = '';
 
-            if (check_install) {
-                group_actions.items.push({
-                    label: SovmartLangs.install,
-                    icon: 'ri-download',
-                    class: 'ri-btn ri-btn-default ri-btn-success ri-btn-install',
-                    disabled: 'disabled',
-                    events: [
-                        [
-                            'click',
-                            function (ev) {
-                                let button_install = this;
-                                let button_delete = SovmartUI.getContainerToolbar().querySelector('.ri-btn-delete');
-                                let logs_container = SovmartUI.getContainerPage().querySelector('.radicalinstaller-logs');
+                            button_install.setAttribute('disabled', 'disabled');
+                            button_install.querySelector('span').innerHTML = SovmartLangs.install_process;
 
-                                logs_container.innerHTML = '';
+                            SovmartProject.install({
+                                ids: [id],
+                                success: function (responses) {
+                                    let success = false;
+                                    let data = JSON.parse(responses[0].data);
 
-                                button_install.setAttribute('disabled', 'disabled');
-                                button_install.querySelector('span').innerHTML = SovmartLangs.install_process;
+                                    logs_container.append(SovmartUI.renderLogsClose());
 
-                                SovmartProject.install({
-                                    ids: [id],
-                                    success: function (responses) {
-                                        let success = false;
-                                        let data = JSON.parse(responses[0].data);
-
-                                        logs_container.append(SovmartUI.renderLogsClose());
-
-                                        if (data.messages !== undefined && data.messages !== null) {
-                                            for (let i = data.messages.length - 1; i >= 0; i--) {
-                                                logs_container.append(
-                                                    SovmartUtils.createElement(
-                                                        'div',
-                                                        {},
-                                                        '<div class="alert alert-' + data.messages[i].type + '">' + data.messages[i].message + '</div>'
-                                                    ).build()
-                                                );
-                                            }
+                                    if (data.messages !== undefined && data.messages !== null) {
+                                        for (let i = data.messages.length - 1; i >= 0; i--) {
+                                            logs_container.append(
+                                                SovmartUtils.createElement(
+                                                    'div',
+                                                    {},
+                                                    '<div class="alert alert-' + data.messages[i].type + '">' + data.messages[i].message + '</div>'
+                                                ).build()
+                                            );
                                         }
-
-                                        if (responses[0].success === true) {
-                                            if (data.status === undefined || data.status === null || data.status === 'fail') {
-                                                success = false;
-                                            } else {
-                                                success = true;
-                                            }
-                                        }
-
-                                        if (success) {
-                                            button_install.querySelector('span').innerHTML = SovmartLangs.reinstall;
-
-                                            if (
-                                                button_delete !== undefined &&
-                                                button_delete !== null
-                                            ) {
-                                                button_delete.classList.remove('ri-hidden');
-                                                button_delete.removeAttribute('disabled');
-                                            }
-
-                                            Sovmart.checkUpdatedProjects(false, false);
-                                        } else {
-                                            button_install.querySelector('span').innerHTML = SovmartLangs.install;
-                                        }
-
-                                        button_install.removeAttribute('disabled');
-                                    },
-                                    fail: function (responses) {
-                                        button_install.querySelector('span').innerHTML = SovmartLangs.install;
-                                        button_install.removeAttribute('disabled');
-                                        logs_container.append(SovmartUI.renderLogsClose());
-                                        logs_container.append(
-                                            SovmartUtils.createElement(
-                                                'div',
-                                                {},
-                                                '<div class="alert alert-danger">' + SovmartLangs.text_install_error + '</div>'
-                                            ).build()
-                                        );
                                     }
-                                });
+
+                                    if (responses[0].success === true) {
+                                        if (data.status === undefined || data.status === null || data.status === 'fail') {
+                                            success = false;
+                                        } else {
+                                            success = true;
+                                        }
+                                    }
+
+                                    if (success) {
+                                        button_install.querySelector('span').innerHTML = SovmartLangs.reinstall;
+
+                                        if (
+                                            button_delete !== undefined &&
+                                            button_delete !== null
+                                        ) {
+                                            button_delete.classList.remove('ri-hidden');
+                                            button_delete.removeAttribute('disabled');
+                                        }
+
+                                        Sovmart.checkUpdatedProjects(false, false);
+                                    } else {
+                                        button_install.querySelector('span').innerHTML = SovmartLangs.install;
+                                    }
+
+                                    button_install.removeAttribute('disabled');
+                                },
+                                fail: function (responses) {
+                                    button_install.querySelector('span').innerHTML = SovmartLangs.install;
+                                    button_install.removeAttribute('disabled');
+                                    logs_container.append(SovmartUI.renderLogsClose());
+                                    logs_container.append(
+                                        SovmartUtils.createElement(
+                                            'div',
+                                            {},
+                                            '<div class="alert alert-danger">' + SovmartLangs.text_install_error + '</div>'
+                                        ).build()
+                                    );
+                                }
+                            });
 
 
-                            }
-                        ]
-                    ],
-                });
-            } else {
-                group_actions.items.push({
-                    label: SovmartLangs.need_key,
-                    icon: 'ri-link',
-                    class: 'ri-btn ri-btn-default ri-btn-success',
-                    events: [
-                        [
-                            'click',
-                            function (ev) {
-                                SovmartUtils.openInNewTab(Sovmart.api + project.link);
-                                ev.preventDefault();
-                                return false;
-                            }
-                        ]
-                    ],
-                });
-            }
+                        }
+                    ]
+                ],
+            });
 
             group_actions.items.push({
                 label: SovmartLangs.delete,
@@ -948,7 +947,7 @@ window.Sovmart = {
 
                             let button_install = SovmartUI.getContainerToolbar().querySelector('.ri-btn-install');
                             let button_delete = this;
-                            let logs_container = SovmartUI.getContainerPage().querySelector('.radicalinstaller-logs');
+                            let logs_container = SovmartUI.getContainerPage().querySelector('.sovmart-logs');
 
                             logs_container.innerHTML = '';
 
@@ -1060,18 +1059,18 @@ window.Sovmart = {
                 });
             }
 
-            body.add('div', {'class': 'radicalinstaller-project-page_description-header'}, SovmartLangs.description);
+            body.add('div', {'class': 'sovmart-project-page_description-header'}, SovmartLangs.description);
 
             if (
                 project.fulltext !== undefined &&
                 project.fulltext !== ''
             ) {
-                body = body.add('div', {'class': 'radicalinstaller-project-page_description-text'}, project.fulltext);
+                body = body.add('div', {'class': 'sovmart-project-page_description-text'}, project.fulltext);
             } else {
                 if (project.introtext !== undefined && project.introtext !== '') {
-                    body = body.add('div', {'class': 'radicalinstaller-project-page_description-text'}, project.introtext);
+                    body = body.add('div', {'class': 'sovmart-project-page_description-text'}, project.introtext);
                 } else {
-                    body = body.add('div', {'class': 'radicalinstaller-project-page_description-text'}, SovmartLangs.description_no);
+                    body = body.add('div', {'class': 'sovmart-project-page_description-text'}, SovmartLangs.description_no);
                 }
             }
 
@@ -1152,11 +1151,11 @@ window.Sovmart = {
                 }
             }
 
-            for (let k = 0; k < data.items.length; k++) {
+            for (let k = 0; k < data.data.length; k++) {
                 projects_card.push(
-                    SovmartUI.renderProjectCard(data.items[k])
+                    SovmartUI.renderProjectCard(data.data[k].attributes)
                 );
-                ids.push(data.items[k].id);
+                ids.push(data.data[k].attributes);
             }
 
             grid = SovmartUI.renderProjectGrid({
@@ -1166,69 +1165,6 @@ window.Sovmart = {
 
             page.appendChild(SovmartUI.renderGroup({
                 label: categories_list.join(' / '),
-                content: grid
-            }));
-
-            SovmartProject.checkInstall({
-                ids: ids,
-                done: Sovmart.checkInstallProjectCard
-            });
-
-        });
-    },
-
-
-    showProjectsKey: function () {
-        let page = SovmartUI.renderPage();
-
-        SovmartUI.showPage({
-            buttons: this.buttons_page_main,
-            page: page
-        });
-
-        SovmartUI.loaderShow({
-            container: page,
-            wait: function (resolve, reject) {
-
-                SovmartUtils.ajaxGet(Sovmart.url + '&method=projectsKey')
-                    .done(function (response) {
-
-                        if (typeof response === 'string') {
-                            response = JSON.parse(response);
-                        }
-
-                        let items = response.data[0];
-
-                        resolve(items);
-                    }).fail(function (xhr) {
-                    reject(xhr);
-                });
-
-            }
-        }).then(items => {
-            let grid = '';
-            let projects_card = [];
-            let ids = [];
-
-            // это кастыль пока что
-            if (items.items === undefined) {
-                items = JSON.parse(items);
-            }
-
-            for (let k = 0; k < items.items.length; k++) {
-                projects_card.push(
-                    SovmartUI.renderProjectCard(items.items[k])
-                );
-                ids.push(parseInt(items.items[k].id));
-            }
-
-            grid = SovmartUI.renderProjectGrid({
-                items: projects_card,
-                trigger_grid_row_end_for: Sovmart.triggerGridRowEndForCard
-            });
-
-            page.appendChild(SovmartUI.renderGroup({
-                label: SovmartLangs.group_key,
                 content: grid
             }));
 
@@ -1253,9 +1189,9 @@ window.Sovmart = {
             container: page,
             wait: function (resolve, reject) {
 
-                SovmartUtils.ajaxGet(Sovmart.url + '&method=projectsFree')
+                SovmartUtils.ajaxGet(Sovmart.url + '&method=projectsfree')
                     .done(function (response) {
-                        let items = response.data[0];
+                        let items = JSON.parse(response.data);
                         resolve(items);
                     }).fail(function (xhr) {
                     reject(xhr);
@@ -1267,16 +1203,11 @@ window.Sovmart = {
             let projects_card = [];
             let ids = [];
 
-            // это кастыль пока что
-            if (items.items === undefined) {
-                items = JSON.parse(items);
-            }
-
-            for (let k = 0; k < items.items.length; k++) {
+            for (let k = 0; k < items.data.length; k++) {
                 projects_card.push(
-                    SovmartUI.renderProjectCard(items.items[k])
+                    SovmartUI.renderProjectCard(items.data[k].attributes)
                 );
-                ids.push(parseInt(items.items[k].id));
+                ids.push(parseInt(items.data[k].attributes.id));
             }
 
             grid = SovmartUI.renderProjectGrid({
@@ -1309,9 +1240,9 @@ window.Sovmart = {
             container: page,
             wait: function (resolve, reject) {
 
-                SovmartUtils.ajaxGet(Sovmart.url + '&method=projectsPaid')
+                SovmartUtils.ajaxGet(Sovmart.url + '&method=projectspaid')
                     .done(function (response) {
-                        let items = response.data[0];
+                        let items = JSON.parse(response.data);
                         resolve(items);
                     }).fail(function (xhr) {
                     reject(xhr);
@@ -1323,16 +1254,11 @@ window.Sovmart = {
             let projects_card = [];
             let ids = [];
 
-            // это кастыль пока что
-            if (items.items === undefined) {
-                items = JSON.parse(items);
-            }
-
-            for (let k = 0; k < items.items.length; k++) {
+            for (let k = 0; k < items.data.length; k++) {
                 projects_card.push(
-                    SovmartUI.renderProjectCard(items.items[k])
+                    SovmartUI.renderProjectCard(items.data[k].attributes)
                 );
-                ids.push(parseInt(items.items[k].id));
+                ids.push(parseInt(items.data[k].attributes.id));
             }
 
             grid = SovmartUI.renderProjectGrid({
@@ -1352,9 +1278,6 @@ window.Sovmart = {
 
         });
     },
-
-
-    loadCategories: function () {},
 
 
     initButtonsMain: function () {
@@ -1449,84 +1372,6 @@ window.Sovmart = {
                             ]
                         }
                     ]
-                },
-                {
-                    name: 'search',
-                    items: [
-                        {
-                            type: 'forminput',
-                            name: 'search',
-                            label: SovmartLangs.search,
-                            events: [
-                                [
-                                    'submit',
-                                    function (event) {
-                                        event.preventDefault();
-                                        let form = this;
-                                        let q = form.querySelector('input').value;
-                                        let page = SovmartUI.renderPage();
-
-                                        if(q.length < 3)
-                                        {
-                                            SovmartUtils.createAlert(
-                                                SovmartLangs.text_search_error_small,
-                                                'danger',
-                                                5000
-                                            );
-
-                                            return;
-                                        }
-
-                                        SovmartUI.showPage({
-                                            page: page
-                                        });
-
-                                        SovmartUI.loaderShow({
-                                            container: page,
-                                            wait: function (resolve, reject) {
-
-                                                SovmartUtils.ajaxGet(Sovmart.url + '&method=search&q=' + encodeURIComponent(q))
-                                                    .done(function (response) {
-                                                        let data = JSON.parse(response.data);
-                                                        resolve(data);
-                                                    }).fail(function (xhr) {
-                                                    reject(xhr);
-                                                });
-
-                                            }
-                                        }).then(data => {
-                                            let grid = '';
-                                            let projects_card = [];
-                                            let ids = [];
-
-                                            for (let k = 0; k < data.items.length; k++) {
-                                                projects_card.push(
-                                                    SovmartUI.renderProjectCard(data.items[k])
-                                                );
-                                                ids.push(data.items[k].id);
-                                            }
-
-                                            grid = SovmartUI.renderProjectGrid({
-                                                items: projects_card,
-                                                trigger_grid_row_end_for: Sovmart.triggerGridRowEndForCard
-                                            });
-
-                                            page.appendChild(SovmartUI.renderGroup({
-                                                label: SovmartLangs.text_search_by + q,
-                                                content: grid
-                                            }));
-
-                                            SovmartProject.checkInstall({
-                                                ids: ids,
-                                                done: Sovmart.checkInstallProjectCard
-                                            });
-
-                                        });
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
                 }
             ]
         };
@@ -1591,20 +1436,7 @@ window.Sovmart = {
                 if (find_ids.indexOf(parseInt(ids[k])) !== -1) {
                     cards[i].querySelector('.ri-btn-install').innerHTML = SovmartLangs.reinstall;
                     cards[i].querySelector('.ri-btn-delete').classList.remove('ri-hidden');
-                } else {
-                    if (paid === 'paid' && SovmartConfig.key === '') {
-                        cards[i].querySelector('.ri-btn-install').innerHTML = SovmartLangs.need_key;
-
-                        cards[i].querySelector('.ri-btn-install').addEventListener('click', function (event) {
-
-                            SovmartUtils.openInNewTab(Sovmart.api + '/kontakty');
-
-                            event.preventDefault();
-                            return false;
-                        })
-                    }
                 }
-
             }
 
         }
@@ -1619,22 +1451,22 @@ window.Sovmart = {
 
                 for (let i = 0; i < cards.length; i++) {
                     cards[i].querySelector('.ri-btn-install').innerHTML = SovmartLangs.update;
-                    cards[i].querySelector('.radicalinstaller-project-card-version').classList.remove('ri-hidden');
-                    cards[i].querySelector('.radicalinstaller-project-card-version').querySelector('.value-last').innerHTML = updates.items[j].version_last;
-                    let version = cards[i].querySelector('.radicalinstaller-project-card-version').querySelector('.value').innerHTML;
+                    cards[i].querySelector('.sovmart-project-card-version').classList.remove('ri-hidden');
+                    cards[i].querySelector('.sovmart-project-card-version').querySelector('.value-last').innerHTML = updates.items[j].version_last;
+                    let version = cards[i].querySelector('.sovmart-project-card-version').querySelector('.value').innerHTML;
 
                     if (version === updates.items[j].version_last) {
-                        cards[i].querySelector('.radicalinstaller-project-card-version').querySelector('.value').innerHTML = '';
+                        cards[i].querySelector('.sovmart-project-card-version').querySelector('.value').innerHTML = '';
                     }
 
                     if (
                         (version !== '' && updates.items[j].version_last !== '') &&
                         (version !== updates.items[j].version_last)
                     ) {
-                        cards[i].querySelector('.radicalinstaller-project-card-version').querySelector('.value-arrow').classList.remove('ri-hidden');
+                        cards[i].querySelector('.sovmart-project-card-version').querySelector('.value-arrow').classList.remove('ri-hidden');
                     }
 
-                    cards[i].querySelector('.radicalinstaller-project-card-version').querySelector('.value-last').classList.remove('ri-hidden');
+                    cards[i].querySelector('.sovmart-project-card-version').querySelector('.value-last').classList.remove('ri-hidden');
                 }
 
             }
@@ -1659,17 +1491,7 @@ window.Sovmart = {
             if (find_ids.indexOf(parseInt(ids[k])) !== -1) {
                 SovmartUI.container.querySelector('.ri-btn-install').querySelector('span').innerHTML = SovmartLangs.reinstall;
                 SovmartUI.container.querySelector('.ri-btn-delete').classList.remove('ri-hidden');
-            } else {
-                if (paid === 'paid' && SovmartConfig.key === '') {
-                    SovmartUI.container.querySelector('.ri-btn-install').querySelector('span').innerHTML = SovmartLangs.need_key;
-
-                    SovmartUI.container.querySelector('.ri-btn-install').addEventListener('click', function (event) {
-                        // TODO отправлять на покупку
-                        event.preventDefault();
-                    })
-                }
             }
-
         }
 
         if (updates.count > 0) {

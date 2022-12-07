@@ -70,9 +70,9 @@
 }
 
 .ri-btn-success {
-    background-color: #457d54;
     border-color: #457d54;
-    color: #fff;
+    color: #457d54;
+    opacity: .9;
 }
 
 .ri-btn-success:focus + .ri-btn-success,
@@ -81,6 +81,7 @@
     background-color: #3b6a47;
     border-color: #376443;
     color: #fff;
+    opacity: 1;
 }
 
 .ri-btn-success:active + .ri-btn-success,
@@ -90,6 +91,7 @@
     background-color: #376443;
     border-color: #345e3f;
     color: #fff;
+    opacity: 1;
 }
 
 .ri-btn-success:focus + .ri-btn-success,
@@ -98,9 +100,9 @@
 }
 
 .ri-btn-danger {
-    background-color: #c52827;
     border-color: #c52827;
-    color: #fff;
+    color: #c52827;
+    opacity: .8;
 }
 
 .ri-btn-danger:focus + .ri-btn-danger,
@@ -109,6 +111,7 @@
     background-color: #a72221;
     border-color: #9e201f;
     color: #fff;
+    opacity: 1;
 }
 
 .ri-btn-danger:active + .ri-btn-danger,
@@ -117,11 +120,39 @@
     background-color: #9e201f;
     border-color: #941e1d;
     color: #fff;
+    opacity: 1;
 }
 
 .ri-btn-danger:active + .ri-btn-danger:focus,
 .ri-btn-danger:checked + .ri-btn-danger:focus {
     box-shadow: 0 0 0 .25rem rgba(206,72,71,.5);
+}
+
+.ri-btn-auth {
+    background: #457d54;
+    border-color: #457d54;
+    color: #fff;
+}
+
+.ri-btn-auth:focus + .ri-btn-auth,
+.ri-btn-auth:focus,
+.ri-btn-auth:hover {
+    background-color: #385941;
+    border-color: #385941;
+}
+
+.ri-btn-auth:active + .ri-btn-auth,
+.ri-btn-auth:checked + .ri-btn-auth,
+.ri-btn-auth.active,
+.ri-btn-auth:active {
+    background-color: #406749;
+    border-color: #406749;
+    opacity: 1;
+}
+
+.ri-btn-auth:focus + .ri-btn-auth,
+.ri-btn-auth:focus {
+    box-shadow: 0 0 0 .25rem rgba(72, 110, 82, 0.5);
 }
 
 .ri-btn:disabled,
@@ -191,8 +222,7 @@
 .ri-btn-group > *,
 .ri-btn-group > * > .ri-btn {
     border-radius: 0;
-    border-left-width: 0;
-
+    margin-left: -1px;
 }
 
 .ri-btn-group > *:first-child,
@@ -230,96 +260,49 @@
 
 
 /******************** Dropdown **********************/
-.ri-btn-wrap {
-    position: relative;
-    display: inline-block;
-}
-
-.ri-btn-dropdown {
-    visibility: hidden;
-    position: absolute;
-    width: 100%;
+.ri-dropdown {
     background-color: #f9f9f9;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    transition: visibility 0.1s;
-    z-index: 6;
-}
-
-.ri-btn-wrap:hover .ri-btn-dropdown {
-    visibility: visible;
-}
-
-.ri-btn-dropdown .btn {
-    border-top: none;
-}
-
-.ri-btn-dropdown {
-    width: 300px;
-}
-
-.ri-btn-dropdown > * {
-    width: 100%;
-    text-align: left;
-    border-radius: 0;
-    border-top: none;
-    border-bottom: none;
-}
-
-
-/************* Accordion ***************/
-.ri-tab-label {
-    background: var(--template-bg-dark-60);
-    color: var(--template-text-light);
-}
-
-.ri-tab-label:hover {
-    background-color: var(--template-bg-dark-70);
-}
-
-.ri-tabs input:checked + .ri-tab-label {
-    background-color: var(--template-bg-dark-70);
-    border-color: var(--template-bg-dark-90);
-}
-
-.ri-tab-close {
-    background: var(--template-text-light);
-}
-
-.ri-tab-close:hover {
-    background: var(--template-text-light);
 }
 
 
 /************* Main container ***************/
-#radicalinstaller-container {
+#sovmart-container {
 }
 
 
 /************* Group ***************/
-.radicalinstaller-group {
-    padding: 25px 0;
+.sovmart-group {
+    margin: 0 -41px;
+    padding: 25px 41px 25px 41px;
+    border-top: 1px solid var(--template-bg-dark-20);
+    border-bottom: 1px solid var(--template-bg-dark-20);
 }
 
-.radicalinstaller-group:nth-child(even) {
-    margin: 0px -41px;
-    padding: 25px 41px 25px 41px;
+.sovmart-group +
+.sovmart-group {
+    border-top: none;
+}
+
+.sovmart-group:nth-child(even) {
     background: rgb(243, 247, 252);
 }
 
-.radicalinstaller-group:last-child {
+.sovmart-group:last-child {
     margin-bottom: -20px;
+    border-bottom: none;
 }
 
 /************* Card ***************/
-.radicalinstaller-project-categories a:not([href]):not([class]) {
+.sovmart-project-categories a:not([href]):not([class]) {
     color: var(--template-link-color);
 }
 
-.radicalinstaller-project-categories a:not([href]):not([class]):hover {
+.sovmart-project-categories a:not([href]):not([class]):hover {
     color: var(--template-link-hover-color);
 }
 
 /************* Logs ***************/
-.radicalinstaller-group + .radicalinstaller-group .radicalinstaller-logs {
+.sovmart-group + .sovmart-group .sovmart-logs {
     background-color: #fff;
 }

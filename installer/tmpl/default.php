@@ -76,6 +76,7 @@ $langs = [
 	'key_view'                  => Text::_('PLG_INSTALLER_SOVMART_KEY_VIEW'),
 	'save'                      => Text::_('PLG_INSTALLER_SOVMART_SAVE'),
 	'clean'                     => Text::_('PLG_INSTALLER_SOVMART_CLEAN'),
+	'find'                      => Text::_('PLG_INSTALLER_SOVMART_FIND'),
 	'view'                      => Text::_('PLG_INSTALLER_SOVMART_VIEW'),
 	'view_all'                  => Text::_('PLG_INSTALLER_SOVMART_VIEW_ALL'),
 	'version'                   => Text::_('PLG_INSTALLER_SOVMART_VERSION'),
@@ -106,11 +107,11 @@ $langs = [
     <legend><?php echo Text::_('PLG_INSTALLER_SOVMART_LEGEND'); ?></legend>
 <?php endif; ?>
 
-<div id="radicalinstaller-container">
-    <div class="radicalinstaller-form-key radicalinstaller-margin-bottom"></div>
-    <div class="radicalinstaller-toolbar radicalinstaller-margin-bottom"></div>
-    <div class="radicalinstaller-page">
-        <div class="radicalinstaller-loader radicalinstaller-flex radicalinstaller-flex-center radicalinstaller-flex-middle">
+<div id="sovmart-container">
+    <div class="sovmart-header sovmart-margin-bottom"></div>
+    <div class="sovmart-toolbar sovmart-margin-bottom"></div>
+    <div class="sovmart-page">
+        <div class="sovmart-loader sovmart-flex sovmart-flex-center sovmart-flex-middle">
             <img src="/media/plg_installer_sovmart/img/loader.svg"/>
         </div>
     </div>
@@ -119,7 +120,9 @@ $langs = [
     document.addEventListener("DOMContentLoaded", function () {
         window.SovmartConfig = {
             api: '<?php echo Config::$scheme . '://' . Config::$host ?>',
-            key: '<?php echo $params->get('apikey', '')?>'
+            token: '<?php echo $params->get('token', '')?>',
+            name: '<?php echo $params->get('name', '')?>',
+            sync: <?php echo (int) $params->get('sync', 0)?>
         };
         window.SovmartLangs = <?php echo json_encode($langs) ?>;
         Sovmart.init();

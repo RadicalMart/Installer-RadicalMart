@@ -192,39 +192,39 @@ window.SovmartUtils = {
             classForModal = '';
         }
 
-        let modalBackground = document.querySelector('.radicalinstaller-modal_background');
-        let activeModal = document.querySelector('.radicalinstaller-modal');
+        let modalBackground = document.querySelector('.sovmart-modal_background');
+        let activeModal = document.querySelector('.sovmart-modal');
         if(activeModal !== null) {
             activeModal.remove();
             modalBackground.classList.remove('active');
         }
 
 
-        let modal = this.createElement('div', {'class': 'radicalinstaller-modal ' + classForModal})
-            .addChild('div', {'class': 'radicalinstaller-modal_container'})
+        let modal = this.createElement('div', {'class': 'sovmart-modal ' + classForModal})
+            .addChild('div', {'class': 'sovmart-modal_container'})
             .add('button', {
-                'class': 'btn btn-danger radicalinstaller-modal_close',
+                'class': 'btn btn-danger sovmart-modal_close',
                 'events': [
                     ['click', function (ev) {
-                        let modalBackground = document.querySelector('.radicalinstaller-modal_background');
+                        let modalBackground = document.querySelector('.sovmart-modal_background');
 
                         modalBackground.classList.remove('active');
-                        this.closest('.radicalinstaller-modal').remove();
+                        this.closest('.sovmart-modal').remove();
 
                         if(callback_close !== undefined && callback_close !== null) {
                             callback_close();
                         }
                     }]
                 ]}, '<span class="icon-delete large-icon"></span> ' + SovmartLangs.button_close)
-            .add('div', {'class': 'radicalinstaller-modal_header'}, header)
-            .addChild('div', {'class': 'radicalinstaller-modal_body-wrap'})
-            .add('div', {'class': 'radicalinstaller-modal_body'}, body)
+            .add('div', {'class': 'sovmart-modal_header'}, header)
+            .addChild('div', {'class': 'sovmart-modal_body-wrap'})
+            .add('div', {'class': 'sovmart-modal_body'}, body)
             .getParent()
             .getParent();
 
 
         if(modalBackground === null) {
-            modalBackground = this.createElement('div', {'class': 'radicalinstaller-modal_background'}).build();
+            modalBackground = this.createElement('div', {'class': 'sovmart-modal_background'}).build();
             document.querySelector('body').append(modalBackground);
         }
 
@@ -235,33 +235,33 @@ window.SovmartUtils = {
 
 
     modalAjax: function(header, url) {
-        let modalBackground = document.querySelector('.radicalinstaller-modal_background');
-        let activeModal = document.querySelector('.radicalinstaller-modal');
+        let modalBackground = document.querySelector('.sovmart-modal_background');
+        let activeModal = document.querySelector('.sovmart-modal');
         if(activeModal !== null) {
             activeModal.remove();
             modalBackground.classList.remove('active');
         }
 
 
-        let modal = this.createElement('div', {'class': 'radicalinstaller-modal radicalinstaller-modal-iframe'})
-            .addChild('div', {'class': 'radicalinstaller-modal_container'})
+        let modal = this.createElement('div', {'class': 'sovmart-modal sovmart-modal-iframe'})
+            .addChild('div', {'class': 'sovmart-modal_container'})
             .add('button', {
-                'class': 'btn btn-danger btn-large radicalinstaller-modal_close',
+                'class': 'btn btn-danger btn-large sovmart-modal_close',
                 'events': [
                     ['click', function (ev) {
-                        let modalBackground = document.querySelector('.radicalinstaller-modal_background');
+                        let modalBackground = document.querySelector('.sovmart-modal_background');
 
                         modalBackground.classList.remove('active');
-                        this.closest('.radicalinstaller-modal').remove();
+                        this.closest('.sovmart-modal').remove();
                     }]
                 ]}, '<span class="icon-delete large-icon"></span> ' + SovmartLangs.button_close)
-            .add('div', {'class': 'radicalinstaller-modal_header'}, header)
-            .add('iframe', {'class': 'radicalinstaller-modal_iframe', 'src': url})
+            .add('div', {'class': 'sovmart-modal_header'}, header)
+            .add('iframe', {'class': 'sovmart-modal_iframe', 'src': url})
             .getParent();
 
 
         if(modalBackground === null) {
-            modalBackground = this.createElement('div', {'class': 'radicalinstaller-modal_background'}).build();
+            modalBackground = this.createElement('div', {'class': 'sovmart-modal_background'}).build();
             document.querySelector('body').append(modalBackground);
         }
 
@@ -272,8 +272,8 @@ window.SovmartUtils = {
 
     modalClose: function () {
 
-        let modalBackground = document.querySelector('.radicalinstaller-modal_background');
-        let activeModal = document.querySelector('.radicalinstaller-modal');
+        let modalBackground = document.querySelector('.sovmart-modal_background');
+        let activeModal = document.querySelector('.sovmart-modal');
         if(activeModal !== null) {
             activeModal.remove();
             modalBackground.classList.remove('active');
@@ -296,10 +296,10 @@ window.SovmartUtils = {
 
         //Create alert element
         let alert = document.createElement("div");
-        alert.className += "animation-target radicalinstaller-alert ";
+        alert.className += "animation-target sovmart-alert ";
 
         //Attach correct colour to alert
-        let status_class = "radicalinstaller-alert-" + status + " ";
+        let status_class = "sovmart-alert-" + status + " ";
         alert.className += status_class;
 
         //Create close button
@@ -338,15 +338,15 @@ window.SovmartUtils = {
         alert.appendChild(close_button);
 
         //Prepend new alert to container
-        let alert_wrapper = document.getElementById("radicalinstaller-alert-wrapper");
+        let alert_wrapper = document.getElementById("sovmart-alert-wrapper");
 
         if (
             alert_wrapper === undefined ||
             alert_wrapper === null) {
             let alert_container = document.createElement('div');
-            alert_container.setAttribute('id', 'radicalinstaller-alert-container');
+            alert_container.setAttribute('id', 'sovmart-alert-container');
             alert_wrapper = document.createElement('div');
-            alert_wrapper.setAttribute('id', 'radicalinstaller-alert-wrapper');
+            alert_wrapper.setAttribute('id', 'sovmart-alert-wrapper');
             alert_container.appendChild(alert_wrapper);
             document.querySelector('body').appendChild(alert_container);
         }

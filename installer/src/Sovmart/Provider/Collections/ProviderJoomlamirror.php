@@ -19,7 +19,7 @@ class ProviderJoomlamirror extends ProviderJoomla
 		$app     = Factory::getApplication();
 		$input   = $app->input;
 		$project = json_decode(API::project($id), true);
-		$url     = $this->scheme . '://' . $this->host . $project['download'];
+		$url     = $this->scheme . '://' . $this->host . $project['attributes']['download'];
 
 		$input->set('installtype', 'url');
 		$input->set('install_url', $url);
@@ -56,22 +56,22 @@ class ProviderJoomlamirror extends ProviderJoomla
 				$manifest_cache   = new Registry($extension_joomla->manifest_cache);
 				$version          = $manifest_cache->get('version');
 
-				if (isset($project['version']['version']))
+				if (isset($project['attributes']['version']['version']))
 				{
-					$version = $project['version']['version'];
+					$version = $project['attributes']['version']['version'];
 				}
 
 				$table = Table::getInstance('SovmartExtensions', 'Table');
 				$table->load([
-					'provider' => $project['provider'],
+					'provider' => $project['attributes']['provider'],
 					'type'     => $type,
 					'element'  => $element,
 					'folder'   => $folder
 				]);
 
-				$table->provider       = $project['provider'];
-				$table->title          = $project['title'];
-				$table->cover          = $sync_project['images']['cover'] ?? '';
+				$table->provider       = $project['attributes']['provider'];
+				$table->title          = $project['attributes']['title'];
+				$table->cover          = $project['attributes']['images']['cover'] ?? '';
 				$table->type           = $type;
 				$table->element        = $element;
 				$table->folder         = $folder;
@@ -143,10 +143,15 @@ class ProviderJoomlamirror extends ProviderJoomla
 		// отсылаем на сервер radicalmart.ru и получаем ответ об установленных расширениях
 		$sync_projects = json_decode(API::syncExtensions($this->name, json_encode($extensions_for_api)), true);
 
-		if (!is_array($sync_projects))
+		if (
+			!is_array($sync_projects) ||
+			!isset($sync_projects['data'])
+		)
 		{
 			return 0;
 		}
+
+		$sync_projects = $sync_projects['data'];
 
 		foreach ($list as $item)
 		{
@@ -169,28 +174,28 @@ class ProviderJoomlamirror extends ProviderJoomla
 		{
 
 			$type    = 'file';
-			$element = $sync_project['element'];
+			$element = $sync_project['attributes']['element'];
 			$folder  = '';
 			$table   = Table::getInstance('SovmartExtensions', 'Table');
 
 			$table->load([
-				'provider' => $sync_project['provider'],
+				'provider' => $sync_project['attributes']['provider'],
 				'type'     => $type,
 				'folder'   => $folder,
 				'element'  => $element
 			]);
 
-			$table->title          = $sync_project['title'];
-			$table->provider       = $sync_project['provider'];
-			$table->cover          = $sync_project['images']['cover'] ?? '';
+			$table->title          = $sync_project['attributes']['title'];
+			$table->provider       = $sync_project['attributes']['provider'];
+			$table->cover          = $sync_project['attributes']['images']['cover'] ?? '';
 			$table->type           = $type;
 			$table->branch         = 'stable';
 			$table->element        = $element;
 			$table->folder         = $folder ?? '';
 			$table->version        = $extensions[$element]['version'] ?? '';
-			$table->project_id     = $sync_project['id'];
+			$table->project_id     = $sync_project['attributes']['id'];
 			$table->extension_id   = $extensions[$element]['id'] ?? '';
-			$table->category_title = $sync_project['title'];
+			$table->category_title = $sync_project['attributes']['title'];
 
 			if (!$table->check())
 			{
@@ -210,4 +215,5 @@ class ProviderJoomlamirror extends ProviderJoomla
 
 		return $count;
 	}
+
 }

@@ -27,7 +27,17 @@ window.SovmartProject = {
                         ids_current === ids_count &&
                         typeof args.success === 'function'
                     ) {
-                        args.success(responses);
+                        try {
+                            args.success(responses);
+                        }
+                        catch (e) {
+                            if(
+                                flag_break &&
+                                typeof args.fail === 'function'
+                            ) {
+                                args.fail(responses);
+                            }
+                        }
                     }
 
                     if(
@@ -82,7 +92,14 @@ window.SovmartProject = {
                 let data = JSON.parse(response.data);
 
                 if (typeof args.success === 'function') {
-                    args.success(data, args.id);
+                    try {
+                        args.success(data, args.id);
+                    }
+                    catch (e) {
+                        if (typeof args.fail === 'function') {
+                            args.fail(args.id);
+                        }
+                    }
                 }
 
             })
@@ -98,7 +115,7 @@ window.SovmartProject = {
 
 
     checkInstall: function (args) {
-        SovmartUtils.ajaxGet(Sovmart.url + '&method=checkInstall&list=' + JSON.stringify(args.ids))
+        SovmartUtils.ajaxGet(Sovmart.url + '&method=checkinstall&list=' + JSON.stringify(args.ids))
             .done( function (json) {
                 let find = json.data[0];
 
@@ -123,7 +140,7 @@ window.SovmartProject = {
 
 
     checkUpdate: function (args) {
-        SovmartUtils.ajaxGet(Sovmart.url + '&method=checkUpdates')
+        SovmartUtils.ajaxGet(Sovmart.url + '&method=checkupdates')
             .done( function (response) {
                 let data = JSON.parse(response.data);
 
@@ -135,7 +152,7 @@ window.SovmartProject = {
 
 
     sync: function (args) {
-        SovmartUtils.ajaxGet(Sovmart.url + '&method=syncExtensions')
+        SovmartUtils.ajaxGet(Sovmart.url + '&method=sync')
             .done(function (json) {
                 let count = json.data;
 

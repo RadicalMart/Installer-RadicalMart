@@ -81,7 +81,7 @@ class ProviderYoolayouts implements ProviderInterface
 		$data = http_build_query([
 			'option'  => 'com_swjprojects',
 			'view'    => 'download',
-			'element' => $project['element'],
+			'element' => $project['attributes']['element'],
 			'api_key' => $this->config['api_key'],
 		]);
 
@@ -157,8 +157,8 @@ class ProviderYoolayouts implements ProviderInterface
 					$ext            = array_pop($filename_split);
 
 					// Check name
-					$key          = 'sovmart_yoolayouts_' . $project['element'];
-					$item['name'] = $project['title'] . '; ' . ((count($files) > 1) ? (implode($filename_split) . '; ') : '') . 'v' . $project['version']['version'];
+					$key          = 'sovmart_yoolayouts_' . $project['attributes']['element'];
+					$item['name'] = $project['attributes']['title'] . '; ' . ((count($files) > 1) ? (implode($filename_split) . '; ') : '') . 'v' . $project['attributes']['version']['version'];
 
 					// Add to items
 					$items[$key] = $item;
@@ -177,20 +177,20 @@ class ProviderYoolayouts implements ProviderInterface
 				//записываем обновление
 				$table = Table::getInstance('SovmartExtensions', 'Table');
 				$table->load([
-					'provider' => $project['provider'],
-					'element'  => $project['element'],
+					'provider' => strtolower($project['attributes']['provider']),
+					'element'  => $project['attributes']['element'],
 				]);
 
-				$table->provider       = $project['provider'];
-				$table->title          = $project['title'];
-				$table->cover          = $sync_project['images']['cover'] ?? '';
+				$table->provider       = $project['attributes']['provider'];
+				$table->title          = $project['attributes']['title'];
+				$table->cover          = $project['attributes']['images']['cover'] ?? '';
 				$table->type           = 'layout';
-				$table->element        = $project['element'];
+				$table->element        = $project['attributes']['element'];
 				$table->folder         = '';
-				$table->version        = $project['version']['version'];
+				$table->version        = $project['attributes']['version']['version'];
 				$table->branch         = 'stable';
-				$table->project_id     = $project['id'];
-				$table->category_title = $project['title'];
+				$table->project_id     = $project['attributes']['id'];
+				$table->category_title = $project['attributes']['title'];
 				$table->extension_id   = 0;
 
 				if (!$table->check())
@@ -253,7 +253,7 @@ class ProviderYoolayouts implements ProviderInterface
 
 				foreach ($custom_data['library'] as $key => $item)
 				{
-					if (strpos($key, 'sovmart_yoolayouts_' . $project['element']) !== false)
+					if (strpos($key, 'sovmart_yoolayouts_' . $project['attributes']['element']) !== false)
 					{
 						continue;
 					}

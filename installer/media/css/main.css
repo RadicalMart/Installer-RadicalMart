@@ -1,47 +1,51 @@
 /*********** Container ************/
-#radicalinstaller-container {
+#sovmart-container {
     position: relative;
 }
 
 
 /************* Text ***************/
-.radicalinstaller-text-center {
+.sovmart-text-center {
     text-align: center;
 }
 
-.radicalinstaller-text-large {
+.sovmart-text-right {
+    text-align: right;
+}
+
+.sovmart-text-large {
     font-size: 20px;
     line-height: 24px;
 }
 
 
 /************* Width *************/
-.radicalinstaller-width-1-1 {
+.sovmart-width-1-1 {
     width: 100%;
 }
 
-.radicalinstaller-width-1-2 {
+.sovmart-width-1-2 {
     width: 50%;
 }
 
-.radicalinstaller-width-2-3 {
+.sovmart-width-2-3 {
     width: 66.6%
 }
 
-.radicalinstaller-width-auto {
+.sovmart-width-auto {
     width: auto;
 }
 
-.radicalinstaller-width-expand {
+.sovmart-width-expand {
     flex: 1;
 }
 
-.radicalinstaller-width-500 {
+.sovmart-width-500 {
     width: 500px;
 }
 
 @media screen and (min-width: 1600px) {
-    .radicalinstaller-width-1-2\@l {
+    .sovmart-width-1-2\@l {
         width: 50%;
     }
 }
@@ -60,109 +64,121 @@
 }
 
 /************ Backgrounds ***********/
-.radicalinstaller-background-muted {
+.sovmart-background-muted {
     background: #eee;
 }
 
 /************* Margin *************/
-.radicalinstaller-child-margin-right-small > * {
+.sovmart-child-margin-right-small > * {
     margin-right: 15px;
 }
 
-.radicalinstaller-margin-auto {
+.sovmart-margin-auto {
     margin: auto !important;
 }
 
-.radicalinstaller-margin-top {
+.sovmart-margin-small {
+    margin: 15px;
+}
+
+.sovmart-margin-small + .sovmart-margin-small {
+    margin-top: 0;
+}
+
+.sovmart-margin-top {
     margin-top: 30px;
 }
 
-.radicalinstaller-margin-right {
+.sovmart-margin-right {
     margin-right: 30px;
 }
 
-.radicalinstaller-margin-bottom {
+.sovmart-margin-bottom {
     margin-bottom: 30px;
 }
 
-.radicalinstaller-margin-bottom-small {
+.sovmart-margin-bottom-small {
     margin-bottom: 15px;
 }
 
-.radicalinstaller-margin-right-small {
+.sovmart-margin-right-small {
     margin-right: 15px;
 }
 
-.radicalinstaller-margin-left-xsmall {
+.sovmart-margin-left-xsmall {
     margin-left: 5px;
 }
 
-.radicalinstaller-margin-right-xsmall {
+.sovmart-margin-right-xsmall {
     margin-right: 5px;
 }
 
-.radicalinstaller-margin-right-xsmall {
+.sovmart-margin-right-xsmall {
     margin-right: 5px;
 }
 
 /************* Padding *************/
-.radicalinstaller-padding {
+.sovmart-padding {
     padding: 30px !important;
 }
 
-.radicalinstaller-padding-large {
+.sovmart-padding-large {
     padding: 50px !important;
+}
+
+.sovmart-padding-small {
+    padding: 15px !important;
 }
 
 
 /*********** Height ***************/
-.radicalinstaller-height-large {
+.sovmart-height-large {
     height: 400px;
 }
 
 
 /*********** Backgrounds **********/
-.radicalinstaller-background-muted {
+.sovmart-background-muted {
     background: #F0F0F0 !important;
 }
 
 
 /************ Flex ****************/
-.radicalinstaller-flex {
+.sovmart-flex {
     display: flex;
 }
 
-.radicalinstaller-flex-wrap {
+.sovmart-flex-wrap {
     flex-wrap: wrap;
 }
 
-.radicalinstaller-flex-nowrap {
+.sovmart-flex-nowrap {
     flex-wrap: nowrap;
 }
 
-.radicalinstaller-flex-center {
+.sovmart-flex-center {
     justify-content: center;
     justify-items: center;
 }
 
 
-.radicalinstaller-flex-middle {
+.sovmart-flex-middle {
     align-items: center;
     align-content: center;
 }
 
-.radicalinstaller-flex-space > * {
+.sovmart-flex-space > * {
     margin-right: 6px;
     margin-bottom: 6px !important;
 }
 
-.radicalinstaller-flex-space > *:last-child {
+.sovmart-flex-space > *:last-child {
     margin-right: 0;
 }
 
 
 /************ Grid ***************/
-.radicalinstaller-grid {
+.sovmart-grid {
     display: flex;
     flex-wrap: wrap;
     margin-top: -15px;
@@ -170,19 +186,19 @@
     margin-right: -15px;
 }
 
-.radicalinstaller-grid > * {
+.sovmart-grid > * {
     margin: 15px;
 }
 
-.radicalinstaller-grid-width-1-3 > * {
+.sovmart-grid-width-1-3 > * {
     width: calc(33% - 30px);
 }
 
-.radicalinstaller-grid-width-1-4 > * {
+.sovmart-grid-width-1-4 > * {
     width: calc(25% - 30px);
 }
 
-.radicalinstaller-grid-width-1-5 > * {
+.sovmart-grid-width-1-5 > * {
     width: calc(20% - 30px);
 }
 
@@ -212,8 +228,12 @@
     border-radius: 4px;
 }
 
+.ri-input-medium {
+    height: 35px;
+}
+
 /************ Page ******************/
-.radicalinstaller-page {
+.sovmart-page {
 
 }
 
@@ -223,74 +243,81 @@
 }
 
 /*********** Group *****************/
-.radicalinstaller-group {
+.sovmart-group {
     /*border: 1px solid #eee;
     border-radius: 4px;
     padding: 35px;*/
 }
 
-.radicalinstaller-group +
-.radicalinstaller-group {
-    margin-top: 35px;
+.sovmart-group +
+.sovmart-group {
     padding-top: 35px;
 }
 
-.radicalinstaller-group-header {
+.sovmart-group-header {
     margin-bottom: 15px;
 }
 
-.radicalinstaller-group-header h3 {
+.sovmart-group-header h3 {
     font-size: 24px;
     margin-top: 0;
     margin-bottom: 0;
 }
 
-.radicalinstaller-group-subgroup {
+.sovmart-group-subgroup {
 }
 
-.radicalinstaller-group-subgroup + .radicalinstaller-group-subgroup {
+.sovmart-group-subgroup + .sovmart-group-subgroup {
     padding-top: 20px;
 }
 
-.radicalinstaller-group-subgroup h4 {
+.sovmart-group-subgroup h4 {
     margin-top: 0;
     margin-bottom: 0;
 }
 
-.radicalinstaller-group-subgroup:last-child {
+.sovmart-group-subgroup:last-child {
     padding-bottom: 0;
 }
 
-.radicalinstaller-group-content {
+.sovmart-group-content {
     padding: 0;
 }
 
-.radicalinstaller-group-actions {
+.sovmart-group-actions {
     margin-top: 35px;
 }
 
 /************* Card **************/
-.radicalinstaller-project-card {
+.sovmart-project-card {
     height: 100%;
     border-radius: 4px;
     position: relative;
     box-sizing: border-box;
-    padding-bottom: 50px;
     background: #fff;
-    border: 1px solid #dfdfdf;
-    overflow: hidden;
+    border: 1px solid #dfdfdf8c;
+    overflow: visible;
+    z-index: 1;
+    transition: box-shadow 0.3s ease-in;
 }
 
-.radicalinstaller-project-card-header {
+.sovmart-project-card:hover {
+    -webkit-box-shadow: 0px 0px 40px 4px rgba(34, 60, 80, 0.30);
+    -moz-box-shadow: 0px 0px 40px 4px rgba(34, 60, 80, 0.30);
+    box-shadow: 0px 0px 40px 4px rgba(34, 60, 80, 0.30);
+    z-index: 2;
+    transition: box-shadow 0.3s ease-out;
+}
+
+.sovmart-project-card-header {
     display: flex;
     flex-wrap: nowrap;
     align-items: center;
     height: 90px;
-    border-bottom: 1px solid #dfdfdf;
+    border-bottom: 1px solid #dfdfdf8c;
 }
 
-.radicalinstaller-project-card-image {
-    /*background-color: #eee;*/
+.sovmart-project-card-image {
     display: flex;
     justify-content: center;
     justify-items: center;
@@ -300,35 +327,36 @@
     width: 133px;
     height: 100%;
     overflow: hidden;
+    border-top-left-radius: 4px;
 }
 
-.radicalinstaller-project-card-image img {
+.sovmart-project-card-image img {
     max-width: none;
     height: 100%;
 }
 
-.radicalinstaller-project-card-image img.icon {
+.sovmart-project-card-image img.icon {
     width: 50%;
     height: 100%;
     opacity: .5;
 }
 
-.radicalinstaller-project-card-info {
+.sovmart-project-card-info {
     padding: 15px;
     font-size: 13px;
     line-height: 17px;
 }
 
-.radicalinstaller-project-card-info h4 {
+.sovmart-project-card-info h4 {
     font-size: 16px;
     line-height: 20px;
 }
 
-.radicalinstaller-project-categories {
+.sovmart-project-categories {
     padding: 10px 15px 0 15px;
 }
 
-.radicalinstaller-project-categories a {
+.sovmart-project-categories a {
     position: relative;
     display: inline-block;
     font-size: 14px;
@@ -336,21 +364,21 @@
     cursor: pointer;
 }
 
-.radicalinstaller-project-categories a + a {
+.sovmart-project-categories a + a {
     margin-left: 13px;
 }
 
-.radicalinstaller-project-categories a + a:before {
+.sovmart-project-categories a + a:before {
     content: '/';
     position: absolute;
     left: -8px;
     top: 0;
 }
-.radicalinstaller-project-card-category a:hover {
+.sovmart-project-card-category a:hover {
     color: #1f374f !important;
 }
 
-.radicalinstaller-project-card-version .value-arrow {
+.sovmart-project-card-version .value-arrow {
     display: flex;
     justify-items: center;
     justify-content: center;
@@ -358,7 +386,39 @@
     align-content: center;
 }
 
-.radicalinstaller-project-card-description {
+.sovmart-project-card-more-wrap {
+    position: relative;
+    margin-top: -4px;
+    margin-left: -1px;
+    margin-right: -1px;
+    padding-top: 4px;
+}
+
+.sovmart-project-card-more {
+    display: none;
+    position: absolute;
+    width: 100%;
+    left: 0;
+    right: 0;
+    top: 0;
+    background: #fff;
+    overflow: hidden;
+    opacity: 0;
+    transition: box-shadow,opacity 0.3s;
+}
+
+.sovmart-project-card:hover .sovmart-project-card-more {
+    display: block;
+    border: 1px solid #dfdfdf8c;
+    border-radius: 0 0 4px 4px;
+    -webkit-box-shadow: 0px 42px 40px 4px rgba(34, 60, 80, 0.30);
+    -moz-box-shadow: 0px 42px 40px 4px rgba(34, 60, 80, 0.30);
+    box-shadow: 0px 42px 40px 4px rgba(34, 60, 80, 0.30);
+    transition: box-shadow,opacity 0.3s;
+    opacity: 1;
+}
+
+.sovmart-project-card-description {
     min-height: 60px;
     padding: 10px 15px 15px 15px;
     font-size: 13px;
@@ -366,35 +426,38 @@
     color: #777;
 }
 
-.radicalinstaller-project-card-actions {
-    position: absolute;
-    width: 100%;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    box-sizing: border-box;
+.sovmart-project-card-actions {
     display: flex;
     justify-content: space-between;
-    border-top: 1px solid #dfdfdf;
     padding: 10px;
 }
 
+.sovmart-project-card .ri-btn {
+    transition: opacity 0.3s;
+}
+
+.sovmart-project-card:not(:hover) .ri-btn {
+    opacity: .35;
+}
+
+
 /************ Alerts *************/
-#radicalinstaller-alert-container {
+#sovmart-alert-container {
     position: fixed;
     height: auto;
     max-width: 350px;
     width: 100%;
     bottom: 30px;
     right: 0;
+    z-index: 99;
 }
 
-#radicalinstaller-alert-wrapper {
+#sovmart-alert-wrapper {
     height: auto;
     padding: 15px;
 }
 
-.radicalinstaller-alert {
+.sovmart-alert {
     position: relative;
     padding: 25px 30px 20px;
     font-size: 15px;
@@ -411,48 +474,48 @@
     user-select: none;
 }
 
-.radicalinstaller-alert span {
+.sovmart-alert span {
     /*opacity: 0.7;*/
     transition: all 0.25s ease-in-out;
 }
 
-.radicalinstaller-alert span:hover {
+.sovmart-alert span:hover {
     opacity: 1.0;
 }
 
-.radicalinstaller-alert-success {
+.sovmart-alert-success {
     color: #ffffff;
     background-color: #37c1aa;
 }
 
-.radicalinstaller-alert-success > span {
+.sovmart-alert-success > span {
     color: #0b6f5e;
 }
 
-.radicalinstaller-alert-info {
+.sovmart-alert-info {
     color: #ffffff;
     background-color: #3473c1;
 }
 
-.radicalinstaller-alert-info > span {
+.sovmart-alert-info > span {
     color: #1e4567;
 }
 
-.radicalinstaller-alert-warning {
+.sovmart-alert-warning {
     color: #6b7117;
     background-color: #ffee9e;
 }
 
-.radicalinstaller-alert-warning > span {
+.sovmart-alert-warning > span {
     color: #8a6d3b;
 }
 
-.radicalinstaller-alert-danger {
+.sovmart-alert-danger {
     color: #ffffff;
     background-color: #d64f62;
 }
 
-.radicalinstaller-alert-danger > span {
+.sovmart-alert-danger > span {
     color: #6f1414;
 }
 
@@ -470,11 +533,11 @@
 }
 
 .animation-target {
-    animation: radicalinstaller-alert-animation 1500ms linear both;
+    animation: sovmart-alert-animation 1500ms linear both;
 }
 
 /* Generated with Bounce.js. Edit at http://goo.gl/BKCT19 */
-@keyframes radicalinstaller-alert-animation {
+@keyframes sovmart-alert-animation {
     0% { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 250, 0, 0, 1); }
     3.14% { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 160.737, 0, 0, 1); }
     4.3% { transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 132.565, 0, 0, 1); }
@@ -502,27 +565,27 @@
 
 
 /************ Page project ***************/
-.radicalinstaller-project-page {
+.sovmart-project-page {
 
 }
 
-.radicalinstaller-project-page_buttons {
+.sovmart-project-page_buttons {
     margin-bottom: 35px;
 }
 
-.radicalinstaller-project-page_providers-header {
+.sovmart-project-page_providers-header {
     font-size: 20px;
     font-weight: bold;
     margin-bottom: 15px;
 }
 
-.radicalinstaller-project-page_providers-elements {
+.sovmart-project-page_providers-elements {
     margin-bottom: 25px;
     display: flex;
     align-self: center;
 }
 
-.radicalinstaller-project-page_providers-elements_element {
+.sovmart-project-page_providers-elements_element {
     width: 31%;
     margin-right: 2%;
     position: relative;
@@ -530,19 +593,19 @@
     align-items: center;
 }
 
-.radicalinstaller-project-page_providers-elements_element_logo {
+.sovmart-project-page_providers-elements_element_logo {
     width: 25%;
     margin-right: 10px;
 }
 
-.radicalinstaller-project-page_providers-elements_element_title {
+.sovmart-project-page_providers-elements_element_title {
     flex: 1;
     font-size: 17px;
     line-height: 21px;
     font-weight: 500;
 }
 
-.radicalinstaller-project-page_providers-elements_element_link {
+.sovmart-project-page_providers-elements_element_link {
     position: absolute;
     top: 0;
     left: 0;
@@ -550,31 +613,31 @@
     bottom: 0;
 }
 
-.radicalinstaller-project-page_description-header {
+.sovmart-project-page_description-header {
     font-size: 20px;
     font-weight: bold;
     margin-bottom: 15px;
 }
 
-.radicalinstaller-project-page_description-text {
+.sovmart-project-page_description-text {
     margin-bottom: 25px;
     font-size: 17px;
     line-height: 23px;
 }
 
-.radicalinstaller-project-page_gallery-header {
+.sovmart-project-page_gallery-header {
     font-size: 25px;
     font-weight: bold;
     margin-bottom: 22px;
 }
 
-.radicalinstaller-project-page_gallery-images {
+.sovmart-project-page_gallery-images {
     position: relative;
     background: #ccc;
     height: 300px;
 }
 
-.radicalinstaller-project-page_gallery-images-background {
+.sovmart-project-page_gallery-images-background {
     position: absolute;
     top: 0;
     left: 0;
@@ -584,8 +647,8 @@
     z-index: 0;
 }
 
-.radicalinstaller-project-page_gallery-images-prev,
-.radicalinstaller-project-page_gallery-images-next {
+.sovmart-project-page_gallery-images-prev,
+.sovmart-project-page_gallery-images-next {
     position: absolute;
     border: none;
     display: inline-block;
@@ -601,33 +664,33 @@
     box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.04), 0px 0px 2px rgba(0, 0, 0, 0.06), 0px 4px 8px rgba(0, 0, 0, 0.04);
 }
 
-.radicalinstaller-project-page_gallery-images-prev {
+.sovmart-project-page_gallery-images-prev {
     top: 50%;
     left: 0;
     transform: translate(0%,-50%);
     -ms-transform: translate(-0%,-50%);
 }
 
-.radicalinstaller-project-page_gallery-images-next {
+.sovmart-project-page_gallery-images-next {
     top: 50%;
     right: 0;
     transform: translate(0%,-50%);
     -ms-transform: translate(0%,-50%);
 }
 
-.radicalinstaller-project-page_gallery-images-element {
+.sovmart-project-page_gallery-images-element {
     position: relative;
     animation: opac 0.8s;
 }
 
-.radicalinstaller-project-page_gallery-images-element img {
+.sovmart-project-page_gallery-images-element img {
     width: 100%;
     object-fit: contain;
     object-position: center;
     max-height: 300px;
 }
 
-.radicalinstaller-project-page_gallery-images-element_caption {
+.sovmart-project-page_gallery-images-element_caption {
     position: absolute;
     left: 10px;
     bottom: 10px;
@@ -641,81 +704,118 @@
     box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.04), 0px 0px 2px rgba(0, 0, 0, 0.06), 0px 4px 8px rgba(0, 0, 0, 0.04);
 }
 
-.radicalinstaller-project-page_relations {
+.sovmart-project-page_relations {
     margin-top: 35px;
 }
 
-.radicalinstaller-project-page_relations-header {
+.sovmart-project-page_relations-header {
     font-size: 20px;
     line-height: 24px;
 }
 
-.radicalinstaller-project-page_relations-list {
+.sovmart-project-page_relations-list {
 
 }
 
-.radicalinstaller-project-page_relations-list_link {
+.sovmart-project-page_relations-list_link {
     padding-top: 5px;
     padding-bottom: 5px;
     font-size: 18px;
     color: #000;
 }
 
-.radicalinstaller-project-page_relations-list_link:hover {
+.sovmart-project-page_relations-list_link:hover {
     color: #ccc;
     cursor: pointer;
 }
 
 
-/************** accordion *****************/
-.ri-tabs {
-    border-radius: 4px;
-    overflow: hidden;
+/************** Dropdown *****************/
+.ri-dropdown-wrap {
+    position: relative;
+    display: inline-block;
 }
 
-.ri-tab {
+.ri-dropdown {
+    visibility: hidden;
+    position: absolute;
+    width: 300px;
+    transition: visibility 0.1s;
+    z-index: 6;
+}
+
+.ri-dropdown-wrap:hover .ri-dropdown {
+    visibility: visible;
+}
+
+.ri-dropdown {
+    width: 300px;
+}
+
+.ri-dropdown-right {
+    right: 0;
+}
+
+.ri-dropdown > * {
     width: 100%;
-    color: white;
-    overflow: hidden;
+    text-align: left;
+    border-radius: 0;
+    border-top: none;
+    border-bottom: none;
 }
 
-.ri-tab-label {
-    display: flex;
+.ri-dropdown > .ri-btn {
+    border: none;
+    border-radius: 0;
+    text-align: left;
+}
+
+
+/************** Toggle *****************/
+.ri-toggle {
+    border-radius: 4px;
+}
+
+.ri-toggle-buttons {
+    display: inline-block;
+    margin-right: 15px;
+}
+
+.ri-toggle-label {
     justify-content: space-between;
     padding: 1em;
     cursor: pointer;
+    display: inline-block;
     border-radius: 4px;
 }
 
-.ri-tab-label::after {
-    content: "❯";
-    width: 1em;
-    height: 1em;
-    text-align: center;
-    transition: all 0.35s;
+.ri-toggle-label:before {
+    content: attr(data-open);
 }
 
-.ri-tab-content {
+.ri-toggle-content {
     max-height: 0;
     padding: 0;
     transition: all 0.35s;
+    overflow: hidden;
 }
 
-.ri-tab-content > div  {
+.ri-toggle-content > div  {
     margin-bottom: 15px;
-    padding: 0 15px;
+    padding: 0;
 }
 
-.ri-tab-content > div:first-child {
+.ri-toggle-content > div:first-child {
     padding-top: 15px;
     margin-top: 15px;
 }
 
-.ri-tab-content > div:last-child {
+.ri-toggle-content > div:last-child {
     padding-bottom: 15px;
+    margin-bottom: 0;
 }
 
-.ri-tab-close {
+.ri-toggle-close {
     display: flex;
     justify-content: flex-end;
     padding: 1em;
@@ -723,39 +823,40 @@
     cursor: pointer;
 }
 
-.ri-tabs input {
+.ri-toggle input {
     display: none;
 }
 
-.ri-tabs input:checked + .ri-tabtab-label::after {
-    transform: rotate(90deg);
+.ri-toggle input:checked ~ .ri-toggle-label:before {
+    content: attr(data-close);
 }
 
-.ri-tabs input:checked ~ .ri-tab-content {
+.ri-toggle input:checked ~ .ri-toggle-content {
     max-height: 100vh;
+    overflow: visible;
 }
 
 
-/****************** radicalinstaller-logs *********************/
-.radicalinstaller-logs {
+/****************** sovmart-logs *********************/
+.sovmart-logs {
     background: #eee;
     border-radius: 4px;
 }
 
-.radicalinstaller-logs > div .alert {
+.sovmart-logs > div .alert {
     margin: 0;
 }
 
-.radicalinstaller-logs > div  {
+.sovmart-logs > div  {
     margin-bottom: 15px;
     padding: 0 15px;
 }
 
-.radicalinstaller-logs > div:first-child {
+.sovmart-logs > div:first-child {
     padding-top: 15px;
     margin-top: 15px;
 }
 
-.radicalinstaller-logs > div:last-child {
+.sovmart-logs > div:last-child {
     padding-bottom: 15px;
 }

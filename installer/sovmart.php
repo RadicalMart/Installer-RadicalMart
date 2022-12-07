@@ -75,13 +75,11 @@ class PlgInstallerSovmart extends CMSPlugin
 	{
 		if (
 			parse_url($url, PHP_URL_HOST) === Config::$host &&
-			!strpos($url, 'download_key=') &&
-			$key = $this->params->get('apikey')
+			$token = $this->params->get('token')
 		)
 		{
 
-			$url .= ((strpos($url, '?') === false ? '?' : '&')) . 'download_key=' . $key;
-
+			$headers['Authorization'] = 'Bearer ' . $token;
 		}
 
 		return true;
@@ -102,100 +100,21 @@ class PlgInstallerSovmart extends CMSPlugin
 		try
 		{
 
-			if ($method === 'minimal')
+			$method_name = 'method' . ucfirst(strtolower($method));
+
+			if (!method_exists($this, $method_name))
 			{
-				$output = $this->APIMinimal();
+				throw new Exception('Not found method', 404);
 			}
 
-			if ($method === 'categories')
+			$token = $this->params->get('token', '');
+
+			if (!empty($token))
 			{
-				$output = $this->APICategories();
+				Api::setToken($token);
 			}
 
-			if ($method === 'projects')
-			{
-				$output = $this->APIProjects();
-			}
-
-			if ($method === 'groupsStartPage')
-			{
-				$output = $this->APIGroupsStartPage();
-			}
-
-			if ($method === 'projectList')
-			{
-				$output = $this->APIProjectList();
-			}
-
-			if ($method === 'projectsMy')
-			{
-				$output = $this->APIProjectsMy();
-			}
-
-			if ($method === 'projectsKey')
-			{
-				$output = $this->APIProjectsKey();
-			}
-
-			if ($method === 'projectsPaid')
-			{
-				$output = $this->APIProjectsPaid();
-			}
-
-			if ($method === 'projectsFree')
-			{
-				$output = $this->APIProjectsFree();
-			}
-
-			if ($method === 'project')
-			{
-				$output = $this->APIProject();
-			}
-
-			if ($method === 'getForInstallDepends')
-			{
-				$output = $this->APIGetForInstallDepends();
-			}
-
-			if ($method === 'install')
-			{
-				$output = $this->install();
-			}
-
-			if ($method === 'delete')
-			{
-				$output = $this->delete();
-			}
-
-			if ($method === 'checkInstall')
-			{
-				$output = $this->checkInstall();
-			}
-
-			if ($method === 'checkUpdates')
-			{
-				$output = $this->checkUpdates();
-			}
-
-			if ($method === 'installedList')
-			{
-				$output = $this->installedList();
-			}
-
-			if ($method === 'syncExtensions')
-			{
-				$output = $this->syncExtensions();
-			}
-
-			if ($method === 'saveKey')
-			{
-				$output = $this->saveKey();
-			}
-
-			if ($method === 'search')
-			{
-				$output = $this->search();
-			}
+			$output = $this->$method_name();
 		}
 		catch (Exception $e)
 		{
@@ -213,7 +132,7 @@ class PlgInstallerSovmart extends CMSPlugin
 	}
 
 
-	protected function install()
+	protected function methodInstall()
 	{
 
 		$app            = Factory::getApplication();
@@ -256,7 +175,7 @@ class PlgInstallerSovmart extends CMSPlugin
 	}
 
 
-	protected function delete()
+	protected function methodDelete()
 	{
 		$app     = Factory::getApplication();
 		$input   = $app->input;
@@ -285,7 +204,7 @@ class PlgInstallerSovmart extends CMSPlugin
 	}
 
 
-	protected function checkUpdates()
+	protected function methodCheckupdates()
 	{
 		$ids   = [];
 		$query = $this->db->getQuery(true);
@@ -336,16 +255,16 @@ class PlgInstallerSovmart extends CMSPlugin
 	}
 
 
-	protected function APIMinimal()
+	protected function methodMinimal()
 	{
 		$response        = json_decode(API::minimal(), true);
 		$current_version = SovmartHelper::getVersion();
 		$result          = true;
 
 		if (
-			isset($response['version']) &&
+			isset($response['data']['attributes']['version']) &&
 			!empty($current_version) &&
-			version_compare($current_version, $response['version'], '<')
+			version_compare($current_version, $response['data']['attributes']['version'], '<')
 		)
 		{
 			$result = false;
@@ -355,35 +274,21 @@ class PlgInstallerSovmart extends CMSPlugin
 	}
 
 
-	protected function APICategories()
+	protected function methodCategories()
 	{
 		return API::categories();
 	}
 
 
-	protected function APIGroupsStartPage()
+	protected function methodStartPage()
 	{
-		return API::groupsStartPage($this->params->get('apikey', ''));
+		return API::groupsStartPage();
 	}
 
 
-	protected function APIProjects()
+	protected function methodProjects()
 	{
 		$id = $this->app->input->get('category_id');
-
-		if ($id === 'my')
-		{
-			$key = $this->params->get('apikey', '');
-
-			if (empty($key))
-			{
-				return [];
-			}
-
-			$projects = API::projectsMy($key);
-
-			return $projects;
-		}
 
 		$page  = $this->app->input->get('page', 1, 'int');
 		$limit = $this->app->input->get('limit', 12, 'int');
@@ -392,7 +297,7 @@ class PlgInstallerSovmart extends CMSPlugin
 	}
 
 
-	protected function APIProjectList()
+	protected function methodProjectlist()
 	{
 		$ids = $this->app->input->get('ids', '{}', 'raw');
 
@@ -400,16 +305,7 @@ class PlgInstallerSovmart extends CMSPlugin
 	}
 
 
-	protected function APIGetForInstallDepends()
-	{
-		$id       = $this->app->input->getInt('project_id');
-		$projects = API::getForInstallDepends($id);
-
-		return $projects;
-	}
-
-
-	protected function APIProject()
+	protected function methodProject()
 	{
 		$id = $this->app->input->get('project_id');
 
@@ -417,27 +313,19 @@ class PlgInstallerSovmart extends CMSPlugin
 	}
 
 
-	protected function APIProjectsKey()
-	{
-		$key = $this->params->get('apikey', '');
-
-		return API::projectsKey($key);
-	}
-
-
-	protected function APIProjectsPaid()
+	protected function methodProjectspaid()
 	{
 		return API::projectsPaid();
 	}
 
 
-	protected function APIProjectsFree()
+	protected function methodProjectsfree()
 	{
 		return API::projectsFree();
 	}
 
 
-	protected function syncExtensions()
+	protected function methodSync()
 	{
 
 		$result    = 0;
@@ -448,11 +336,15 @@ class PlgInstallerSovmart extends CMSPlugin
 			$result += $provider->sync();
 		}
 
+		SovmartHelper::updateParams(
+			['sync' => 0]
+		);
+
 		return $result;
 	}
 
 
-	protected function checkInstall()
+	protected function methodCheckinstall()
 	{
 		$list             = $this->app->input->getString('list', '{}');
 		$list             = json_decode($list, true);
@@ -490,15 +382,17 @@ class PlgInstallerSovmart extends CMSPlugin
 	}
 
 
-	protected function saveKey()
+	protected function methodSavetoken()
 	{
-		$key = trim($this->app->input->getString('key'));
+		$token = trim($this->app->input->getString('token'));
 
-		// сохраняем пустой ключ
-		if (empty($key))
+		// сохраняем пустой токен
+		if (empty($token))
 		{
 
-			$this->params->set('apikey', '');
+			$this->params->set('token', '');
+			$this->params->set('name', '');
+
 			$query  = $this->db->getQuery(true);
 			$fields = [
 				$this->db->qn('params') . ' = ' . $this->db->q($this->params->toString())
@@ -521,45 +415,48 @@ class PlgInstallerSovmart extends CMSPlugin
 			return ['status' => 'ok'];
 		}
 
-		$result = json_decode(API::checkKey($key), true);
+		API::setToken($token);
+		$result = json_decode(API::checkToken(), true);
 
-		if (
-			is_array($result) &&
-			isset($result['check']) &&
-			((string) $result['check'] === 'true')
+		if(
+			!isset($result['data']['attributes']['find']) ||
+			!$result['data']['attributes']['find']
 		)
 		{
-			$this->params->set('apikey', $key);
-			$query  = $this->db->getQuery(true);
-			$fields = [
-				$this->db->qn('params') . ' = ' . $this->db->q($this->params->toString())
-			];
-
-			$conditions = [
-				$this->db->qn('element') . ' = ' . $this->db->q('sovmart'),
-				$this->db->qn('folder') . ' = ' . $this->db->q('installer'),
-			];
-
-			$query->update($this->db->quoteName('#__extensions'))->set($fields)->where($conditions);
-			$this->db->setQuery($query);
-			$result = $this->db->execute();
-
-			if (!$result)
-			{
-				throw new RuntimeException(Text::_('PLG_INSTALLER_SOVMART_ERROR_DATABASE_SAVE'), 500);
-			}
-
-			$this->cleanCache('_system');
-			$this->cleanCache('_system', 1);
-
-			return ['status' => 'ok'];
+			throw new RuntimeException(Text::_('PLG_INSTALLER_SOVMART_NOT_FOUND_AUTH'), 401);
 		}
 
-		throw new RuntimeException(Text::_('PLG_INSTALLER_SOVMART_ERROR_KEY'), 401);
+		$this->params->set('token', $token);
+		$this->params->set('name', $result['data']['attributes']['name']);
+
+		$query  = $this->db->getQuery(true);
+		$fields = [
+			$this->db->qn('params') . ' = ' . $this->db->q($this->params->toString())
+		];
+
+		$conditions = [
+			$this->db->qn('element') . ' = ' . $this->db->q('sovmart'),
+			$this->db->qn('folder') . ' = ' . $this->db->q('installer'),
+		];
+
+		$query->update($this->db->quoteName('#__extensions'))->set($fields)->where($conditions);
+		$this->db->setQuery($query);
+		$result = $this->db->execute();
+
+		if (!$result)
+		{
+			throw new RuntimeException(Text::_('PLG_INSTALLER_SOVMART_ERROR_DATABASE_SAVE'), 500);
+		}
+
+		$this->cleanCache('_system');
+		$this->cleanCache('_system', 1);
+
+		return ['status' => 'ok'];
+
 	}
 
 
-	protected function installedList()
+	protected function methodInstalledlist()
 	{
 		$query = $this->db->getQuery(true);
 		$query
@@ -571,30 +468,9 @@ class PlgInstallerSovmart extends CMSPlugin
 	}
 
 
-	protected function search()
+	protected function methodSearch()
 	{
 		return API::search($this->app->input->getString('q', ''));
-	}
-
-
-	protected function toggleEnabled()
-	{
-		$id    = $this->app->input->getInt('id');
-		$query = $this->db->getQuery(true);
-		$query
-			->select(['type'])
-			->from($this->db->quoteName('#__sovmart_extensions'))
-			->where('id = ' . $this->db->quote($id));
-		$item   = $this->db->setQuery($query);
-		$result = false;
-		$class  = '\\Sovmart\\Provider' . ucfirst(strtolower($item->type));
-
-		if (class_exists($class))
-		{
-			$result = (new $class())->enabled($id);
-		}
-
-		return json_encode(['status' => $result ? 'ok' : 'fail']);
 	}
 
 
