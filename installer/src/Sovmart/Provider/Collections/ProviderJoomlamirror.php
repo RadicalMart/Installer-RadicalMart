@@ -19,7 +19,7 @@ class ProviderJoomlamirror extends ProviderJoomla
 		$app     = Factory::getApplication();
 		$input   = $app->input;
 		$project = json_decode(API::project($id), true);
-		$url     = $this->scheme . '://' . $this->host . $project['attributes']['download'];
+		$url     = API::getProjectDownload($id);
 
 		$input->set('installtype', 'url');
 		$input->set('install_url', $url);
@@ -48,30 +48,30 @@ class ProviderJoomlamirror extends ProviderJoomla
 				$query->where($db->quoteName('element') . '=' . $db->quote($element));
 				$extension_joomla = $db->setQuery($query)->loadObject();
 
-				if(empty($extension_joomla->manifest_cache))
+				if (empty($extension_joomla->manifest_cache))
 				{
 					throw new RuntimeException('Not found installed extension');
 				}
 
-				$manifest_cache   = new Registry($extension_joomla->manifest_cache);
-				$version          = $manifest_cache->get('version');
+				$manifest_cache = new Registry($extension_joomla->manifest_cache);
+				$version        = $manifest_cache->get('version');
 
-				if (isset($project['attributes']['version']['version']))
+				if (isset($project['data']['attributes']['version']['version']))
 				{
-					$version = $project['attributes']['version']['version'];
+					$version = $project['data']['attributes']['version']['version'];
 				}
 
 				$table = Table::getInstance('SovmartExtensions', 'Table');
 				$table->load([
-					'provider' => $project['attributes']['provider'],
+					'provider' => $project['data']['attributes']['provider'],
 					'type'     => $type,
 					'element'  => $element,
 					'folder'   => $folder
 				]);
 
-				$table->provider       = $project['attributes']['provider'];
-				$table->title          = $project['attributes']['title'];
-				$table->cover          = $project['attributes']['images']['cover'] ?? '';
+				$table->provider       = $project['data']['attributes']['provider'];
+				$table->title          = $project['data']['attributes']['title'];
+				$table->cover          = $project['data']['attributes']['images']['cover'] ?? '';
 				$table->type           = $type;
 				$table->element        = $element;
 				$table->folder         = $folder;
@@ -99,7 +99,7 @@ class ProviderJoomlamirror extends ProviderJoomla
 			{
 				// TODO лог
 
-				//$this->addMessage(Text::_('PLG_INSTALLER_SOVMART_TEXT_INSTALL_ERROR'), 'error');
+				$this->addMessage(Text::_('PLG_INSTALLER_SOVMART_TEXT_INSTALL_ERROR_KEY'), 'error');
 			}
 		}
 		catch (Throwable $e)

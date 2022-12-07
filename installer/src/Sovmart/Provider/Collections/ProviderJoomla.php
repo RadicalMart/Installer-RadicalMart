@@ -38,7 +38,7 @@ class ProviderJoomla implements ProviderInterface
 		$app     = Factory::getApplication();
 		$input   = $app->input;
 		$project = json_decode(API::project($id), true);
-		$url     = $this->scheme . '://' . $this->host . $project['attributes']['download'];
+		$url     = API::getProjectDownload($id);
 
 		$input->set('installtype', 'url');
 		$input->set('install_url', $url);
@@ -55,9 +55,9 @@ class ProviderJoomla implements ProviderInterface
 			if ($result)
 			{
 				//проверяем что поставила джумла на расширение
-				$type    = $project['attributes']['provider_data']['type'] ?? '';
-				$element = $project['attributes']['provider_data']['element'] ?? '';
-				$folder  = $project['attributes']['provider_data']['folder'] ?? '';
+				$type    = $project['data']['attributes']['provider_data']['type'] ?? '';
+				$element = $project['data']['attributes']['provider_data']['element'] ?? '';
+				$folder  = $project['data']['attributes']['provider_data']['folder'] ?? '';
 
 				$db    = Factory::getDbo();
 				$query = $db->getQuery(true);
@@ -75,29 +75,29 @@ class ProviderJoomla implements ProviderInterface
 				$manifest_cache = new Registry($extension_joomla->manifest_cache);
 				$version        = $manifest_cache->get('version');
 
-				if (isset($project['attributes']['version']['version']))
+				if (isset($project['data']['attributes']['version']['version']))
 				{
-					$version = $project['attributes']['version']['version'];
+					$version = $project['data']['attributes']['version']['version'];
 				}
 
 				$table = Table::getInstance('SovmartExtensions', 'Table');
 				$table->load([
-					'provider' => strtolower($project['attributes']['provider']),
+					'provider' => strtolower($project['data']['attributes']['provider']),
 					'type'     => $type,
 					'element'  => $element,
 					'folder'   => $folder
 				]);
 
-				$table->provider       = $project['attributes']['provider'];
-				$table->title          = $project['attributes']['title'];
-				$table->cover          = $project['attributes']['images']['cover'] ?? '';
+				$table->provider       = $project['data']['attributes']['provider'];
+				$table->title          = $project['data']['attributes']['title'];
+				$table->cover          = $project['data']['attributes']['images']['cover'] ?? '';
 				$table->type           = $type;
 				$table->element        = $element;
 				$table->folder         = $folder;
 				$table->version        = $version;
 				$table->branch         = 'stable';
-				$table->project_id     = $project['attributes']['id'];
-				$table->category_title = $project['attributes']['title'];
+				$table->project_id     = $project['data']['attributes']['id'];
+				$table->category_title = $project['data']['attributes']['title'];
 				$table->extension_id   = $extension_joomla->extension_id;
 
 				if (!$table->check())
@@ -118,7 +118,7 @@ class ProviderJoomla implements ProviderInterface
 			{
 				// TODO лог
 
-				//$this->addMessage(Text::_('PLG_INSTALLER_SOVMART_TEXT_INSTALL_ERROR'), 'error');
+				$this->addMessage(Text::_('PLG_INSTALLER_SOVMART_TEXT_INSTALL_ERROR_KEY'), 'error');
 			}
 		}
 		catch (Throwable $e)
@@ -184,9 +184,8 @@ class ProviderJoomla implements ProviderInterface
 
 	public function getMessages()
 	{
-		$app      = Factory::getApplication();
-		$messages = array_merge($this->messages, Factory::getApplication()->getMessageQueue());
-
+		$app               = Factory::getApplication();
+		$messages          = array_merge($this->messages, Factory::getApplication()->getMessageQueue());
 		$extension_message = $app->getUserState('com_installer.extension_message', '');
 
 		if ($extension_message)
@@ -196,15 +195,6 @@ class ProviderJoomla implements ProviderInterface
 		}
 
 		$app->setUserState('com_installer.message', '');
-
-		/*
-		$message           = $app->getUserState('com_installer.message', '');
-
-		if ($message)
-		{
-			$messages[] = ['message' => $app->getUserState('com_installer.message', ''), 'type' => 'info'];
-			$app->setUserState('com_installer.message', '');
-		}*/
 
 		return $messages;
 	}

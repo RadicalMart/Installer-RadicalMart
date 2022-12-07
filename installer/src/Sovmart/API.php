@@ -52,6 +52,17 @@ class API
 	}
 
 
+	public static function getProjectDownload($id)
+	{
+		$uri = (new Uri());
+		$uri->setScheme(Config::$scheme);
+		$uri->setHost(Config::$host);
+		$uri->setPath(Config::$path . 'projects/download/' . $id);
+
+		return $uri->toString();
+	}
+
+
 	public static function minimal()
 	{
 		return self::execute('minimal');
