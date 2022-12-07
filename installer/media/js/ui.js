@@ -774,17 +774,20 @@ window.SovmartUI = {
         if(category_id > 0)
         {
             let i_categories = Sovmart.categories.length - 1;
-            let category_find = false;
+            let category_level = -1;
 
             while(i_categories >= 0)
             {
                 if(Sovmart.categories[i_categories].id === category_id) {
-                    category_find = true;
-                }
-
-                if(!category_find) {
-                    i_categories--;
-                    continue;
+                    category_level = Sovmart.categories[i_categories].level;
+                } else {
+                    if(
+                        category_level < 0 ||
+                        Sovmart.categories[i_categories].level === category_level
+                    ) {
+                        i_categories--;
+                        continue;
+                    }
                 }
 
                 if(Sovmart.categories[i_categories].level >= 1) {

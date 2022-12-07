@@ -1126,17 +1126,20 @@ window.Sovmart = {
             let categories_list = [];
             let ids = [];
             let i = Sovmart.categories.length - 1;
-            let category_find = false;
+            let category_level = -1;
 
             while(i >= 0)
             {
                 if(Sovmart.categories[i].id === id) {
-                    category_find = true;
-                }
-
-                if(!category_find) {
-                    i--;
-                    continue;
+                    category_level = Sovmart.categories[i].level;
+                } else {
+                    if(
+                        category_level < 0 ||
+                        Sovmart.categories[i].level === category_level
+                    ) {
+                        i--;
+                        continue;
+                    }
                 }
 
                 if(Sovmart.categories[i].level >= 1) {
