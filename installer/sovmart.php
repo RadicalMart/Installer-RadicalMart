@@ -139,27 +139,32 @@ class PlgInstallerSovmart extends CMSPlugin
 		$input          = $app->input;
 		$id             = $input->get('id', '', 'int');
 		$project        = json_decode(API::project($id), true);
-		$provider_class = '\\Sovmart\\Provider\\Collections\\Provider' . ucfirst(strtolower(!empty($project['provider']) ? $project['provider'] : 'joomla'));
-		$config         = [
-			'api_key' => $this->params->get('apikey', '')
-		];
-		$install        = false;
+		$error_provider = json_encode([
+			'status'   => 'fail',
+			'messages' => [
+				[
+					'message' => Text::_('PLG_INSTALLER_SOVMART_TEXT_INSTALL_PROVIDER_NO_FOUND'),
+					'type'    => 'danger'
+				]
+			]
+		]);
+
+		if (empty($project['data']['attributes']['provider']))
+		{
+			return $error_provider;
+		}
+
+		$provider_class = '\\Sovmart\\Provider\\Collections\\Provider' . ucfirst(strtolower($project['data']['attributes']['provider']));
 
 		if (!class_exists($provider_class))
 		{
-			return json_encode([
-				'status'   => 'fail',
-				'messages' => [
-					[
-						'message' => Text::_('PLG_INSTALLER_SOVMART_TEXT_INSTALL_PROVIDER_NO_FOUND'),
-						'type'    => 'danger'
-					]
-				]
-			]);
+			return $error_provider;
 		}
 
-		$provider = new $provider_class($config);
+		$config   = [];
+		$install  = false;
 		$messages = [];
+		$provider = new $provider_class($config);
 
 		try
 		{
@@ -418,7 +423,7 @@ class PlgInstallerSovmart extends CMSPlugin
 		API::setToken($token);
 		$result = json_decode(API::checkToken(), true);
 
-		if(
+		if (
 			!isset($result['data']['attributes']['find']) ||
 			!$result['data']['attributes']['find']
 		)
