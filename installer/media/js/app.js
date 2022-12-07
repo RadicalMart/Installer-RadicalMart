@@ -501,7 +501,7 @@ window.Sovmart = {
                         [
                             'click',
                             function (ev) {
-                                SovmartUtils.openInNewTab(Sovmart.api + '/kontakty')
+                                SovmartUtils.openInNewTab(Sovmart.api + '/contacts')
                             }
                         ]
                     ]
@@ -1366,7 +1366,7 @@ window.Sovmart = {
                                 [
                                     'click',
                                     function (event) {
-                                        SovmartUtils.openInNewTab(Sovmart.api + '/kontakty');
+                                        SovmartUtils.openInNewTab(Sovmart.api + '/contacts');
                                     }
                                 ]
                             ]
