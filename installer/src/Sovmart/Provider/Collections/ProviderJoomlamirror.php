@@ -37,7 +37,7 @@ class ProviderJoomlamirror extends ProviderJoomla
 			{
 				//проверяем что поставила джумла на расширение
 				$type    = 'file';
-				$element = $project['element'] ?? '';
+				$element = $project['data']['attributes']['element'] ?? '';
 				$folder  = '';
 
 				$db    = Factory::getDbo();
