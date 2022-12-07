@@ -1,12 +1,16 @@
 window.SovmartUI = {
 
     container: null,
-    container_page: null,
-    container_toolbar: null,
-    container_header: null,
-    container_loader: null,
-    icons_sprite: '/media/plg_installer_sovmart/img/sprite.svg',
 
+    container_page: null,
+
+    container_toolbar: null,
+
+    container_header: null,
+
+    container_loader: null,
+
+    icons_sprite: '/media/plg_installer_sovmart/img/sprite.svg',
 
     loaderShow: function (args) {
         let loader = SovmartUtils.createElement('div', {}, this.renderLoader()).build();
@@ -25,9 +29,7 @@ window.SovmartUI = {
         return promise;
     },
 
-
     showPage: function (args) {
-
 
         if (args.buttons !== undefined) {
             this.container_toolbar.innerHTML = '';
@@ -51,16 +53,13 @@ window.SovmartUI = {
 
     },
 
-
     getContainerToolbar: function () {
         return this.container_toolbar;
     },
 
-
     getContainerPage: function () {
         return this.container_page;
     },
-
 
     renderToolbar: function (args) {
         let toolbar = SovmartUtils.createElement('div', {class: 'sovmart-toolbar sovmart-flex sovmart-child-margin-right-small'});
@@ -79,8 +78,8 @@ window.SovmartUI = {
         return toolbar.build();
     },
 
-
     renderToolbarGroup: function (buttons) {
+
         if (
             buttons.items === undefined ||
             buttons.items === null
@@ -138,9 +137,7 @@ window.SovmartUI = {
                     group = group.getParent();
                 }
 
-                if(type === 'forminput') {
-
-                }
+                //if(type === 'forminput') {}
             } else {
 
                 let type = 'button';
@@ -182,7 +179,6 @@ window.SovmartUI = {
         return group.build();
     },
 
-
     renderIcon(options) {
         if (
             options.name === undefined ||
@@ -200,7 +196,6 @@ window.SovmartUI = {
 
         return '<svg width="' + size + '" height="' + size + '"><use xlink:href="' + SovmartUI.icons_sprite + '#' + name + '"></use></svg>';
     },
-
 
     renderButtonIcon(button) {
 
@@ -230,36 +225,16 @@ window.SovmartUI = {
         return button.label;
     },
 
-
-    renderToolbarDropdown: function (buttons) {
-        let dropdown = SovmartUtils.createElement('div', {class: 'ri-dropdown'});
-
-        for (let k = 0; k < buttons.length; k++) {
-            dropdown = dropdown.add('button', {
-                'type': 'button',
-                'events': buttons[k].events,
-                'class': buttons[k].class
-            }, buttons[k].label);
-        }
-
-        dropdown = dropdown.getParent();
-
-        return dropdown.build();
-    },
-
-
     renderPage: function (args) {
         let page = SovmartUtils.createElement('div', {class: 'sovmart-page'});
         return page.build();
     },
-
 
     renderAlert: function (args) {
         let alert = SovmartUtils.createElement('div', {class: 'sovmart-alert sovmart-alert-info'}, args.message);
 
         return alert.build();
     },
-
 
     renderGroup: function (args) {
         let logs_id = SovmartUtils.randomInteger(11111111, 9999999);
@@ -404,10 +379,8 @@ window.SovmartUI = {
         return group.build();
     },
 
-
     renderFormSearch: function () {
-        let self = this,
-            form = SovmartUtils.createElement('div');
+        let form = SovmartUtils.createElement('div');
 
         form = form
             .addChild('div')
@@ -684,7 +657,6 @@ window.SovmartUI = {
 
         return grid.build();
     },
-
 
     renderProjectCard: function (args) {
         let cover = '/media/plg_installer_sovmart/img/extension.svg';
@@ -1114,7 +1086,6 @@ window.SovmartUI = {
 
         return wrap.build();
     },
-
 
     renderLoader: function () {
         return SovmartUtils.createElement('div', {'class': 'sovmart-loader sovmart-flex sovmart-flex-center sovmart-flex-middle'})

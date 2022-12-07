@@ -67,11 +67,9 @@ window.SovmartProject = {
 
     },
 
-
     update: function (args) {
         return this.install(args);
     },
-
 
     delete: function (args) {
 
@@ -113,7 +111,6 @@ window.SovmartProject = {
 
     },
 
-
     checkInstall: function (args) {
         SovmartUtils.ajaxGet(Sovmart.url + '&method=checkinstall&list=' + JSON.stringify(args.ids))
             .done( function (json) {
@@ -138,7 +135,6 @@ window.SovmartProject = {
             });
     },
 
-
     checkUpdate: function (args) {
         SovmartUtils.ajaxGet(Sovmart.url + '&method=checkupdates')
             .done( function (response) {
@@ -149,7 +145,6 @@ window.SovmartProject = {
                 }
             });
     },
-
 
     sync: function (args) {
         SovmartUtils.ajaxGet(Sovmart.url + '&method=sync')

@@ -1,4 +1,5 @@
 window.SovmartUtils = {
+
     ajaxGet: function (url, data) {
         let self = this,
             request = new XMLHttpRequest();
@@ -12,7 +13,6 @@ window.SovmartUtils = {
         request.open('GET', url);
         return self.ajaxRequest(request);
     },
-
 
     ajaxPost: function (url, data) {
         let self = this,
@@ -32,7 +32,6 @@ window.SovmartUtils = {
 
         return ajax
     },
-
 
     ajaxRequest: function (request, send = true) {
         let ajax = new function () {
@@ -84,7 +83,6 @@ window.SovmartUtils = {
 
         return ajax_proxy;
     },
-
 
     createElement: function(tag, attr, innerHtml) {
         let self = this;
@@ -163,7 +161,6 @@ window.SovmartUtils = {
         }
     },
 
-
     generateColorFromText: function(str) {
         let hash = 0;
         let colour = '#';
@@ -179,13 +176,11 @@ window.SovmartUtils = {
         return colour;
     },
 
-
     randomInteger: function (min, max) {
         let rand = min - 0.5 + Math.random() * (max - min + 1);
         rand = Math.round(rand);
         return rand;
     },
-
 
     modal: function(header, body, footer, classForModal, callback_close) {
         if(classForModal === null) {
@@ -233,7 +228,6 @@ window.SovmartUtils = {
 
     },
 
-
     modalAjax: function(header, url) {
         let modalBackground = document.querySelector('.sovmart-modal_background');
         let activeModal = document.querySelector('.sovmart-modal');
@@ -269,7 +263,6 @@ window.SovmartUtils = {
         document.querySelector('body').append(modal.build());
     },
 
-
     modalClose: function () {
 
         let modalBackground = document.querySelector('.sovmart-modal_background');
@@ -280,7 +273,6 @@ window.SovmartUtils = {
         }
 
     },
-
 
     /**
      * Source: https://github.com/lalaman/lala-alerts-js
@@ -306,12 +298,6 @@ window.SovmartUtils = {
         let close_button = document.createElement("span");
         close_button.className += " close-alert-x glyphicon glyphicon-remove";
 
-        /*
-            There are 3 event listeners:
-                1. Clicking x to close alert
-                2. Mousing over to prevent timeout
-                3. Mousing out to start timeout
-        */
         close_button.addEventListener("click", function () {
             let parent = this.parentNode;
             parent.parentNode.removeChild(parent);
@@ -364,7 +350,6 @@ window.SovmartUtils = {
             }
         }, timeout);
     },
-
 
     openInNewTab: function (url) {
         let win = window.open(url, '_blank');

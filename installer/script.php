@@ -7,7 +7,6 @@ use Joomla\Registry\Registry;
 class plgInstallerSovmartInstallerScript
 {
 
-
 	/**
 	 * Runs right after any installation action.
 	 *

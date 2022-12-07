@@ -4,7 +4,6 @@ defined('_JEXEC') or die;
 
 use http\Exception\InvalidArgumentException;
 use Joomla\Filesystem\Folder;
-use Throwable;
 
 class FactoryProvider
 {

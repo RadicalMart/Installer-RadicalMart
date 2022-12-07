@@ -1,5 +1,7 @@
 <?php namespace Sovmart\Provider\Collections;
 
+defined('_JEXEC') or die;
+
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
@@ -7,7 +9,7 @@ use Joomla\CMS\Table\Table;
 use Joomla\Registry\Registry;
 use Sovmart\API;
 
-defined('_JEXEC') or die;
+// TODO переписать весь класс
 
 class ProviderJoomlamirror extends ProviderJoomla
 {
@@ -124,7 +126,6 @@ class ProviderJoomlamirror extends ProviderJoomla
 
 		return $result;
 	}
-
 
 	public function sync()
 	{

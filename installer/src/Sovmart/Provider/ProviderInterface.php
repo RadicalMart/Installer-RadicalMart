@@ -7,12 +7,9 @@ interface ProviderInterface
 
 	public function start($id);
 
-
 	public function delete($id);
 
-
 	public function getMessages();
-
 
 	public function sync();
 

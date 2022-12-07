@@ -13,6 +13,8 @@ use Sovmart\API;
 use Sovmart\Config;
 use Sovmart\Provider\ProviderInterface;
 
+// TODO переписать весь класс
+
 class ProviderYoolayouts implements ProviderInterface
 {
 
@@ -25,12 +27,9 @@ class ProviderYoolayouts implements ProviderInterface
 	 */
 	private $filepath_extract;
 
-
 	protected $config = [];
 
-
 	protected $messages = [];
-
 
 	public function __construct($config = [])
 	{
@@ -39,7 +38,6 @@ class ProviderYoolayouts implements ProviderInterface
 		$this->host   = Config::$host;
 		$this->config = $config;
 	}
-
 
 	public function start($id)
 	{
@@ -204,7 +202,6 @@ class ProviderYoolayouts implements ProviderInterface
 
 	}
 
-
 	public function delete($id)
 	{
 		$db = Factory::getDbo();
@@ -270,18 +267,15 @@ class ProviderYoolayouts implements ProviderInterface
 		return $db->execute();
 	}
 
-
 	public function addMessage($msg, $type = 'info')
 	{
 		$this->messages[] = ['message' => $msg, 'type' => $type];
 	}
 
-
 	public function getMessages()
 	{
 		return $this->messages;
 	}
-
 
 	public function sync()
 	{
@@ -329,7 +323,6 @@ class ProviderYoolayouts implements ProviderInterface
 		return 0;
 	}
 
-
 	/**
 	 * Метод для очистки кеша установки шаблона
 	 *
@@ -357,6 +350,5 @@ class ProviderYoolayouts implements ProviderInterface
 		}
 
 	}
-
 
 }

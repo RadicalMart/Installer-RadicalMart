@@ -1,12 +1,16 @@
 window.Sovmart = {
 
     api: 'https://sovmart.ru',
-    url: 'index.php?option=com_ajax&plugin=sovmart&group=installer&format=json',
-    assets: '/media/plg_installer_sovmart/',
-    categories: [],
-    buttons_page_main: {},
-    installer_service_id: 24,
 
+    url: 'index.php?option=com_ajax&plugin=sovmart&group=installer&format=json',
+
+    assets: '/media/plg_installer_sovmart/',
+
+    categories: [],
+
+    buttons_page_main: {},
+
+    installer_service_id: 24,
 
     init: function () {
         SovmartUI.container = document.querySelector('#sovmart-container');
@@ -451,7 +455,6 @@ window.Sovmart = {
         });
     },
 
-
     showForcedUpdate: function () {
         let page = SovmartUI.renderPage();
 
@@ -515,7 +518,6 @@ window.Sovmart = {
         page.appendChild(forced_update.build())
     },
 
-
     showUpdates: function () {
         let page = SovmartUI.renderPage();
 
@@ -578,7 +580,6 @@ window.Sovmart = {
         });
     },
 
-
     showInstalled: function () {
         let page = SovmartUI.renderPage();
 
@@ -640,7 +641,6 @@ window.Sovmart = {
 
         });
     },
-
 
     showProject: function (id) {
         let page = SovmartUI.renderPage();
@@ -1098,7 +1098,6 @@ window.Sovmart = {
 
     },
 
-
     showCategory: function (id, title) {
         let page = SovmartUI.renderPage();
 
@@ -1177,7 +1176,6 @@ window.Sovmart = {
 
         });
     },
-
 
     showProjectsFree: function () {
         let page = SovmartUI.renderPage();
@@ -1281,7 +1279,6 @@ window.Sovmart = {
         });
     },
 
-
     initButtonsMain: function () {
         let self = this;
         this.buttons_page_main = {
@@ -1379,7 +1376,6 @@ window.Sovmart = {
         };
     },
 
-
     checkUpdatedProjects: function (show_alert, show_toolbar) {
 
         if (show_alert === null || show_alert === undefined) {
@@ -1419,7 +1415,6 @@ window.Sovmart = {
             }
         })
     },
-
 
     checkInstallProjectCard: function (find_ids, ids, updates) {
 
@@ -1476,7 +1471,6 @@ window.Sovmart = {
 
     },
 
-
     checkInstallProjectPage: function (find_ids, ids, updates) {
 
         for (let k = 0; k < ids.length; k++) {
@@ -1510,7 +1504,6 @@ window.Sovmart = {
         }
 
     },
-
 
     triggerGridRowEndForCard: function (items, grid_row_id) {
         for (let i = 0; i < items.length; i++) {

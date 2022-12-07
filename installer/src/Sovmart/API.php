@@ -8,6 +8,8 @@ use Joomla\CMS\Uri\Uri;
 use Joomla\Registry\Registry;
 use stdClass;
 
+// TODO переписать весь класс
+
 class API
 {
 
@@ -19,14 +21,12 @@ class API
 	 */
 	private static $data_request = [];
 
-
 	/**
 	 *
 	 * @var string[]
 	 * @since version
 	 */
 	private static $data_headers = [];
-
 
 	/**
 	 * @param $key
@@ -39,7 +39,6 @@ class API
 		static::$data_request['key'] = $key;
 	}
 
-
 	/**
 	 * @param $token
 	 *
@@ -51,7 +50,6 @@ class API
 		static::$data_headers['Authorization'] = 'Bearer ' . $token;
 	}
 
-
 	public static function getProjectDownload($id)
 	{
 		$uri = (new Uri());
@@ -62,30 +60,25 @@ class API
 		return $uri->toString();
 	}
 
-
 	public static function minimal()
 	{
 		return self::execute('minimal');
 	}
-
 
 	public static function checkToken()
 	{
 		return self::execute('token/check');
 	}
 
-
 	public static function categories()
 	{
 		return self::execute('categories');
 	}
 
-
 	public static function groupsStartPage()
 	{
 		return self::execute('startpage');
 	}
-
 
 	public static function projects($category_id, $page = 1, $limit = 12)
 	{
@@ -96,42 +89,35 @@ class API
 		]);
 	}
 
-
 	public static function projectDownload($id)
 	{
 		return self::execute('projects/download/' . $id);
 	}
-
 
 	public static function projectList($ids)
 	{
 		return self::execute('projects/ids', ['projects_ids' => $ids]);
 	}
 
-
 	public static function project($id)
 	{
 		return self::execute('projects/' . $id);
 	}
-
 
 	public static function projectsPaid()
 	{
 		return self::execute('projects/paid');
 	}
 
-
 	public static function projectsFree()
 	{
 		return self::execute('projects/free');
 	}
 
-
 	public static function projectListCheckVersion($ids)
 	{
 		return self::execute('projects/checkversion', ['projects_ids' => json_encode($ids)]);
 	}
-
 
 	public static function syncExtensions($provider, $list = '')
 	{
@@ -142,12 +128,10 @@ class API
 		);
 	}
 
-
 	public static function search($search)
 	{
 		return self::execute('search', ['q' => $search]);
 	}
-
 
 	public static function request($method, $data = [], $type = 'GET')
 	{
@@ -168,6 +152,7 @@ class API
 
 		$data_build = [];
 
+		// если отдать data для метода request объекта $curlTransport, то он тогда формирует как POST запрос, чтобы избежать этого, формирую переменные в объекте Uri через setVar
 		if ($type === 'GET')
 		{
 			$data_tmp = array_merge($data, static::$data_request);
@@ -189,7 +174,6 @@ class API
 
 		return $output;
 	}
-
 
 	private static function requestDebug($method, $data = [], $type = 'GET')
 	{
@@ -252,6 +236,5 @@ class API
 	{
 		return static::request($method, $data, $type)->body;
 	}
-
 
 }

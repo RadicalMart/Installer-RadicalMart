@@ -13,6 +13,8 @@ use Sovmart\Config;
 use Sovmart\Provider\ProviderInterface;
 use Throwable;
 
+// TODO переписать весь класс
+
 class ProviderJoomla implements ProviderInterface
 {
 
@@ -20,9 +22,7 @@ class ProviderJoomla implements ProviderInterface
 
 	protected $config = [];
 
-
 	protected $messages = [];
-
 
 	public function __construct($config = [])
 	{
@@ -31,7 +31,6 @@ class ProviderJoomla implements ProviderInterface
 		$this->host   = Config::$host;
 		$this->config = $config;
 	}
-
 
 	public function start($id)
 	{
@@ -144,7 +143,6 @@ class ProviderJoomla implements ProviderInterface
 		return $result;
 	}
 
-
 	public function delete($id)
 	{
 		$table = Table::getInstance('SovmartExtensions', 'Table');
@@ -180,12 +178,10 @@ class ProviderJoomla implements ProviderInterface
 		return $result;
 	}
 
-
 	public function addMessage($msg, $type = 'info')
 	{
 		$this->messages[] = ['message' => $msg, 'type' => $type];
 	}
-
 
 	public function getMessages()
 	{
@@ -203,7 +199,6 @@ class ProviderJoomla implements ProviderInterface
 
 		return $messages;
 	}
-
 
 	public function sync()
 	{

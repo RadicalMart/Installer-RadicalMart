@@ -29,15 +29,11 @@ else
 class PlgInstallerSovmart extends CMSPlugin
 {
 
-
 	protected $app;
-
 
 	protected $db;
 
-
 	protected $autoloadLanguage = true;
-
 
 	public function onInstallerAddInstallationTab()
 	{
@@ -51,7 +47,6 @@ class PlgInstallerSovmart extends CMSPlugin
 
 		return $tab;
 	}
-
 
 	public function onExtensionAfterUninstall($installer, $identifier, $result)
 	{
@@ -70,7 +65,6 @@ class PlgInstallerSovmart extends CMSPlugin
 		$this->db->execute();
 	}
 
-
 	public function onInstallerBeforePackageDownload(&$url, &$headers)
 	{
 		if (
@@ -84,7 +78,6 @@ class PlgInstallerSovmart extends CMSPlugin
 
 		return true;
 	}
-
 
 	public function onAjaxSovmart()
 	{
@@ -130,7 +123,6 @@ class PlgInstallerSovmart extends CMSPlugin
 		}
 
 	}
-
 
 	protected function methodInstall()
 	{
@@ -179,7 +171,6 @@ class PlgInstallerSovmart extends CMSPlugin
 		return json_encode(['status' => $install ? 'ok' : 'fail', 'messages' => $messages]);
 	}
 
-
 	protected function methodDelete()
 	{
 		$app     = Factory::getApplication();
@@ -207,7 +198,6 @@ class PlgInstallerSovmart extends CMSPlugin
 
 		return json_encode(['status' => $result ? 'ok' : 'fail', 'messages' => $messages]);
 	}
-
 
 	protected function methodCheckupdates()
 	{
@@ -259,7 +249,6 @@ class PlgInstallerSovmart extends CMSPlugin
 		return json_encode(['items' => $projects_for_update, 'count' => count($projects_for_update)]);
 	}
 
-
 	protected function methodMinimal()
 	{
 		$response        = json_decode(API::minimal(), true);
@@ -278,18 +267,15 @@ class PlgInstallerSovmart extends CMSPlugin
 		return json_encode(['result' => $result]);
 	}
 
-
 	protected function methodCategories()
 	{
 		return API::categories();
 	}
 
-
 	protected function methodStartpage()
 	{
 		return API::groupsStartPage();
 	}
-
 
 	protected function methodProjects()
 	{
@@ -301,14 +287,12 @@ class PlgInstallerSovmart extends CMSPlugin
 		return API::projects($id, $page, $limit);
 	}
 
-
 	protected function methodProjectlist()
 	{
 		$ids = $this->app->input->get('ids', '{}', 'raw');
 
 		return API::projectList($ids);
 	}
-
 
 	protected function methodProject()
 	{
@@ -317,18 +301,15 @@ class PlgInstallerSovmart extends CMSPlugin
 		return API::project($id);
 	}
 
-
 	protected function methodProjectspaid()
 	{
 		return API::projectsPaid();
 	}
 
-
 	protected function methodProjectsfree()
 	{
 		return API::projectsFree();
 	}
-
 
 	protected function methodSync()
 	{
@@ -347,7 +328,6 @@ class PlgInstallerSovmart extends CMSPlugin
 
 		return $result;
 	}
-
 
 	protected function methodCheckinstall()
 	{
@@ -385,7 +365,6 @@ class PlgInstallerSovmart extends CMSPlugin
 
 		return $find_list_output;
 	}
-
 
 	protected function methodSavetoken()
 	{
@@ -453,13 +432,13 @@ class PlgInstallerSovmart extends CMSPlugin
 			throw new RuntimeException(Text::_('PLG_INSTALLER_SOVMART_ERROR_DATABASE_SAVE'), 500);
 		}
 
+		// очистка кеша, так как джумла кеширует параметры плагинов и компонентов, чтобы обновился токен надо кеш сбросить
 		$this->cleanCache('_system');
 		$this->cleanCache('_system', 1);
 
 		return ['status' => 'ok'];
 
 	}
-
 
 	protected function methodInstalledlist()
 	{
@@ -472,12 +451,10 @@ class PlgInstallerSovmart extends CMSPlugin
 		return $list_installed;
 	}
 
-
 	protected function methodSearch()
 	{
 		return API::search($this->app->input->getString('q', ''));
 	}
-
 
 	protected function cleanCache($group = null, $client_id = 0)
 	{
@@ -491,6 +468,5 @@ class PlgInstallerSovmart extends CMSPlugin
 		$cache = Cache::getInstance('callback', $options);
 		$cache->clean();
 	}
-
 
 }
