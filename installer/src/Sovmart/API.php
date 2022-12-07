@@ -5,8 +5,8 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Http\Transport\CurlTransport;
 use Joomla\CMS\Uri\Uri;
-use Joomla\CMS\Version;
 use Joomla\Registry\Registry;
+use stdClass;
 
 class API
 {
@@ -81,6 +81,12 @@ class API
 	}
 
 
+	public static function groupsStartPage()
+	{
+		return self::execute('startpage');
+	}
+
+
 	public static function projects($category_id, $page = 1, $limit = 12)
 	{
 		return self::execute('projects', [
@@ -91,9 +97,9 @@ class API
 	}
 
 
-	public static function groupsStartPage()
+	public static function projectDownload($id)
 	{
-		return self::execute('startpage');
+		return self::execute('projects/download/' . $id);
 	}
 
 
@@ -143,23 +149,13 @@ class API
 	}
 
 
-	/**
-	 * @param          $method
-	 * @param   array  $data
-	 *
-	 * @return string|bool
-	 *
-	 * @since version
-	 */
-	private static function execute($method, $data = [], $type = "GET")
+	public static function request($method, $data = [], $type = 'GET')
 	{
-
 		if (JDEBUG)
 		{
-			return static::executeDebug($method, $data, $type);
+			return static::requestDebug($method, $data, $type);
 		}
 
-		$data_build = array_merge($data, static::$data_request);
 
 		$curlTransport = new CurlTransport(new Registry());
 		$uri           = (new Uri());
@@ -170,20 +166,32 @@ class API
 		$lang = Factory::getLanguage();
 		$uri->setVar('lang', $lang->getTag());
 
-		$response = $curlTransport->request($type, $uri, (count($data_build) > 0 ? $data_build : null), static::$data_headers);
+		$data_build = [];
 
-		if (((new Version())->isCompatible('4.0')))
+		if ($type === 'GET')
 		{
-			$body = $response->body;
-
-			return (!empty($body)) ? $response->body : false;
+			$data_tmp = array_merge($data, static::$data_request);
+			foreach ($data_tmp as $key => $value)
+			{
+				$uri->setVar($key, $value);
+			}
+		}
+		else
+		{
+			$data_build = array_merge($data, static::$data_request);
 		}
 
-		return (!empty($response->body)) ? $response->body : false;
+		$response = $curlTransport->request($type, $uri, (count($data_build) > 0 ? $data_build : null), static::$data_headers);
+
+		$output       = new stdClass();
+		$output->code = $response->code;
+		$output->body = (string) $response->body;
+
+		return $output;
 	}
 
 
-	private static function executeDebug($method, $data = [], $type = "GET")
+	private static function requestDebug($method, $data = [], $type = 'GET')
 	{
 		$url  = Config::$scheme . '://' . Config::$host . Config::$path . $method;
 		$lang = Factory::getLanguage();
@@ -225,7 +233,25 @@ class API
 
 		curl_close($ch);
 
-		return $body;
+		$output       = new stdClass();
+		$output->code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		$output->body = $body;
+
+		return $output;
 	}
+
+	/**
+	 * @param          $method
+	 * @param   array  $data
+	 *
+	 * @return string|bool
+	 *
+	 * @since version
+	 */
+	private static function execute($method, $data = [], $type = "GET")
+	{
+		return static::request($method, $data, $type)->body;
+	}
+
 
 }

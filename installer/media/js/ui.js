@@ -773,36 +773,31 @@ window.SovmartUI = {
 
         if(category_id > 0)
         {
-            for(let i=0;i<Sovmart.categories.length;i++) {
-                if(Sovmart.categories[i].id !== category_id) {
+            let i_categories = Sovmart.categories.length - 1;
+            let category_find = false;
+
+            while(i_categories >= 0)
+            {
+                if(Sovmart.categories[i_categories].id === category_id) {
+                    category_find = true;
+                }
+
+                if(!category_find) {
+                    i_categories--;
                     continue;
                 }
 
-                categories_list.push({
-                    id: Sovmart.categories[i].id,
-                    title: Sovmart.categories[i].title
-                });
-
-                if(Sovmart.categories[i].level <= 1) {
-                    continue;
+                if(Sovmart.categories[i_categories].level >= 1) {
+                    categories_list.unshift(Sovmart.categories[i_categories]);
                 }
 
-                let level_current = Sovmart.categories[i].level;
-
-                for(let j=i;j>=0;j--) {
-
-                    if(Math.abs(level_current - Sovmart.categories[j].level) === 0) {
-                        continue;
-                    }
-
-                    level_current = Sovmart.categories[j].level;
-
-                    categories_list.unshift({
-                        id: Sovmart.categories[j].id,
-                        title: Sovmart.categories[j].title
-                    });
+                if(Sovmart.categories[i_categories].level <= 1) {
+                    break;
                 }
+
+                i_categories--;
             }
+
 
             for (let i=0;i<categories_list.length;i++) {
                 categories.add('a', {'data-id': categories_list[i].id,

@@ -4,13 +4,11 @@ defined('_JEXEC') or die;
 
 use Joomla\Archive\Zip;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Http\Transport\CurlTransport;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Table\Table;
-use Joomla\CMS\Uri\Uri;
 use Joomla\Filesystem\File;
 use Joomla\Filesystem\Folder;
-use Joomla\Registry\Registry;
+use RuntimeException;
 use Sovmart\API;
 use Sovmart\Config;
 use Sovmart\Provider\ProviderInterface;
@@ -65,6 +63,11 @@ class ProviderYoolayouts implements ProviderInterface
 
 		$project = json_decode(API::project($id), true);
 
+		if (!isset($project['data']['attributes']['id']))
+		{
+			throw new RuntimeException('Not found project');
+		}
+
 		$zip = new Zip;
 
 		if (!Zip::hasNativeSupport())
@@ -78,18 +81,7 @@ class ProviderYoolayouts implements ProviderInterface
 		$this->filepath         = JPATH_ROOT . DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR . md5(date('U'));
 		$this->filepath_extract = JPATH_ROOT . DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR . md5('extract_' . date('U'));
 
-		$data = http_build_query([
-			'option'  => 'com_swjprojects',
-			'view'    => 'download',
-			'element' => $project['data']['attributes']['element'],
-			'api_key' => $this->config['api_key'],
-		]);
-
-		$curlTransport = new CurlTransport(new Registry());
-		$url_curl      = (new Uri());
-		$url_curl->setScheme($this->scheme);
-		$url_curl->setHost($this->host);
-		$request = $curlTransport->request('GET', $url_curl, $data);
+		$request = API::request(API::getProjectDownload($project['data']['attributes']['id']));
 
 		//если сервер прислал ошибку, то пишем и выходим
 		if ($request->code !== 200)
@@ -103,107 +95,107 @@ class ProviderYoolayouts implements ProviderInterface
 		$body = json_decode($body, true);
 
 		//если ключ установлен, но не находится такой на сервере
-		if (is_array($body) && isset($body['message']) && ($body['message'] === 'forbidden'))
+		if (is_array($body) && isset($body['attributes']['messages']))
 		{
-			$this->addMessage(Text::_('PLG_INSTALLER_SOVMART_ERROR_KEY'), 'error');
+			$this->addMessage(Text::_('PLG_INSTALLER_SOVMART_TEXT_INSTALL_ERROR_KEY'), 'error');
 
 			return false;
 		}
 
 		//пишем ответ в файл
-		File::write($this->filepath, $request->body);
+		if (File::write($this->filepath, $request->body))
+		{
+			throw new RuntimeException(Text::_('PLG_INSTALLER_SOVMART_TEXT_INSTALL_ERROR'));
+		}
 
 		//проверяем архив ли
-		if ($zip->checkZipData($request->body))
+		if (!$zip->checkZipData($request->body))
 		{
+			throw new RuntimeException(Text::_('PLG_INSTALLER_SOVMART_TEXT_INSTALL_ERROR'));
+		}
 
-			//вытаскиваем данные из архива
-			if ($zip->extract($this->filepath, $this->filepath_extract))
+		//вытаскиваем данные из архива
+		if (!$zip->extract($this->filepath, $this->filepath_extract))
+		{
+			throw new RuntimeException(Text::_('PLG_INSTALLER_SOVMART_TEXT_INSTALL_ERROR'));
+		}
+
+		$files = Folder::files($this->filepath_extract);
+
+		// Get current
+		$items = [];
+
+		if ($custom_data = $yootheme->custom_data)
+		{
+			$custom_data = json_decode($custom_data, true);
+
+			if (!empty($custom_data['library']))
 			{
-				$files         = Folder::files($this->filepath_extract);
-				$names_install = [];
-
-				// Get current
-
-				$keys  = [];
-				$names = [];
-				$items = [];
-
-
-				if ($custom_data = $yootheme->custom_data)
+				foreach ($custom_data['library'] as $key => $item)
 				{
-					$custom_data = json_decode($custom_data, true);
-
-					if (!empty($custom_data['library']))
-					{
-						foreach ($custom_data['library'] as $key => $item)
-						{
-							$items[$key] = $item;
-						}
-					}
-				}
-
-				// Add new items
-				foreach ($files as $file)
-				{
-					$item = json_decode(file_get_contents($this->filepath_extract . DIRECTORY_SEPARATOR . $file), true);
-
-					if (empty($item['name']))
-					{
-						return false;
-					}
-
-					$filename_split = explode('.', $file);
-					$ext            = array_pop($filename_split);
-
-					// Check name
-					$key          = 'sovmart_yoolayouts_' . $project['data']['attributes']['element'];
-					$item['name'] = $project['data']['attributes']['title'] . '; ' . ((count($files) > 1) ? (implode($filename_split) . '; ') : '') . 'v' . $project['data']['attributes']['version']['version'];
-
-					// Add to items
 					$items[$key] = $item;
 				}
-
-				// Update plugin
-				$yootheme->custom_data            = ($custom_data) ?: array();
-				$yootheme->custom_data['library'] = $items;
-				$yootheme->custom_data            = json_encode($yootheme->custom_data);
-
-				if (!$db->updateObject('#__extensions', $yootheme, array('extension_id')))
-				{
-					return false;
-				}
-
-				//записываем обновление
-				$table = Table::getInstance('SovmartExtensions', 'Table');
-				$table->load([
-					'provider' => strtolower($project['data']['attributes']['provider']),
-					'element'  => $project['data']['attributes']['element'],
-				]);
-
-				$table->provider       = $project['data']['attributes']['provider'];
-				$table->title          = $project['data']['attributes']['title'];
-				$table->cover          = $project['data']['attributes']['images']['cover'] ?? '';
-				$table->type           = 'layout';
-				$table->element        = $project['data']['attributes']['element'];
-				$table->folder         = '';
-				$table->version        = $project['data']['attributes']['version']['version'];
-				$table->branch         = 'stable';
-				$table->project_id     = $project['data']['attributes']['id'];
-				$table->category_title = $project['data']['attributes']['title'];
-				$table->extension_id   = 0;
-
-				if (!$table->check())
-				{
-					return false;
-				}
-
-				if (!$table->store())
-				{
-					return false;
-				}
-
 			}
+		}
+
+		// Add new items
+		foreach ($files as $file)
+		{
+			$item = json_decode(file_get_contents($this->filepath_extract . DIRECTORY_SEPARATOR . $file), true);
+
+			if (empty($item['name']))
+			{
+				throw new RuntimeException(Text::_('PLG_INSTALLER_SOVMART_TEXT_INSTALL_ERROR'));
+			}
+
+			$filename_split = explode('.', $file);
+			$ext            = array_pop($filename_split);
+
+			// Check name
+			$key          = 'sovmart_yoolayouts_' . $project['data']['attributes']['element'];
+			$item['name'] = $project['data']['attributes']['title'] . '; ' . ((count($files) > 1) ? (implode($filename_split) . '; ') : '') . 'v' . $project['data']['attributes']['version']['version'];
+
+			// Add to items
+			$items[$key] = $item;
+		}
+
+		// Update plugin
+		$yootheme->custom_data            = ($custom_data) ?: array();
+		$yootheme->custom_data['library'] = $items;
+		$yootheme->custom_data            = json_encode($yootheme->custom_data);
+
+		if (!$db->updateObject('#__extensions', $yootheme, array('extension_id')))
+		{
+			throw new RuntimeException(Text::_('PLG_INSTALLER_SOVMART_TEXT_INSTALL_ERROR'));
+		}
+
+		//записываем обновление
+		$table = Table::getInstance('SovmartExtensions', 'Table');
+		$table->load([
+			'provider' => strtolower($project['data']['attributes']['provider']),
+			'element'  => $project['data']['attributes']['element'],
+		]);
+
+		$table->provider       = $project['data']['attributes']['provider'];
+		$table->title          = $project['data']['attributes']['title'];
+		$table->cover          = $project['data']['attributes']['images']['cover'] ?? '';
+		$table->type           = 'layout';
+		$table->element        = $project['data']['attributes']['element'];
+		$table->folder         = '';
+		$table->version        = $project['data']['attributes']['version']['version'];
+		$table->branch         = 'stable';
+		$table->project_id     = $project['data']['attributes']['id'];
+		$table->category_title = $project['data']['attributes']['title'];
+		$table->extension_id   = 0;
+
+		if (!$table->check())
+		{
+			throw new RuntimeException(Text::_('PLG_INSTALLER_SOVMART_TEXT_INSTALL_ERROR'));
+		}
+
+		if (!$table->store())
+		{
+			throw new RuntimeException(Text::_('PLG_INSTALLER_SOVMART_TEXT_INSTALL_ERROR'));
 		}
 
 		$this->addMessage(Text::_('PLG_INSTALLER_SOVMART_TEXT_PROVIDER_YOOTHEMEPRO_LAYOUTS_INSTALLED'));

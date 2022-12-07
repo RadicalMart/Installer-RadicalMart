@@ -19,8 +19,13 @@ class ProviderJoomlamirror extends ProviderJoomla
 		$app     = Factory::getApplication();
 		$input   = $app->input;
 		$project = json_decode(API::project($id), true);
-		$url     = API::getProjectDownload($id);
 
+		if (!isset($project['data']['attributes']['id']))
+		{
+			throw new RuntimeException('Not found project');
+		}
+
+		$url = API::getProjectDownload($id);
 		$input->set('installtype', 'url');
 		$input->set('install_url', $url);
 

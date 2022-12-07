@@ -1125,30 +1125,29 @@ window.Sovmart = {
             let projects_card = [];
             let categories_list = [];
             let ids = [];
+            let i = Sovmart.categories.length - 1;
+            let category_find = false;
 
-            for(let i=0;i<Sovmart.categories.length;i++) {
-                if(Sovmart.categories[i].id !== id) {
+            while(i >= 0)
+            {
+                if(Sovmart.categories[i].id === id) {
+                    category_find = true;
+                }
+
+                if(!category_find) {
+                    i--;
                     continue;
                 }
 
-                categories_list.push(Sovmart.categories[i].title);
+                if(Sovmart.categories[i].level >= 1) {
+                    categories_list.unshift(Sovmart.categories[i].title);
+                }
 
                 if(Sovmart.categories[i].level <= 1) {
-                    continue;
+                    break;
                 }
 
-                let level_current = Sovmart.categories[i].level;
-
-                for(let j=i;j>=0;j--) {
-
-                    if(Math.abs(level_current - Sovmart.categories[j].level) === 0) {
-                        continue;
-                    }
-
-                    level_current = Sovmart.categories[j].level;
-
-                    categories_list.unshift(Sovmart.categories[j].title);
-                }
+                i--;
             }
 
             for (let k = 0; k < data.data.length; k++) {

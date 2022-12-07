@@ -285,7 +285,7 @@ class PlgInstallerSovmart extends CMSPlugin
 	}
 
 
-	protected function methodStartPage()
+	protected function methodStartpage()
 	{
 		return API::groupsStartPage();
 	}
