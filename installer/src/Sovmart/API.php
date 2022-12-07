@@ -91,9 +91,9 @@ class API
 	}
 
 
-	public static function groupsStartPage($key = '')
+	public static function groupsStartPage()
 	{
-		return self::execute('startpage', ['key' => $key]);
+		return self::execute('startpage');
 	}
 
 
@@ -159,18 +159,18 @@ class API
 			return static::executeDebug($method, $data, $type);
 		}
 
-		$lang = Factory::getLanguage();
-
-		$data_build = http_build_query(
-			array_merge($data, static::$data_request, ['lang' => $lang->getTag()])
-		);
+		$data_build = array_merge($data, static::$data_request);
 
 		$curlTransport = new CurlTransport(new Registry());
 		$uri           = (new Uri());
 		$uri->setScheme(Config::$scheme);
 		$uri->setHost(Config::$host);
 		$uri->setPath(Config::$path . $method);
-		$response = $curlTransport->request($type, $uri, $data_build, static::$data_headers);
+
+		$lang = Factory::getLanguage();
+		$uri->setVar('lang', $lang->getTag());
+
+		$response = $curlTransport->request($type, $uri, (count($data_build) > 0 ? $data_build : null), static::$data_headers);
 
 		if (((new Version())->isCompatible('4.0')))
 		{
