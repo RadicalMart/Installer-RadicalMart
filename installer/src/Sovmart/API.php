@@ -215,11 +215,11 @@ class API
 		$header      = substr($response, 0, $header_size);
 		$body        = substr($response, $header_size);
 
-		curl_close($ch);
-
 		$output       = new stdClass();
 		$output->code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		$output->body = $body;
+
+		curl_close($ch);
 
 		return $output;
 	}
