@@ -83,6 +83,10 @@ $langs = [
 	'description'               => Text::_('PLG_INSTALLER_SOVMART_DESCRIPTION'),
 	'description_no'            => Text::_('PLG_INSTALLER_SOVMART_DESCRIPTION_NO'),
 	'search'                    => Text::_('PLG_INSTALLER_SOVMART_SEARCH'),
+	'auth'                      => Text::_('PLG_INSTALLER_SOVMART_AUTH'),
+	'login'                     => Text::_('PLG_INSTALLER_SOVMART_LOGIN'),
+	'logout'                    => Text::_('PLG_INSTALLER_SOVMART_LOGOUT'),
+	'hi'                        => Text::_('PLG_INSTALLER_SOVMART_HI'),
 	'alert_service_error'       => Text::_('PLG_INSTALLER_SOVMART_TEXT_SERVICE_ERROR'),
 	'text_key_error'            => Text::_('PLG_INSTALLER_SOVMART_TEXT_KEY_ERROR'),
 	'text_sync'                 => Text::_('PLG_INSTALLER_SOVMART_TEXT_SYNC'),
@@ -100,6 +104,7 @@ $langs = [
 	'text_question_delete'      => Text::_('PLG_INSTALLER_SOVMART_TEXT_QUESTION_DELETE'),
 	'text_search_error_small'   => Text::_('PLG_INSTALLER_SOVMART_TEXT_SEARCH_ERROR_SMALL'),
 	'text_search_by'            => Text::_('PLG_INSTALLER_SOVMART_TEXT_SEARCH_BY'),
+	'text_token_input'          => Text::_('PLG_INSTALLER_SOVMART_TEXT_TOKEN_INPUT'),
 ];
 ?>
 

@@ -407,7 +407,7 @@ class PlgInstallerSovmart extends CMSPlugin
 			!$result['data']['attributes']['find']
 		)
 		{
-			throw new RuntimeException(Text::_('PLG_INSTALLER_SOVMART_NOT_FOUND_AUTH'), 401);
+			throw new RuntimeException(Text::_('PLG_INSTALLER_SOVMART_ERROR_NOT_FOUND_AUTH'), 401);
 		}
 
 		$this->params->set('token', $token);

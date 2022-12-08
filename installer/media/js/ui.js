@@ -524,15 +524,15 @@ window.SovmartUI = {
                 ]
             })
                 .addChild('div', {class: 'sovmart-margin-small'})
-                    .add('input', {class: 'sovmart-width-1-1 ri-input ri-input-medium', type: 'text', name: 'token', placeholder: 'Введите токен'})
+                    .add('input', {class: 'sovmart-width-1-1 ri-input ri-input-medium', type: 'text', name: 'token', placeholder: SovmartLangs.text_token_input})
                     .getParent()
                 .addChild('div', {class: 'sovmart-margin-small'})
-                    .add('button', {type: 'submit', class: 'ri-btn ri-btn-primary'}, 'Войти')
+                    .add('button', {type: 'submit', class: 'ri-btn ri-btn-primary'}, SovmartLangs.login)
                     .getParent()
                 .getParent()
 
         return SovmartUI.renderDropdownButton({
-            label: 'Авторизоваться',
+            label: SovmartLangs.auth,
             position: 'right',
             padding: true,
             button: 'auth',
@@ -545,7 +545,7 @@ window.SovmartUI = {
         let container = SovmartUtils
             .createElement('div');
 
-        container = container.add('div', {}, 'Здравствуйте, <b>' + SovmartConfig.name + '</b>!')
+        container = container.add('div', {}, SovmartLangs.hi + '<b>' + SovmartConfig.name + '</b>!')
             .addChild('div', {class: 'sovmart-text-right'})
                 .add('a', {
                     href: '#',
@@ -573,7 +573,7 @@ window.SovmartUI = {
                                 return false;
                             }
                         ]
-                    ]}, 'Выйти из аккаунта')
+                    ]}, SovmartLangs.logout)
                 .getParent();
 
         return container.build();
