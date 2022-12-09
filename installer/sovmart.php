@@ -93,6 +93,7 @@ class PlgInstallerSovmart extends CMSPlugin
 		try
 		{
 
+			Factory::getConfig()->set('error_reporting', 'none');
 			$method_name = 'method' . ucfirst(strtolower($method));
 
 			if (!method_exists($this, $method_name))
