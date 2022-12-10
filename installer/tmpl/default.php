@@ -123,13 +123,19 @@ $langs = [
 </div>
 <script type="text/javascript">
     document.addEventListener("DOMContentLoaded", function () {
-        window.SovmartConfig = {
-            api: '<?php echo Config::$scheme . '://' . Config::$host ?>',
-            token: '<?php echo $params->get('token', '')?>',
-            name: '<?php echo $params->get('name', '')?>',
-            sync: <?php echo (int) $params->get('sync', 0)?>
-        };
-        window.SovmartLangs = <?php echo json_encode($langs) ?>;
-        Sovmart.init();
+        try {
+            window.SovmartConfig = {
+                api: '<?php echo Config::$scheme . '://' . Config::$host ?>',
+                token: '<?php echo $params->get('token', '')?>',
+                name: '<?php echo $params->get('name', '')?>',
+                sync: <?php echo (int) $params->get('sync', 0)?>
+            };
+            window.SovmartLangs = <?php echo json_encode($langs) ?>;
+            Sovmart.init();
+        }
+        catch (e) {
+            Sovmart.showCriticalError(e.message);
+        }
+
     });
 </script>

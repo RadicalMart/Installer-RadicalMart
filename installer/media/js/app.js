@@ -455,6 +455,61 @@ window.Sovmart = {
         });
     },
 
+    showCriticalError: function (error) {
+        let page = SovmartUI.renderPage();
+
+        SovmartUI.showPage({
+            buttons: [],
+            page: page
+        });
+
+        let message = SovmartUtils.createElement('div')
+            .add('div', {class: 'sovmart-margin-bottom-small'}, SovmartLangs.text_critical_error)
+            .addChild('div', {class: 'sovmart-flex sovmart-flex-middle'})
+            .add(
+                'button',
+                {
+                    type: 'button',
+                    class: 'ri-btn ri-btn-large ri-btn-default sovmart-margin-right-small',
+                    events: [
+                        [
+                            'click',
+                            function (ev) {
+                                let input = SovmartUtils.createElement('input');
+                                input.value = error;
+                                input.select();
+                                input.setSelectionRange(0, 99999); // For mobile devices
+
+                                navigator.clipboard.writeText(input.value);
+
+                                SovmartUtils.createAlert(SovmartLangs.text_copied);
+                            }
+                        ]
+                    ]
+                },
+                SovmartLangs.update
+            )
+            .add('button', {
+                    type: 'button',
+                    class: 'ri-btn ri-btn-large ri-btn-default',
+                    events: [
+                        [
+                            'click',
+                            function (ev) {
+                                SovmartUtils.openInNewTab(Sovmart.api + '/contacts')
+                            }
+                        ]
+                    ]
+                },
+                SovmartLangs.support)
+            .getParent();
+
+        let forced_update = SovmartUtils.createElement('div', {class: 'sovmart-flex sovmart-flex-middle sovmart-flex-center'})
+            .add('div', {class: 'sovmart-width-1-2'}, SovmartUI.renderAlert({message: message.build()}));
+
+        page.appendChild(forced_update.build())
+    },
+
     showForcedUpdate: function () {
         let page = SovmartUI.renderPage();
 
