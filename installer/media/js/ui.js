@@ -458,7 +458,7 @@ window.SovmartUI = {
             })
             .addChild('div', {'class': 'sovmart-flex'})
             .add('input', {
-                class: 'ri-input sovmart-input-key sovmart-width-500 sovmart-margin-right-xsmall',
+                class: 'ri-input ri-input-large sovmart-input-key sovmart-width-500 sovmart-margin-right-xsmall',
                 type: 'text',
                 placeholder: SovmartLangs.search,
                 name: 'q',
@@ -536,6 +536,7 @@ window.SovmartUI = {
             position: 'right',
             padding: true,
             button: 'auth',
+            button_class: 'ri-btn-large',
             click: function (event) { event.target.closest('.ri-dropdown-wrap').querySelector('input').focus(); },
             content: form.build(),
         });
@@ -1030,7 +1031,7 @@ window.SovmartUI = {
     renderDropdownButton: function (args) {
         return SovmartUtils
             .createElement('div', {class: 'ri-dropdown-wrap'})
-            .add('button', {type: 'button', class: 'ri-btn ri-btn-' + (args.button !== undefined ? args.button : 'default'), events: (args.click !== undefined ? [['click', args.click]] : [])}, args.label)
+            .add('button', {type: 'button', class: 'ri-btn ri-btn-' + (args.button !== undefined ? args.button : 'default') + ' ' + (args.button_class !== undefined ? args.button_class : ''), events: (args.click !== undefined ? [['click', args.click]] : [])}, args.label)
             .addChild('div', {
                 class: 'ri-dropdown ri-dropdown-' + (args.position !== undefined ? args.position : 'left') + ' ' + (args.padding !== undefined ? 'sovmart-padding-small' : '')
             })

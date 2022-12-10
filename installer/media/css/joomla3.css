@@ -1,4 +1,10 @@
-.sovmart-container * {
+#sovmart-container {
+    border: 1px solid #ddd;
+    margin-top: -21px;
+    padding: 40px;
+}
+
+#sovmart-container * {
     box-sizing: border-box;
 }
 
@@ -89,37 +95,64 @@
 }
 
 .ri-btn-success {
-    background-color: #46a546;
-    border-color: rgba(0, 0, 0, 0.2);
-    color: #fff;
+    background-color: transparent;
+    border-color: #457d54;
+    color: #457d54;
+    opacity: .9;
 }
 
 .ri-btn-success:focus + .ri-btn-success,
 .ri-btn-success:focus,
 .ri-btn-success:hover {
-    background-color: #2f6f2f;
+    background-color: #3b6a47;
+    border-color: #376443;
     color: #fff;
-    text-decoration: none;
+    opacity: 1;
+}
+
+.ri-btn-success:active + .ri-btn-success,
+.ri-btn-success:checked + .ri-btn-success,
+.ri-btn-success.active,
+.ri-btn-success:active {
+    background-color: #376443;
+    border-color: #345e3f;
+    color: #fff;
+    opacity: 1;
 }
 
 .ri-btn-success:focus + .ri-btn-success,
 .ri-btn-success:focus {
-    outline: 5px auto -webkit-focus-ring-color;
-    outline-offset: -2px;
+    box-shadow: 0 0 0 .25rem rgba(97,145,110,.5);
 }
 
 .ri-btn-danger {
-    background-color: #bd362f;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    color: #fff;
+    background-color: transparent;
+    border-color: #c52827;
+    color: #c52827;
+    opacity: .8;
 }
 
 .ri-btn-danger:focus + .ri-btn-danger,
 .ri-btn-danger:focus,
 .ri-btn-danger:hover {
-    background-color: #85352f;
-    outline: 5px auto -webkit-focus-ring-color;
-    outline-offset: -2px;
+    background-color: #a72221;
+    border-color: #9e201f;
+    color: #fff;
+    opacity: 1;
+}
+
+.ri-btn-danger:active + .ri-btn-danger,
+.ri-btn-danger:checked + .ri-btn-danger ,
+.ri-btn-danger:active {
+    background-color: #9e201f;
+    border-color: #941e1d;
+    color: #fff;
+    opacity: 1;
+}
+
+.ri-btn-danger:active + .ri-btn-danger:focus,
+.ri-btn-danger:checked + .ri-btn-danger:focus {
+    box-shadow: 0 0 0 .25rem rgba(206,72,71,.5);
 }
 
 .ri-btn:disabled,
@@ -127,6 +160,33 @@
     opacity: 0.4;
     cursor: not-allowed;
     pointer-events: none;
+}
+
+.ri-btn-auth {
+    background: #457d54;
+    border-color: #457d54;
+    color: #fff;
+}
+
+.ri-btn-auth:focus + .ri-btn-auth,
+.ri-btn-auth:focus,
+.ri-btn-auth:hover {
+    background-color: #385941;
+    border-color: #385941;
+}
+
+.ri-btn-auth:active + .ri-btn-auth,
+.ri-btn-auth:checked + .ri-btn-auth,
+.ri-btn-auth.active,
+.ri-btn-auth:active {
+    background-color: #406749;
+    border-color: #406749;
+    opacity: 1;
+}
+
+.ri-btn-auth:focus + .ri-btn-auth,
+.ri-btn-auth:focus {
+    box-shadow: 0 0 0 .25rem rgba(72, 110, 82, 0.5);
 }
 
 .ri-btn-large {
@@ -178,7 +238,6 @@
 }
 
 
-
 /**************** Button groups ***************/
 .ri-btn-group {
     display: flex;
@@ -216,55 +275,45 @@
 }
 
 
-/******************** Dropdown **********************/
-.ri-btn-wrap {
-    position: relative;
-    display: inline-block;
+/*********** Form **********/
+.ri-input {
+    padding: 0 10px;
 }
 
-.ri-btn-dropdown {
-    visibility: hidden;
-    position: absolute;
-    width: 100%;
+.sovmart-header .form-horizontal {
+    margin: 0;
+}
+
+
+/******************** Dropdown **********************/
+.ri-dropdown {
     background-color: #f9f9f9;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    transition: visibility 0.1s;
-    z-index: 6;
-}
-
-.ri-btn-wrap:hover .ri-btn-dropdown {
-    visibility: visible;
-}
-
-.ri-btn-dropdown .btn {
-    border-top: none;
-}
-
-.ri-btn-dropdown {
-    width: 300px;
-}
-
-.ri-btn-dropdown > * {
-    width: 100%;
-    text-align: left;
-    border-radius: 0;
-    border-top: none;
-    border-bottom: none;
-}
-
-
-/******************* Form key ***********************/
-.sovmart-input-key {
-    min-height: 35px;
 }
 
 
 /************* Group ***************/
 .sovmart-group {
-    padding: 25px 0;
+    margin: 0 -40px;
+    padding: 25px 41px 25px 41px;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
 }
 
-.sovmart-group:nth-child(2n) {
-    padding: 35px 25px;
+.sovmart-group + .sovmart-group {
+    border-top: none;
+}
+
+.sovmart-group:nth-child(even) {
     background: #F0F0F0;
+}
+
+.sovmart-group:last-child {
+    border-bottom: none;
+}
+
+
+/************* Logs ***************/
+.sovmart-group:nth-child(even) .sovmart-logs {
+    background-color: #fff;
 }

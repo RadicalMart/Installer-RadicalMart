@@ -229,7 +229,13 @@
 }
 
 .ri-input-medium {
-    height: 35px;
+    font-size: 17px !important;
+    height: 35px !important;
+}
+
+.ri-input-large {
+    font-size: 17px !important;
+    height: 45px !important;
 }
 
 /************ Page ******************/
@@ -785,7 +791,7 @@
     justify-content: space-between;
     padding: 1em;
     cursor: pointer;
-    display: inline-block;
+    display: inline-block !important;
     border-radius: 4px;
 }
 
@@ -824,7 +830,7 @@
 }
 
 .ri-toggle input {
-    display: none;
+    display: none !important;
 }
 
 .ri-toggle input:checked ~ .ri-toggle-label:before {
