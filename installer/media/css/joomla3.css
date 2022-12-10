@@ -309,6 +309,7 @@
 }
 
 .sovmart-group:last-child {
+    margin-bottom: -40px;
     border-bottom: none;
 }
 
