@@ -100,7 +100,6 @@ class PlgInstallerSovmart extends CMSPlugin
 				throw new Exception('Not found method', 404);
 			}
 
-			@ini_set('error_reporting', 0);
 			@error_reporting(0);
 
 			$token = $this->params->get('token', '');
