@@ -303,6 +303,6 @@
 }
 
 /************* Logs ***************/
-.sovmart-group + .sovmart-group .sovmart-logs {
+.sovmart-group:nth-child(even) .sovmart-logs {
     background-color: #fff;
 }
