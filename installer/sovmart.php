@@ -122,7 +122,9 @@ class PlgInstallerSovmart extends CMSPlugin
 			$app->setHeader('Content-Type', 'application/json');
 			$app->sendHeaders();
 
-			return $output;
+			echo $output;
+
+			$this->app->close();
 		}
 
 	}
