@@ -27,6 +27,7 @@ class plgSystemSovmartmenu extends CMSPlugin
 		if (
 			!$this->app->isClient('administrator') ||
 			!Factory::getUser()->authorise('core.manage', 'com_installer') ||
+			($this->app->input->get('option') === 'com_installer' && $this->app->input->get('view') === 'install') ||
 			$this->loadAdminMenu === true
 		)
 		{
