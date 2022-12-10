@@ -482,7 +482,7 @@ window.Sovmart = {
 
                                 navigator.clipboard.writeText(input.value);
 
-                                SovmartUtils.createAlert(SovmartLangs.text_copied);
+                                SovmartUtils.createAlert(SovmartLangs.text_copied)
                             }
                         ]
                     ]
@@ -649,7 +649,7 @@ window.Sovmart = {
 
                 SovmartUtils.ajaxGet(Sovmart.url + '&method=installedlist')
                     .done(function (response) {
-                        let items = response.data[0];
+                        let items = response.data;
                         resolve(items);
                     }).fail(function (xhr) {
                     reject(xhr);

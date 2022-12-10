@@ -42,11 +42,10 @@ window.SovmartUtils = {
             if (this.readyState === 4) {
                 if (this.status === 200) {
                     if (ajax.done !== undefined) {
-                        let response = JSON.parse(this.responseText);
+                        let response = this.responseText;
 
-                        if(response === null || response === undefined)
-                        {
-                            response = this.responseText;
+                        if(typeof response === 'string') {
+                            response = JSON.parse(response);
                         }
 
                         ajax.done(response, this);

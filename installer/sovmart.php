@@ -5,6 +5,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\FileLayout;
 use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\CMS\Response\JsonResponse;
 use Joomla\CMS\Version;
 use Sovmart\API;
 use Sovmart\Config;
@@ -87,7 +88,7 @@ class PlgInstallerSovmart extends CMSPlugin
 
 		if (!$app->isClient('administrator'))
 		{
-			return false;
+			return;
 		}
 
 		try
@@ -121,7 +122,7 @@ class PlgInstallerSovmart extends CMSPlugin
 			$app->setHeader('Content-Type', 'application/json');
 			$app->sendHeaders();
 
-			echo $output;
+			echo (new JsonResponse($output));
 
 			$this->app->close();
 		}
@@ -330,7 +331,7 @@ class PlgInstallerSovmart extends CMSPlugin
 			['sync' => 0]
 		);
 
-		return $result;
+		return ['count' => $result];
 	}
 
 	protected function methodCheckinstall()

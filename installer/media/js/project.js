@@ -114,7 +114,7 @@ window.SovmartProject = {
     checkInstall: function (args) {
         SovmartUtils.ajaxGet(Sovmart.url + '&method=checkinstall&list=' + JSON.stringify(args.ids))
             .done( function (json) {
-                let find = json.data[0];
+                let find = json.data;
 
                 SovmartUtils.ajaxGet(Sovmart.url + '&method=checkUpdates')
                     .done( function (response) {
@@ -149,7 +149,7 @@ window.SovmartProject = {
     sync: function (args) {
         SovmartUtils.ajaxGet(Sovmart.url + '&method=sync')
             .done(function (json) {
-                let count = json.data;
+                let count = json.data.count;
 
                 SovmartUtils.createAlert(SovmartLangs.text_sync + count, 'info', 5000);
 
