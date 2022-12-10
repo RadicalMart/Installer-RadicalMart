@@ -279,8 +279,7 @@
     border-bottom: 1px solid var(--template-bg-dark-20);
 }
 
-.sovmart-group +
-.sovmart-group {
+.sovmart-group + .sovmart-group {
     border-top: none;
 }
 
