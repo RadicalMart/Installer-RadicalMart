@@ -487,7 +487,7 @@ window.Sovmart = {
                         ]
                     ]
                 },
-                SovmartLangs.update
+                SovmartLangs.copy
             )
             .add('button', {
                     type: 'button',

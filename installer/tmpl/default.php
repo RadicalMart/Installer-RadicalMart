@@ -62,6 +62,7 @@ $langs = [
 	'updated_new'               => Text::_('PLG_INSTALLER_SOVMART_UPDATED_NEW'),
 	'update'                    => Text::_('PLG_INSTALLER_SOVMART_UPDATE'),
 	'sync'                      => Text::_('PLG_INSTALLER_SOVMART_SYNC'),
+	'copy'                      => Text::_('PLG_INSTALLER_SOVMART_COPY'),
 	'docs'                      => Text::_('PLG_INSTALLER_SOVMART_DOCS'),
 	'support'                   => Text::_('PLG_INSTALLER_SOVMART_SUPPORT'),
 	'message_close'             => Text::_('PLG_INSTALLER_SOVMART_MESSAGE_CLOSE'),
@@ -105,6 +106,8 @@ $langs = [
 	'text_search_error_small'   => Text::_('PLG_INSTALLER_SOVMART_TEXT_SEARCH_ERROR_SMALL'),
 	'text_search_by'            => Text::_('PLG_INSTALLER_SOVMART_TEXT_SEARCH_BY'),
 	'text_token_input'          => Text::_('PLG_INSTALLER_SOVMART_TEXT_TOKEN_INPUT'),
+	'text_critical_error'       => Text::_('PLG_INSTALLER_SOVMART_TEXT_CRITICAL_ERROR'),
+	'text_copied'               => Text::_('PLG_INSTALLER_SOVMART_TEXT_COPIED'),
 ];
 ?>
 
@@ -132,8 +135,7 @@ $langs = [
             };
             window.SovmartLangs = <?php echo json_encode($langs) ?>;
             Sovmart.init();
-        }
-        catch (e) {
+        } catch (e) {
             Sovmart.showCriticalError(e.message);
         }
 
