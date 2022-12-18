@@ -249,7 +249,6 @@ class ProviderJoomla implements ProviderInterface
 
 		$count = count($sync_projects);
 
-
 		foreach ($sync_projects as $sync_project)
 		{
 
@@ -272,7 +271,7 @@ class ProviderJoomla implements ProviderInterface
 			$table->branch         = 'stable';
 			$table->element        = $element;
 			$table->folder         = $folder ?? '';
-			$table->version        = $extensions[$element]['attributes']['version'] ?? '';
+			$table->version        = $extensions[$element]['version'] ?? '';
 			$table->project_id     = $sync_project['attributes']['id'];
 			$table->extension_id   = $extensions[$element]['id'] ?? '';
 			$table->category_title = $sync_project['attributes']['title'];

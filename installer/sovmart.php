@@ -223,16 +223,17 @@ class PlgInstallerSovmart extends CMSPlugin
 		$projects             = [];
 		$projects_for_update  = [];
 
-		if (is_array($projects_from_server))
+		if (is_array($projects_from_server) && isset($projects_from_server['data']))
 		{
-			foreach ($projects_from_server as $project_from_server)
+
+			foreach ($projects_from_server['data'] as $project_from_server)
 			{
-				if (!isset($project_from_server['id']))
+				if (!isset($project_from_server['attributes']['id']))
 				{
 					continue;
 				}
 
-				$projects[(int) $project_from_server['id']] = $project_from_server;
+				$projects[(int) $project_from_server['attributes']['id']] = $project_from_server['attributes'];
 			}
 
 			foreach ($projects_install as $project_install)
