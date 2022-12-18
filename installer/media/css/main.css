@@ -746,16 +746,14 @@
     visibility: hidden;
     position: absolute;
     width: 300px;
+    max-height: 400px;
+    overflow: auto;
     transition: visibility 0.1s;
     z-index: 6;
 }
 
 .ri-dropdown-wrap:hover .ri-dropdown {
     visibility: visible;
-}
-
-.ri-dropdown {
-    width: 300px;
 }
 
 .ri-dropdown-right {
