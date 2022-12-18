@@ -1211,7 +1211,7 @@ window.Sovmart = {
                 projects_card.push(
                     SovmartUI.renderProjectCard(data.data[k].attributes)
                 );
-                ids.push(data.data[k].attributes);
+                ids.push(data.data[k].attributes.id);
             }
 
             grid = SovmartUI.renderProjectGrid({
