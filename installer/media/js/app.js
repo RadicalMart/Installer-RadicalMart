@@ -1154,6 +1154,7 @@ window.Sovmart = {
     },
 
     showCategory: function (id, title) {
+        let self = this;
         let page = SovmartUI.renderPage();
 
         SovmartUI.showPage({
@@ -1229,10 +1230,18 @@ window.Sovmart = {
                 done: Sovmart.checkInstallProjectCard
             });
 
+            if(
+                data.links.next !== undefined &&
+                data.links.next !== null
+            ) {
+                self.showPageNext(data.links.next);
+            }
+
         });
     },
 
     showProjectsFree: function () {
+        let self = this;
         let page = SovmartUI.renderPage();
 
         SovmartUI.showPage({
@@ -1280,11 +1289,87 @@ window.Sovmart = {
                 done: Sovmart.checkInstallProjectCard
             });
 
+            if(
+                items.links.next !== undefined &&
+                items.links.next !== null
+            ) {
+                self.showPageNext(items.links.next);
+            }
         });
+    },
+
+    showPageNext: function (url) {
+        let self = this;
+        let page = SovmartUI.getPage();
+        let button = SovmartUtils.createElement('div', {class: 'sovmart-flex sovmart-flex-center sovmart-margin'})
+            .add('button', {
+                type: 'button',
+                class: 'ri-btn ri-btn-primary ri-btn-large button-load-more',
+                events: [
+                    [
+                        'click',
+                        function (event) {
+
+
+                            let button_self = this;
+                            this.setAttribute('disabled', 'disabled');
+
+                            SovmartUtils.ajaxGet(url)
+                            .done(function (response) {
+                                let items = {};
+
+                                if(typeof response === 'string') {
+                                    items = JSON.parse(response);
+                                } else {
+                                    items = response;
+                                }
+
+                                let grid = '';
+                                let projects_card = [];
+                                let ids = [];
+
+                                for (let k = 0; k < items.data.length; k++) {
+                                    projects_card.push(
+                                        SovmartUI.renderProjectCard(items.data[k].attributes)
+                                    );
+                                    ids.push(parseInt(items.data[k].attributes.id));
+                                }
+
+                                grid = SovmartUI.renderProjectGrid({
+                                    items: projects_card,
+                                    trigger_grid_row_end_for: Sovmart.triggerGridRowEndForCard
+                                });
+
+                                button_self.parentElement.remove();
+                                page.appendChild(grid);
+
+                                SovmartProject.checkInstall({
+                                    ids: ids,
+                                    done: Sovmart.checkInstallProjectCard
+                                });
+
+                                if(
+                                    items.links.next !== undefined &&
+                                    items.links.next !== null
+                                ) {
+                                    self.showPageNext(items.links.next);
+                                }
+
+                            })
+                            .fail(function (xhr) {
+                                button_self.removeAttribute('disabled');
+                            });
+                        }
+                    ]
+                ]
+            }, 'Загрузить еще');
+
+        page.appendChild(button.build());
     },
 
     showProjectsPaid: function () {
         let page = SovmartUI.renderPage();
+        let self = this;
 
         SovmartUI.showPage({
             buttons: this.buttons_page_main,
@@ -1330,6 +1415,13 @@ window.Sovmart = {
                 ids: ids,
                 done: Sovmart.checkInstallProjectCard
             });
+
+            if(
+                items.links.next !== undefined &&
+                items.links.next !== null
+            ) {
+                self.showPageNext(items.links.next);
+            }
 
         });
     },

@@ -53,6 +53,10 @@ window.SovmartUI = {
 
     },
 
+    getPage: function () {
+        return this.container_page;
+    },
+
     getContainerToolbar: function () {
         return this.container_toolbar;
     },

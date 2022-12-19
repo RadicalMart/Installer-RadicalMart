@@ -69,6 +69,10 @@
 }
 
 /************* Margin *************/
+.sovmart-margin {
+    margin: 30px;
+}
+
 .sovmart-child-margin-right-small > * {
     margin-right: 15px;
 }
