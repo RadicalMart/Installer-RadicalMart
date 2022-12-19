@@ -50,14 +50,19 @@ class API
 		static::$data_headers['Authorization'] = 'Bearer ' . $token;
 	}
 
-	public static function getProjectDownload($id)
+	public static function getProjectDownload($id, $full = true)
 	{
-		$uri = (new Uri());
-		$uri->setScheme(Config::$scheme);
-		$uri->setHost(Config::$host);
-		$uri->setPath(Config::$path . 'projects/download/' . $id);
+		if($full)
+		{
+			$uri = (new Uri());
+			$uri->setScheme(Config::$scheme);
+			$uri->setHost(Config::$host);
+			$uri->setPath(Config::$path . 'projects/download/' . $id);
 
-		return $uri->toString();
+			return $uri->toString();
+		}
+
+		return 'projects/download/' . $id;
 	}
 
 	public static function minimal()

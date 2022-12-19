@@ -63,7 +63,10 @@ class ProviderYoolayouts implements ProviderInterface
 
 		if (!isset($project['data']['attributes']['id']))
 		{
-			throw new RuntimeException('Not found project');
+
+			$this->addMessage(Text::_('Not found project'), 'error');
+
+			return false;
 		}
 
 		$zip = new Zip;
@@ -79,7 +82,7 @@ class ProviderYoolayouts implements ProviderInterface
 		$this->filepath         = JPATH_ROOT . DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR . md5(date('U'));
 		$this->filepath_extract = JPATH_ROOT . DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR . md5('extract_' . date('U'));
 
-		$request = API::request(API::getProjectDownload($project['data']['attributes']['id']));
+		$request = API::request(API::getProjectDownload($project['data']['attributes']['id'], false));
 
 		//если сервер прислал ошибку, то пишем и выходим
 		if ($request->code !== 200)
@@ -91,7 +94,6 @@ class ProviderYoolayouts implements ProviderInterface
 
 		$body = (!empty($request->body)) ? $request->body : false;
 		$body = json_decode($body, true);
-
 		//если ключ установлен, но не находится такой на сервере
 		if (is_array($body) && isset($body['attributes']['messages']))
 		{
@@ -101,7 +103,7 @@ class ProviderYoolayouts implements ProviderInterface
 		}
 
 		//пишем ответ в файл
-		if (File::write($this->filepath, $request->body))
+		if (!File::write($this->filepath, $request->body))
 		{
 			throw new RuntimeException(Text::_('PLG_INSTALLER_SOVMART_TEXT_INSTALL_ERROR'));
 		}
