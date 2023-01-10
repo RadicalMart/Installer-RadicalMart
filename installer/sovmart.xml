@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3; see LICENSE.txt</license>
 	<authorEmail>cymbal@delo-design.ru</authorEmail>
 	<authorUrl>https://delo-design.ru</authorUrl>
-	<version>1.5.8</version>
+	<version>1.5.9</version>
 	<description>PLG_INSTALLER_SOVMART_PLUGIN_XML_DESCRIPTION</description>
 	<scriptfile>script.php</scriptfile>
 
@@ -23,12 +23,6 @@
 		<folder>img</folder>
 		<folder>js</folder>
 	</media>
-
-	<updateservers>
-		<server type="extension" priority="1" name="SovmartInstaller">
-			https://sovmart.ru/update?element=sovmart_installer
-		</server>
-	</updateservers>
 
 	<install>
 		<sql>
