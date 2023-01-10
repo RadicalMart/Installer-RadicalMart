@@ -878,11 +878,26 @@ window.Sovmart = {
                 }, '❯');
                 header = header.getParent();
             } else {
+                let cover = '';
+
+                if (
+                    project.attributes.images !== undefined &&
+                    project.attributes.images.icon !== undefined &&
+                    project.attributes.images.icon !== false
+                ) {
+                    cover = project.attributes.images.icon;
+                }
+
                 if (
                     project.attributes.images !== undefined &&
                     project.attributes.images.cover !== undefined &&
                     project.attributes.images.cover !== false
                 ) {
+                    cover = project.attributes.images.cover ;
+                }
+
+                if(cover && cover !== '')
+                {
                     header = header.addChild('div', {
                         'class': 'sovmart-project-page_gallery-images',
                         'data-active': 1
@@ -896,12 +911,11 @@ window.Sovmart = {
                         'style': 'display:block'
                     })
                         .add('img', {
-                            'src': Sovmart.api + '/' + project.attributes.images.cover
+                            'src': Sovmart.api + '/' + cover
                         })
                         .getParent()
                         .getParent();
                 }
-
             }
 
             body = body.add('h2', {'class': 'sovmart-project-page_gallery-header'}, project.attributes.title);
@@ -1117,13 +1131,13 @@ window.Sovmart = {
             body.add('div', {'class': 'sovmart-project-page_description-header'}, SovmartLangs.description);
 
             if (
-                project.fulltext !== undefined &&
-                project.fulltext !== ''
+                project.attributes.fulltext !== undefined &&
+                project.attributes.fulltext !== ''
             ) {
-                body = body.add('div', {'class': 'sovmart-project-page_description-text'}, project.fulltext);
+                body = body.add('div', {'class': 'sovmart-project-page_description-text'}, project.attributes.fulltext);
             } else {
-                if (project.introtext !== undefined && project.introtext !== '') {
-                    body = body.add('div', {'class': 'sovmart-project-page_description-text'}, project.introtext);
+                if (project.attributes.introtext !== undefined && project.attributes.introtext !== '') {
+                    body = body.add('div', {'class': 'sovmart-project-page_description-text'}, project.attributes.introtext);
                 } else {
                     body = body.add('div', {'class': 'sovmart-project-page_description-text'}, SovmartLangs.description_no);
                 }
