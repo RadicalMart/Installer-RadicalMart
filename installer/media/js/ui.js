@@ -61,10 +61,6 @@ window.SovmartUI = {
         return this.container_toolbar;
     },
 
-    getContainerPage: function () {
-        return this.container_page;
-    },
-
     renderToolbar: function (args) {
         let toolbar = SovmartUtils.createElement('div', {class: 'sovmart-toolbar sovmart-flex sovmart-child-margin-right-small'});
 
@@ -335,8 +331,8 @@ window.SovmartUI = {
                     {
                         group = group
                             .addChild('div', {class: 'sovmart-width-auto sovmart-margin-right'})
-                                .add('h4', {}, args.groups[k].label)
-                                .getParent();
+                            .add('h4', {}, args.groups[k].label)
+                            .getParent();
                     }
 
                     if (args.groups[k].buttons !== undefined) {
@@ -527,13 +523,13 @@ window.SovmartUI = {
                     ]
                 ]
             })
-                .addChild('div', {class: 'sovmart-margin-small'})
-                    .add('input', {class: 'sovmart-width-1-1 ri-input ri-input-medium', type: 'text', name: 'token', placeholder: SovmartLangs.text_token_input})
-                    .getParent()
-                .addChild('div', {class: 'sovmart-margin-small'})
-                    .add('button', {type: 'submit', class: 'ri-btn ri-btn-primary'}, SovmartLangs.login)
-                    .getParent()
-                .getParent()
+            .addChild('div', {class: 'sovmart-margin-small'})
+            .add('input', {class: 'sovmart-width-1-1 ri-input ri-input-medium', type: 'text', name: 'token', placeholder: SovmartLangs.text_token_input})
+            .getParent()
+            .addChild('div', {class: 'sovmart-margin-small'})
+            .add('button', {type: 'submit', class: 'ri-btn ri-btn-primary'}, SovmartLangs.login)
+            .getParent()
+            .getParent()
 
         return SovmartUI.renderDropdownButton({
             label: SovmartLangs.auth,
@@ -552,34 +548,34 @@ window.SovmartUI = {
 
         container = container.add('div', {}, SovmartLangs.hi + '<b>' + SovmartConfig.name + '</b>!')
             .addChild('div', {class: 'sovmart-text-right'})
-                .add('a', {
-                    href: '#',
-                    events: [
-                        [
-                            'click',
-                            function (event) {
-                                event.preventDefault();
+            .add('a', {
+                href: '#',
+                events: [
+                    [
+                        'click',
+                        function (event) {
+                            event.preventDefault();
 
-                                SovmartUtils.ajaxPost(Sovmart.url + '&method=savetoken', {token: ''})
-                                    .done(function (response) {
-                                        Sovmart.reload();
-                                    })
-                                    .fail(function (xhr) {
-                                        let response = JSON.parse(xhr.responseText);
+                            SovmartUtils.ajaxPost(Sovmart.url + '&method=savetoken', {token: ''})
+                                .done(function (response) {
+                                    Sovmart.reload();
+                                })
+                                .fail(function (xhr) {
+                                    let response = JSON.parse(xhr.responseText);
 
-                                        if (response !== null && response.data[0] !== undefined) {
-                                            SovmartUtils.createAlert(response.data[0], 'danger', 5000);
-                                            return;
-                                        }
+                                    if (response !== null && response.data[0] !== undefined) {
+                                        SovmartUtils.createAlert(response.data[0], 'danger', 5000);
+                                        return;
+                                    }
 
-                                        SovmartUtils.createAlert(SovmartLangs.alert_service_error, 'danger', 5000);
-                                    });
+                                    SovmartUtils.createAlert(SovmartLangs.alert_service_error, 'danger', 5000);
+                                });
 
-                                return false;
-                            }
-                        ]
-                    ]}, SovmartLangs.logout)
-                .getParent();
+                            return false;
+                        }
+                    ]
+                ]}, SovmartLangs.logout)
+            .getParent();
 
         return container.build();
     },
@@ -590,7 +586,8 @@ window.SovmartUI = {
             width = 5,
             close = false,
             grid_row_id = SovmartUtils.randomInteger(1111111111, 9999999999),
-            items = [];
+            items = [],
+            count = args.items.length;
 
         if (window.matchMedia("(max-width: 2100px)").matches) {
             width = 4;
@@ -601,7 +598,7 @@ window.SovmartUI = {
             'data-row': grid_row_id
         });
 
-        for (let i = 0; i < args.items.length; i++) {
+        for (let i = 0; i < count; i++) {
             current++;
             close = false;
             items.push(args.items[i]);
@@ -622,11 +619,13 @@ window.SovmartUI = {
                     args.trigger_grid_row_end_for(items, grid_row_id);
                 }
 
-                grid_row_id = SovmartUtils.randomInteger(1111111111, 9999999999);
-                grid = grid.addChild('div', {
-                    class: 'sovmart-grid sovmart-grid-width-1-' + width,
-                    'data-row': grid_row_id
-                });
+                if((i + 1) !== count) {
+                    grid_row_id = SovmartUtils.randomInteger(1111111111, 9999999999);
+                    grid = grid.addChild('div', {
+                        class: 'sovmart-grid sovmart-grid-width-1-' + width,
+                        'data-row': grid_row_id
+                    });
+                }
 
                 current = 0;
                 close = true;
@@ -656,8 +655,6 @@ window.SovmartUI = {
                 args.trigger_grid_row_end_for(items, grid_row_id);
             }
 
-        } else {
-            grid = grid.getParent();
         }
 
         return grid.build();
@@ -680,6 +677,15 @@ window.SovmartUI = {
             args.images.cover !== ''
         ) {
             cover = Sovmart.api + '/' + args.images.cover;
+            cover_class = 'cover';
+        }
+
+        if (
+            args.images !== undefined &&
+            args.images.icon !== false &&
+            args.images.icon !== ''
+        ) {
+            cover = Sovmart.api + '/' + args.images.icon;
             cover_class = 'cover';
         }
 
@@ -784,9 +790,9 @@ window.SovmartUI = {
                     'events': [
                         [
                             'click', function (event) {
-                                Sovmart.showCategory(categories_list[i].id)
-                                event.preventDefault();
-                            }
+                            Sovmart.showCategory(categories_list[i].id)
+                            event.preventDefault();
+                        }
                         ]
                     ]
                 }, categories_list[i].title);
@@ -1023,11 +1029,11 @@ window.SovmartUI = {
 
         card = card
             .addChild('div', {class: 'sovmart-project-card-more-wrap'} )
-                .addChild('div', {class: 'sovmart-project-card-more'} )
-                    .add('div', {}, categories.build())
-                    .add('div', {class: 'sovmart-project-card-description'}, description)
-                    .getParent()
-                .getParent();
+            .addChild('div', {class: 'sovmart-project-card-more'} )
+            .add('div', {}, categories.build())
+            .add('div', {class: 'sovmart-project-card-description'}, description)
+            .getParent()
+            .getParent();
 
         return card.build();
     },
@@ -1039,7 +1045,7 @@ window.SovmartUI = {
             .addChild('div', {
                 class: 'ri-dropdown ri-dropdown-' + (args.position !== undefined ? args.position : 'left') + ' ' + (args.padding !== undefined ? 'sovmart-padding-small' : '')
             })
-                .add('div', {}, args.content)
+            .add('div', {}, args.content)
             .getParent()
             .build();
     },

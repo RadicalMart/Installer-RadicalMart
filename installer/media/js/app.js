@@ -917,7 +917,7 @@ window.Sovmart = {
                         function (ev) {
                             let button_install = this;
                             let button_delete = SovmartUI.getContainerToolbar().querySelector('.ri-btn-delete');
-                            let logs_container = SovmartUI.getContainerPage().querySelector('.sovmart-logs');
+                            let logs_container = SovmartUI.getPage().querySelector('.sovmart-logs');
 
                             logs_container.innerHTML = '';
 
@@ -1002,7 +1002,7 @@ window.Sovmart = {
 
                             let button_install = SovmartUI.getContainerToolbar().querySelector('.ri-btn-install');
                             let button_delete = this;
-                            let logs_container = SovmartUI.getContainerPage().querySelector('.sovmart-logs');
+                            let logs_container = SovmartUI.getPage().querySelector('.sovmart-logs');
 
                             logs_container.innerHTML = '';
 
@@ -1301,6 +1301,19 @@ window.Sovmart = {
     showPageNext: function (url) {
         let self = this;
         let page = SovmartUI.getPage();
+        let content = page.querySelector('.sovmart-group-content');
+
+        if(
+            content === null ||
+            content === undefined
+        )
+        {
+            return;
+        }
+
+        // забираем первый див, в него будет вставлять
+        content = content.children[0];
+
         let button = SovmartUtils.createElement('div', {class: 'sovmart-flex sovmart-flex-center sovmart-margin'})
             .add('button', {
                 type: 'button',
@@ -1341,7 +1354,11 @@ window.Sovmart = {
                                 });
 
                                 button_self.parentElement.remove();
-                                page.appendChild(grid);
+                                let collections = Array.from(grid.children);
+
+                                for(let i=0;i<collections.length;i++) {
+                                    content.appendChild(collections[i]);
+                                }
 
                                 SovmartProject.checkInstall({
                                     ids: ids,
