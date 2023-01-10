@@ -193,7 +193,7 @@ class ProviderJoomlamirror extends ProviderJoomla
 
 			$table->title          = $sync_project['attributes']['title'];
 			$table->provider       = $sync_project['attributes']['provider'];
-			$table->cover          = $sync_project['attributes']['images']['cover'] ?? '';
+			$table->cover          = $sync_project['attributes']['images']['icon'] ?? $sync_project['attributes']['images']['image'] ?? '';
 			$table->type           = $type;
 			$table->branch         = 'stable';
 			$table->element        = $element;
