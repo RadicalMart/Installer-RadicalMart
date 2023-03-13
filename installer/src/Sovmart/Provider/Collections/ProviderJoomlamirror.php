@@ -84,8 +84,8 @@ class ProviderJoomlamirror extends ProviderJoomla
 				$table->folder         = $folder;
 				$table->version        = $version;
 				$table->branch         = 'stable';
-				$table->project_id     = $project['id'];
-				$table->category_title = $project['title'];
+				$table->project_id     = $project['data']['attributes']['id'];
+				$table->category_title = $project['data']['attributes']['title'];
 				$table->extension_id   = $extension_joomla->extension_id;
 
 				if (!$table->check())

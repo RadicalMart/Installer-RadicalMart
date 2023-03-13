@@ -122,7 +122,7 @@ class PlgInstallerSovmart extends CMSPlugin
 			$app->setHeader('Content-Type', 'application/json');
 			$app->sendHeaders();
 
-			echo (new JsonResponse($output));
+			echo(new JsonResponse($output));
 
 			$this->app->close();
 		}
@@ -170,7 +170,7 @@ class PlgInstallerSovmart extends CMSPlugin
 		}
 		catch (Exception $e)
 		{
-			$messages[] = ['message' => Text::_('PLG_INSTALLER_SOVMART_TEXT_INSTALL_ERROR'), 'type' => 'danger'];
+			array_unshift($messages, ['message' => Text::_('PLG_INSTALLER_SOVMART_TEXT_INSTALL_ERROR'), 'type' => 'danger']);
 		}
 
 		return json_encode(['status' => $install ? 'ok' : 'fail', 'messages' => $messages]);
