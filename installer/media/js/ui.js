@@ -494,6 +494,7 @@ window.SovmartUI = {
     renderNoAuth: function () {
         let form = SovmartUtils
             .createElement('div')
+            .add('p', {}, 'Получить токен вы можете в личном кабинете на <a href="https://sovmart.ru/lk" target="_blank">SovMart</a>')
             .addChild('form', {
                 events: [
                     [
@@ -502,6 +503,11 @@ window.SovmartUI = {
                             event.preventDefault();
 
                             let token_value = event.target.querySelector('[name=token]').value;
+
+                            if(token_value === '') {
+                                SovmartUtils.createAlert('Пустой токен не допускается', 'danger', 5000);
+                                return;
+                            }
 
                             SovmartUtils.ajaxPost(Sovmart.url + '&method=savetoken', {token: token_value})
                                 .done(function (response) {
@@ -523,23 +529,21 @@ window.SovmartUI = {
                     ]
                 ]
             })
-            .addChild('div', {class: 'sovmart-margin-small'})
-            .add('input', {class: 'sovmart-width-1-1 ri-input ri-input-medium', type: 'text', name: 'token', placeholder: SovmartLangs.text_token_input})
+            .addChild('div', {class: 'sovmart-margin-bottom'})
+            .add('input', {class: 'sovmart-width-1-1 ri-input ri-input-large', type: 'text', name: 'token', placeholder: SovmartLangs.text_token_input})
             .getParent()
-            .addChild('div', {class: 'sovmart-margin-small'})
-            .add('button', {type: 'submit', class: 'ri-btn ri-btn-primary'}, SovmartLangs.login)
+            .addChild('div', {class: ''})
+            .add('button', {type: 'submit', class: 'ri-btn ri-btn-primary ri-btn-large'}, SovmartLangs.login)
             .getParent()
-            .getParent()
+            .getParent();
 
-        return SovmartUI.renderDropdownButton({
-            label: SovmartLangs.auth,
-            position: 'right',
-            padding: true,
-            button: 'auth',
-            button_class: 'ri-btn-large',
-            click: function (event) { event.target.closest('.ri-dropdown-wrap').querySelector('input').focus(); },
-            content: form.build(),
-        });
+        let button = SovmartUtils.createElement('button', {type: 'button', class: 'ri-btn ri-btn-auth ri-btn-large', 'events': [
+            ['click', function() {
+                SovmartUtils.modal({container: this.container, header: 'Авторизация в сервисе', body: form.build()})
+            }]
+        ]}, SovmartLangs.auth);
+
+        return button.build();
     },
 
     renderAuth: function () {

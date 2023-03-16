@@ -486,6 +486,96 @@
 }
 
 
+/************************ Modals *************************************/
+.sovmart-wrap {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    background: rgba(0,0,0,.7);
+    z-index: 9999;
+}
+
+.sovmart-hide {
+    display: none;
+}
+
+.sovmart-wrap .sovmart-container {
+    position: relative;
+    width: 800px;
+    height: 50%;
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+    -webkit-flex-wrap: wrap;
+    flex-direction: column;
+    -webkit-flex-direction: column;
+    flex: 1 1 auto;
+    -webkit-flex: 1 1 auto;
+    justify-content: flex-end;
+    background: #fff;
+    top: 25%;
+    border-radius: 4px;
+}
+
+@media screen and (max-width: 1200px) {
+
+    .sovmart-wrap .sovmart-container {
+        width: 100%;
+    }
+
+}
+
+.sovmart-wrap .sovmart-close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 1;
+}
+
+.sovmart-wrap .sovmart-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 85px;
+    padding: 10px 35px;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    align-items: center;
+    font-size: 25px;
+    line-height: 39px;
+}
+
+.sovmart-wrap .sovmart-body-wrap {
+    position: relative;
+    height: calc(100% - 85px);
+}
+
+.sovmart-wrap .sovmart-body-wrap .sovmart-body {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    padding: 10px 35px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    webkit-overflow-scrolling: touch;
+    -webkit-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    -o-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+
 /************ Alerts *************/
 #sovmart-alert-container {
     position: fixed;
@@ -494,7 +584,7 @@
     width: 100%;
     bottom: 30px;
     right: 0;
-    z-index: 99;
+    z-index: 99999;
 }
 
 #sovmart-alert-wrapper {

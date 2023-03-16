@@ -181,97 +181,82 @@ window.SovmartUtils = {
         return rand;
     },
 
-    modal: function(header, body, footer, classForModal, callback_close) {
-        if(classForModal === null) {
-            classForModal = '';
+    modal: function (options) {
+
+        if (options.container === undefined) {
+            options.container = document.querySelector('body');
         }
 
-        let modalBackground = document.querySelector('.sovmart-modal_background');
-        let activeModal = document.querySelector('.sovmart-modal');
-        if(activeModal !== null) {
-            activeModal.remove();
-            modalBackground.classList.remove('active');
+        if (options.classForModal === undefined) {
+            options.classForModal = '';
         }
 
+        if (options.header === undefined) {
+            options.header = '';
+        }
 
-        let modal = this.createElement('div', {'class': 'sovmart-modal ' + classForModal})
-            .addChild('div', {'class': 'sovmart-modal_container'})
-            .add('button', {
-                'class': 'btn btn-danger sovmart-modal_close',
+        if (options.body === undefined) {
+            options.body = '';
+        }
+
+        if (options.footer === undefined) {
+            options.footer = '';
+        }
+
+        if (options.close === undefined) {
+            options.close = true;
+        }
+
+        let modal = this.createElement('div', {'class': 'sovmart-wrap ' + options.classForModal, 'events': [
+                ['click', function (ev) {
+                    if(ev.target.classList.contains('sovmart-wrap')) {
+                        this.remove();
+                    }
+                }]
+            ]})
+            .addChild('div', {'class': 'sovmart-container'});
+
+        if (options.close) {
+            modal = modal.add('button', {
+                'class': 'ri-btn ri-btn-danger sovmart-close',
                 'events': [
                     ['click', function (ev) {
-                        let modalBackground = document.querySelector('.sovmart-modal_background');
-
-                        modalBackground.classList.remove('active');
-                        this.closest('.sovmart-modal').remove();
-
-                        if(callback_close !== undefined && callback_close !== null) {
-                            callback_close();
-                        }
+                        this.closest('.sovmart-wrap').remove();
                     }]
-                ]}, '<span class="icon-delete large-icon"></span> ' + SovmartLangs.button_close)
-            .add('div', {'class': 'sovmart-modal_header'}, header)
-            .addChild('div', {'class': 'sovmart-modal_body-wrap'})
-            .add('div', {'class': 'sovmart-modal_body'}, body)
+                ]
+            }, 'Закрыть');
+        }
+
+        modal = modal.add('div', {'class': 'sovmart-header'}, options.header)
+            .addChild('div', {'class': 'sovmart-body-wrap'})
+            .add('div', {'class': 'sovmart-body'}, options.body)
             .getParent()
             .getParent();
 
+        options.container.appendChild(modal.build());
 
-        if(modalBackground === null) {
-            modalBackground = this.createElement('div', {'class': 'sovmart-modal_background'}).build();
-            document.querySelector('body').append(modalBackground);
+        let modalClass = function (modal) {
+            let self = this;
+            self.modal = modal;
+            self.modal_html = modal.build();
+
+            this.show = function () {
+                self.modal_html.classList.remove('sovmart-hide');
+            }
+
+            this.hide = function () {
+                self.modal_html.classList.add('sovmart-hide');
+            }
+
+            this.destroy = function () {
+                self.modal_html.remove();
+            }
+
         }
 
-        modalBackground.classList.add('active');
-        document.querySelector('body').append(modal.build());
-
+        return (new modalClass(modal));
     },
 
-    modalAjax: function(header, url) {
-        let modalBackground = document.querySelector('.sovmart-modal_background');
-        let activeModal = document.querySelector('.sovmart-modal');
-        if(activeModal !== null) {
-            activeModal.remove();
-            modalBackground.classList.remove('active');
-        }
-
-
-        let modal = this.createElement('div', {'class': 'sovmart-modal sovmart-modal-iframe'})
-            .addChild('div', {'class': 'sovmart-modal_container'})
-            .add('button', {
-                'class': 'btn btn-danger btn-large sovmart-modal_close',
-                'events': [
-                    ['click', function (ev) {
-                        let modalBackground = document.querySelector('.sovmart-modal_background');
-
-                        modalBackground.classList.remove('active');
-                        this.closest('.sovmart-modal').remove();
-                    }]
-                ]}, '<span class="icon-delete large-icon"></span> ' + SovmartLangs.button_close)
-            .add('div', {'class': 'sovmart-modal_header'}, header)
-            .add('iframe', {'class': 'sovmart-modal_iframe', 'src': url})
-            .getParent();
-
-
-        if(modalBackground === null) {
-            modalBackground = this.createElement('div', {'class': 'sovmart-modal_background'}).build();
-            document.querySelector('body').append(modalBackground);
-        }
-
-        modalBackground.classList.add('active');
-        document.querySelector('body').append(modal.build());
-    },
-
-    modalClose: function () {
-
-        let modalBackground = document.querySelector('.sovmart-modal_background');
-        let activeModal = document.querySelector('.sovmart-modal');
-        if(activeModal !== null) {
-            activeModal.remove();
-            modalBackground.classList.remove('active');
-        }
-
-    },
 
     /**
      * Source: https://github.com/lalaman/lala-alerts-js
