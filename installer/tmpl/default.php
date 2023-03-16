@@ -88,6 +88,7 @@ $langs = [
 	'login'                     => Text::_('PLG_INSTALLER_SOVMART_LOGIN'),
 	'logout'                    => Text::_('PLG_INSTALLER_SOVMART_LOGOUT'),
 	'hi'                        => Text::_('PLG_INSTALLER_SOVMART_HI'),
+	'icon_pay'                  => Text::_('PLG_INSTALLER_SOVMART_COPY_ICON_PAY'),
 	'alert_service_error'       => Text::_('PLG_INSTALLER_SOVMART_TEXT_SERVICE_ERROR'),
 	'text_key_error'            => Text::_('PLG_INSTALLER_SOVMART_TEXT_KEY_ERROR'),
 	'text_sync'                 => Text::_('PLG_INSTALLER_SOVMART_TEXT_SYNC'),

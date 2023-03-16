@@ -510,8 +510,8 @@ window.SovmartUI = {
                                 .fail(function (xhr) {
                                     let response = JSON.parse(xhr.responseText);
 
-                                    if (response !== null && response.data[0] !== undefined) {
-                                        SovmartUtils.createAlert(response.data[0], 'danger', 5000);
+                                    if (response !== null && response.data !== undefined) {
+                                        SovmartUtils.createAlert(response.data, 'danger', 5000);
                                         return;
                                     }
 
@@ -808,6 +808,12 @@ window.SovmartUI = {
             card = card.add('img', {src: cover, class: cover_class})
         }
 
+        if(paid === 'paid')
+        {
+            card = card.addChild('div', {class: 'sovmart-project-card-badge'})
+                .add('div', {class: 'sovmart-project-card-badge-icon'}, SovmartLangs.icon_pay)
+                .getParent();
+        }
 
         card = card.getParent()
             .addChild('div', {class: 'sovmart-project-card-info'})
