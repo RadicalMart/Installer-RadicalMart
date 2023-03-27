@@ -136,11 +136,11 @@ window.Sovmart = {
                 }
 
 
-                let header = SovmartUtils.createElement('div', {class: 'sovmart-flex'})
+                let header = SovmartUtils.createElement('div', {class: 'sovmart-flex sovmart-flex-wrap'})
 
                 header = header
-                    .add('div', {class: 'sovmart-width-expand'}, SovmartUI.renderFormSearch())
-                    .add('div', {class: 'sovmart-width-auto'},
+                    .add('div', {class: 'sovmart-width-1-1 sovmart-width-expand@m sovmart-margin-right-xsmall'}, SovmartUI.renderFormSearch())
+                    .add('div', {class: 'sovmart-width-1-1 sovmart-margin-bottom-xsmall sovmart-width-auto@m sovmart-flex sovmart-flex-left sovmart-flex-right@m  sovmart-flex-first sovmart-flex-last@m'},
                         (SovmartConfig.name !== '' && SovmartConfig.token !== '') ? SovmartUI.renderAuth() : SovmartUI.renderNoAuth()
             );
 
@@ -227,7 +227,7 @@ window.Sovmart = {
                             class: '',
                             accordeon: accordeon,
                             buttons: [{
-                                    label: 'Установить ' + items[k].title,
+                                    label: SovmartLangs.install + ' ' + items[k].title,
                                     class: 'ri-btn ri-btn-primary',
                                     events: [
                                         [

@@ -207,9 +207,10 @@ window.SovmartUtils = {
             options.close = true;
         }
 
-        let modal = this.createElement('div', {'class': 'sovmart-wrap ' + options.classForModal, 'events': [
+        let modal = this.createElement('div', {'class': 'sovmart-modal-wrap ' + options.classForModal, 'events': [
                 ['click', function (ev) {
-                    if(ev.target.classList.contains('sovmart-wrap')) {
+                    if(ev.target.classList.contains('sovmart-modal-wrap')) {
+                        document.querySelector('body').classList.remove('sovmart-modal-active');
                         this.remove();
                     }
                 }]
@@ -221,7 +222,8 @@ window.SovmartUtils = {
                 'class': 'ri-btn ri-btn-danger sovmart-close',
                 'events': [
                     ['click', function (ev) {
-                        this.closest('.sovmart-wrap').remove();
+                        this.closest('.sovmart-modal-wrap').remove();
+                        document.querySelector('body').classList.remove('sovmart-modal-active');
                     }]
                 ]
             }, 'Закрыть');
@@ -234,6 +236,7 @@ window.SovmartUtils = {
             .getParent();
 
         options.container.appendChild(modal.build());
+        document.querySelector('body').classList.add('sovmart-modal-active');
 
         let modalClass = function (modal) {
             let self = this;
@@ -242,6 +245,7 @@ window.SovmartUtils = {
 
             this.show = function () {
                 self.modal_html.classList.remove('sovmart-hide');
+                document.querySelector('body').classList.add('sovmart-modal-active');
             }
 
             this.hide = function () {

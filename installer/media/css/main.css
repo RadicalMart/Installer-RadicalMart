@@ -40,11 +40,28 @@
     flex: 1;
 }
 
-.sovmart-width-500 {
+.sovmart-width-large {
+    flex: unset;
     width: 500px;
 }
 
-@media screen and (min-width: 1600px) {
+@media screen and (min-width: 968px) {
+
+    .sovmart-width-auto\@m {
+        width: auto;
+    }
+
+    .sovmart-width-expand\@m {
+        flex: 1;
+    }
+
+    .sovmart-width-large\@m {
+        flex: unset;
+        width: 500px;
+    }
+}
+
+@media screen and (min-width: 1700px) {
     .sovmart-width-1-2\@l {
         width: 50%;
     }
@@ -117,8 +134,8 @@
     margin-right: 5px;
 }
 
-.sovmart-margin-right-xsmall {
-    margin-right: 5px;
+.sovmart-margin-bottom-xsmall {
+    margin-bottom: 5px;
 }
 
 /************* Padding *************/
@@ -160,11 +177,48 @@
     flex-wrap: nowrap;
 }
 
+.sovmart-flex-first {
+    order: -1;
+}
+
+.sovmart-flex-last {
+    order: 999;
+}
+
+.sovmart-flex-left {
+    justify-content: flex-start;
+}
+
+.sovmart-flex-right {
+    justify-content: flex-end;
+}
+
+.sovmart-flex-center {
+    justify-content: center;
+}
+
+@media screen and (min-width: 968px) {
+    .sovmart-flex-first\@m {
+        order: -1;
+    }
+
+    .sovmart-flex-last\@m {
+        order: 999;
+    }
+
+    .sovmart-flex-left\@m {
+        justify-content: flex-start;
+    }
+
+    .sovmart-flex-right\@m {
+        justify-content: flex-end;
+    }
+}
+
 .sovmart-flex-center {
     justify-content: center;
     justify-items: center;
 }
-
 
 .sovmart-flex-middle {
     align-items: center;
@@ -192,6 +246,14 @@
 
 .sovmart-grid > * {
     margin: 15px;
+}
+
+.sovmart-grid-width-1-1 > * {
+    width: calc(100% - 30px);
+}
+
+.sovmart-grid-width-1-2 > * {
+    width: calc(50% - 30px);
 }
 
 .sovmart-grid-width-1-3 > * {
@@ -250,6 +312,22 @@
 /************ Toolbar ******************/
 .ri-toolbar-form input {
     height: 35px;
+}
+
+@media screen and (max-width: 968px) {
+    .sovmart-toolbar .ri-btn-group {
+        margin-right: 5px;
+        margin-bottom: 5px;
+    }
+}
+
+/*********** Buttons ****************/
+@media screen and (max-width: 968px) {
+    .ri-btn {
+        max-width: calc(100vw - 80px);
+        text-overflow: ellipsis;
+        overflow: clip;
+    }
 }
 
 /*********** Group *****************/
@@ -502,8 +580,12 @@
 
 
 /************************ Modals *************************************/
-.sovmart-wrap {
-    position: absolute;
+.sovmart-modal-active {
+    overflow: hidden;
+}
+
+.sovmart-modal-wrap{
+    position: fixed;
     left: 0;
     right: 0;
     bottom: 0;
@@ -516,7 +598,7 @@
     display: none;
 }
 
-.sovmart-wrap .sovmart-container {
+.sovmart-modal-wrap .sovmart-container {
     position: relative;
     width: 800px;
     height: 50%;
@@ -536,20 +618,20 @@
 
 @media screen and (max-width: 1200px) {
 
-    .sovmart-wrap .sovmart-container {
+    .sovmart-modal-wrap .sovmart-container {
         width: 100%;
     }
 
 }
 
-.sovmart-wrap .sovmart-close {
+.sovmart-modal-wrap .sovmart-close {
     position: absolute;
     top: 8px;
     right: 8px;
     z-index: 1;
 }
 
-.sovmart-wrap .sovmart-header {
+.sovmart-modal-wrap .sovmart-header {
     position: absolute;
     top: 0;
     left: 0;
@@ -564,12 +646,12 @@
     line-height: 39px;
 }
 
-.sovmart-wrap .sovmart-body-wrap {
+.sovmart-modal-wrap .sovmart-body-wrap {
     position: relative;
     height: calc(100% - 85px);
 }
 
-.sovmart-wrap .sovmart-body-wrap .sovmart-body {
+.sovmart-modal-wrap .sovmart-body-wrap .sovmart-body {
     width: 100%;
     height: 100%;
     position: absolute;

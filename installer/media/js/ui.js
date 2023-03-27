@@ -62,7 +62,7 @@ window.SovmartUI = {
     },
 
     renderToolbar: function (args) {
-        let toolbar = SovmartUtils.createElement('div', {class: 'sovmart-toolbar sovmart-flex sovmart-child-margin-right-small'});
+        let toolbar = SovmartUtils.createElement('div', {class: 'sovmart-toolbar sovmart-flex sovmart-flex-wrap sovmart-child-margin-right-small'});
 
         if (args.groups !== undefined) {
 
@@ -458,12 +458,12 @@ window.SovmartUI = {
             })
             .addChild('div', {'class': 'sovmart-flex'})
             .add('input', {
-                class: 'ri-input ri-input-large sovmart-input-key sovmart-width-500 sovmart-margin-right-xsmall',
+                class: 'ri-input ri-input-large sovmart-input-key sovmart-width-expand sovmart-width-large@m sovmart-margin-right-xsmall',
                 type: 'text',
                 placeholder: SovmartLangs.search,
                 name: 'q',
             })
-            .addChild('div', {class: 'ri-btn-group'})
+            .addChild('div', {class: 'sovmart-width-auto sovmart-flex sovmart-flex-nowrap ri-btn-group'})
             .add('button', {
                 class: 'ri-btn ri-btn-default ri-btn-primary ri-btn-large',
                 type: 'submit'
@@ -603,6 +603,10 @@ window.SovmartUI = {
 
         if (window.matchMedia("(max-width: 968px)").matches) {
             width = 2;
+        }
+
+        if (window.matchMedia("(max-width: 700px)").matches) {
+            width = 1;
         }
 
         grid = grid.addChild('div', {
