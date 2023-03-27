@@ -597,6 +597,14 @@ window.SovmartUI = {
             width = 4;
         }
 
+        if (window.matchMedia("(max-width: 1500px)").matches) {
+            width = 3;
+        }
+
+        if (window.matchMedia("(max-width: 968px)").matches) {
+            width = 2;
+        }
+
         grid = grid.addChild('div', {
             class: 'sovmart-grid sovmart-grid-width-1-' + width,
             'data-row': grid_row_id

@@ -273,8 +273,8 @@
 
 /************* Group ***************/
 .sovmart-group {
-    margin: 0 -41px;
-    padding: 25px 41px 25px 41px;
+    margin: 0 -2vw;
+    padding: 25px 2vw;
     border-top: 1px solid var(--template-bg-dark-20);
     border-bottom: 1px solid var(--template-bg-dark-20);
 }

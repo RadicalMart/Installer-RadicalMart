@@ -375,6 +375,13 @@
     border-top-left-radius: 4px;
 }
 
+@media screen and (max-width: 1700px) {
+    .sovmart-project-card-image {
+        min-width: 100px;
+        width: 100px;
+    }
+}
+
 .sovmart-project-card-image img {
     max-width: none;
     height: 100%;
@@ -393,8 +400,16 @@
 }
 
 .sovmart-project-card-info h4 {
+    margin-bottom: 3px;
     font-size: 16px;
     line-height: 20px;
+}
+
+@media screen and (max-width: 1700px) {
+    .sovmart-project-card-info h4 {
+        font-size: 13px;
+        line-height: 17px;
+    }
 }
 
 .sovmart-project-categories {
