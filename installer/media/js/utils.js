@@ -226,7 +226,7 @@ window.SovmartUtils = {
                         document.querySelector('body').classList.remove('sovmart-modal-active');
                     }]
                 ]
-            }, 'Закрыть');
+            }, SovmartLangs.close);
         }
 
         modal = modal.add('div', {'class': 'sovmart-header'}, options.header)

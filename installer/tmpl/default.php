@@ -65,6 +65,7 @@ $langs = [
 	'copy'                      => Text::_('PLG_INSTALLER_SOVMART_COPY'),
 	'docs'                      => Text::_('PLG_INSTALLER_SOVMART_DOCS'),
 	'support'                   => Text::_('PLG_INSTALLER_SOVMART_SUPPORT'),
+	'close'                     => Text::_('PLG_INSTALLER_SOVMART_CLOSE'),
 	'message_close'             => Text::_('PLG_INSTALLER_SOVMART_MESSAGE_CLOSE'),
 	'installed'                 => Text::_('PLG_INSTALLER_SOVMART_INSTALLED'),
 	'install'                   => Text::_('PLG_INSTALLER_SOVMART_INSTALL'),
