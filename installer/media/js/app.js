@@ -360,6 +360,12 @@ window.Sovmart = {
                                                     }
 
                                                     Sovmart.checkUpdatedProjects(false);
+
+                                                    SovmartProject.checkInstall({
+                                                        ids: ids_required,
+                                                        done: Sovmart.checkInstallProjectCard
+                                                    });
+
                                                     button_install.innerHTML = SovmartLangs.install_meta;
                                                     button_install.removeAttribute('disabled');
                                                     subgroup.classList.remove('ri-area-disabled');
