@@ -176,6 +176,14 @@ class PlgInstallerSovmart extends CMSPlugin
 		return json_encode(['status' => $install ? 'ok' : 'fail', 'messages' => $messages]);
 	}
 
+	protected function methodStartinfo()
+	{
+		return [
+			'categories'  => $this->methodCategories(),
+			'coreupdates' => $this->methodDefinecoreupdates(),
+		];
+	}
+
 	protected function methodDelete()
 	{
 		$app     = Factory::getApplication();
@@ -460,6 +468,57 @@ class PlgInstallerSovmart extends CMSPlugin
 	protected function methodSearch()
 	{
 		return API::search($this->app->input->getString('q', ''));
+	}
+
+	protected function methodDefinecoreupdates()
+	{
+		$checked_core = true;
+		$checked_lang = true;
+
+		$core = 'https://update.joomla.org/core/list.xml';
+		$lang = '';
+
+		if (version_compare((new Version())->getShortVersion(), '4.0', '<'))
+		{
+			$lang = 'https://update.joomla.org/language/translationlist_3.xml';
+		}
+
+		if (version_compare((new Version())->getShortVersion(), '5.0', '<'))
+		{
+			$lang = 'https://update.joomla.org/language/translationlist_4.xml';
+		}
+
+		$query = $this->db->getQuery(true);
+		$query
+			->select(['location', 'enabled'])
+			->from($this->db->quoteName('#__update_sites'))
+			->where('location IN (' . implode(', ', [$this->db->q($core), $this->db->q($lang)]) . ')');
+
+		$checked = $this->db->setQuery($query)->loadObjectList();
+
+		foreach ($checked as $item)
+		{
+			if (
+				$item->location === $core &&
+				!(int) $item->enabled
+			)
+			{
+				$checked_core = false;
+			}
+
+			if (
+				$item->location === $lang &&
+				!(int) $item->enabled
+			)
+			{
+				$checked_lang = false;
+			}
+		}
+
+		return [
+			'core' => $checked_core,
+			'lang' => $checked_lang,
+		];
 	}
 
 	protected function cleanCache($group = null, $client_id = 0)

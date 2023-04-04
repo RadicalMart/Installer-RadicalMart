@@ -87,7 +87,16 @@ window.SovmartUI = {
             return '';
         }
 
-        let group = SovmartUtils.createElement('div', {class: 'ri-btn-group'});
+        let group = SovmartUtils.createElement('div', {class: 'ri-btn-group-wrap'});
+
+        if(
+            buttons.label !== undefined &&
+            buttons.label !== null
+        ) {
+            group = group.add('div', {class: 'ri-btn-group-label'}, buttons.label);
+        }
+
+        group = group.addChild('div', {class: 'ri-btn-group'});
 
         for (let k = 0; k < buttons.items.length; k++) {
 
@@ -175,6 +184,8 @@ window.SovmartUI = {
             }
 
         }
+
+        group = group.getParent();
 
         return group.build();
     },

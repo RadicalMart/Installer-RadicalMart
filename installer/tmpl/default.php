@@ -90,7 +90,10 @@ $langs = [
 	'logout'                    => Text::_('PLG_INSTALLER_SOVMART_LOGOUT'),
 	'hi'                        => Text::_('PLG_INSTALLER_SOVMART_HI'),
 	'icon_pay'                  => Text::_('PLG_INSTALLER_SOVMART_COPY_ICON_PAY'),
+	'updates_joomla'            => Text::_('PLG_INSTALLER_SOVMART_UPDATES_JOOMLA'),
+	'updates_lang'              => Text::_('PLG_INSTALLER_SOVMART_UPDATES_LANG'),
 	'alert_service_error'       => Text::_('PLG_INSTALLER_SOVMART_TEXT_SERVICE_ERROR'),
+	'text_server_updates'       => Text::_('PLG_INSTALLER_SOVMART_TEXT_SERVER_UPDATES'),
 	'text_key_error'            => Text::_('PLG_INSTALLER_SOVMART_TEXT_KEY_ERROR'),
 	'text_sync'                 => Text::_('PLG_INSTALLER_SOVMART_TEXT_SYNC'),
 	'text_updated_new'          => Text::_('PLG_INSTALLER_SOVMART_TEXT_UPDATED_NEW'),
@@ -110,6 +113,10 @@ $langs = [
 	'text_token_input'          => Text::_('PLG_INSTALLER_SOVMART_TEXT_TOKEN_INPUT'),
 	'text_critical_error'       => Text::_('PLG_INSTALLER_SOVMART_TEXT_CRITICAL_ERROR'),
 	'text_copied'               => Text::_('PLG_INSTALLER_SOVMART_TEXT_COPIED'),
+	'text_set_more'             => Text::_('PLG_INSTALLER_SOVMART_TEXT_SET_SHOW'),
+	'text_set_hide'             => Text::_('PLG_INSTALLER_SOVMART_TEXT_SET_HIDE'),
+	'text_log_more'             => Text::_('PLG_INSTALLER_SOVMART_TEXT_LOG_SHOW'),
+	'text_log_hide'             => Text::_('PLG_INSTALLER_SOVMART_TEXT_LOG_HIDE'),
 ];
 ?>
 

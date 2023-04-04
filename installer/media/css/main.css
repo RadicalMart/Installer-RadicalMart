@@ -151,6 +151,10 @@
     padding: 15px !important;
 }
 
+.sovmart-padding-remove-horizontal {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
 
 /*********** Height ***************/
 .sovmart-height-large {
@@ -314,11 +318,9 @@
     height: 35px;
 }
 
-@media screen and (max-width: 968px) {
-    .sovmart-toolbar .ri-btn-group {
-        margin-right: 5px;
-        margin-bottom: 5px;
-    }
+.sovmart-toolbar .ri-btn-group {
+    margin-right: 5px;
+    margin-bottom: 5px;
 }
 
 /*********** Buttons ****************/
@@ -602,6 +604,7 @@
     position: relative;
     width: 800px;
     height: 50%;
+    min-height: 300px;
     margin: auto;
     display: flex;
     flex-wrap: wrap;

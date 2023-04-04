@@ -47,12 +47,24 @@ window.Sovmart = {
             SovmartUI.loaderShow({
                 container: page,
                 wait: function (resolve, reject) {
-                    let url = Sovmart.url + '&method=categories';
+                    let url = Sovmart.url + '&method=startinfo';
 
                     SovmartUtils.ajaxGet(url)
                         .done(function (json) {
-                            json = JSON.parse(json.data);
-                            let categories_items = json.data;
+
+                            if(typeof json === 'string')
+                            {
+                                json = JSON.parse(json);
+                            }
+
+                            if(typeof json.data.categories === 'string')
+                            {
+                                json.data.categories = JSON.parse(json.data.categories);
+                            }
+
+                            let categories_items = json.data.categories;
+                            let core_updates = json.data.coreupdates;
+                            let core_updates_items = [];
                             let items = {
                                 dropdown: {
                                     label: SovmartLangs.category,
@@ -104,13 +116,45 @@ window.Sovmart = {
                                 });
                             }
 
+                            if(core_updates.core === true)
+                            {
+                                core_updates_items.push({
+                                    'label': SovmartLangs.updates_joomla + ' - std',
+                                    'class': 'ri-btn ri-btn-text sovmart-padding-remove-horizontal sovmart-margin-right-small'
+                                });
+                            }
+                            else
+                            {
+                                core_updates_items.push({
+                                    'label': SovmartLangs.updates_joomla + ' - alt',
+                                    'class': 'ri-btn ri-btn-text sovmart-padding-remove-horizontal sovmart-margin-right-small'
+                                });
+                            }
+
+                            if(core_updates.lang === true)
+                            {
+                                core_updates_items.push({
+                                    'label': SovmartLangs.updates_lang + ' - std',
+                                    'class': 'ri-btn ri-btn-text sovmart-padding-remove-horizontal'
+                                });
+                            }
+                            else
+                            {
+                                core_updates_items.push({
+                                    'label': SovmartLangs.updates_lang + ' - alt',
+                                    'class': 'ri-btn ri-btn-text sovmart-padding-remove-horizontal'
+                                });
+                            }
+
                             for (let k = 0; k < Sovmart.buttons_page_main.groups.length; k++) {
 
                                 if (Sovmart.buttons_page_main.groups[k].name === 'main') {
                                     Sovmart.buttons_page_main.groups[k].items.push(items);
-                                    break;
                                 }
 
+                                if (Sovmart.buttons_page_main.groups[k].name === 'coreupdates') {
+                                    Sovmart.buttons_page_main.groups[k].items = core_updates_items;
+                                }
                             }
 
                             SovmartUI.showPage({buttons: Sovmart.buttons_page_main});
@@ -118,8 +162,8 @@ window.Sovmart = {
                             resolve();
 
                         }).fail(function (xhr) {
-                        reject();
-                    });
+                            reject();
+                        });
                 }
             }).then(function () {
 
@@ -218,8 +262,8 @@ window.Sovmart = {
                     });
 
                     if(items[k].items_not_required !== undefined && items[k].items_not_required.length > 0) {
-                        accordeon.label = 'Показать состав ядра';
-                        accordeon.label_close = 'Скрыть состав ядра';
+                        accordeon.label = SovmartLangs.text_set_more;
+                        accordeon.label_close = SovmartLangs.text_set_hide;
                     }
 
                     group.groups = [
@@ -280,7 +324,6 @@ window.Sovmart = {
 
                                                     }
 
-
                                                     if (success) {
 
                                                         logs_container.append(
@@ -293,8 +336,8 @@ window.Sovmart = {
 
                                                         logs_container.append(
                                                             SovmartUI.renderToggle({
-                                                                label: 'Показать подробности установки',
-                                                                label_close: 'Свернуть подробности установки',
+                                                                label: SovmartLangs.text_log_more,
+                                                                label_close: SovmartLangs.text_log_hide,
                                                                 label_class: 'ri-btn-default',
                                                                 content: messages
                                                             })
@@ -1549,7 +1592,12 @@ window.Sovmart = {
                             ]
                         }
                     ]
-                }
+                },
+                {
+                    name: 'coreupdates',
+                    label: SovmartLangs.text_server_updates,
+                    items: []
+                },
             ]
         };
     },

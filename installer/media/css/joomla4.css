@@ -128,6 +128,11 @@
     box-shadow: 0 0 0 .25rem rgba(206,72,71,.5);
 }
 
+.ri-btn-text {
+    border-color: transparent;
+    background-color: transparent;
+}
+
 .ri-btn-auth {
     background: #457d54;
     border-color: #457d54;
@@ -211,7 +216,18 @@
 
 
 /**************** Button groups ***************/
+.ri-btn-group-wrap {
+    position: relative;
+}
+
 .ri-btn-group {
+}
+
+.ri-btn-group-label {
+    position: absolute;
+    left: 0;
+    top: -20px;
+    font-size: 13px;
 }
 
 .ri-btn-group-small > * {
@@ -236,6 +252,13 @@
 .ri-btn-group > *:last-child > .ri-btn {
     border-bottom-right-radius: .25rem;
     border-top-right-radius: .25rem;
+}
+
+@media screen and (max-width: 1600px) {
+    .ri-btn-group-label {
+        top: auto;
+        bottom: -17px;
+    }
 }
 
 /*********** Form **********/

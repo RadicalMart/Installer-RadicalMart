@@ -8,7 +8,7 @@
     <license>GNU General Public License version 3; see LICENSE.txt</license>
     <authorEmail>cymbal@delo-design.ru</authorEmail>
     <authorUrl>https://delo-deisgn.ru</authorUrl>
-    <version>1.6.0</version>
+    <version>1.6.1</version>
     <scriptfile>script.php</scriptfile>
     <description>PKG_SOVMART_XML_DESCRIPTION</description>
     <languages folder="language">

@@ -69,6 +69,7 @@ class ProviderJoomla implements ProviderInterface
 				$query->from('#__extensions');
 				$query->where($db->quoteName('type') . '=' . $db->quote($type));
 				$query->where($db->quoteName('element') . '=' . $db->quote($element));
+				$query->where($db->quoteName('folder') . '=' . $db->quote($folder));
 				$extension_joomla = $db->setQuery($query)->loadObject();
 
 				if (empty($extension_joomla->manifest_cache))

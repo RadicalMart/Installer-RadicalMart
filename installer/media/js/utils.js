@@ -342,6 +342,11 @@ window.SovmartUtils = {
     openInNewTab: function (url) {
         let win = window.open(url, '_blank');
         win.focus();
+    },
+
+
+    redirect: function (url) {
+        window.location.href = url;
     }
 
 };
