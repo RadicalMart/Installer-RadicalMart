@@ -246,10 +246,13 @@ class PlgInstallerSovmart extends CMSPlugin
 
 			foreach ($projects_install as $project_install)
 			{
-				if (isset($projects[(int) $project_install->project_id]))
+				if (isset(
+					$projects[(int) $project_install->project_id],
+					$projects[(int) $project_install->project_id]['version']['version']
+				))
 				{
 					$version_current = (string) $project_install->version;
-					$version_last    = (string) $projects[$project_install->project_id]['version']['version'];
+					$version_last    = (string) $projects[(int) $project_install->project_id]['version']['version'];
 
 					if (version_compare($version_last, $version_current, '>'))
 					{
