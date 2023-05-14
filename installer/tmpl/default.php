@@ -89,6 +89,7 @@ $langs = [
 	'login'                     => Text::_('PLG_INSTALLER_SOVMART_LOGIN'),
 	'logout'                    => Text::_('PLG_INSTALLER_SOVMART_LOGOUT'),
 	'hi'                        => Text::_('PLG_INSTALLER_SOVMART_HI'),
+	'load_more'                 => Text::_('PLG_INSTALLER_SOVMART_LOAD_MORE'),
 	'icon_pay'                  => Text::_('PLG_INSTALLER_SOVMART_COPY_ICON_PAY'),
 	'updates_joomla'            => Text::_('PLG_INSTALLER_SOVMART_UPDATES_JOOMLA'),
 	'updates_lang'              => Text::_('PLG_INSTALLER_SOVMART_UPDATES_LANG'),

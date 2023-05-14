@@ -1442,7 +1442,7 @@ window.Sovmart = {
                         }
                     ]
                 ]
-            }, 'Загрузить еще');
+            }, SovmartLangs.load_more);
 
         page.appendChild(button.build());
     },

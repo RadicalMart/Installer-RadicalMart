@@ -5,6 +5,7 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Http\Transport\CurlTransport;
 use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Version;
 use Joomla\Registry\Registry;
 use stdClass;
 
@@ -52,7 +53,7 @@ class API
 
 	public static function getProjectDownload($id, $full = true)
 	{
-		if($full)
+		if ($full)
 		{
 			$uri = (new Uri());
 			$uri->setScheme(Config::$scheme);
@@ -155,6 +156,10 @@ class API
 		$lang = Factory::getLanguage();
 		$uri->setVar('lang', $lang->getTag());
 
+		$version = (new Version)->getShortVersion();
+		$uri->setVar('targetplatform', 'joomla');
+		$uri->setVar('targetversion', $version);
+
 		$data_build = [];
 
 		// если отдать data для метода request объекта $curlTransport, то он тогда формирует как POST запрос, чтобы избежать этого, формирую переменные в объекте Uri через setVar
@@ -182,11 +187,16 @@ class API
 
 	private static function requestDebug($method, $data = [], $type = 'GET')
 	{
-		$url  = Config::$scheme . '://' . Config::$host . Config::$path . $method;
-		$lang = Factory::getLanguage();
+		$url     = Config::$scheme . '://' . Config::$host . Config::$path . $method;
+		$lang    = Factory::getLanguage();
+		$version = (new Version)->getShortVersion();
 
 		$data_build = http_build_query(
-			array_merge($data, static::$data_request, ['lang' => $lang->getTag()])
+			array_merge($data, static::$data_request, [
+				'lang'           => $lang->getTag(),
+				'targetplatform' => 'joomla',
+				'targetversion'  => $version,
+			])
 		);
 
 		$headers_build = [];
