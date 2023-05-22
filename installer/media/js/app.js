@@ -62,7 +62,7 @@ window.Sovmart = {
                                 json.data.categories = JSON.parse(json.data.categories);
                             }
 
-                            let categories_items = json.data.categories;
+                            let categories_items = json.data.categories.data;
                             let core_updates = json.data.coreupdates;
                             let core_updates_items = [];
                             let items = {
@@ -115,6 +115,8 @@ window.Sovmart = {
                                     ]
                                 });
                             }
+
+                            console.log(Sovmart.categories);
 
                             if(core_updates.core === true)
                             {
