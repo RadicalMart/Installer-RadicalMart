@@ -974,7 +974,7 @@
 .ri-dropdown {
     visibility: hidden;
     position: absolute;
-    width: 300px;
+    width: 330px;
     max-height: 400px;
     overflow: auto;
     transition: visibility 0.1s;
