@@ -80,11 +80,6 @@ class ProviderJoomla implements ProviderInterface
 				$manifest_cache = new Registry($extension_joomla->manifest_cache);
 				$version        = $manifest_cache->get('version');
 
-				if (isset($project['data']['attributes']['version']['version']))
-				{
-					$version = $project['data']['attributes']['version']['version'];
-				}
-
 				$table = Table::getInstance('SovmartExtensions', 'Table');
 				$table->load([
 					'provider' => strtolower($project['data']['attributes']['provider']),

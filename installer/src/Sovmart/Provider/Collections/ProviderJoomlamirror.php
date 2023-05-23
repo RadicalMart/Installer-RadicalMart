@@ -63,11 +63,6 @@ class ProviderJoomlamirror extends ProviderJoomla
 				$manifest_cache = new Registry($extension_joomla->manifest_cache);
 				$version        = $manifest_cache->get('version');
 
-				if (isset($project['data']['attributes']['version']['version']))
-				{
-					$version = $project['data']['attributes']['version']['version'];
-				}
-
 				$table = Table::getInstance('SovmartExtensions', 'Table');
 				$table->load([
 					'provider' => $project['data']['attributes']['provider'],
