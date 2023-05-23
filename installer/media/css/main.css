@@ -481,8 +481,8 @@
 
 .sovmart-project-card-info h4 {
     margin-bottom: 3px;
-    font-size: 16px;
-    line-height: 20px;
+    font-size: 14px;
+    line-height: 17px;
 }
 
 @media screen and (max-width: 1700px) {
@@ -524,6 +524,11 @@
     justify-content: center;
     align-items: center;
     align-content: center;
+}
+
+.sovmart-project-card-version > span {
+    font-size: 11px;
+    white-space: nowrap;
 }
 
 .sovmart-project-card-more-wrap {
