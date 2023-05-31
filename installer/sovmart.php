@@ -419,6 +419,9 @@ class PlgInstallerSovmart extends CMSPlugin
 				throw new RuntimeException(Text::_('PLG_INSTALLER_SOVMART_ERROR_DATABASE_SAVE'), 500);
 			}
 
+			$this->cleanCache('com_plugins');
+			$this->cleanCache('com_plugins', 1);
+
 			return ['status' => 'ok'];
 		}
 
@@ -456,8 +459,8 @@ class PlgInstallerSovmart extends CMSPlugin
 		}
 
 		// очистка кеша, так как джумла кеширует параметры плагинов и компонентов, чтобы обновился токен надо кеш сбросить
-		$this->cleanCache('_system');
-		$this->cleanCache('_system', 1);
+		$this->cleanCache('com_plugins');
+		$this->cleanCache('com_plugins', 1);
 
 		return ['status' => 'ok'];
 
