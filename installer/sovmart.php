@@ -74,14 +74,13 @@ class PlgInstallerSovmart extends CMSPlugin
 		)
 		{
 			$headers['Authorization'] = 'Bearer ' . $token;
+			$version = (new Version)->getShortVersion();
+
+			$url .= (strpos('?', $url) === false ? '?' : '&') . http_build_query([
+					'targetplatform' => 'joomla',
+					'targetversion'  => $version,
+				]);
 		}
-
-		$version = (new Version)->getShortVersion();
-
-		$url .= (strpos('?', $url) === false ? '?' : '&') . http_build_query([
-				'targetplatform' => 'joomla',
-				'targetversion'  => $version,
-			]);
 
 		return true;
 	}
