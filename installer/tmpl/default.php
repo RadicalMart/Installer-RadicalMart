@@ -118,6 +118,7 @@ $langs = [
 	'text_set_hide'             => Text::_('PLG_INSTALLER_SOVMART_TEXT_SET_HIDE'),
 	'text_log_more'             => Text::_('PLG_INSTALLER_SOVMART_TEXT_LOG_SHOW'),
 	'text_log_hide'             => Text::_('PLG_INSTALLER_SOVMART_TEXT_LOG_HIDE'),
+	'text_under_development'    => Text::_('PLG_INSTALLER_SOVMART_TEXT_UNDER_DEVELOPMENT'),
 ];
 ?>
 

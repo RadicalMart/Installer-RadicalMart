@@ -970,90 +970,100 @@ window.Sovmart = {
             }
 
             body = body.add('h2', {'class': 'sovmart-project-page_gallery-header'}, project.attributes.title);
+            if(project.attributes.version !== false)
+            {
+                group_actions.items.push({
+                    label: SovmartLangs.install,
+                    icon: 'ri-download',
+                    class: 'ri-btn ri-btn-default ri-btn-success ri-btn-install',
+                    disabled: 'disabled',
+                    events: [
+                        [
+                            'click',
+                            function (ev) {
+                                let button_install = this;
+                                let button_delete = SovmartUI.getContainerToolbar().querySelector('.ri-btn-delete');
+                                let logs_container = SovmartUI.getPage().querySelector('.sovmart-logs');
 
-            group_actions.items.push({
-                label: SovmartLangs.install,
-                icon: 'ri-download',
-                class: 'ri-btn ri-btn-default ri-btn-success ri-btn-install',
-                disabled: 'disabled',
-                events: [
-                    [
-                        'click',
-                        function (ev) {
-                            let button_install = this;
-                            let button_delete = SovmartUI.getContainerToolbar().querySelector('.ri-btn-delete');
-                            let logs_container = SovmartUI.getPage().querySelector('.sovmart-logs');
+                                logs_container.innerHTML = '';
 
-                            logs_container.innerHTML = '';
+                                button_install.setAttribute('disabled', 'disabled');
+                                button_install.querySelector('span').innerHTML = SovmartLangs.install_process;
 
-                            button_install.setAttribute('disabled', 'disabled');
-                            button_install.querySelector('span').innerHTML = SovmartLangs.install_process;
+                                SovmartProject.install({
+                                    ids: [id],
+                                    success: function (responses) {
+                                        let success = false;
+                                        let data = JSON.parse(responses[0].data);
 
-                            SovmartProject.install({
-                                ids: [id],
-                                success: function (responses) {
-                                    let success = false;
-                                    let data = JSON.parse(responses[0].data);
+                                        logs_container.append(SovmartUI.renderLogsClose());
 
-                                    logs_container.append(SovmartUI.renderLogsClose());
-
-                                    if (data.messages !== undefined && data.messages !== null) {
-                                        for (let i = data.messages.length - 1; i >= 0; i--) {
-                                            logs_container.append(
-                                                SovmartUtils.createElement(
-                                                    'div',
-                                                    {},
-                                                    '<div class="alert alert-' + data.messages[i].type + '">' + data.messages[i].message + '</div>'
-                                                ).build()
-                                            );
+                                        if (data.messages !== undefined && data.messages !== null) {
+                                            for (let i = data.messages.length - 1; i >= 0; i--) {
+                                                logs_container.append(
+                                                    SovmartUtils.createElement(
+                                                        'div',
+                                                        {},
+                                                        '<div class="alert alert-' + data.messages[i].type + '">' + data.messages[i].message + '</div>'
+                                                    ).build()
+                                                );
+                                            }
                                         }
-                                    }
 
-                                    if (responses[0].success === true) {
-                                        if (data.status === undefined || data.status === null || data.status === 'fail') {
-                                            success = false;
+                                        if (responses[0].success === true) {
+                                            if (data.status === undefined || data.status === null || data.status === 'fail') {
+                                                success = false;
+                                            } else {
+                                                success = true;
+                                            }
+                                        }
+
+                                        if (success) {
+                                            button_install.querySelector('span').innerHTML = SovmartLangs.reinstall;
+
+                                            if (
+                                                button_delete !== undefined &&
+                                                button_delete !== null
+                                            ) {
+                                                button_delete.classList.remove('ri-hidden');
+                                                button_delete.removeAttribute('disabled');
+                                            }
+
+                                            Sovmart.checkUpdatedProjects(false, false);
                                         } else {
-                                            success = true;
-                                        }
-                                    }
-
-                                    if (success) {
-                                        button_install.querySelector('span').innerHTML = SovmartLangs.reinstall;
-
-                                        if (
-                                            button_delete !== undefined &&
-                                            button_delete !== null
-                                        ) {
-                                            button_delete.classList.remove('ri-hidden');
-                                            button_delete.removeAttribute('disabled');
+                                            button_install.querySelector('span').innerHTML = SovmartLangs.install;
                                         }
 
-                                        Sovmart.checkUpdatedProjects(false, false);
-                                    } else {
+                                        button_install.removeAttribute('disabled');
+                                    },
+                                    fail: function (responses) {
                                         button_install.querySelector('span').innerHTML = SovmartLangs.install;
+                                        button_install.removeAttribute('disabled');
+                                        logs_container.append(SovmartUI.renderLogsClose());
+                                        logs_container.append(
+                                            SovmartUtils.createElement(
+                                                'div',
+                                                {},
+                                                '<div class="alert alert-danger">' + SovmartLangs.text_install_error + '</div>'
+                                            ).build()
+                                        );
                                     }
-
-                                    button_install.removeAttribute('disabled');
-                                },
-                                fail: function (responses) {
-                                    button_install.querySelector('span').innerHTML = SovmartLangs.install;
-                                    button_install.removeAttribute('disabled');
-                                    logs_container.append(SovmartUI.renderLogsClose());
-                                    logs_container.append(
-                                        SovmartUtils.createElement(
-                                            'div',
-                                            {},
-                                            '<div class="alert alert-danger">' + SovmartLangs.text_install_error + '</div>'
-                                        ).build()
-                                    );
-                                }
-                            });
+                                });
 
 
-                        }
-                    ]
-                ],
-            });
+                            }
+                        ]
+                    ],
+                });
+            } else {
+                group_actions.items.push({
+                    label: SovmartLangs.text_under_development,
+                    icon: 'ri-info',
+                    class: 'ri-btn ri-btn-default text-warning fw-bold',
+                    disabled: 'disabled',
+                });
+            }
+
 
             group_actions.items.push({
                 label: SovmartLangs.delete,
