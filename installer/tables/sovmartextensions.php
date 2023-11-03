@@ -12,7 +12,7 @@ class TableSovmartExtensions extends Table
 	 *
 	 * @since   1.0.0
 	 */
-	public function __construct(JDatabaseDriver $db)
+	public function __construct($db)
 	{
 		parent::__construct('#__sovmart_extensions', 'id', $db);
 	}

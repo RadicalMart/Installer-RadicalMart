@@ -2,12 +2,12 @@
 <extension version="3.*" type="plugin" method="upgrade" group="installer">
 	<name>PLG_INSTALLER_SOVMART</name>
 	<author>Cymbal</author>
-	<creationDate>01.06.2022</creationDate>
+	<creationDate>November 2023</creationDate>
 	<copyright>Delo-Design</copyright>
 	<license>GNU General Public License version 3; see LICENSE.txt</license>
 	<authorEmail>cymbal@delo-design.ru</authorEmail>
 	<authorUrl>https://delo-design.ru</authorUrl>
-	<version>1.6.7</version>
+	<version>1.6.8</version>
 	<description>PLG_INSTALLER_SOVMART_PLUGIN_XML_DESCRIPTION</description>
 	<scriptfile>script.php</scriptfile>
 

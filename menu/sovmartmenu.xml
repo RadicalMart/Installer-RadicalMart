@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="plugin" version="3.8" group="system" method="upgrade">
     <name>PLG_SOVMARTMENU</name>
-    <creationDate>31.10.2022</creationDate>
+    <creationDate>November 2023</creationDate>
     <author>Cymbal</author>
     <authorEmail>cymbal@delo-design.ru</authorEmail>
     <authorUrl>https://www.norrnext.com</authorUrl>
     <copyright>Copyright © 2020 Delo Design &amp; NorrNext. All rights reserved.</copyright>
     <license>GNU General Public License version 3 or later; see license.txt</license>
-    <version>1.0</version>
+    <version>1.6.8</version>
     <description>PLG_SOVMARTMENU_XML_DESCRIPTION</description>
     <scriptfile>script.php</scriptfile>
 

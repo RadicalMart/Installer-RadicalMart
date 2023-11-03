@@ -3,12 +3,12 @@
     <name>PKG_SOVMART</name>
     <packagename>sovmart</packagename>
     <author>Cymbal</author>
-    <creationDate>09.10.2023</creationDate>
+    <creationDate>November 2023</creationDate>
     <copyright>Delo-Design</copyright>
     <license>GNU General Public License version 3; see LICENSE.txt</license>
     <authorEmail>cymbal@delo-design.ru</authorEmail>
     <authorUrl>https://delo-deisgn.ru</authorUrl>
-    <version>1.6.7</version>
+    <version>1.6.8</version>
     <scriptfile>script.php</scriptfile>
     <description>PKG_SOVMART_XML_DESCRIPTION</description>
     <languages folder="language">
